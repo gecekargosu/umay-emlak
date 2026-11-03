@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api, type Summary, type Today } from "../api";
-import { InfoNote } from "../components/InfoNote";
+import { Calendar } from "./Calendar";
 
 /**
  * Ana sayfa — kaynak dosya "8. Ana sayfa nasıl olmalı?" (satır 357-410).
@@ -185,23 +185,9 @@ export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
 
   return (
     <div>
-      <div className="page-head">
-        <h2>Bugün</h2>
-        <span className="spacer" />
-        <span className="muted small">
-          {new Date(`${today.date}T00:00:00`).toLocaleDateString("tr-TR", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          })}
-        </span>
-      </div>
-      <InfoNote title="Ana sayfa ofisin komuta merkezidir.">
-        Önce <strong>modül kutuları</strong> gelir: ofisin tamamını özetler, bir kutuya tıklayınca
-        ilgili ekran açılır. Modülü henüz olmayan kutular (DASK, görev, mesaj) <strong>"planlı"</strong>
-        yazar; sıfır göstermiyoruz, çünkü yokluk bilgi değil. <strong>Aksiyon merkezi</strong> en
-        alttadır: kırmızı gecikmiş, sarı yaklaşan, mavi "dikkat" demektir.
-      </InfoNote>
+      {/* TUR:26 — kullanıcı isteği: "bugün yazan başlığı ve bilgi penceresini kaldır,
+          yerine takvim ekle". Ana sayfa artık takvimle açılır. */}
+      <Calendar compact onGo={onGo} />
 
       <h3>Modüller</h3>
       <div className="module-grid">

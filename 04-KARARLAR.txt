@@ -331,3 +331,21 @@ K-55 | Komisyon: %3 varsayılan, indirimde gerekçe zorunlu.
 K-56 | Kapora ilanı kaporalıya düşürür.
        Ne: kapora tutarı ve tarihi ilanda tutulur; alınınca ilan "kaporalı",
        iade edilince "aktif" olur. Kapora makbuzu yazdırma sonraki dilimde.
+
+
+K-57 | Takvim ayrı sayfa, ana sayfada kompakt sürüm.
+       Ne: ay ızgarası + gün paneli; ana sayfada aynı bileşen compact olarak
+       durur, "Takvimi aç" ile tam sayfaya geçilir.
+
+K-58 | Takvim rozetleri.
+       Ne: kira günü kırmızı (tutar kalan), sözleşme bitişi sarı, başlangıç
+       mavi. Bugün mavi çerçeve, seçili gün turuncu.
+
+K-59 | Gün panelinden işe gitme.
+       Ne: her satırda "Tahsilata git" / "Sözleşmeye git" kısayolu; takvim
+       kaydı kopyalamaz, ilgili ekrana götürür.
+
+K-60 | Gönderilecek APK kuralı.
+       Ne: paket, telefondaki kurulu sürümün imzasıyla uyumlu olmalı; aksi
+       hâlde güncelleme kurulamaz. Telefondaki 5.3 dosyası ve release anahtarı
+       yerini biliyoruz; 5.13 imzalı derleme gerektiğinde yapılır.

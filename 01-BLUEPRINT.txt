@@ -363,3 +363,17 @@ TUR:25 DURUM — KİŞİ SAYFASI, KOMİSYON/KAPORA, YOL HARİTASI
 Kalan: tutanak, DASK, TÜİK artış, randevu, arıza, bildirim, ekstre, audit,
 fotoğraf/filigran, mal sahibi/kiracı paneli, mobil.
 Sıradaki: teslim tutanağı (fotoğraf + demirbaş + imza) ve depozito hesabı.
+
+
+====================================================================
+TUR:26 DURUM — TAKVİM
+====================================================================
+- GET /api/v1/calendar?month=YYYY-MM
+    · charge.due_date (kira, kalan tutar) → "rent"
+    · contract.end_date → "contract-end" (yenileme/çıkış)
+    · contract.start_date → "contract-start" (teslim tutanağı)
+  Gün bazında gruplanır; her gün için rentCount/rentKurus/rentText.
+- Arayüz: pages/Calendar.tsx (Calendar + CalendarPage). Pazartesi ilk sütun,
+  bugün mavi çerçeve, seçili gün turuncu; gün panelinde kısayol düğmeleri.
+- Ana sayfa: Dashboard başlığı ve InfoNote kaldırıldı; <Calendar compact> en üstte.
+Kalan: DASK/poliçe, tekrarlayan hatırlatıcı, teslim tutanağı (SIRA 2).

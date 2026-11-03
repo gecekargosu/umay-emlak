@@ -220,3 +220,15 @@ Sol menüde Sistem → Yol haritası: bilgi bankasıyla karşılaştırma (18 va
 Komisyon/kapora: ilan dosyasında %3 varsayılan komisyon, indirimde gerekçe,
 onay yetkisiyle kesinleşme; kapora alınınca ilan kaporalıya düşer.
 Kayıt: 09-BILGI-BANKASI-KARSILASTIRMA.txt. Sıradaki: teslim tutanağı.
+
+
+====================================================================
+TUR:26 — TAKVİM, ANA SAYFA, APK ENVANTERİ
+====================================================================
+Takvim yeni sayfa (Bugün → Takvim): ay ızgarası + seçili günün işleri.
+Kira günleri kırmızı rozet, sözleşme bitişi sarı, başlangıç mavi.
+Ana sayfada "Bugün" başlığı ve bilgi penceresi kaldırıldı; yerine kompakt
+takvim geldi. Güne tıklayınca o günün kirası/sözleşmesi görünür.
+APK: telefondaki 5.3 dosyası bulundu (telefon-kaynagi/apk/umay-5.3-kurulu.apk),
+en yeni kaynak 5.13 (UmayWork). Gönderilecek paket, kurulu sürümün imzasıyla
+uyumlu olmalı; imzalı derleme için release anahtarı duruyor.

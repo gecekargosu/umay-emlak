@@ -12,6 +12,7 @@ import { Payouts } from "./pages/Payouts";
 import { PasswordChange } from "./pages/PasswordChange";
 import { People } from "./pages/People";
 import { Roadmap } from "./pages/Roadmap";
+import { CalendarPage } from "./pages/Calendar";
 import { Rents } from "./pages/Rents";
 import { Team } from "./pages/Team";
 
@@ -27,12 +28,19 @@ type Page =
   | "sahipler"
   | "belgeler"
   | "aktar"
+  | "takvim"
   | "yol-haritasi"
   | "ekip";
 
 /** Kaynak dosya 6.2: düz 15 maddelik menü değil, 6 grup. */
 const NAV: Array<{ group: string; items: Array<{ page: Page; label: string }> }> = [
-  { group: "Bugün", items: [{ page: "bugun", label: "Aksiyon panosu" }] },
+  {
+    group: "Bugün",
+    items: [
+      { page: "bugun", label: "Aksiyon panosu" },
+      { page: "takvim", label: "Takvim" },
+    ],
+  },
   {
     group: "Portföy",
     items: [
@@ -69,6 +77,7 @@ const NAV: Array<{ group: string; items: Array<{ page: Page; label: string }> }>
 
 const TITLES: Record<Page, string> = {
   bugun: "Bugün",
+  takvim: "Takvim",
   portfoy: "Portföy",
   satiliklar: "Satılıklar",
   kiraliklar: "Kiralıklar",
@@ -316,6 +325,7 @@ export function App() {
           {page === "sahipler" && <Payouts />}
           {page === "belgeler" && <Documents canApprove={session.canApprove} />}
           {page === "aktar" && <Import />}
+          {page === "takvim" && <CalendarPage onGo={(next) => go(next as Page)} />}
           {page === "yol-haritasi" && <Roadmap />}
           {page === "ekip" && (
             <Team
