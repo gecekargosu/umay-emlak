@@ -268,6 +268,7 @@ payoutRoutes.get("/:id/statement", async (c) => {
         ownerName: schema.persons.fullName,
         ownerPhone: schema.persons.phone,
         tenantName: sql<string>`(select full_name from person where id = ${schema.contracts.tenantPersonId})`,
+        snapshot: schema.contracts.snapshot,
       })
       .from(schema.ownerPayouts)
       .innerJoin(schema.contracts, eq(schema.contracts.id, schema.ownerPayouts.contractId))
@@ -283,6 +284,12 @@ payoutRoutes.get("/:id/statement", async (c) => {
 
   const p = data.payout;
   const periodLabel = formatPeriodTr(p.period);
+  // Y-53: sözleşme dondurduysa ekstre de dondurulmuş adı kullanır.
+  const ownerName = data.snapshot?.owners[0]?.fullName ?? data.ownerName;
+  const tenantName = data.snapshot?.tenant.fullName ?? data.tenantName;
+  const propertyTitle = data.snapshot?.property.title ?? data.propertyTitle;
+  const district = data.snapshot?.property.district ?? data.district;
+  const city = data.snapshot?.property.city ?? data.city;
   const rows: Array<[string, string]> = [
     ["Dönemde tahsil edilen kira", formatTry(p.grossKurus)],
     ["Kira takip bedeli (ofis)", `- ${formatTry(p.feeKurus)}`],
@@ -293,7 +300,7 @@ payoutRoutes.get("/:id/statement", async (c) => {
 <html lang="tr">
 <head>
   <meta charset="utf-8" />
-  <title>Aktarım ekstresi — ${escapeHtml(data.ownerName ?? "Mal sahibi")} — ${periodLabel}</title>
+  <title>Aktarım ekstresi — ${escapeHtml(ownerName ?? "Mal sahibi")} — ${periodLabel}</title>
   <style>
     @page { size: A4; margin: 18mm; }
     body { font-family: "Segoe UI", system-ui, sans-serif; color: #1c2128; margin: 0; }
@@ -321,13 +328,13 @@ payoutRoutes.get("/:id/statement", async (c) => {
   </header>
 
   <table>
-    <tr><th>Mal sahibi</th><td>${escapeHtml(data.ownerName ?? "—")}${
+    <tr><th>Mal sahibi</th><td>${escapeHtml(ownerName ?? "—")}${
       data.ownerPhone ? ` · ${escapeHtml(data.ownerPhone)}` : ""
     }</td></tr>
-    <tr><th>Gayrimenkul</th><td>${escapeHtml(data.propertyTitle)}${
-      data.district ? ` · ${escapeHtml(data.district)}` : ""
-    }${data.city ? ` / ${escapeHtml(data.city)}` : ""}</td></tr>
-    <tr><th>Kiracı</th><td>${escapeHtml(data.tenantName ?? "—")}</td></tr>
+    <tr><th>Gayrimenkul</th><td>${escapeHtml(propertyTitle)}${
+      district ? ` · ${escapeHtml(district)}` : ""
+    }${city ? ` / ${escapeHtml(city)}` : ""}</td></tr>
+    <tr><th>Kiracı</th><td>${escapeHtml(tenantName ?? "—")}</td></tr>
     <tr><th>Dönem</th><td>${periodLabel}</td></tr>
   </table>
 

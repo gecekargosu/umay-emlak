@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { api, ApiError, type ContractDetail, type ContractRow, type ListingRow, type PersonRow } from "../api";
 import { InfoNote } from "../components/InfoNote";
+import { useDraft } from "../hooks/useDraft";
 import { formatKurusText } from "./Rents";
 
 const STATUS_TR: Record<string, string> = { active: "Aktif", ended: "Bitti", cancelled: "İptal" };
@@ -19,7 +20,8 @@ export function Contracts() {
   const [detail, setDetail] = useState<ContractDetail | null>(null);
   const [listings, setListings] = useState<ListingRow[]>([]);
   const [tenants, setTenants] = useState<PersonRow[]>([]);
-  const [form, setForm] = useState({
+  // Y-57: uzun form yarım kalmasın — taslak tarayıcıda tutulur.
+  const [form, setForm, clearDraft] = useDraft("umay.contract.draft", {
     listingId: "",
     tenantPersonId: "",
     startDate: new Date().toISOString().slice(0, 10),
@@ -80,7 +82,7 @@ export function Contracts() {
         }),
       });
       setMessage("Sözleşme açıldı, ilan kapandı.");
-      setForm({ ...form, rentText: "", depositText: "" });
+      clearDraft();
       await load();
       await open(created.id);
     } catch (caught) {
@@ -268,6 +270,16 @@ export function Contracts() {
             Depozito: {detail.contract.deposit} · Vade: her ayın {detail.contract.dueDay}.
           </p>
 
+          {detail.contract.snapshot && (
+            <p className="hint">
+              İmza anındaki bilgiler donduruldu (
+              {new Date(detail.contract.snapshot.frozenAt).toLocaleString("tr-TR")}):{" "}
+              {detail.contract.snapshot.tenant.fullName} · {detail.contract.snapshot.property.title} ·{" "}
+              {formatKurusText(detail.contract.snapshot.terms.rentKurus)}. Kişi veya mülk kartı sonradan
+              değişse bile bu sözleşme ve ekstre değişmez.
+            </p>
+          )}
+
           <h4>Kira takvimi</h4>
           {detail.charges.length === 0 ? (
             <p className="muted small">Henüz tahakkuk yok.</p>
@@ -329,6 +341,29 @@ export function Contracts() {
             Toplam tahakkuk: {formatKurusText(detail.totals.charged)} · Tahsil edilen:{" "}
             {formatKurusText(detail.totals.paid)} · Açık: {formatKurusText(detail.totals.open)}
           </p>
+
+          <h4>Hukuki metinler</h4>
+          <div className="row-gap">
+            <button
+              type="button"
+              className="secondary"
+              onClick={() =>
+                window.open(`/api/v1/contracts/${detail.contract.id}/output/tahliye`, "_blank")
+              }
+            >
+              Tahliye taahhüdü yazdır
+            </button>
+            <button
+              type="button"
+              className="secondary"
+              onClick={() =>
+                window.open(`/api/v1/contracts/${detail.contract.id}/output/kefalet`, "_blank")
+              }
+            >
+              Kefaletname yazdır
+            </button>
+            <span className="muted small">Örnek şablon — avukat onayı gerekir.</span>
+          </div>
 
           <div className="row-gap">
             <button type="button" className="ghost" onClick={() => setDetail(null)}>

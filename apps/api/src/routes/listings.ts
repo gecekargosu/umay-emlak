@@ -71,6 +71,8 @@ const newListing = z.object({
   priceKurus: z.number().int().nonnegative(),
   city: z.string().max(80).optional(),
   district: z.string().max(80).optional(),
+  /** Y-60: EİDS / yetki numarası — kayıt alanı, resmî doğrulama değil */
+  authorityNo: z.string().max(60).optional(),
 });
 
 listingRoutes.post("/", async (c) => {
@@ -104,6 +106,7 @@ listingRoutes.post("/", async (c) => {
         kind: input.kind,
         status: "draft",
         priceKurus: input.priceKurus,
+        authorityNo: input.authorityNo?.trim() || null,
         responsibleUserId: session.userId,
       })
       .returning({ id: schema.listings.id });
@@ -201,6 +204,29 @@ listingRoutes.get("/:id", async (c) => {
 
   if (!detail) throw new HttpError(404, "İlan bulunamadı");
   return c.json(detail);
+});
+
+/** Y-60: yetki numarasını ayrı uçtan güncelle (fiyat/durum akışını bozmadan). */
+listingRoutes.patch("/:id/authority", async (c) => {
+  const session = await resolveSession(c);
+  requirePasswordChanged(session);
+  requireWrite(session, "yetki numarası güncelleme");
+
+  const parsed = z
+    .object({ authorityNo: z.string().max(60).nullable() })
+    .safeParse(await c.req.json().catch(() => ({})));
+  if (!parsed.success) throw new HttpError(400, "Geçersiz veri");
+  const value = parsed.data.authorityNo?.trim() || null;
+
+  const updated = await withTenant(session.tenantId, async (tx) =>
+    tx
+      .update(schema.listings)
+      .set({ authorityNo: value })
+      .where(eq(schema.listings.id, c.req.param("id")))
+      .returning({ id: schema.listings.id }),
+  );
+  if (!updated[0]) throw new HttpError(404, "İlan bulunamadı");
+  return c.json({ ok: true, authorityNo: value });
 });
 
 const patchListing = z.object({

@@ -6,6 +6,7 @@ import {
   type KindOption,
   type ListingDetail,
   type ListingRow,
+  type PropertyAssets,
 } from "../api";
 import { InfoNote } from "../components/InfoNote";
 
@@ -49,6 +50,10 @@ export function Listings({ canApprove }: { canApprove: boolean }) {
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [view, setView] = useState<"raf" | "tablo">("raf");
+  const [authority, setAuthority] = useState("");
+  const [assets, setAssets] = useState<PropertyAssets | null>(null);
+  const [subForm, setSubForm] = useState({ kind: "elektrik", provider: "", monthlyText: "" });
+  const [fixtureForm, setFixtureForm] = useState({ name: "", quantity: 1 });
 
   async function load() {
     try {
@@ -73,6 +78,10 @@ export function Listings({ canApprove }: { canApprove: boolean }) {
       setDetail(data);
       setPriceText(kurusToText(data.listing.priceKurus));
       setNote("");
+      setAuthority(data.listing.authorityNo ?? "");
+      void api<PropertyAssets>(`/properties/${data.listing.propertyId}/assets`)
+        .then(setAssets)
+        .catch(() => setAssets(null));
       setError(null);
     } catch {
       setError("İlan açılamadı");
@@ -121,6 +130,77 @@ export function Listings({ canApprove }: { canApprove: boolean }) {
       await refresh();
     } catch (caught) {
       setError(caught instanceof ApiError ? caught.message : "Fiyat güncellenemedi");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  /** Y-60: yetki numarası — kayıt alanı, resmî doğrulama değil. */
+  async function saveAuthority() {
+    if (!detail) return;
+    setBusy(true);
+    setError(null);
+    setMessage(null);
+    try {
+      await api(`/listings/${detail.listing.id}/authority`, {
+        method: "PATCH",
+        body: JSON.stringify({ authorityNo: authority.trim() || null }),
+      });
+      setMessage("Yetki numarası kaydedildi. Bu bir kayıttır, resmî doğrulama değildir.");
+      await refresh();
+    } catch (caught) {
+      setError(caught instanceof ApiError ? caught.message : "Kaydedilemedi");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  /** Y-55: mülk aboneliği / demirbaş — kayıt amaçlı, ödeme yapılmaz. */
+  async function addSubscription() {
+    if (!detail || subForm.kind.trim() === "") return;
+    setBusy(true);
+    try {
+      await api(`/properties/${detail.listing.propertyId}/subscriptions`, {
+        method: "POST",
+        body: JSON.stringify({
+          kind: subForm.kind,
+          provider: subForm.provider || undefined,
+          monthlyText: subForm.monthlyText || undefined,
+        }),
+      });
+      setSubForm({ kind: "elektrik", provider: "", monthlyText: "" });
+      await refresh();
+    } catch (caught) {
+      setError(caught instanceof ApiError ? caught.message : "Abonelik eklenemedi");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function addFixture() {
+    if (!detail || fixtureForm.name.trim() === "") return;
+    setBusy(true);
+    try {
+      await api(`/properties/${detail.listing.propertyId}/fixtures`, {
+        method: "POST",
+        body: JSON.stringify({ name: fixtureForm.name, quantity: Number(fixtureForm.quantity) || 1 }),
+      });
+      setFixtureForm({ name: "", quantity: 1 });
+      await refresh();
+    } catch (caught) {
+      setError(caught instanceof ApiError ? caught.message : "Demirbaş eklenemedi");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function removeAsset(path: string) {
+    setBusy(true);
+    try {
+      await api(path, { method: "DELETE" });
+      await refresh();
+    } catch (caught) {
+      setError(caught instanceof ApiError ? caught.message : "Silinemedi");
     } finally {
       setBusy(false);
     }
@@ -330,6 +410,119 @@ export function Listings({ canApprove }: { canApprove: boolean }) {
             </p>
           )}
 
+          <h4>EİDS / ilan yetki numarası</h4>
+          <div className="inline-form">
+            <input
+              placeholder="Örn. 3400123456"
+              value={authority}
+              onChange={(e) => setAuthority(e.target.value)}
+            />
+            <button type="button" disabled={busy} onClick={() => void saveAuthority()}>
+              Kaydet
+            </button>
+          </div>
+          <p className="hint">
+            Bu alan yalnız kayıttır; program yetki numarasını resmî olarak doğrulamaz.
+          </p>
+
+          <h4>Abonelikler ve demirbaş</h4>
+          {assets === null ? (
+            <p className="muted small">Yüklenemedi.</p>
+          ) : (
+            <>
+              <ul className="doc-list">
+                {assets.subscriptions.map((sub) => (
+                  <li key={sub.id}>
+                    <strong>{sub.kind}</strong>
+                    {sub.provider ? ` · ${sub.provider}` : ""}
+                    {sub.monthly ? ` · aylık ${sub.monthly}` : ""}
+                    <button
+                      type="button"
+                      className="ghost"
+                      style={{ marginLeft: 10 }}
+                      disabled={busy}
+                      onClick={() =>
+                        void removeAsset(
+                          `/properties/${detail.listing.propertyId}/subscriptions/${sub.id}`,
+                        )
+                      }
+                    >
+                      Sil
+                    </button>
+                  </li>
+                ))}
+                {assets.fixtures.map((fixture) => (
+                  <li key={fixture.id}>
+                    <strong>{fixture.name}</strong> · {fixture.quantity} adet
+                    <button
+                      type="button"
+                      className="ghost"
+                      style={{ marginLeft: 10 }}
+                      disabled={busy}
+                      onClick={() =>
+                        void removeAsset(`/properties/${detail.listing.propertyId}/fixtures/${fixture.id}`)
+                      }
+                    >
+                      Sil
+                    </button>
+                  </li>
+                ))}
+                {assets.subscriptions.length === 0 && assets.fixtures.length === 0 && (
+                  <li className="muted small">Kayıt yok.</li>
+                )}
+              </ul>
+
+              <div className="inline-form">
+                <select
+                  value={subForm.kind}
+                  onChange={(e) => setSubForm({ ...subForm, kind: e.target.value })}
+                >
+                  <option value="elektrik">Elektrik</option>
+                  <option value="su">Su</option>
+                  <option value="dogalgaz">Doğalgaz</option>
+                  <option value="internet">İnternet</option>
+                  <option value="aidat">Aidat</option>
+                  <option value="diger">Diğer</option>
+                </select>
+                <input
+                  placeholder="Kurum"
+                  value={subForm.provider}
+                  onChange={(e) => setSubForm({ ...subForm, provider: e.target.value })}
+                />
+                <input
+                  placeholder="Aylık (örn. 450)"
+                  value={subForm.monthlyText}
+                  onChange={(e) => setSubForm({ ...subForm, monthlyText: e.target.value })}
+                />
+                <button type="button" disabled={busy} onClick={() => void addSubscription()}>
+                  Abonelik ekle
+                </button>
+              </div>
+
+              <div className="inline-form">
+                <input
+                  placeholder="Demirbaş (klima, kombi…)"
+                  value={fixtureForm.name}
+                  onChange={(e) => setFixtureForm({ ...fixtureForm, name: e.target.value })}
+                />
+                <input
+                  type="number"
+                  min={1}
+                  value={fixtureForm.quantity}
+                  onChange={(e) =>
+                    setFixtureForm({ ...fixtureForm, quantity: Number(e.target.value) })
+                  }
+                />
+                <button type="button" disabled={busy} onClick={() => void addFixture()}>
+                  Demirbaş ekle
+                </button>
+              </div>
+              <p className="hint">
+                Bu liste bilgi amaçlıdır; program abonelik ödemesi yapmaz, tahsilat kaydı açmaz.
+              </p>
+            </>
+          )}
+
           {detail.priceHistory.length > 0 && (
             <>
               <h4>Fiyat geçmişi</h4>
@@ -389,9 +582,19 @@ function Shelves({
   selectedId: string | null;
   onOpen: (id: string) => void;
 }) {
+  // HATA DÜZELTMESİ (TUR:16): taslak ilan hem "Kiralıklar" hem "Taslaklar"
+  // rafında görünüyordu (aynı kart iki kez). Taslaklar artık tür rafından çıkarılır.
   const groups = [
-    { key: "rent", label: "Kiralıklar", rows: rows.filter((r) => r.kind === "rent") },
-    { key: "sale", label: "Satılıklar", rows: rows.filter((r) => r.kind === "sale") },
+    {
+      key: "rent",
+      label: "Kiralıklar",
+      rows: rows.filter((r) => r.kind === "rent" && r.status !== "draft"),
+    },
+    {
+      key: "sale",
+      label: "Satılıklar",
+      rows: rows.filter((r) => r.kind === "sale" && r.status !== "draft"),
+    },
     { key: "draft", label: "Taslaklar", rows: rows.filter((r) => r.status === "draft") },
   ].filter((group) => group.rows.length > 0);
 

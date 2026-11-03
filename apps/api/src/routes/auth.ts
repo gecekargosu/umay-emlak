@@ -172,6 +172,27 @@ authRoutes.post("/change-password", async (c) => {
  * E-posta servisi henüz yok (Dilim 9): jeton geliştirmede yanıtta döner,
  * üretimde ASLA dönmez — orada e-posta ile gönderilecek.
  */
+/**
+ * Y-58: boşta kilit açma. Ekran kilitlendiğinde şifre yeniden doğrulanır;
+ * oturum çerezi değişmez, yeni oturum açılmaz.
+ */
+authRoutes.post("/verify-password", async (c) => {
+  const session = await resolveSession(c);
+  const body = z
+    .object({ password: z.string().min(1) })
+    .safeParse(await c.req.json().catch(() => ({})));
+  if (!body.success) throw new HttpError(400, "Şifre gerekli");
+
+  const { rows } = await getPool().query<{ password_hash: string | null }>(
+    "select password_hash from app_user where id = $1",
+    [session.userId],
+  );
+  if (!verifyPassword(body.data.password, rows[0]?.password_hash ?? null)) {
+    throw new HttpError(401, "Şifre hatalı");
+  }
+  return c.json({ ok: true });
+});
+
 authRoutes.post("/reset-request", async (c) => {
   const body = z.object({ email: z.string().min(3) }).safeParse(await c.req.json().catch(() => ({})));
   if (!body.success) throw new HttpError(400, "E-posta gerekli");

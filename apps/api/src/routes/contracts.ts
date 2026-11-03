@@ -86,11 +86,63 @@ contractRoutes.post("/", async (c) => {
     }
 
     const [tenantPerson] = await tx
-      .select({ id: schema.persons.id, kind: schema.persons.kind })
+      .select({
+        id: schema.persons.id,
+        kind: schema.persons.kind,
+        fullName: schema.persons.fullName,
+        phone: schema.persons.phone,
+        email: schema.persons.email,
+      })
       .from(schema.persons)
       .where(eq(schema.persons.id, input.tenantPersonId))
       .limit(1);
     if (!tenantPerson) throw new HttpError(404, "Kiracı bulunamadı");
+
+    const [property] = await tx
+      .select({
+        title: schema.properties.title,
+        city: schema.properties.city,
+        district: schema.properties.district,
+        address: schema.properties.address,
+        roomCount: schema.properties.roomCount,
+      })
+      .from(schema.properties)
+      .where(eq(schema.properties.id, listing.propertyId))
+      .limit(1);
+
+    const owners = await tx
+      .select({ fullName: schema.persons.fullName, shareBp: schema.propertyOwners.shareBp })
+      .from(schema.propertyOwners)
+      .innerJoin(schema.persons, eq(schema.persons.id, schema.propertyOwners.personId))
+      .where(eq(schema.propertyOwners.propertyId, listing.propertyId));
+
+    // Y-53: sözleşme açıldığı andaki bilgiler DONDURULUR. Kiracının adı veya
+    // mülkün başlığı sonradan değişse bile eski sözleşme ve ekstre bunu gösterir.
+    const snapshot = {
+      version: 1,
+      frozenAt: new Date().toISOString(),
+      tenant: {
+        fullName: tenantPerson.fullName,
+        phone: tenantPerson.phone,
+        email: tenantPerson.email,
+      },
+      property: {
+        title: property?.title ?? "",
+        city: property?.city ?? null,
+        district: property?.district ?? null,
+        address: property?.address ?? null,
+        roomCount: property?.roomCount ?? null,
+      },
+      owners: owners.map((o) => ({ fullName: o.fullName, shareBp: o.shareBp })),
+      terms: {
+        rentKurus,
+        depositKurus,
+        dueDay: input.dueDay,
+        utilityPayer: input.utilityPayer,
+        startDate: input.startDate,
+        endDate: input.endDate ?? null,
+      },
+    };
 
     const existing = await tx
       .select({ id: schema.contracts.id })
@@ -115,6 +167,7 @@ contractRoutes.post("/", async (c) => {
           input.depositRentCount ?? (rentKurus > 0 ? Math.round(depositKurus / rentKurus) : null),
         dueDay: input.dueDay,
         utilityPayer: input.utilityPayer,
+        snapshot,
       })
       .returning({ id: schema.contracts.id });
 
@@ -273,6 +326,88 @@ contractRoutes.get("/:id", async (c) => {
 
   if (!detail) throw new HttpError(404, "Sözleşme bulunamadı");
   return c.json(detail);
+});
+
+/**
+ * Y-56: hukuki metin şablonları — tahliye taahhüdü ve kefaletname.
+ * Dondurulmuş sözleşme verisi varsa o kullanılır; şablon hukuki danışmanlık değildir.
+ */
+contractRoutes.get("/:id/output/:kind", async (c) => {
+  const session = await resolveSession(c);
+  requirePasswordChanged(session);
+  const kind = c.req.param("kind");
+  if (kind !== "tahliye" && kind !== "kefalet") throw new HttpError(404, "Şablon bulunamadı");
+  const id = c.req.param("id");
+
+  const data = await withTenant(session.tenantId, async (tx) => {
+    const [row] = await tx
+      .select({
+        contract: schema.contracts,
+        tenantName: schema.persons.fullName,
+        propertyTitle: schema.properties.title,
+        district: schema.properties.district,
+        city: schema.properties.city,
+      })
+      .from(schema.contracts)
+      .innerJoin(schema.persons, eq(schema.persons.id, schema.contracts.tenantPersonId))
+      .innerJoin(schema.listings, eq(schema.listings.id, schema.contracts.listingId))
+      .innerJoin(schema.properties, eq(schema.properties.id, schema.listings.propertyId))
+      .where(eq(schema.contracts.id, id))
+      .limit(1);
+    return row ?? null;
+  });
+  if (!data) throw new HttpError(404, "Sözleşme bulunamadı");
+
+  const esc = (value: string) =>
+    value.replace(/[&<>"]/g, (ch) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[ch] ?? ch,
+    );
+
+  const snap = data.contract.snapshot;
+  const tenantName = snap?.tenant.fullName ?? data.tenantName;
+  const propertyTitle = snap?.property.title ?? data.propertyTitle;
+  const place = [snap?.property.district ?? data.district, snap?.property.city ?? data.city]
+    .filter(Boolean)
+    .join(" / ");
+  const rent = formatTry(snap?.terms.rentKurus ?? data.contract.rentKurus);
+  const deposit = formatTry(snap?.terms.depositKurus ?? data.contract.depositKurus);
+  const start = snap?.terms.startDate ?? data.contract.startDate;
+
+  const title = kind === "tahliye" ? "TAHLİYE TAAHHÜDÜ" : "KEFALETNAME";
+  const body =
+    kind === "tahliye"
+      ? `<p>Kiracı <strong>${esc(tenantName)}</strong>, ${esc(propertyTitle)}${
+          place ? ` (${esc(place)})` : ""
+        } adresindeki taşınmazı ${esc(start)} tarihli kira sözleşmesi ile kiralamıştır.</p>
+         <p>Kiracı, yukarıda belirtilen taşınmazı <span class="line"></span> tarihinde, kira
+         sözleşmesinden doğan tüm borçlarını ödeyerek kayıtsız ve şartsız tahliye etmeyi
+         gayrikabili rücu olarak taahhüt eder.</p>`
+      : `<p>Kefil <span class="line"></span> (T.C. kimlik no: <span class="line"></span>),
+         kiracı <strong>${esc(tenantName)}</strong>'in ${esc(propertyTitle)}${
+           place ? ` (${esc(place)})` : ""
+         } adresindeki taşınmaz için ${esc(start)} başlangıçlı kira sözleşmesinden doğan;
+         aylık kira ${esc(rent)}, depozito ${esc(deposit)} ve sair tüm borçlarına
+         müteselsil kefil olmuştur.</p>`;
+
+  return c.html(`<!doctype html>
+<html lang="tr"><head><meta charset="utf-8" /><title>${title} — ${esc(tenantName)}</title>
+<style>
+  @page { size: A4; margin: 20mm; }
+  body { font-family: "Segoe UI", system-ui, sans-serif; color: #1c2128; font-size: 13px; line-height: 1.8; }
+  h1 { font-size: 16px; letter-spacing: 1px; text-align: center; margin-bottom: 4px; }
+  .muted { color: #6b7480; font-size: 11px; }
+  .line { border-bottom: 1px solid #9aa4b0; display: inline-block; min-width: 170px; }
+  .sign { margin-top: 42px; display: flex; justify-content: space-between; }
+</style></head><body>
+  <h1>${title}</h1>
+  <p class="muted" style="text-align:center">${esc(session.tenantName)} · düzenleme ${new Date().toLocaleDateString("tr-TR")}</p>
+  ${body}
+  <div class="sign">
+    <div>Kiracı<br /><br />Ad soyad: ${esc(tenantName)}<br />İmza: ______________</div>
+    <div>${kind === "kefalet" ? "Kefil" : "Mal sahibi / yetkili"}<br /><br />Ad soyad: ______________<br />İmza: ______________</div>
+  </div>
+  <p class="muted" style="margin-top:26px">Bu metin örnek şablondur; hukuki geçerlilik için avukat onayı gerekir. Program hukuki danışmanlık vermez.</p>
+</body></html>`);
 });
 
 /** Dönem için kira tahakkuku üret. Aynı dönem ikinci kez üretilmez. */

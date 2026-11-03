@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { api, type Session, type Today } from "./api";
+import { IdleLock, useIdleLock } from "./components/IdleLock";
 import { Contracts } from "./pages/Contracts";
 import { Dashboard } from "./pages/Dashboard";
 import { Documents } from "./pages/Documents";
@@ -74,6 +75,7 @@ export function App() {
   const [peopleQuery, setPeopleQuery] = useState("");
   const [actionCount, setActionCount] = useState(0);
   const searchRef = useRef<HTMLInputElement | null>(null);
+  const idle = useIdleLock();
 
   useEffect(() => {
     api<Session>("/auth/session")
@@ -208,10 +210,15 @@ export function App() {
           {page === "belgeler" && <Documents canApprove={session.canApprove} />}
           {page === "aktar" && <Import />}
           {page === "ekip" && (
-            <Team canApprove={session.canApprove} isOwner={session.role === "owner"} />
+            <Team
+              canApprove={session.canApprove}
+              isOwner={session.role === "owner"}
+              selfEmail={session.user.email}
+            />
           )}
         </main>
       </div>
+      {idle.locked && <IdleLock name={session.user.name} onUnlock={idle.unlock} />}
     </div>
   );
 }

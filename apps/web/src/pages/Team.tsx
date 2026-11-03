@@ -31,7 +31,15 @@ const ROLE_TR: Record<string, string> = {
 
 const ROLES = ["partner", "manager", "agent", "finance", "viewer"] as const;
 
-export function Team({ canApprove, isOwner }: { canApprove: boolean; isOwner: boolean }) {
+export function Team({
+  canApprove,
+  isOwner,
+  selfEmail,
+}: {
+  canApprove: boolean;
+  isOwner: boolean;
+  selfEmail: string;
+}) {
   const [data, setData] = useState<TeamData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [info, setInfo] = useState<string | null>(null);
@@ -199,7 +207,7 @@ export function Team({ canApprove, isOwner }: { canApprove: boolean; isOwner: bo
                 )}
               </td>
               <td className="right">
-                {canApprove && member.status === "active" && (
+                {canApprove && member.status === "active" && member.email !== selfEmail && (
                   <button
                     type="button"
                     className="ghost"

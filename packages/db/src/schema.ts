@@ -151,6 +151,19 @@ export const persons = pgTable(
     /** Aynı dosya iki kez aktarılınca mükerrer açılmasın */
     importKey: text("import_key"),
     source: text("source"),
+    /** Y-54: aday CRM'i — aşama, takip tarihi, bütçe, istek */
+    candidateStage: text("candidate_stage"),
+    followUpDate: date("follow_up_date", { mode: "string" }),
+    budgetKurus: bigint("budget_kurus", { mode: "number" }),
+    wantsDistrict: text("wants_district"),
+    wantsRoomCount: text("wants_room_count"),
+    /** Y-59: KVKK iletişim izni */
+    contactPermission: text("contact_permission")
+      .$type<"unknown" | "allowed" | "denied">()
+      .notNull()
+      .default("unknown"),
+    contactPermissionAt: timestamp("contact_permission_at", { withTimezone: true }),
+    contactPermissionNote: text("contact_permission_note"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [
@@ -206,6 +219,8 @@ export const listings = pgTable(
       onDelete: "set null",
     }),
     publishedAt: timestamp("published_at", { withTimezone: true }),
+    /** Y-60: EİDS / ilan yetki numarası — kayıt alanı, resmî doğrulama değil */
+    authorityNo: text("authority_no"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [
@@ -239,6 +254,8 @@ export const contracts = pgTable(
     status: contractStatus("status").notNull().default("active"),
     endedAt: timestamp("ended_at", { withTimezone: true }),
     endReason: text("end_reason"),
+    /** Y-53: imza anındaki kişi/mülk/kira bilgisi — sonradan değişmez */
+    snapshot: jsonb("snapshot").$type<ContractSnapshot>(),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [index("contract_tenant_status_idx").on(t.tenantId, t.status)],
@@ -486,6 +503,29 @@ export const ownerPayouts = pgTable(
   ],
 );
 
+/** Y-53: sözleşme açılırken dondurulan bilgiler. */
+export type ContractSnapshot = {
+  version: number;
+  frozenAt: string;
+  tenant: { fullName: string; phone: string | null; email: string | null };
+  property: {
+    title: string;
+    city: string | null;
+    district: string | null;
+    address: string | null;
+    roomCount: string | null;
+  };
+  owners: Array<{ fullName: string; shareBp: number | null }>;
+  terms: {
+    rentKurus: number;
+    depositKurus: number;
+    dueDay: number;
+    utilityPayer: string;
+    startDate: string;
+    endDate: string | null;
+  };
+};
+
 /** Hisseli mülk: bir gayrimenkulde birden fazla malik (K-17). */
 export const propertyOwners = pgTable(
   "property_owner",
@@ -508,6 +548,66 @@ export const propertyOwners = pgTable(
     uniqueIndex("property_owner_uidx").on(t.propertyId, t.personId),
     index("property_owner_person_idx").on(t.tenantId, t.personId),
   ],
+);
+
+/** Y-54: görüşme notu (aday CRM'i). */
+export const personNotes = pgTable(
+  "person_note",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tenantId: uuid("tenant_id")
+      .notNull()
+      .references(() => tenants.id, { onDelete: "cascade" }),
+    personId: uuid("person_id")
+      .notNull()
+      .references(() => persons.id, { onDelete: "cascade" }),
+    body: text("body").notNull(),
+    createdByUserId: uuid("created_by_user_id").references(() => appUsers.id, {
+      onDelete: "set null",
+    }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("person_note_person_idx").on(t.tenantId, t.personId, t.createdAt)],
+);
+
+/** Y-55: mülk abonelikleri — yalnız kayıt, ödeme yapılmaz. */
+export const propertySubscriptions = pgTable(
+  "property_subscription",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tenantId: uuid("tenant_id")
+      .notNull()
+      .references(() => tenants.id, { onDelete: "cascade" }),
+    propertyId: uuid("property_id")
+      .notNull()
+      .references(() => properties.id, { onDelete: "cascade" }),
+    kind: text("kind").notNull(),
+    provider: text("provider"),
+    subscriberNo: text("subscriber_no"),
+    monthlyKurus: bigint("monthly_kurus", { mode: "number" }),
+    note: text("note"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("property_subscription_property_idx").on(t.tenantId, t.propertyId)],
+);
+
+/** Y-55: demirbaş listesi. */
+export const propertyFixtures = pgTable(
+  "property_fixture",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tenantId: uuid("tenant_id")
+      .notNull()
+      .references(() => tenants.id, { onDelete: "cascade" }),
+    propertyId: uuid("property_id")
+      .notNull()
+      .references(() => properties.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    quantity: integer("quantity").notNull().default(1),
+    note: text("note"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("property_fixture_property_idx").on(t.tenantId, t.propertyId)],
 );
 
 /** İçe aktarma defteri — denetim izi (hangi dosya, ne oldu). */

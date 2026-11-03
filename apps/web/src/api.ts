@@ -85,6 +85,28 @@ export type PersonRow = {
   phone: string | null;
   email: string | null;
   createdAt: string;
+  candidateStage: string | null;
+  followUpDate: string | null;
+  budgetKurus: number | null;
+  wantsDistrict: string | null;
+  wantsRoomCount: string | null;
+  contactPermission: "unknown" | "allowed" | "denied";
+  contactPermissionAt: string | null;
+};
+
+export type PersonNote = { id: string; body: string; author: string; createdAt: string };
+
+export type PropertyAssets = {
+  property: { id: string; title: string };
+  subscriptions: Array<{
+    id: string;
+    kind: string;
+    provider: string | null;
+    subscriberNo: string | null;
+    monthly: string | null;
+    note: string | null;
+  }>;
+  fixtures: Array<{ id: string; name: string; quantity: number; note: string | null }>;
 };
 
 export type DocumentRow = {
@@ -134,6 +156,7 @@ export type ListingDetail = {
     priceKurus: number;
     price: string;
     publishedAt: string | null;
+    authorityNo: string | null;
   };
   property: {
     id: string;
@@ -277,6 +300,28 @@ export type ContractCharge = {
   daysOverdue: number;
 };
 
+export type ContractSnapshot = {
+  version: number;
+  frozenAt: string;
+  tenant: { fullName: string; phone: string | null; email: string | null };
+  property: {
+    title: string;
+    city: string | null;
+    district: string | null;
+    address: string | null;
+    roomCount: string | null;
+  };
+  owners: Array<{ fullName: string; shareBp: number | null }>;
+  terms: {
+    rentKurus: number;
+    depositKurus: number;
+    dueDay: number;
+    utilityPayer: string;
+    startDate: string;
+    endDate: string | null;
+  };
+};
+
 export type ContractDetail = {
   contract: {
     id: string;
@@ -290,6 +335,7 @@ export type ContractDetail = {
     dueDay: number;
     utilityPayer: string;
     endReason: string | null;
+    snapshot: ContractSnapshot | null;
   };
   tenant: { id: string; fullName: string; phone: string | null; email: string | null };
   property: { id: string; title: string; city: string | null; district: string | null };
