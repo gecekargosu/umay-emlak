@@ -1,0 +1,12 @@
+packages:
+  - apps/*
+  - packages/*
+
+allowBuilds:
+  esbuild: set this to true or false
+
+# pnpm 10+ build script'lerini varsayılan olarak engeller.
+# esbuild, tsx ve vitest için zorunlu; izin listesine alındı.
+onlyBuiltDependencies:
+  - esbuild
+strictDepBuilds: false

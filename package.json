@@ -1,0 +1,22 @@
+{
+  "name": "umay-emlak",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.18.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @umay/api dev",
+    "db:migrate": "pnpm --filter @umay/db migrate",
+    "db:seed": "pnpm --filter @umay/db seed",
+    "test": "vitest run",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  }
+}

@@ -1,0 +1,22 @@
+node_modules/
+dist/
+build/
+coverage/
+*.log
+
+# Sırlar — asla commit edilmez (K-19)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Geçici
+.freebuff/tmp/
+.DS_Store
+Thumbs.db
+
+# Üretim derlemesi (source map üretimde yok — K-19/5)
+apps/web/.next/
+apps/desktop/src-tauri/target/
+.freebuff/

@@ -1,0 +1,228 @@
+UMAY EMLAK — AYSAN KEŞİF SORULARI
+Görüşme: 90-120 dakika · Soruları sırayla sor, cevapları buraya yaz.
+Kural: bilmiyorsa "bilmiyorum" yaz, tahmin ettirme. Tahmin, yanlış tablo demek.
+★ = Dilim 0'ı bloke eder, cevapsız başlanmaz.
+
+====================================================================
+A) PARA VE İŞ MODELİ  (en kritik bölüm — buradan başla)
+====================================================================
+★1. Kiracının kirası ŞU AN kimin hesabına yatıyor?
+    ( ) doğrudan mal sahibinin hesabına
+    ( ) ofis hesabına, ofis mal sahibine aktarıyor
+    ( ) ikisi de oluyor (kiracıya göre değişiyor)
+    Cevap:
+
+★2. Ofis komisyonunu nasıl alıyorsunuz?
+    ( ) ilk kiralamada tek sefer (kaç kira? ....)
+    ( ) her ay kira üzerinden yüzde (....%)
+    ( ) yıllık yönetim bedeli (....)
+    ( ) mal sahibinden ayrı, kiracıdan ayrı
+    Cevap:
+
+★3. Satış komisyonu nasıl? Oran sabit mi, pazarlık mı, kim onaylıyor?
+    Cevap:
+
+★4. Kira tahsilatını ofis mi yapıyor, kiracı mal sahibine mi yatırıyor?
+    Cevap:
+
+5. Mal sahibine para ne zaman ve nasıl aktarılıyor? (ayın kaçı, havale/nakit)
+    Cevap:
+
+6. Mal sahibine her ay döküm/ekstre veriyor musunuz? Hangi biçimde?
+    Cevap:
+
+7. Aidat, fatura, sigorta gibi kalemleri ofis mi ödüyor, mal sahibi mi?
+    Cevap:
+
+8. Kira gecikince şu an ne yapıyorsunuz? (telefon / mesaj / ihtar / avukat)
+    Cevap:
+
+★9. Faturayı kim, hangi programla kesiyor? Muhasebeci hangi formatta veri istiyor?
+    Cevap:
+
+10. Kaç banka hesabı var, hangi bankalar? (ekstre eşleştirmesi için)
+    Cevap:
+
+====================================================================
+B) PORTFÖY VE İŞ AKIŞI
+====================================================================
+★11. Şu an kaç aktif portföy var?  Satılık: .....  Kiralık: .....
+     Toplam mal sahibi: .....  Aktif kiracı: .....
+     Cevap:
+
+★12. Kayıtlar bugün nerede tutuluyor?
+     ( ) Excel  ( ) defter  ( ) WhatsApp  ( ) başka program (....)  ( ) hiçbiri
+     Cevap:
+
+★13. Mal sahibinden hangi belgeleri alıyorsunuz? Hangisi olmadan portföy açılmıyor?
+     ( ) tapu  ( ) kimlik  ( ) yetki sözleşmesi  ( ) DASK  ( ) diğer (....)
+     Cevap:
+
+14. Yetki sözleşmesi imzalanıyor mu? Süresi ne kadar? (.... ay)
+    Cevap:
+
+15. Fotoğraf/video kim çekiyor? Portföy başına ortalama kaç fotoğraf?
+    Cevap:
+
+16. Fiyatı kim belirliyor? Fiyat değişince kim onaylıyor?
+    Cevap:
+
+17. Bir portföy ortalama kaç günde kiralanıyor / satılıyor?
+    Cevap:
+
+====================================================================
+C) EKİP VE YETKİ
+====================================================================
+18. 18 kişiden kaçı sahada, kaçı ofiste? Hangi işi kim yapıyor?
+    Cevap:
+
+★19. Ortaklar birbirinin finans hareketini görüyor mu? (evet/hayır)
+    Cevap:
+
+20. Bir personel başka personelin portföyünü görebiliyor mu?
+    Cevap:
+
+★21. Portföy personel değiştirince eski personel dosyayı görmeye devam etmeli mi?
+     Cevap:
+
+22. İşten ayrılan personelin kayıtları ne olacak? (silinsin / geçmişte kalsın)
+    Cevap:
+
+★23. Kimler "onay" yetkisine sahip? (fiyat, tahsilat, gider, iade)
+     Cevap:
+
+====================================================================
+D) MAL SAHİBİ VE KİRACI
+====================================================================
+24. Mal sahipleri programa girip bakacak mı? En çok neyi görmek isterler?
+    Cevap:
+
+★25. Mal sahibi kiracının hangi bilgisini görmeli?
+     ( ) ad  ( ) telefon  ( ) ödeme durumu  ( ) sözleşme  ( ) hiçbiri
+     Cevap:
+
+26. Kiracılar uygulamayı kullanacak mı? Telefonu olan herkes mi, yoksa gençler mi?
+    Cevap:
+
+27. Kiracı dekont yükleyecek mi? Arıza talebi açacak mı?
+    Cevap:
+
+====================================================================
+E) MEVCUT VERİ VE GÖÇ
+====================================================================
+★28. Bu kayıtları sisteme kim, kaç günde girecek? (elle mi, Excel'den mi)
+     Cevap:
+
+29. Aynı kişi hem mal sahibi hem kiracı oluyor mu? (örnek ver)
+    Cevap:
+
+30. Hisseli mülk var mı? (bir gayrimenkulde birden fazla malik)
+    Cevap:
+
+====================================================================
+F) BEKLENTİ VE KARARLAR
+====================================================================
+★31. Bu programdan ilk beklentin tek cümleyle ne?
+     Cevap:
+
+32. Sabah programı açtığında ilk görmek istediğin 3 şey?
+    1) ................  2) ................  3) ................
+    Cevap:
+
+★33. Şu an en çok zaman kaybettiğin iş hangisi?
+     Cevap:
+
+34. Program çıktığında ilk gün kaç kişi kullanacak? Hangi cihazlar?
+    ( ) Windows masaüstü  ( ) Android  ( ) iPhone  ( ) tablet
+    Cevap:
+
+35. İnternet kesilince ne olmalı? (çalışmaya devam / bekler)
+    Cevap:
+
+36. Kimseye göstermeyeceğin veri var mı? (kimlik, tapu, maaş, özel not)
+    Cevap:
+
+37. Bir yıl sonra bu programda olmasını istediğin tek şey ne?
+    Cevap:
+
+====================================================================
+G) GÖRÜŞMEDEN SONRA KONTROL (ajan için)
+====================================================================
+[ ] ★ işaretli tüm sorular cevaplandı mı?
+[ ] Cevaplardan çıkan kararlar 04-KARARLAR.txt'ye eklendi mi?
+[ ] Tablo etkisi olan cevaplar (2, 9, 11, 13, 21, 23, 25, 28) işaretlendi mi?
+[ ] Log'a "KEŞİF TAMAMLANDI" kaydı ve "SIRADAKİ:" cümlesi yazıldı mı?
+
+====================================================================
+H) AYSAN'IN CEVAPLARI — 2026-11-03 (kullanıcı sözlü aktardı)
+====================================================================
+1  (★) Bazı kiracılar doğrudan mal sahibine yatırıyor; bazıları toplu olarak
+      ofisten (Aysan) alıyor. Çok mülkü olanların mülk takibi yapılıyor.
+      BAZI KİRACILAR ELDEN GETİRİYOR. Kira takibi için YILLIK 1 KİRA alınıyor
+      ama bu bazen değişebiliyor → admin elle girebilmeli.
+2  (★) Satışta hesaba komisyon yatıyor; bazı durumlarda önden KAPORA alınıyor
+      ve bu komisyon oluyor. Kirada emlakçıya doğrudan havale/EFT. İlk
+      kiralamada depozito 2 veya 3 kira olabiliyor, sabit değil → elle girilmeli.
+3  (★) Satış komisyonu %3. Bazen pazarlık; mal sahibinin çok dairesi varsa
+      onu kaybetmemek için indirimli rakam isteniyor → DEĞİŞKEN.
+4  (★) Kiracıların büyük kısmı ofise yatırıyor; çok seçmeli bir durum.
+      Aylık alındığında mal sahibine bilgi verilip aktarılıyor; çok malı
+      olanda dönem toplamı TEK seferde gönderiliyor.
+5  Kira başlangıç tarihi genelde kiralama tarihine göre belirleniyor;
+      para aktarımı buna göre yapılıyor.
+6  Mal sahibine döküm vermek istiyoruz, özellikle çok malı olanlara. PDF
+      olarak ama "kara kalem yazı" gibi değil, düzgün tasarımlı olmalı.
+7  Bazı malların aidat/faturasını kiracı ödüyor; idarenin tamamı Aysan'a
+      verildiyse Aysan ödüyor.
+8  Kira gecikince hemen uyarı; çok gecikirse resmi yolla uyarı.
+9  (★) Fatura/ödeme programı bilinmiyor, yüksek ihtimalle manuel. Muhasebe
+      programı henüz kullanılmıyor ama kullanılacak gibi düşünülmeli →
+      SEÇENEKLİ/DIŞA AKTARILABİLİR olmalı. Hemen hemen her banka var; bazen
+      bankayla anlaşma yapılıyor → değişken.
+10 Her banka mevcut; banka anlaşmaları değişken.
+11 (★) Şu an ~150 gayrimenkul idare ediliyor (kiralık + satılık); artabilir.
+12 (★) Kayıtların bir kısmı laptopta/telefonda, "kara düzen"; Excel dağınık.
+13 (★) Satış: tapu ve benzeri bilgiler, ANAHTAR, satış yetki belgesi; bazen
+      bankayla ortak çalışılıp kredi çıkartılıyor. Kiralık: kiracıdan kimlik,
+      maaş bordrosu, kefil, bazı durumlarda Findex raporu. Arsa/arazi:
+      tapu kopyası, imar durumu ve benzeri. Hangi belge olmadan portföy
+      açılmadığı BİLİNMİYOR.
+14 Yetki belgesi imzalanıyor, süre DEĞİŞKEN.
+15 Fotoğrafları genelde kendileri çekiyor; değerli satışta profesyonel
+      fotoğrafçı/dron. Portföy başına ~15-20 fotoğraf.
+16 Fiyat mal sahibiyle birlikte belirleniyor: bölge araştırması + mal
+      sahibinin istediği rakam → ortak karar. Değişikliği bazen Aysan
+      öneriyor, bazen mal sahibi istiyor.
+17 Bilmiyor.
+18 Bilmiyor (18 kişinin saha/ofis dağılımı).
+19 (★) Ortak aynı zamanda akraba; genelde mahsuplaşılıyor. AMA program iki
+      yabancı gibi tasarlanmalı (ürün satılacak). → finans görünürlüğü
+      rol bazlı, varsayılan: sadece owner/ortak görür.
+20 Evet — personel başka personelin portföyünü görebiliyor.
+21 (★) Hayır — portföy devredilince eski personel görmemeli.
+22 Şirket hattı kullanılıyor; ayrılan kendi hattıyla devam ediyor.
+23 (★) Sadece Aysan ve ortağı Mehmet onay yetkisine sahip.
+24 Mal sahibi girişi ve ekranı AYRI olmalı; görmesi gerekenler ana kaynakta
+      yazıldı, üzerinde fikirlere açık.
+25 (★) Mal sahibi kiracının TÜM bilgilerine erişebilmeli (fikre açık) →
+      bizde varsayılan açık, tenant ayarıyla maskelenebilir yapılır.
+26 Kiracılar farklı yerden girecek; belgeler orada; gerekirse kartla kira,
+      aidat, emlakçı komisyonu ödenebilecek. Telefonu olan herkes.
+27 Evet dekont yüklenecek; arıza/bozukluk için talep açılabilecek ve talep
+      HEM ofise HEM mal sahibine gitmeli.
+28 Aslında Excel kayıtları var ama dağınık. Belge yükleyerek ve elle giriş
+      olmalı. ÖNEMLİ: mal sahibinin tüm belgeleri yüklendiğinde program
+      belgelerden kime ait olduğunu anlayıp o kişinin altındaki uygun yerlere
+      yerleştirmeli. Hisseli mülk var mı bilmiyor.
+29 Hayır — aynı kişi hem mal sahibi hem kiracı olmuyor.
+30 Bilmiyor (hisseli mülk).
+31 (★) "Her şeye çok kısa yoldan ulaşabilmek ve sağlam bir arşiv yapabilmek."
+      Ayrıca WEB SİTESİ eklenecek ve program siteyle entegre çalışacak:
+      sanal POS ödemeleri, müşterinin satılık/kiralık görmesi, iletişim
+      kurması; program arka planda sitenin içinde çalışacak.
+32 (ertelendi) 33 (ertelendi) 34 (ertelendi) 35 (ertelendi)
+36 (ertelendi) 37 (ertelendi)
+Not: kullanıcı "diğer sorular programı çok etkilemez, sonra bakarız" dedi.
+      Ertelenen sorular blokaj değil; ilgili dilimde tekrar sorulur.
+
+ÇIKAN KARARLAR: K-21 … K-33 (04-KARARLAR.txt).

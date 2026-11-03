@@ -1,0 +1,102 @@
+UMAY EMLAK — BURADAN BAŞLA
+Son güncelleme: 2026-11-03 · Durum: DİLİM 0 (iskelet kuruluyor)
+
+====================================================================
+0) BU KLASÖR NEDİR (tek cümle)
+====================================================================
+Emlak ofisleri için çok kiracılı (SaaS) bir gayrimenkul yönetim programı.
+İlk gerçek kullanıcı Aysan'ın ofisi (pilot kiracı #1, ~150 portföy, 18 kişi).
+Ürünü biz başka ofislere satacağız/kiralayacağız. Kod TypeScript monorepo
+olarak bu klasörde; kararlar 04'te, hafıza 03'te.
+
+====================================================================
+1) İLK 5 DAKİKA — SADECE BUNLARI OKU (sırayla)
+====================================================================
+1. Bu dosya (00) — bitti sayılır, şu an okuyorsun.
+2. 04-KARARLAR.txt — bağlayıcı kararlar (K-01…K-33). Çelişkide 04 kazanır.
+3. 03-LOG.txt — SON 3 KAYIT yeterli. Son satırdaki "SIRADAKİ:" cümlesi
+   senin başlangıç noktandır.
+4. Görev hangi modüle aitse 01-BLUEPRINT.txt'te o modülün satırını bul.
+
+ARŞİV DOSYASI: "umay emlak program detayları benim yazdığım.txt" (280 KB).
+Varsayılan olarak OKUMA (bütçe). Ama iş gerçekten dayanıyorsa — bir iş kuralı,
+bir ekran tarifi, eski bir itiraz — AÇ ve SADECE ilgili bölümü oku (grep ile
+bul, 200-300 satırlık pencere al). Kullanıcı 2026-11-03'te bu izni verdi.
+Bölüm haritası 01-BLUEPRINT.txt sonundadır.
+
+TOKEN BÜTÇESİ KURALI
+- Rutin okuma hedefi: 12 KB (00 + 04 + son log + tek blueprint satırı).
+- Arşive inmek gerekiyorsa önce grep ile satırı bul; dosyayı baştan okuma.
+- Uzun çıktıyı sohbete değil dosyaya yaz, sohbette sadece yolunu söyle.
+
+====================================================================
+2) ALTI KIRMIZI ÇİZGİ (ihlal edilirse iş çöpe gider)
+====================================================================
+1. Kartla kiraya ek bedel/komisyon YOK. Ne özellik, ne "admin oranı",
+   ne "kapalı ama hazır" ayar. 5464 sayılı Kanun md.17 yasaklıyor.
+2. Program para tutmaz: tahsilat yalnız KAYIT ve TAKİP. Para akışı
+   avukat + mali müşavir onayı olmadan koda girmez (sanal POS = Dilim 10+).
+3. tenant_id'siz tablo yok. Her tablo, her sorgu, her dosya yolu kiracıya bağlı.
+4. Sahte başarı yok: çalışmayan buton, veritabanına yazmayan form,
+   gerçek veriden üretilmeyen grafik "bitti" sayılmaz.
+5. Gerçek müşteri verisi test ortamına girmez. Gerçek tapu/kimlik yüklemesi
+   güvenlik testleri bitmeden başlamaz.
+6. Modülleri ayrı ayrı yapıp sonra birleştirme. Tek uygulama, içinde modül
+   klasörleri. Her dilim sonunda uygulama tek komutla ayağa kalkar.
+
+====================================================================
+3) KOMUTLAR (tahmin etme, buradan oku)
+====================================================================
+pnpm install            bağımlılıkları kur
+pnpm db:up              PostgreSQL'i Docker'da başlat (port 5433)
+pnpm db:migrate         migration'ları uygula (0001 = şema + RLS)
+pnpm db:seed            iki ofis + demo kullanıcı ekle (yalnız dev)
+pnpm test               birim + izolasyon testleri (vitest)
+pnpm typecheck          tsc --noEmit (tüm paketler)
+pnpm dev                API'yi başlat (http://localhost:3100)
+
+Dilim 0 kabul eşiği: yeni bilgisayarda kurulum ≤15 dk, giriş çalışır,
+A ofisinin kullanıcısı B ofisinin tek kaydını göremez (test yeşil).
+
+====================================================================
+4) GÖREV BİTİNCE OTOMATİK YAPILACAKLAR
+====================================================================
+Talimat tamamlandığında sırayla:
+  a) Tip kontrolü + testleri çalıştır, çıktısını yaz (çıktıyı kırpma).
+  b) 03-LOG.txt'ye YENİ KAYIT EKLE (dosyanın sonuna, üzerine yazma).
+  c) Yeni karar aldıysan 04-KARARLAR.txt'ye ekle (eski kararı silme, revize et).
+  d) Yeni dosya/klasör yarattıysan 01-BLUEPRINT.txt'teki haritayı güncelle.
+  e) Cevap bekleyen soru varsa log kaydının "SORU:" alanına yaz.
+  f) Commit at (mesaj: "modül: ne yapıldı").
+  g) Kullanıcıya en fazla 5 satır özet ver.
+
+Ayrıntılı kontrol listesi: 02-GOREV-PROTOKOLU.txt (görev başında 7, sonunda 9 madde).
+
+====================================================================
+5) KLASÖRDE NE VAR
+====================================================================
+00-BASLA-BURADAN.txt   bu dosya — oryantasyon, kırmızı çizgiler, komutlar
+01-BLUEPRINT.txt       klasör haritası, mimari, modül→dilim, karar ağacı
+02-GOREV-PROTOKOLU.txt görev başı/sonu zorunlu adımlar, log formatı
+03-LOG.txt             TARİHLİ, EKLEMELİ kayıt defteri (asla üzerine yazılmaz)
+04-KARARLAR.txt        bağlayıcı kararlar (K-01…K-33)
+05-SORULAR-AYSAN.txt   keşif soruları + Aysan'ın cevapları (2026-11-03)
+umay emlak ...txt      ham fikir arşivi (280 KB) — gerektiğinde grep'le bak
+apps/                  api (Hono) — sunucu, oturum, kiracı bağlamı
+packages/db            şema, migration, RLS politikaları, tohum verisi
+packages/shared        para/tarih/doğrulama yardımcıları
+docker-compose.yml     PostgreSQL 16 (dev)
+
+====================================================================
+6) NEREDE KALDIK
+====================================================================
+Keşif TAMAMLANDI: Aysan'ın 37 sorusundan iş modelini belirleyen 25'i
+cevaplandı (05 dosyasının sonunda "AYSAN'IN CEVAPLARI" bölümü). Cevap
+değiştiren kararlar K-21…K-33 olarak 04'e yazıldı.
+
+Dilim 0 durumu: monorepo iskeleti + şema (tenant, kişi, gayrimenkul, portföy,
+sözleşme, tahakkuk, tahsilat) + RLS + iki ofis izolasyon testi kuruluyor.
+Sıradaki: Dilim 1 — giriş, ekip, rol/yetki (Aysan + Mehmet onay yetkisi).
+
+Bilinmeyenler (blokaj değil): portföy ortalama satış/kiralama süresi,
+sahada/ofliste kişi dağılımı, hisseli mülk var mı, aidat/fatura programı.

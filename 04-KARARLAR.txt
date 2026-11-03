@@ -1,0 +1,219 @@
+UMAY EMLAK — KARAR DOSYASI (bağlayıcı)
+Son güncelleme: 2026-11-03 · Bu dosya 00-BASLA-BURADAN.txt'den sonra okunur.
+Kural: Bir karar değişecekse burada değişir; kod sessizce farklı davranmaz.
+Her kararda "ne zaman gözden geçirilir" yazar.
+
+====================================================================
+A) ÜRÜN VE TİCARİ MODEL
+====================================================================
+K-01 · Ürün çok kiracılı SaaS'tır; Aysan pilot kiracıdır.
+Karar: Aysan programı satmıyor, KULLANIYOR. Ürünü biz başka emlak ofislerine
+satacağız/kiralayacağız. Aysan'ın ofisi kiracı #1 ve referans kurulumdur.
+Gerekçe: Aysan gerçek kullanıcı; satış kanalı değil. İki rolü karıştırmak
+ürün kararlarını bozar (Aysan'ın alışkanlığı = pazarın tamamı değildir).
+Ücretsiz lisans bile YAZILI olur: kapsam, veri sahipliği, sorumluluk sınırı.
+Gözden geçirme: ikinci ofis satıldığında.
+
+K-02 · Her ofis ayrı kiracı; kişi kayıtları kiracıya bağlı.
+Karar: aynı kişi iki ofisle çalışıyorsa iki kayıt olur. Global kişi havuzu YOK.
+Gerekçe: ofisler birbirinin verisini göremez; global havuz bunu deler.
+
+K-03 · Askıya almada yazma kapanır, okuma açık kalır.
+Gerekçe: veriyi rehin almayan ürün satılır. Ödeme sorunu yaşayan ofis
+kendi verisini görmeye devam eder, yeni kayıt giremez.
+Gözden geçirme: ilk tahsilat sorununda.
+
+K-04 · Tam veri dışa aktarımı sözleşme maddesidir ve ücretsizdir.
+Karar: ofis ayrılmak isterse tüm verisi (JSON + dosyalar) tek pakette verilir.
+Bu bir modüldür (M13), Dilim 9'da yapılır ve test edilir (export → import → aynı sayılar).
+
+====================================================================
+B) TEKNİK
+====================================================================
+K-05 · Tek TypeScript monorepo.
+Gerekçe: tek kişilik ekipte dil/bağlam değiştirmek en pahalı maliyettir.
+Python domain kodu varsa testleriyle birlikte TypeScript'e taşınır; testler
+spesifikasyondur, kayıp değil.
+
+K-06 · Veritabanı: PostgreSQL, baştan. SQLite yok.
+Gerekçe: korumak istediğimiz üç dokunulmazlık (çakışan sözleşme engeli,
+ertelenmiş bakiye denetimi, satır düzeyi güvenlik) SQLite'ta yok; uygulama
+kodunda kalır ve hiç sınanmaz. Şart: Dilim 0'da tek komut kurulum; dev ve
+üretim aynı ana sürümde.
+
+K-07 · Kiracı izolasyonu iki katman: repository (birincil) + RLS (ikinci ağ).
+Gerekçe: havuzda bir kez unutulan oturum değişkeni, RLS'siz durumdan daha
+tehlikelidir; sahte güven verir. Bu yüzden RLS FORCE ile açılır ve
+"bağlam yoksa 0 satır" testi yazılır.
+
+K-08 · Masaüstü = web uygulaması + Tauri ince kabuk.
+Kabuk veri tutmaz; yalnız pencere, dosya bırakma, yazdırma, çevrimdışı
+önbellek, otomatik güncelleme. Yerel veritabanı koymak yasak (iki kaynaklı
+veri ilk çakışmada güveni bitirir).
+Gözden geçirme: kurulum sürtünmesi artarsa PWA kısayolu yedek.
+
+K-09 · Modül = dikey dilim. "Birleştirme günü" yok.
+Karar: tek uygulama, içinde modül klasörleri. Her dilim veritabanı + API +
+ekran + test ile birlikte biter. Her dilim sonunda uygulama tek komutla ayağa
+kalkar. Modüller birbirinin tablosuna doğrudan yazmaz, servis arayüzünden okur.
+Gerekçe: ayrı yazılıp sonra birleştirilen modüller, kimlik/yetki/dosya/para
+katmanlarını tekrar yazar ve birleştirmede çakışır.
+
+K-10 · Zamanlayıcı tek süreçte; Redis/ayrı kuyruk yok.
+Gerekçe: 18 kişilik ofis için kuyruk altyapısı gereksiz yük. PostgreSQL
+advisory lock tekilleştirme için yeter.
+
+====================================================================
+C) İŞ KURALLARI (para, tarih, hukuk)
+====================================================================
+K-11 · Program para tutmaz. Tahsilat = kayıt ve takip.
+Kira, komisyon ve hizmet bedeli ayrı kalemlerdir. Sanal POS ve para akışı
+avukat + mali müşavir onayı olmadan koda girmez.
+
+K-12 · Kartla kiraya ek bedel/komisyon YOK.
+5464 sayılı Kanun md.17: üye iş yeri kart hamillerinden komisyon veya benzeri
+ad altında ilave bedel isteyemez. Ne özellik, ne admin oranı, ne gizli ayar.
+Ofis hizmet bedeli ayrı kalem ve ayrı fatura/makbuzdur.
+Gözden geçirme: yok (kanun değişirse).
+
+K-13 · Para modeli: tahakkuk + tahsilat + mahsup.
+"Beklenen kira" tek satır değildir: ay için borç (tahakkuk) doğar, ödeme
+(mahsup) ondan düşer. Tutar kuruş INTEGER. Onaylanmış kayıt silinmez,
+ters kayıtla düzeltilir.
+
+K-14 · Kira oranı veridir, kodda sabit yok.
+Her oran kaydı: oran, kaynak adı, kaynak bağlantısı, yayın tarihi, onaylayan,
+not. Sistem hesap önerir, yetkili onaylar.
+Gerekçe: aynı ay için yayınlanan rakamlar bile ayrışıyor (3 Kasım 2026:
+Ekim %31,49; Kasım için %31,14 ile %31,23 arası).
+
+K-15 · Yükümlülük tarihten TÜRETİLİR, elle hatırlatma yazılmaz.
+Kira günü, artış tarihi, sözleşme bitişi, DASK bitişi, eksik belge → hepsi
+kuraldan üretilir. Kayıt iptal olunca yükümlülük kendiliğinden kalkar.
+Teslim/erteleme ayrı kayıttır. Aynı yükümlülük iki kez bildirilmez.
+
+K-16 · Hiçbir belge süreyle silinmez: arşiv var, imha yok.
+VUK m.253: 5 yıl; TTK/amortismana tabi kıymet: 10 yıl. Süre belge türüne göre
+değişir; yazılım bu soruyu çözmez, blokaj olmaktan çıkarır.
+
+K-17 · Gayrimenkul ≠ portföy ≠ kiracılık ≠ kişi.
+Dört ayrı kavram, dört ayrı tablo. Aynı daire hem kiralık hem satılık olabilir;
+eski fiyat ve eski kiracılık silinmez. Hisseli mülk ve çoklu malik desteklenir.
+
+K-18 · Belge deposu içerik adreslidir (sha256) + sürüm + filigran.
+Aynı dosya iki kez saklanmaz. Orijinal korunur, dış paylaşım için filigranlı
+kopya üretilir. Silme çöp kutusuna gider (30 gün).
+
+====================================================================
+D) FİKRİ MÜLKİYET VE KOPYA KORUMA
+====================================================================
+K-19 · Yazılımın kaynak kodu müşteriye HİÇ gitmez; lisans satılır, kod değil.
+Katmanlar:
+ 1. Hukuki: her ofisle yazılı lisans/kullanım sözleşmesi (kullanım hakkı,
+    kopyalama yasağı, tersine mühendislik yasağı, kaynak kod verilmez,
+    fesih ve veri teslimi). Aysan dahil — ücretsiz olsa bile.
+ 2. Telif kaydı: FSEK kapsamında eser; kaynak kodun tarihli kopyası ve
+    sürüm kaydı kanıt olarak saklanır. Marka: "UMAY EMLAK" TÜRKPATENT tescil
+    (sınıf 9 ve 42) — satıştan ÖNCE başvur, tescil süresi aylar sürer.
+ 3. Ekip: çalışan/taşeron/yüklenici ile gizlilik + hak devri sözleşmesi.
+    Ajan/araç çıktısı için de aynı madde geçerli.
+ 4. Mimari: iş mantığının tamamı sunucuda. İstemci kopyalanırsa yalnız boş
+    bir kabuk kopyalanır. Hiçbir sır istemciye gömülmez.
+ 5. Teknik: üretimde source map yok; kod küçültme + karıştırma; Tauri imzalı
+    derleme, güncelleme imzası bizde; hız sınırı; anormal toplu veri çekmede
+    alarm; dışa aktarma yetkiye bağlı ve LOGLANIR; kiracı/oturum bağı.
+ 6. Ticari: değer sunucuda ve güncellemede tutulur (sürekli gelişen ürün,
+    canlı veri, destek). Kopyalayan kişi bakım yükünü ve veriyi alamaz.
+Gerçekçi sınır: kopyalama %100 engellenemez. Hedef, kopyalamayı PAHALI ve
+RİSKLİ yapmak; müşteriyi kaybetmemek.
+Gözden geçirme: ikinci ofis satılmadan önce (sözleşme + marka başvurusu).
+
+K-20 · Ajan bağlamı üç dosyayla sınırlıdır.
+00 + 04 + son log kaydı (gerekirse tek blueprint satırı). 280 KB'lık arşiv
+dosyası ajana verilmez. Bu, hem tutarlılık hem maliyet kuralıdır.
+
+====================================================================
+E) AYSAN KEŞFİNDEN ÇIKAN KARARLAR (2026-11-03)
+====================================================================
+K-21 · Tahsilat yöntemi çoklu ve HER ZAMAN kayıtlı.
+Yöntem değerleri: banka havalesi/EFT, ofise nakit ("elden getirdi"),
+ofis hesabına yatırma, kart (Dilim 10+), mahsup. Tahsilat kaydında yöntem +
+teslim alan + tarih + (varsa) dekont zorunlu. Elden/nakit tahsilatın banka
+hareketi yoktur; ekstre eşleştirmesinde ayrı "nakit defter" olarak izlenir ve
+mal sahibine aktarımda nakit/havale ayrımı görünür.
+Gerekçe: Aysan — "bazıları kirasını elden getirdiği de oluyor maalesef".
+Gözden geçirme: mali müşavir incelemesinde.
+
+K-22 · Kira takip bedeli varsayılan "yıllık 1 kira"dır ama SABİT DEĞİLDİR.
+Tutar veya kira adedi, dönem, KDV/fatura notu admin tarafından elle girilir.
+Kodda varsayılan dışında hiçbir oran gömülü değildir.
+Gerekçe: Aysan — "yıllık 1 kira alınıyor fakat bu bazen değişebilir".
+
+K-23 · Depozito serbest tutarlıdır ve GELİR DEĞİLDİR.
+Sözleşmede ayrı alan (tutar + kaç kira karşılığı + iade koşulu). 2 veya 3 kira
+yaygın ama sabit değil; iade yükümlülüğü olarak izlenir, komisyona sayılmaz.
+
+K-24 · Satış komisyonu varsayılan %3, pazarlıkla değişir; KAPORA komisyona sayılır.
+Komisyon kaydı oran VEYA tutar olarak elle girilir. İndirim varsa gerekçe notu
+zorunlu ("mal sahibinin çok dairesi var, kaybetmemek için"). Kapora ayrı kayıt
+açar ve komisyondan mahsup edilir; iade ters kayıtla yapılır (K-13).
+Gerekçe: Aysan — "%3 ama pazarlık oluyor, indirimli rakam isteniyor".
+
+K-25 · Mal sahibine aktarım TEK toplu ödeme + kalem dökümü.
+Aktarım kira başlangıç tarihine göre planlanır. Çok mülkü olanda dönem
+toplamı tek seferde gönderilir; ekstre mülk bazında kalem kalem döküm verir.
+Her aktarım "payout" kaydıdır (tarih, tutar, yöntem, kapsanan dönem, kalemler)
+ve mal sahibine bildirim gider.
+Gerekçe: Aysan — "aylık alındığında bilgi veriliyor, çok malı varsa toplu
+gönderiliyor".
+
+K-26 · Mal sahibi ekstresi PDF ve TASARIMLI olur.
+İçerik: ofis logosu, dönem, mülk bazında tahakkuk/tahsilat/kesinti, aktarılan
+toplam, borç/alacak. "Kara kalem yazı" kabul edilmez.
+Gerekçe: Aysan — "PDF olarak ama kara kalem bir yazı olmasın".
+
+K-27 · Aidat/fatura/sigorta sorumluluğu SÖZLEŞMEDE seçilir.
+Seçenek: kiracı öder / ofis öder (idare Aysan'a verildiyse) / mal sahibi öder.
+Bunlar ayrı gelir değil, "yükümlülük" türüdür ve ödeme kaydı K-21'e uyar.
+
+K-28 · Gecikme kademeli ve kayıtlı ilerler.
+Kademe 1: otomatik hatırlatma (SMS/e-posta/WhatsApp bağlantısı). Kademe 2:
+resmi ihtar (PDF, noter/avukat). Kademe 3: hukuki süreç. Gün eşikleri tenant
+ayarıdır; her adım kim/ne zaman kaydıyla tutulur, aynı adım iki kez atılmaz.
+
+K-29 · Roller: onay yetkisi yalnızca owner ve ortak (Aysan + Mehmet).
+Diğer roller kayıt girer, onaylayamaz (fiyat değişikliği, tahsilat iptali,
+gider, iade). Ofis içinde personel birbirinin portföyünü GÖREBİLİR (Aysan
+tercihi). Portföy devredilince veya personel ayrılınca erişim kesilir; kayıt
+silinmez, geçmiş korunur.
+Gerekçe: Aysan — "sadece ben ve Mehmet", "ayrılan görmemeli".
+
+K-30 · Üç ayrı kapı: ofis / mal sahibi / kiracı.
+Ayrı oturum, ayrı ekran, ayrı yetki seti. Mal sahibi varsayılan olarak
+kiracının tüm bilgilerini görür (Aysan tercihi) AMA bu bir tenant ayarıdır;
+maskeli mod (ad + ödeme durumu, telefon gizli) seçilebilir olmalı — ürün başka
+ofislere satılacağı için KVKK tarafında gerekli.
+
+K-31 · Kiracı portalı: dekont yükleme + arıza/talep + kartla ödeme.
+Talep hem ofise hem mal sahibine gider. Kartla kira/aidat/komisyon ödemesi
+sanal POS ile (Dilim 10+). Kart hamilesinden komisyon/fark alınamaz (K-12).
+
+K-32 · Belge matrisi + ONAYLI otomatik eşleştirme.
+Türler: satış (tapu, satış yetki belgesi, kimlik, anahtar teslim), kiralık
+(kimlik, maaş bordrosu, kefil, Findex opsiyonel), arsa/arazi (tapu kopyası,
+imar durumu). Portföy açılışında zorunlu belge seti tenant ayarıdır; varsayılan
+zorunlu: yetki belgesi + tapu/kimlik. Yüklenen belgeden kişi/portföy tahmini
+yapılır (dosya adı, içerik, tutar, ad) ve ÖNERİ olarak sunulur; onaysız atama
+yapılmaz (yanlış eşleşme veri kirliliğidir).
+Gerekçe: Aysan — "belgelerden kime ait olduğunu anlamalı".
+
+K-33 · Web sitesi aynı üründen beslenir.
+İlan yayını (satılık/kiralık), iletişim formu → CRM adayı, sanal POS, site
+programın verisini kullanır. Tek veritabanı, ayrı yayın katmanı; site için
+yalnız yayınlanmış alanlar dışarı açılır (fotoğraf, fiyat, konum yaklaşık).
+Dilim 8 (portallar) ve Dilim 12 (entegrasyon). Marka: aynı ürün, iki yüz.
+
+--- K-20 REVİZYONU (2026-11-03) ---
+Kullanıcı arşiv okuma yasağını kaldırdı: ajan arşivi GEREKTİĞİNDE okuyabilir.
+Yöntem: önce grep ile bölümü bul, 200-300 satırlık pencere oku; dosyayı baştan
+okuma. Rutin oryantasyon yine 00 + 04 + son log ile yapılır (maliyet kuralı).

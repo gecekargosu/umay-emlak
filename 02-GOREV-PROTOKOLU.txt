@@ -1,0 +1,79 @@
+UMAY EMLAK — GÖREV PROTOKOLÜ (her görevde zorunlu)
+Son güncelleme: 2026-11-03 · Bu dosya 00 ve 01'den sonra okunur.
+
+Bu dosya iki kontrol listesi içerir: GÖREV BAŞINDA (7 madde) ve GÖREV SONUNDA
+(9 madde). İkincisi, "talimat bitti" denildiği anda OTOMATİK yapılır; kimse
+hatırlatmayacak.
+
+====================================================================
+A) GÖREV BAŞINDA — 7 MADDE
+====================================================================
+1. OKU: 00-BASLA-BURADAN.txt (kural + kırmızı çizgi)
+2. OKU: 04-KARARLAR.txt (çelişki varsa bu kazanır)
+3. OKU: 03-LOG.txt'nin SON 3 KAYDI → "SIRADAKİ:" cümlesini bul.
+4. OKU: 01-BLUEPRINT.txt'te sadece ilgili modülün satırı (tamamını değil).
+5. YAZ: tek cümlelik görev sınırı — "bu görevde ne var, ne YOK".
+   Kapsam dışı bir şey istendiğini fark edersen başlamadan söyle.
+6. KONTROL: görev kırmızı çizgilerden birine değiyor mu (kart komisyonu,
+   para tutma, tenant'sız tablo, gerçek veri, modülleri ayrı yapma)?
+   Değiyorsa dur ve sor.
+7. KONTROL: ortam çalışıyor mu (veritabanı, test komutu). Çalışmıyorsa
+   önce onu düzelt; çalışmayan ortamda kod yazma.
+
+KURAL: Tek oturumda tek görev kartı. Kart dışına çıkma. Çıkmak zorundaysan
+log'a "KAPSAM DIŞI:" notu düş ve kullanıcıya söyle.
+
+====================================================================
+B) GÖREV SONUNDA — 9 MADDE (otomatik, hatırlatma beklemeden)
+====================================================================
+1. ÇALIŞTIR: tip kontrolü + testler. Çıktıyı gerçekten gör; "geçti" diyorsan
+   komutu ve sonucu yaz. Kırık test bırakma.
+2. ÇALIŞTIR: uygulama tek komutla ayağa kalkıyor mu? (dilim sonu ise zorunlu)
+3. LOG EKLE: 03-LOG.txt'nin SONUNA yeni kayıt (aşağıdaki format). Üzerine yazma.
+4. KARAR: yeni bir karar aldıysan 04-KARARLAR.txt'ye K-xx olarak ekle
+   (karar + gerekçe + ne zaman gözden geçirilir).
+5. HARİTA: yeni dosya/klasör/tablo eklediysen 01-BLUEPRINT.txt'i güncelle.
+6. SORU: cevap bekleyen soru varsa hem log kaydına hem kullanıcıya yaz.
+7. COMMIT: tek amaçlı commit. Mesaj: "<modül>: <ne yapıldı>". Çalışmayan
+   durumu commit etme; edemiyorsan geri al.
+8. TEMİZLİK: geçici dosya, ölü kod, yarım bırakılmış dosya bırakma.
+9. ÖZET: kullanıcıya en fazla 5 satır — ne yapıldı, ne test edildi,
+   ne yapılmadı, sıradaki adım.
+
+Yarım kalma kuralı: bütçe/oturum bitiyorsa ÖNCE çalışan durumu commit et,
+log'a "YARIM:" satırı yaz, sonra dur. "Devam için: <tek cümle>" bırak.
+
+====================================================================
+C) LOG KAYIT FORMATI (tek satır, sabit alanlar)
+====================================================================
+[YYYY-AA-GG SS:DD] TUR:<oturum no> | MODUL:<M0x / D0x> | IS:<ne yapıldı>
+| DOSYA:<eklenen/değişen dosyalar> | TEST:<komut → sonuç> | KARAR:<K-xx veya ->
+| YARIM:<varsa neresi eksik> | SORU:<varsa> | SIRADAKI:<tek cümle>
+
+Kurallar:
+- Yalnızca EKLE. Geçmiş kaydı düzeltme; hatalıysa yeni kayıtla "DÜZELTME:" yaz.
+- Tarih/saat yerel saat. Bir kayıt 8 satırı geçmesin; uzun anlatım yok.
+- Her kayıt "SIRADAKİ:" ile biter. Kayıtsız görev yok.
+- Log insan içindir ama ajan da okur: kısaltma kullanma, modül kodunu yaz.
+
+====================================================================
+D) "BİTTİ" TANIMI — yedi madde (hepsi sağlanmadan bitti deme)
+====================================================================
+1. Gerçek veritabanına yazıyor ve okuyor; sahte başarı mesajı yok.
+2. Yetki API'de uygulanıyor; yetkisiz kullanıcı ve BAŞKA OFİS testleri geçiyor.
+3. Migration ile geliyor ve geri alınabiliyor.
+4. Kritik işlem audit log'da; finans kaydı silinmiyor, ters kayıtla düzeltiliyor.
+5. Testler çalıştırıldı, sonuç log'da yazılı.
+6. Önceki dilimlerin özellikleri bozulmadı (duman testi).
+7. Kullanıcı ekranda denedi ve onayladı.
+
+====================================================================
+E) YASAKLAR (kısa liste)
+====================================================================
+- Okumadan yazmak. Özellikle 280 KB'lık arşiv dosyasını "bağlam olsun" diye açmak.
+- Test etmeden "bitti/çalışıyor" demek.
+- Log'u üzerine yazmak veya boş bırakmak.
+- Kapsam dışı özellik eklemek ("bir de şunu ekledim").
+- Kırık bırakmak: derlenmeyen kod, yarım dosya, yarım migration.
+- Gerçek müşteri verisiyle test.
+- Kararları sessizce değiştirmek (04'ü güncellemeden farklı davranmak).

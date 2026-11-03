@@ -1,0 +1,26 @@
+version: "3.9"
+
+# Sadece yeni bir bilgisayarda gerekir. Bu makinede zaten çalışan bir
+# PostgreSQL 17 container'ı varsa (umay-pg) bunu başlatma; .env'deki
+# DATABASE_URL'i o sunucuya çevir.
+services:
+  db:
+    image: postgres:17
+    container_name: umay-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-umay_dev_local}
+      POSTGRES_DB: umay_dev
+    ports:
+      - "5440:5432"
+    volumes:
+      - umay-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d umay_dev"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  umay-pgdata:

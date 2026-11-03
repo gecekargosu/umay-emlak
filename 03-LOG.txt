@@ -1,0 +1,33 @@
+UMAY EMLAK — KAYIT DEFTERİ (LOG)
+Bu dosya TARİHLİ ve EKLEMELİDİR. Geçmiş kayıt asla silinmez, düzeltilmez.
+Hatalı kayıt varsa yeni kayıt açılır ve içine "DÜZELTME:" yazılır.
+Biçim ve kurallar: 02-GOREV-PROTOKOLU.txt bölüm C.
+Her kayıt "SIRADAKİ:" ile biter. En son kaydın "SIRADAKİ:" cümlesi, sıradaki
+ajanın başlangıç noktasıdır.
+
+--------------------------------------------------------------------------------
+[2026-11-03 14:17] TUR:1 | MODUL:-- | IS:280 KB arşiv dosyası baştan sona okundu (4 tur, satır 1-4672); "FREEBUFF FİKİRLERİ" kılavuzu yazıldı ve dosya sonuna eklendi (+110 KB).
+DOSYA:umay emlak program detayları benim yazdığım.txt | TEST:iconv UTF-8 OK, bölüm başlıkları doğrulandı | KARAR:-- | YARIM:-- | SORU:--
+SIRADAKİ:Claude v3 paketindeki itirazları değerlendir (özellikle SQLite vs PostgreSQL).
+
+[2026-11-03 14:17] TUR:2 | MODUL:-- | IS:Claude itirazları değerlendirildi: PostgreSQL kabul, Tauri geç aşamaya alındı, para akışı iki yönlü modellendi; dosyaya "EK — KARAR REVİZYONU" (R-1..R-8) eklendi. Kasım 2026 kira oranı kaynaklarda yüzde 31,14 ile 31,23 arasında ayrışıyor (doğrulandı).
+DOSYA:umay emlak program detayları benim yazdığım.txt (+2,5 KB) | TEST:iconv OK, R-1..R-8 = 8 madde | KARAR:R-1..R-8 | YARIM:-- | SORU:tek ofis mi SaaS mı
+SIRADAKİ:SaaS kararını netleştir ve masaüstü başlangıç yol haritasını yaz.
+
+[2026-11-03 14:17] TUR:3 | MODUL:-- | IS:SaaS kararı verildi: Aysan satıcı değil, pilot kiracı #1; ürün başka ofislere satılacak/kiralanacak. Dosyaya "OKUMA SONUÇLARI" (OK-1..OK-10) ve "YOL HARİTASI — MASAÜSTÜ SÜRÜM" (16 modül, 13 dilim, ilk 10 gün, bitti tanımı) eklendi (+31 KB, 4929 satır).
+DOSYA:umay emlak program detayları benim yazdığım.txt | TEST:iconv OK, 10 OK başlığı + 13 dilim başlığı doğrulandı | KARAR:16 modül / 13 dilim | YARIM:-- | SORU:ödeme sağlayıcı seçimi (Dilim 10)
+SIRADAKİ:Kalıcı ajan altyapısını kur: 00 oryantasyon, 01 blueprint, 02 protokol, 04 kararlar, 05 Aysan soruları.
+
+[2026-11-03 14:17] TUR:4 | MODUL:-- | IS:Ajan altyapısı kuruldu. 00-BASLA-BURADAN (oryantasyon, 6 kırmızı çizgi, token bütçesi), 01-BLUEPRINT (klasör ağacı, mimari, modül→dilim haritası, "nereden başlarım" karar ağacı), 02-GOREV-PROTOKOLU (görev başı 7 / sonu 9 madde, log formatı, bitti tanımı), 04-KARARLAR (K-01..K-20; SaaS düzeltmesi + fikri mülkiyet ve kopya koruma katmanları), 05-SORULAR-AYSAN (37 soru, 15 tanesi ★ blokaj).
+DOSYA:00,01,02,03,04,05 *.txt | TEST:6 dosya oluştu, UTF-8 doğrulandı, K-01..K-20 = 20 madde | KARAR:K-01, K-19, K-20 | YARIM:-- | SORU:Aysan cevapları bekleniyor
+SIRADAKİ:Aysan görüşmesi (05 dosyası) + karar dosyası onayı; ardından Dilim 0 iskeleti (monorepo + PostgreSQL + migration 0001 + iki ofis izolasyon testi).
+
+--------------------------------------------------------------------------------
+[2026-11-03 15:02] TUR:5 | MODUL:-- (Dilim 0) | IS:Aysan keşif cevapları karara çevrildi (K-21..K-33) + monorepo iskeleti kuruldu: PostgreSQL 17 (umay-pg, port 5440, db umay_dev), 11 tablo + RLS FORCE, auth_lookup fonksiyonu, migration 0001, iki ofisli tohum verisi, Hono API (/health, /me, /listings, /summary, komisyon onayı), kuruş tabanlı para yardımcıları, 5 izolasyon testi.
+DOSYA:package.json, pnpm-workspace.yaml, tsconfig.base.json, .env.example, .gitignore, docker-compose.yml, apps/api/{package.json,tsconfig.json,src/{index,app,session}.ts}, packages/db/{package.json,tsconfig.json,src/{schema,client,env,migrate,seed,index}.ts,migrations/0001_init.sql,test/isolation.test.ts}, packages/shared/{package.json,tsconfig.json,src/{money,dates,index}.ts}
+TEST:pnpm -r typecheck exit=0 · pnpm test 5/5 gecti · API gercek istekte dogrulandi: /health {ok:true,migrations:1}, /summary A=18.500,00 TL B=12.000,00 TL, taninmayan e-posta 401, oturumsuz 401, agent onay denemesi 403, /listings A ofisinde 1 kayit
+KARAR:K-21..K-33 · ornek DB olarak mevcut umay-pg kullanildi (yeni container acilmadi) · uygulama rolu umay_app (superuser degil, RLS gercekten uygulanir) · API portu 3100 (3000 Open WebUI tarafindan dolu)
+YARIM:Dilim 0'in kalan parcalari: arayuz yok (apps/web), Tauri kabugu yok (D6), belge deposu yok (D3), gercek giris yok (D1)
+SORU:yok (Aysan cevaplari geldi)
+SIRADAKI:Dilim 1 — gercek giris (sifre + oturum cerezi), ekip ve rol yonetimi, Aysan+Mehmet onay yetkisi, sifre sifirlama; kabul esigi: 18 personel hesabi acilir, yetkisiz onay denemesi 403 doner, oturum 30 gun surer.
+--------------------------------------------------------------------------------

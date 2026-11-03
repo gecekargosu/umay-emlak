@@ -1,0 +1,149 @@
+UMAY EMLAK — BLUEPRINT (klasör haritası, mimari, nereden başlarım)
+Son güncelleme: 2026-11-03 · Bu dosya 00-BASLA-BURADAN.txt'den sonra okunur.
+
+====================================================================
+1) ÜRÜN TEK CÜMLE
+====================================================================
+Bir emlak ofisinin portföyünü, mal sahiplerini, kiracılarını, sözleşmelerini,
+belgelerini, kira takibini ve yükümlülüklerini tek yerde tutan; "bugün ne
+yapılmalı" panosuyla çalışan çok kiracılı yönetim programı.
+
+Değer cümlesi: raf tasarımı değil, "hiçbir şey unutulmaz ve her şey kanıtlıdır".
+Raf, bunun vitrinidir.
+
+====================================================================
+2) KİRACI (TENANT) MODELİ
+====================================================================
+- Her emlak ofisi bir kiracıdır (tenant). Verileri birbirinden tamamen ayrıdır.
+- Aysan'ın ofisi = kiracı #1 (pilot). Ücretsiz olsa bile YAZILI lisansla.
+- Her tabloda tenant_id. Dosya yolu: tenants/<tenant_id>/...
+- Kişi kayıtları kiracıya bağlıdır, global değildir. Aynı kişi iki ofisle
+  çalışıyorsa iki kayıt olur; bu doğrudur, ofisler birbirini göremez.
+- İzolasyon iki katman: (1) repository katmanı her sorguya tenant bağlamı
+  enjekte eder — BİRİNCİL; (2) PostgreSQL RLS — ikinci ağ, FORCE açık.
+  "GUC set edilmeden yapılan sorgu 0 satır döner" testi zorunlu.
+
+====================================================================
+3) HEDEF KLASÖR AĞACI  ([ ] = henüz yok, planlı)
+====================================================================
+UMAY-EMLAK/
+  00-BASLA-BURADAN.txt      ajan girişi (var)
+  01-BLUEPRINT.txt          bu dosya (var)
+  02-GOREV-PROTOKOLU.txt    çalışma protokolü (var)
+  03-LOG.txt                kayıt defteri (var, eklemeli)
+  04-KARARLAR.txt           kararlar (var)
+  05-SORULAR-AYSAN.txt      keşif (var)
+  [apps/web/]               masaüstü arayüzü (React + TS + Vite)
+  [apps/shell/]             Tauri kabuğu (Dilim 6)
+  [apps/api/]               Hono + Zod — tek süreç: API + zamanlayıcı
+  [packages/domain/]        saf TS: para, tarih, kira artışı, tahakkuk, yetki
+  [packages/db/]            Drizzle şeması + migrations/ + seed
+  [packages/contracts/]     Zod girdi/çıktı tipleri (web+api ortak)
+  [packages/ui/]            tasarım sistemi (raf, tablo, kart, buton)
+  [docs/adr/]               karar kayıtları (ADR-001…)
+  [docs/ekranlar/]          ekran haritası ve akışlar
+  [tests/]                  uçtan uca ve izolasyon testleri
+
+YERLEŞİM KURALLARI
+- Bir modül = bir klasör: apps/api/src/modules/<modul>/ (route, service, repo, test).
+- Migration adı: 0001_init.sql, 0002_parties.sql … asla geri yazılmaz, yeni eklenir.
+- Test, kodun yanında: <dosya>.test.ts. Uçtan uca testler tests/ altında.
+- Domain'de I/O yok. Veritabanı, dosya, ağ çağrısı domain'e girmez.
+- Hiçbir dosya 250 satırı geçmez; geçiyorsa bölünür.
+
+====================================================================
+4) MİMARİ ÖZET
+====================================================================
+Dil: TypeScript (tek dil). Paket yöneticisi: proje kurulunca sabitlenir.
+Veritabanı: PostgreSQL (baştan; SQLite yok — kısıtlar ve RLS yok).
+ORM/migration: Drizzle.
+API: Hono + Zod doğrulama. Tek süreç; zamanlayıcı da bu süreçte çalışır
+(PostgreSQL advisory lock ile tekilleştirme). Redis/ayrı kuyruk YOK.
+Dosya: içerik adresli depo (sha256) + S3 uyumlu nesne depolama; dev'de disk.
+Kimlik: oturum çerezi + yenileme jetonu, argon2id. Davet ile kullanıcı açma.
+Masaüstü: web uygulaması + Tauri ince kabuk. Kabuk VERİ TUTMAZ; yalnız pencere,
+  dosya bırakma, yazdırma, çevrimdışı önbellek, otomatik güncelleme.
+Mobil: önce duyarlı web + PWA. Native (Expo) yalnız push/arka plan şart olursa.
+Para: tutarlar kuruş cinsinden INTEGER + para birimi. Float yasak.
+Zaman: damga UTC, tarih DATE. İkisi karışmaz.
+Arama/sıralama: Türkçe normalizasyon (İ/ı, ş/s, ğ/g) zorunlu; alfabetik raf
+  bu yüzden doğru çalışır.
+
+====================================================================
+5) MODÜL → DİLİM HARİTASI (16 modül, 13 dilim)
+====================================================================
+M01 Platform çekirdeği (tenant, ortam, log, yedek)        D0-D1
+M02 Kimlik ve yetki (giriş, oturum, davet, rol, izin)     D1
+M03 Ofis ve ekip (personel, atama tarihçesi)               D1
+M04 Kişiler (parties + roller)                            D2
+M05 Gayrimenkul (taşınmaz, adres, hissedar/pay)           D2
+M06 Portföy (kiralık/satılık, fiyat geçmişi, durum)       D3
+M07 Belge ve raf (depo, kategori, raf, sürüm, filigran)   D3
+M08 Sözleşme ve kiracılık (tutanak, DASK, artış)          D4
+M09 Para (tahakkuk, tahsilat, mahsup, ekstre)             D5
+M10 Yükümlülük ve bildirim (türetilmiş, pano)             D5  ← ilk gerçek kullanım
+M11 Görev, arıza, saha                                    D7
+M12 CRM ve randevu                                        D9
+M13 Raporlama + tam dışa aktarım                          D9
+M14 Portallar (mal sahibi, kiracı)                        D8
+M15 Abonelik, plan/limit, onboarding                      D10
+M16 Entegrasyon, OCR, ilan, banka eşleştirme              D12
+
+Dilim sırası: D0 karar+iskelet · D1 platform/kimlik/ekip · D2 kişi+gayrimenkul ·
+D3 portföy+belge+raf (3 amiral ekran) · D4 sözleşme · D5 para+pano ·
+D6 Tauri kabuk+kurulum · D7 saha · D8 portallar · D9 rapor+CRM+göç-dışa aktarım ·
+D10 SaaS/abonelik · D11 mobil native (şart olursa) · D12 entegrasyon.
+
+Her dilimin kabul eşiği 02-GOREV-PROTOKOLU.txt'deki "bitti" tanımına ek olarak
+ilgili modülün kendi eşiğini de karşılamalıdır.
+
+====================================================================
+6) NEREDEN BAŞLARIM (karar ağacı)
+====================================================================
+- Yeni görev aldım            → 00 oku, 04 oku, son log kaydının "SIRADAKİ:"
+                                 cümlesini uygula, tek görev kartı aç.
+- Devam ediyorum (yarım iş)   → log'daki "YARIM:" satırını bul; yarım dosyayı
+                                 önce çalışır hâle getir, sonra devam et.
+- Hata bildirildi             → hatayı yeniden üret, düzelt, testini yaz,
+                                 log'a "DÜZELTME:" kaydı ekle.
+- Yeni özellik istendi        → hangi modüle ait olduğunu söyle ve dilim numarası
+                                 ver. Mevcut dilimde değilse YAPMA; kuyruğa yaz.
+- Karar gerekiyor            → varsayım yapma; 04'e bak, yoksa sor ve bekle.
+
+====================================================================
+7) KOPYA KORUMA — MİMARİ TARAFI (özet; ayrıntı 04-KARARLAR.txt K-15/K-16)
+====================================================================
+- İş mantığının tamamı SUNUCUDA. İstemci aptal kalır. Kopyalayan kişi
+  arayüzü alır, ürünü alamaz.
+- İstemcide sır yok: API anahtarı, şifreleme anahtarı, yedek kimliği asla.
+- Üretim derlemesinde source map yok; kod küçültülür ve karıştırılır.
+- Tauri derlemesi imzalı; güncelleme imzası bizde.
+- Her istek tenant + oturum bağına bağlı; toplu veri çekme alarmı ve hız sınırı.
+- Dışa aktarma yetkiye bağlı ve LOGLANIR (kim, ne zaman, kaç kayıt).
+- Dışa verilen belgelerde ve fotoğraflarda filigran; orijinal yalnız yetkiliye.
+
+====================================================================
+DİLİM 0 DURUMU — 2026-11-03 (kod artık var)
+====================================================================
+KURULAN İSKELET (gerçek, çalışıyor):
+package.json, pnpm-workspace.yaml, tsconfig.base.json, .env.example,
+docker-compose.yml, .gitignore
+apps/api/            Hono sunucu: /health, /api/v1/me, /listings (GET+POST),
+                     /summary, /commissions/:id/approve; geçici oturum
+                     katmanı (x-dev-email) — Dilim 1'de gerçek giriş
+packages/db/         schema.ts (11 tablo), client.ts (withTenant), env.ts,
+                     migrate.ts, seed.ts, migrations/0001_init.sql (şema+RLS),
+                     test/isolation.test.ts (5 test)
+packages/shared/     money.ts (kuruş), dates.ts (dönem/tarih)
+
+ÇALIŞTIRMA: pnpm install → pnpm db:migrate → pnpm db:seed → pnpm dev (port 3100)
+Port 3000 kullanıcının başka bir uygulamasında (Open WebUI) dolu; API 3100'de.
+
+DOĞRULANMIŞ DAVRANIŞ (kayıt: 03-LOG.txt TUR:5):
+- 5/5 izolasyon testi yeşil (A ofisi B'yi göremez, bağlamsız sorgu 0 satır,
+  başka ofis kimliğiyle yazma RLS tarafından reddedilir).
+- /summary iki ofiste farklı sayı döner (18.500,00 ₺ vs 12.000,00 ₺).
+- Tanınmayan e-posta 401, oturumsuz 401, onay yetkisiz personel 403.
+
+SIRADAKİ DOSYALAR (henüz yok): apps/web (ekranlar), apps/desktop (Tauri, D6),
+packages/documents (PDF ekstre, D5), storage (belge deposu, D3).
