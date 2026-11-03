@@ -28,6 +28,11 @@ Y-02 | Şifre değiştirme ekranı |
        mustChangePassword akışı API'de var (veri uçları 403 döner) ama
        arayüzde ekran yok: geçici şifreyle giren kullanıcı kilitli kalır.
        Bu, ekip davetini fiilen kullanılamaz yapar. | Dilim 5 | Y | AÇIK
+       -> YAPILDI (2026-11-03, TUR:19): /change-password ekrani eklendi; gecici sifreli hesap
+         giris yapinca dogrudan bu ekrana dusuyor, veri uclari 403 veriyor. Kayitta diger
+         cihazlarin oturumu kapaniyor. Diger personel de ust bardaki "Sifre" dugmesinden
+         kendi sifresini degistirebiliyor. Test: gecici sifre -> 403, kisa sifre -> 400,
+         degistir -> 200 ve mustChangePassword false.
 Y-03 | Şifre sıfırlama (jeton) ekranı |
        /auth/reset-request + reset-confirm hazır; jeton geliştirmede yanıtta
        dönüyor, e-posta gönderimi yok. | Dilim 5 / 10 | O | AÇIK
@@ -321,4 +326,4 @@ Her tur sonunda sorulacak üç soru:
 2) Yapılan bir iş bir Y kaydını kapattı mı? → satırı silme, "YAPILDI" ekle.
 3) Önceliği değişen kayıt var mı?           → öncelik alanını güncelle.
 
-Açık kayıt sayısı: 65 (Y-01 … Y-75; Y-01, Y-10 ve Y-53…Y-60 kapandı) + 8 sapma notu (S-01 … S-08).
+Açık kayıt sayısı: 64 (Y-01 … Y-75; Y-01, Y-02, Y-10 ve Y-53…Y-60 kapandı) + 8 sapma notu (S-01 … S-08).

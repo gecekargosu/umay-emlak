@@ -59,6 +59,13 @@ afterAll(async () => {
     await admin.query(`delete from property_owner where property_id in (${propertyScope})`);
     await admin.query(`delete from property where title like 'Mulk Test%'`);
     await admin.query(`delete from person where full_name like 'Mulk Test%'`);
+    await admin.query(
+      `delete from session where user_id in (select id from app_user where email like 'mulk-test-%')`,
+    );
+    await admin.query(
+      `delete from membership where user_id in (select id from app_user where email like 'mulk-test-%')`,
+    );
+    await admin.query(`delete from app_user where email like 'mulk-test-%'`);
   } finally {
     await admin.end();
   }
@@ -286,5 +293,56 @@ describe("MülkPro eksikleri", () => {
     );
     expect(found.items).toHaveLength(1);
     expect(found.items[0]!.fullName).toContain("Arama Bir");
+  });
+
+  it("geçici şifreli personel şifresini değiştirmeden veriye giremez", async () => {
+    const ownerCookie = await login(AYSAN);
+    const email = `mulk-test-${Date.now()}@umay-emlak.local`;
+
+    const created = await json<{ tempPassword?: string }>(
+      await send("/api/v1/team", ownerCookie, "POST", {
+        fullName: "Mulk Test Personel",
+        email,
+        role: "agent",
+      }),
+    );
+    expect(created.tempPassword).toBeTruthy();
+
+    const loginRes = await app.request("/api/v1/auth/login", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ email, password: created.tempPassword }),
+    });
+    expect(loginRes.status).toBe(200);
+    const cookie = (loginRes.headers.get("set-cookie") ?? "").split(";")[0]!;
+
+    // Şifre değişmeden veri uçları kilitli
+    expect((await app.request("/api/v1/people", { headers: { cookie } })).status).toBe(403);
+
+    // Kısa şifre reddedilir
+    expect(
+      (
+        await send("/api/v1/auth/change-password", cookie, "POST", {
+          currentPassword: created.tempPassword,
+          newPassword: "kisa",
+        })
+      ).status,
+    ).toBe(400);
+
+    expect(
+      (
+        await send("/api/v1/auth/change-password", cookie, "POST", {
+          currentPassword: created.tempPassword,
+          newPassword: "YeniSifre!2026",
+        })
+      ).status,
+    ).toBe(200);
+
+    // Artık veriye girebiliyor
+    expect((await app.request("/api/v1/people", { headers: { cookie } })).status).toBe(200);
+    const session = await json<{ mustChangePassword: boolean }>(
+      await app.request("/api/v1/auth/session", { headers: { cookie } }),
+    );
+    expect(session.mustChangePassword).toBe(false);
   });
 });

@@ -8,6 +8,7 @@ import { Import } from "./pages/Import";
 import { Listings } from "./pages/Listings";
 import { Login } from "./pages/Login";
 import { Payouts } from "./pages/Payouts";
+import { PasswordChange } from "./pages/PasswordChange";
 import { People } from "./pages/People";
 import { Rents } from "./pages/Rents";
 import { Team } from "./pages/Team";
@@ -74,6 +75,7 @@ export function App() {
   const [search, setSearch] = useState("");
   const [peopleQuery, setPeopleQuery] = useState("");
   const [actionCount, setActionCount] = useState(0);
+  const [changePassword, setChangePassword] = useState(false);
   const searchRef = useRef<HTMLInputElement | null>(null);
   const idle = useIdleLock();
 
@@ -118,6 +120,36 @@ export function App() {
   if (loading) return <div className="center muted">Yükleniyor…</div>;
   if (!session) return <Login onLogin={setSession} />;
 
+  // Y-02: geçici şifreli hesap, şifresini değiştirmeden hiçbir veri ucuna giremez.
+  if (session.mustChangePassword) {
+    return (
+      <PasswordChange
+        forced
+        name={session.user.name}
+        email={session.user.email}
+        onDone={setSession}
+        onLogout={async () => {
+          await api("/auth/logout", { method: "POST" }).catch(() => null);
+          setSession(null);
+        }}
+      />
+    );
+  }
+
+  if (changePassword) {
+    return (
+      <PasswordChange
+        name={session.user.name}
+        email={session.user.email}
+        onDone={(next) => {
+          setSession(next);
+          setChangePassword(false);
+        }}
+        onClose={() => setChangePassword(false)}
+      />
+    );
+  }
+
   function runSearch(event: React.FormEvent) {
     event.preventDefault();
     const term = search.trim();
@@ -158,6 +190,9 @@ export function App() {
               <div className="muted small">{session.tenant.name}</div>
             </span>
           </div>
+          <button type="button" className="ghost" onClick={() => setChangePassword(true)}>
+            Şifre
+          </button>
           <button
             type="button"
             className="ghost"
