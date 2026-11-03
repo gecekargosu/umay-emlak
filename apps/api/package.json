@@ -13,7 +13,12 @@
     "@umay/db": "workspace:*",
     "@umay/shared": "workspace:*",
     "drizzle-orm": "^0.44.0",
+    "exceljs": "^4.4.0",
     "hono": "^4.9.0",
+    "pg": "^8.16.0",
     "zod": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.15.0"
   }
 }

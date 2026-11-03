@@ -16,6 +16,9 @@ import {
 } from "./session.js";
 import { authRoutes } from "./routes/auth.js";
 import { teamRoutes } from "./routes/team.js";
+import { peopleRoutes } from "./routes/people.js";
+import { propertyRoutes } from "./routes/properties.js";
+import { importRoutes } from "./routes/import.js";
 
 export const app = new Hono();
 
@@ -36,6 +39,9 @@ app.get("/health", async (c) => {
 
 app.route("/api/v1/auth", authRoutes);
 app.route("/api/v1/team", teamRoutes);
+app.route("/api/v1/people", peopleRoutes);
+app.route("/api/v1/properties", propertyRoutes);
+app.route("/api/v1/import", importRoutes);
 
 app.get("/api/v1/me", async (c) => {
   const session = await resolveSession(c);

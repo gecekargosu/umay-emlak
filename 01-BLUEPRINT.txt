@@ -167,3 +167,30 @@ GÜVENLİK KARARLARI (uygulandı):
 - Giriş hatası 15 dk / 10 deneme (bellek içi; çok sunucuda taşınacak).
 - Geçici şifreli hesap (must_change_password) veri uçlarına giremez → 403.
 - Ekip ekleme/SQL tamamı parametreli; dize birleştirme yok.
+
+====================================================================
+DİLİM 2 DURUMU — 2026-11-03 (kişi + gayrimenkul + içe aktarma)
+====================================================================
+YENİ DOSYALAR:
+packages/db/migrations/0003_people.sql  telefon/hisse/import_key, property_owner,
+                                        import_batch, RLS politikaları
+apps/api/src/import/parse.ts            CSV + XLSX ayrıştırma, sütun eşanlamlıları,
+                                        para/telefon normalizasyonu
+apps/api/src/routes/people.ts           liste, ekle (mükerrer uyarısı), detay,
+                                        güncelle, birleştir
+apps/api/src/routes/properties.ts       liste, ekle (hisseli), detay, malike göre
+apps/api/src/routes/import.ts           kuru çalıştırma + yazma + aktarım defteri
+apps/api/test/people.test.ts            7 test
+
+İŞ KURALLARI (uygulandı):
+- Mükerrer: aynı telefon (son 10 hane) veya aynı ad → 409 + mevcut kayıt önerisi.
+  ?force=1 ile yine de eklenebilir (gerçekten iki ayrı kişi olabilir).
+- Birleştirme SİLMEZ: kaybeden merged_into_id ile bağlanır, listelerde gizlenir,
+  mülk/hisse/sözleşme/belge bağları kazanana taşınır (K-16).
+- Hisseli mülk: property_owner + share_bp (10000 = tam), toplam %100'ü geçemez.
+- İçe aktarma: kuru çalıştırma önce; aynı dosya iki kez → mükerrer yok (import_key);
+  hatalı satır dosyayı düşürmez, satır bazında raporlanır; her aktarım import_batch'e yazılır.
+- Sütun eşleme eşanlamlıdır (Ad Soyad / Müşteri / Mal Sahibi...), ayırıcı ; veya ,
+  otomatik seçilir; "1.850.000 TL" gibi yazımlar kuruşa çevrilir.
+
+BİLİNEN SINIR: .xls (eski Excel) okunmaz → kullanıcıya ".xlsx olarak kaydet" denir.

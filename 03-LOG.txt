@@ -39,3 +39,11 @@ YARIM:arayuz yok (apps/web) · sifirlama e-postasi yok (Dilim 9) · hiz siniri b
 SORU:yok
 SIRADAKI:Dilim 2 — kisi (mal sahibi/kiraci/aday) + gayrimenkul kaydi, mukerrer birlestirme, Excel'den ice aktarma; ardindan apps/web ilk ekranlari (giris, pano, portfoy).
 --------------------------------------------------------------------------------
+[2026-11-03 15:18] TUR:7 | MODUL:M02 kisi + M03 gayrimenkul (Dilim 2) | IS:Kisi (mal sahibi/kiraci/aday) kaydi, mukerrer uyarisi (telefon/ad) ve force secenegi, silmeyen birlestirme (mulk/hisse/sozlesme/belge baglari tasinir, kaybeden arsivlenir), hisseli malik (property_owner + share_bp, toplam yuzde 100 siniri), gayrimenkul kaydi/detayi, Excel ve CSV ice aktarma: esanlamli sutun esleme, ; ve , ayirici tespiti, "1.850.000 TL" -> kurus, kuru calistirma, idempotent yazma (import_key), satir bazli hata raporu, import_batch denetim defteri.
+DOSYA:packages/db/migrations/0003_people.sql, packages/db/src/schema.ts, apps/api/src/import/parse.ts, apps/api/src/routes/{people,properties,import}.ts, apps/api/src/app.ts, apps/api/test/people.test.ts, apps/api/package.json (exceljs, pg), 00-BASLA-BURADAN.txt, 01-BLUEPRINT.txt
+TEST:pnpm -r typecheck exit=0 · pnpm test 26/26 gecti (5 izolasyon + 14 kimlik + 7 kisi/mulk) · gercek HTTP multipart yukleme: 4 satir -> 2 yeni kisi, 1 birlesme, 2 mulk, 1 hata · ayni dosya tekrar aktarimda yeni kisi/mulk 0 · test sonrasi DB kalintisi 0
+KARAR:K-16 uygulandi (birlestirme silmez, arsivler) · K-17 hisseli malik desteklendi · ice aktarma idempotent · .xls desteklenmiyor (kullaniciya .xlsx soylenir)
+YARIM:arayuz yok · belge yukleme (D3) yok · ice aktarma eslemesi kullanici onayli degil (otomatik esanlamli) — gerekirse D3'te elle esleme ekrani
+SORU:yok
+SIRADAKI:Dilim 3 oncesi apps/web: giris ekrani, pano (vadesi gecen/yaklasan kiralar), portfoy listesi ve kisi ekrani; sonra Dilim 3 (portfoy + belge + raf).
+--------------------------------------------------------------------------------

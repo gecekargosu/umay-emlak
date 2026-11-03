@@ -144,9 +144,19 @@ export const persons = pgTable(
     /** TCKN — maskelenerek saklanır, düz metin aramada kullanılmaz */
     nationalId: text("national_id"),
     notes: text("notes"),
+    /** Mükerrer tespiti için normalize edilmiş telefon (yalnız rakam) */
+    phoneDigits: text("phone_digits"),
+    /** K-16: birleştirmede kaybeden kayıt silinmez, buraya bağlanır */
+    mergedIntoId: uuid("merged_into_id"),
+    /** Aynı dosya iki kez aktarılınca mükerrer açılmasın */
+    importKey: text("import_key"),
+    source: text("source"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
-  (t) => [index("person_tenant_kind_idx").on(t.tenantId, t.kind)],
+  (t) => [
+    index("person_tenant_kind_idx").on(t.tenantId, t.kind),
+    index("person_tenant_phone_idx").on(t.tenantId, t.phoneDigits),
+  ],
 );
 
 /** Gayrimenkul ≠ portföy (K-17): aynı daire hem satılık hem kiralık olabilir. */
@@ -167,6 +177,13 @@ export const properties = pgTable(
     address: text("address"),
     grossM2: integer("gross_m2"),
     notes: text("notes"),
+    block: text("block"),
+    unitNo: text("unit_no"),
+    floor: integer("floor"),
+    /** "3+1" gibi serbest metin: daire tipleri standart değil */
+    roomCount: text("room_count"),
+    deedRef: text("deed_ref"),
+    importKey: text("import_key"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [index("property_tenant_idx").on(t.tenantId)],
@@ -323,6 +340,53 @@ export const documents = pgTable(
     uniqueIndex("document_tenant_sha_uidx").on(t.tenantId, t.sha256),
     index("document_tenant_person_idx").on(t.tenantId, t.personId),
   ],
+);
+
+/** Hisseli mülk: bir gayrimenkulde birden fazla malik (K-17). */
+export const propertyOwners = pgTable(
+  "property_owner",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tenantId: uuid("tenant_id")
+      .notNull()
+      .references(() => tenants.id, { onDelete: "cascade" }),
+    propertyId: uuid("property_id")
+      .notNull()
+      .references(() => properties.id, { onDelete: "cascade" }),
+    personId: uuid("person_id")
+      .notNull()
+      .references(() => persons.id, { onDelete: "cascade" }),
+    /** 10000 = tam hisse; null = belirtilmedi */
+    shareBp: integer("share_bp"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("property_owner_uidx").on(t.propertyId, t.personId),
+    index("property_owner_person_idx").on(t.tenantId, t.personId),
+  ],
+);
+
+/** İçe aktarma defteri — denetim izi (hangi dosya, ne oldu). */
+export const importBatches = pgTable(
+  "import_batch",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tenantId: uuid("tenant_id")
+      .notNull()
+      .references(() => tenants.id, { onDelete: "cascade" }),
+    filename: text("filename").notNull(),
+    dryRun: boolean("dry_run").notNull().default(false),
+    totalRows: integer("total_rows").notNull().default(0),
+    personsCreated: integer("persons_created").notNull().default(0),
+    personsMerged: integer("persons_merged").notNull().default(0),
+    personsSkipped: integer("persons_skipped").notNull().default(0),
+    propertiesCreated: integer("properties_created").notNull().default(0),
+    listingsCreated: integer("listings_created").notNull().default(0),
+    errors: jsonb("errors").$type<unknown[]>().notNull().default([]),
+    createdBy: uuid("created_by").references(() => appUsers.id, { onDelete: "set null" }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("import_batch_tenant_idx").on(t.tenantId, t.createdAt)],
 );
 
 export type Tenant = typeof tenants.$inferSelect;

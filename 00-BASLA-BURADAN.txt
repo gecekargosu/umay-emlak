@@ -89,19 +89,16 @@ docker-compose.yml     PostgreSQL 16 (dev)
 
 ====================================================================
 ====================================================================
-6) NEREDE KALDIK (2026-11-03 · Dilim 1 bitti)
 ====================================================================
-Dilim 0: 11 tablo + RLS FORCE, migration 0001, iki ofisli tohum verisi,
-kuruş tabanlı para modeli, Hono API.
-Dilim 1: e-posta + şifre girişi (scrypt), 30 günlük imzalı çerez +
-veritabanında iptal edilebilir oturum, ofis değiştirme, ekip listesi/davet,
-rol ve onay yetkisi (K-29), şifre değiştirme (diğer cihazları kapatır),
-jetonlu şifre sıfırlama. Giriş denemesi hız sınırı: 15 dakikada 10.
-E-posta servisi olmadığı için sıfırlama jetonu yalnız geliştirmede yanıtta
-döner; üretimde e-posta ile gönderilecek (Dilim 9).
+6) NEREDE KALDIK (2026-11-03 · Dilim 2 bitti)
+====================================================================
+Dilim 0: şema + RLS + para modeli + API iskeleti.
+Dilim 1: giriş (scrypt), imzalı çerez + iptal edilebilir oturum, ekip, yetki.
+Dilim 2: kişi (mal sahibi/kiracı/aday), gayrimenkul, HİSSELİ malik,
+         mükerrer birleştirme (silmeden arşiv), Excel/CSV içe aktarma.
 
-Test: 19/19 yeşil (5 izolasyon + 14 kimlik/yetki).
+Test: 26/26 yeşil (5 izolasyon + 14 kimlik + 7 kişi/mülk/içe aktarma).
 Demo giriş (yalnız dev): aysan.yilmaz@umay-emlak.local / Umay!2026
 
-SIRADAKİ: Dilim 2 — kişi + gayrimenkul kaydı (mal sahibi / kiracı / aday),
-mükerrer birleştirme, Excel'den içe aktarma; ardından apps/web ilk ekranları.
+SIRADAKİ: apps/web — giriş ekranı, pano (vadesi geçen kiralar), portföy
+listesi ve kişi ekranı. Ardından Dilim 3 (portföy + belge + raf).
