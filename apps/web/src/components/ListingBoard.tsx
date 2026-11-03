@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../api";
+import { HandoverPanel } from "./HandoverPanel";
 
 /**
  * Mülk dosyası panosu — TUR:27.
@@ -269,8 +270,15 @@ export function ListingBoard({ listingId }: { listingId: string }) {
             </ul>
           )}
           <p className="hint">
-            Demirbaş fotoğrafı ve teslim tutanağı bir sonraki dilimde (SIRA 2) eklenecek.
+            Demirbaş fotoğrafları belge arşivinden yüklenebilir; tutanak aşağıda.
           </p>
+
+          {data.contract && (
+            <HandoverPanel
+              contractId={data.contract.id}
+              depositText={data.contract.depositText}
+            />
+          )}
         </>
       )}
     </section>

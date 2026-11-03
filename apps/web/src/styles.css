@@ -1638,3 +1638,18 @@ main h3,
 .row-danger td {
   color: var(--danger);
 }
+
+/* TUR:28 — teslim tutanağı demirbaş alanı */
+.handover-items {
+  width: 100%;
+  min-height: 90px;
+  margin: 8px 0;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(17, 26, 46, 0.75);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  resize: vertical;
+}

@@ -244,3 +244,15 @@ portföye giriş, yayın tarihi, yetki no, not.
 Kiralıkta ek: kiracı, kira, depozito, kira günü, tarihler, aidat sorumlusu,
 açık borç, aylık kira çizelgesi (ödenen/kalan/gecikmiş), demirbaş listesi.
 Kayıt: 0010_property_media.sql. Sıradaki: teslim tutanağı + demirbaş fotoğrafı.
+
+
+====================================================================
+TUR:28 — SATILIK/KİRALIK SADE, KİŞİ TAM SAYFA, TESLİM TUTANAĞI
+====================================================================
+Satılıklar ve Kiralıklar ekranlarında artık yalnız raflar var; uzun liste,
+filtre paneli ve "Tüm gayrimenkuller" başlığı kaldırıldı. Liste yalnız geniş
+Gayrimenkuller ekranında.
+Kişi kartında kişi seçilince başlık ve bilgi notu gizlenir; yalnız kişi dosyası.
+Teslim tutanağı eklendi: giriş/çıkış, tarih, demirbaş satırları, depozito,
+kesinti ve iade (iade = depozito − kesinti). Kiralık mülk dosyasında.
+Sıradaki: DASK takibi (SIRA 3).

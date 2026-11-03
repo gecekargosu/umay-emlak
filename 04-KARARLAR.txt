@@ -365,3 +365,17 @@ K-63 | Kiralık detayında kiracı, sözleşme ve kira çizelgesi birlikte.
 
 K-64 | Boyut sınırları: belge 25 MB, medya 50 MB.
        Ne: video dosyaları büyük olduğu için medya ucunda sınır yükseltildi.
+
+
+K-65 | Satılıklar ve Kiralıklar yalnız raf ekranı.
+       Ne: bu iki ekranda liste, filtre paneli ve "Tüm gayrimenkuller" başlığı
+       yok; karta tıklayınca mülk dosyası tam sayfa açılır. Arama/filtre geniş
+       Gayrimenkuller ekranında kalır.
+
+K-66 | Kişi dosyası açılınca liste başlığı ve bilgi notu da gizlenir.
+       Ne: ekranda yalnız kişi sayfası kalır; "← Kişi listesine dön" ile dönülür.
+
+K-67 | Teslim tutanağı ve depozito hesabı.
+       Ne: giriş/çıkış tutanağı, demirbaş satırları (ad|adet|durum), kesinti ve
+       gerekçe. Çıkışta iade = depozito − kesinti; hesap sunucuda yapılır,
+       tutanak silinmez.

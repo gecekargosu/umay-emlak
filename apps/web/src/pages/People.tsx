@@ -162,6 +162,9 @@ export function People({ initialQuery = "" }: { initialQuery?: string }) {
 
   return (
     <div>
+      {/* TUR:28 — kişi seçiliyken başlık ve bilgi notu da gizlenir: gerçek yeni sayfa. */}
+      {!selected && (
+        <>
       <div className="page-head">
         <h2>Kişiler</h2>
       </div>
@@ -171,6 +174,8 @@ export function People({ initialQuery = "" }: { initialQuery?: string }) {
         içindir: "izin yok" işaretli kişiye pazarlama araması yapılmamalı. Adayın aşaması, takip
         tarihi, bütçesi ve görüşme notları satıra tıklayınca açılır.
       </InfoNote>
+        </>
+      )}
 
       {/* TUR:25 — kullanıcı isteği: "isme tıklayınca en alta iniyor; yeni sayfa açılmalı".
           Kişi seçiliyken liste tamamen gizlenir, kişi dosyası tam sayfa açılır. */}

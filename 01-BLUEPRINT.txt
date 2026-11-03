@@ -389,3 +389,15 @@ TUR:27 DURUM — MÜLK DOSYASI VE MEDYA
   kira çizelgesi (24 ay) + demirbaş + medya.
 - Listings.tsx: detay tam sayfa (liste gizlenir, en üste kaydırma, geri tuşu).
 Kalan: demirbaş fotoğrafı, teslim tutanağı, kira çizelgesinden tahsilat.
+
+
+====================================================================
+TUR:28 DURUM — SADE PORTFÖY, TUTANAK
+====================================================================
+- Listings.tsx: fixedKind varsa liste+filtre render edilmez; yalnız raflar.
+- People.tsx: seçili kişide page-head + InfoNote gizlenir.
+- handover_protocol (0011, RLS): kind move_in/move_out, happened_on, items jsonb,
+  deposit_kurus, deduction_kurus, deduction_note, refund_kurus.
+  GET/POST /contracts/:id/handovers; iade sunucuda hesaplanır.
+- ListingBoard: kiralıkta "Teslim tutanağı" paneli (HandoverPanel).
+Kalan: tutanak yazdırma, demirbaş fotoğrafını tutanağa bağlama.

@@ -343,6 +343,11 @@ export function Listings({
         />
       )}
 
+      {/* TUR:28 — kullanıcı isteği: "kiralıklar olmadı, neden liste yapıyorsun?".
+          Satılıklar ve Kiralıklar ekranlarında yalnız raflar var; liste/filtre
+          yalnızca geniş "Gayrimenkuller" ekranında kalır. */}
+      {!fixedKind && (
+        <>
       <h3 style={{ marginTop: 22 }}>Tüm gayrimenkuller</h3>
       <p className="muted small" style={{ marginTop: -6 }}>
         Raflar vitrin (ilk 10 kayıt); arama ve filtreler aşağıdaki listede çalışır, liste
@@ -539,6 +544,8 @@ export function Listings({
             </tbody>
           </table>
         </div>
+      )}
+        </>
       )}
         </>
       )}
