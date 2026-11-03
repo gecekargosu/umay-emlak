@@ -11,6 +11,7 @@ import { Login } from "./pages/Login";
 import { Payouts } from "./pages/Payouts";
 import { PasswordChange } from "./pages/PasswordChange";
 import { People } from "./pages/People";
+import { Roadmap } from "./pages/Roadmap";
 import { Rents } from "./pages/Rents";
 import { Team } from "./pages/Team";
 
@@ -26,6 +27,7 @@ type Page =
   | "sahipler"
   | "belgeler"
   | "aktar"
+  | "yol-haritasi"
   | "ekip";
 
 /** Kaynak dosya 6.2: düz 15 maddelik menü değil, 6 grup. */
@@ -60,6 +62,7 @@ const NAV: Array<{ group: string; items: Array<{ page: Page; label: string }> }>
     items: [
       { page: "belgeler", label: "Belgeler / arşiv" },
       { page: "aktar", label: "İçe aktar" },
+      { page: "yol-haritasi", label: "Yol haritası" },
     ],
   },
 ];
@@ -76,6 +79,7 @@ const TITLES: Record<Page, string> = {
   sahipler: "Sahipler",
   belgeler: "Belgeler",
   aktar: "İçe Aktar",
+  "yol-haritasi": "Yol Haritası",
   ekip: "Personeller",
 };
 
@@ -312,6 +316,7 @@ export function App() {
           {page === "sahipler" && <Payouts />}
           {page === "belgeler" && <Documents canApprove={session.canApprove} />}
           {page === "aktar" && <Import />}
+          {page === "yol-haritasi" && <Roadmap />}
           {page === "ekip" && (
             <Team
               canApprove={session.canApprove}

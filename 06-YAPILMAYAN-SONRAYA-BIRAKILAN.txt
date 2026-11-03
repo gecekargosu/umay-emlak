@@ -344,3 +344,10 @@ Y-79 | Komisyon / kapora akışı — satışta %3 varsayılan komisyon, kapora 
        kapora alınınca ilan "kaporalı"ya düşsün. Satılıklar ekranında olacak.
 Y-80 | Belge içeriğinden okuma (OCR) — şimdilik eşleşme yalnız dosya adından;
        taranmış tapunun içindeki isim okunmuyor.
+
+
+Y-79 | Komisyon / kapora akışı — KOMİSYON + KAPORA YAPILDI (2026-11-04, TUR:25).
+       Kalan: kapora makbuzu yazdırma ve komisyonun finans panosuna düşmesi.
+Y-81 | Teslim tutanağı (fotoğraf + demirbaş + imza) ve çıkışta depozito hesabı — SIRA 2.
+Y-82 | DASK/poliçe bitiş takibi — SIRA 3.
+Y-83 | TÜİK kira artış oranıyla yenileme hesabı (onaylı) — SIRA 4.

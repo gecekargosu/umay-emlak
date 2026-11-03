@@ -349,3 +349,17 @@ TUR:24 DURUM — TEKLİF, BELGE, AYRI EKRANLAR
 - Ana sayfa sırası: modüller → aksiyon merkezi.
 Eksik: komisyon/kapora akışı, OCR ile içerik okuma, teklif kabulünde ilan durumu.
 Sıradaki: komisyon + kapora (Satılıklar), sonra Finans panosu.
+
+
+====================================================================
+TUR:25 DURUM — KİŞİ SAYFASI, KOMİSYON/KAPORA, YOL HARİTASI
+====================================================================
+- Kişi dosyası: People.tsx'te seçim varken liste gizlenir, tam sayfa açılır.
+  Sahip: mülk/portföy/borç tablosu. Kiracı: sözleşme tablosu + oturduğu kayıt.
+- Geri: üst bar (her sayfa) + her detay panelinde BackButton.
+- Komisyon: GET/POST /listings/:id/commissions; onay /commissions/:id/approve.
+  Kapora: POST /listings/:id/deposit (al / release). Migration 0009.
+- Yol haritası: /yol-haritasi (Roadmap.tsx) + 09-BILGI-BANKASI-KARSILASTIRMA.txt.
+Kalan: tutanak, DASK, TÜİK artış, randevu, arıza, bildirim, ekstre, audit,
+fotoğraf/filigran, mal sahibi/kiracı paneli, mobil.
+Sıradaki: teslim tutanağı (fotoğraf + demirbaş + imza) ve depozito hesabı.

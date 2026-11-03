@@ -79,6 +79,8 @@ export function People({ initialQuery = "" }: { initialQuery?: string }) {
     try {
       const detail = await api<PersonDetail>(`/people/${id}`);
       setSelected(detail);
+      // Yeni sayfa gibi davranır: kaydırma konumu en üste alınır.
+      window.scrollTo(0, 0);
       setCandidate({
         candidateStage: detail.person.candidateStage ?? "",
         followUpDate: detail.person.followUpDate ?? "",
@@ -155,6 +157,9 @@ export function People({ initialQuery = "" }: { initialQuery?: string }) {
     }
   }
 
+  // Liste gizlenirken TS `selected`ı null'a daraltıyor; seçili kimliği ayrı tutuyoruz.
+  const selectedPersonId = selected ? selected.person.id : null;
+
   return (
     <div>
       <div className="page-head">
@@ -167,6 +172,10 @@ export function People({ initialQuery = "" }: { initialQuery?: string }) {
         tarihi, bütçesi ve görüşme notları satıra tıklayınca açılır.
       </InfoNote>
 
+      {/* TUR:25 — kullanıcı isteği: "isme tıklayınca en alta iniyor; yeni sayfa açılmalı".
+          Kişi seçiliyken liste tamamen gizlenir, kişi dosyası tam sayfa açılır. */}
+      {!selected && (
+        <>
       <div className="toolbar">
         <input
           placeholder="İsim veya telefon ara"
@@ -236,7 +245,7 @@ export function People({ initialQuery = "" }: { initialQuery?: string }) {
           {rows.map((row) => (
             <tr
               key={row.id}
-              className={selected?.person.id === row.id ? "selected" : "clickable"}
+              className={selectedPersonId === row.id ? "selected" : "clickable"}
               onClick={() => void open(row.id)}
             >
               <td>{row.fullName}</td>
@@ -266,10 +275,17 @@ export function People({ initialQuery = "" }: { initialQuery?: string }) {
         </tbody>
       </table>
       {rows.length === 0 && <p className="muted">Kayıt yok.</p>}
+        </>
+      )}
 
       {selected && (
-        <div className="panel">
+        <div className="person-page">
           <BackButton onBack={() => setSelected(null)} label="Kişi listesine dön" />
+          <div className="page-head">
+            <h2>{selected.person.fullName}</h2>
+            <span className="spacer" />
+            <span className="muted small">kişi dosyası</span>
+          </div>
           <div className="detail-head">
             <h3>{selected.person.fullName}</h3>
             <span className="badge">{KIND_TR[selected.person.kind] ?? selected.person.kind}</span>
@@ -282,6 +298,45 @@ export function People({ initialQuery = "" }: { initialQuery?: string }) {
             {selected.person.email ? ` · ${selected.person.email}` : ""} ·{" "}
             {selected.properties.length} mülk · {selected.contracts.length} sözleşme
           </p>
+
+          {/* Kiracı: oturduğu daire + sözleşme + kira bilgisi tam sayfada */}
+          {selected.person.kind === "tenant" && (
+            <>
+              <h4>Kira sözleşmesi</h4>
+              {selected.contracts.length === 0 ? (
+                <p className="muted small">Bu kiracının aktif sözleşmesi yok.</p>
+              ) : (
+                <div className="table-scroll">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Başlangıç</th>
+                        <th className="right">Kira</th>
+                        <th>Durum</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {selected.contracts.map((contract) => (
+                        <tr key={contract.id}>
+                          <td>{contract.startDate}</td>
+                          <td className="right">
+                            {(contract.rentKurus / 100).toLocaleString("tr-TR")} ₺
+                          </td>
+                          <td>{contract.status === "active" ? "Aktif" : contract.status}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+              {selected.properties.length > 0 && (
+                <p className="muted small">
+                  Oturduğu kayıt:{" "}
+                  {selected.properties.map((p) => p.title).join(", ")}
+                </p>
+              )}
+            </>
+          )}
 
           {ownerFolder && (
             <>

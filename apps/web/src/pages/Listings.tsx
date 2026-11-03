@@ -11,6 +11,7 @@ import {
 import { BackButton } from "../components/BackButton";
 import { InfoNote } from "../components/InfoNote";
 import { ListingOffers } from "../components/ListingOffers";
+import { ListingMoney } from "../components/ListingMoney";
 
 const KIND_TR: Record<string, string> = { sale: "Satılık", rent: "Kiralık" };
 const STATUS_TR: Record<string, string> = {
@@ -561,6 +562,12 @@ export function Listings({
           </p>
 
           <ListingOffers listingId={detail.listing.id} />
+
+          <ListingMoney
+            listingId={detail.listing.id}
+            canApprove={canApprove}
+            onChanged={() => void refresh()}
+          />
 
           <h4>Belgeler</h4>
           <ul className="req-list">

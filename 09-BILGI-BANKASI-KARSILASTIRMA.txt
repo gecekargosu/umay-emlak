@@ -1,0 +1,125 @@
+BİLGİ BANKASI KARŞILAŞTIRMASI — 2026-11-04 (TUR:25)
+Kaynak: "umay emlak program detayları benim yazdığım.txt" (4929 satır)
+Yöntem: kaynak dosyadaki her başlık maddesi tek tek okundu, bugünkü programla karşılaştırıldı.
+Durumlar: VAR / KISMI / YOK. "Sıra" sütunu YOK ve KISMİ olanların yapım sırasıdır.
+Kural: satır silinmez; yapılanın sonuna "→ YAPILDI (tarih)" eklenir.
+
+====================================================================
+A. PROGRAMDA OLANLAR (VAR)
+====================================================================
+[VAR] 1. Ofis, ortaklar, personel, yetki sınırları
+      → membership rolü + can_approve; personel yalnız kendi portföyünü görür.
+[VAR] 2. Mal sahipleri: mülk, kiracı, borç klasörü
+      → Mal sahipleri ekranı (alfabetik raflar) + kişi dosyası.
+[VAR] 3. Raf görünümü (vitrin) ve liste görünümü
+      → Işıldayan raf + kart (fiyat/durum/teklif sayısı) ve ayrıntılı tablo.
+[VAR] 4. Filtreler: adres, daire, site, apartman, mal sahibi, kiracı, ilçe, oda, fiyat
+      → Yazarken kendiliğinden süzülür (300 ms).
+[VAR] 5. Kiracılık dönemleri ve sözleşme kaydı
+      → contract tablosu, teslim/depozito/kira günü/aidat sorumlusu.
+[VAR] 6. Sözleşme metni üretimi
+      → /contracts/:id/contract-text, A4 yazdırılabilir; snapshot dondurma.
+[VAR] 7. Kira tahakkuku, tahsilat, gecikme takibi
+      → charge/payment; gecikme seviyesi, ihtarname adayı, hatırlatma kaydı.
+[VAR] 8. Belge arşivi + eşleştirme
+      → sha256 tek kopya; ada göre otomatik bağ, belirsizde insan onayı.
+[VAR] 9. Fiyat geçmişi (eski fiyat silinmez)
+      → listing_price_change.
+[VAR] 10. Personel portföyü + alınan teklifler + ilçe ortalaması
+      → /team/:id/portfolio.
+[VAR] 11. Müşteri teklifi / görüşme kaydı
+      → offer tablosu + ilan altında form/tablo; durum değişir, silinmez.
+[VAR] 12. KVKK iletişim izni
+      → izin bilinmiyor/var/yok + not.
+[VAR] 13. Mükerrer kişi birleştirme (kayıt silinmeden)
+      → /people/:id/merge, kaybeden arşivde kalır.
+[VAR] 14. Excel/CSV içe aktarma
+      → İçe aktar ekranı, mükerrer kayıt açmaz.
+[VAR] 15. Oturum güvenliği, zorunlu şifre değişimi, boşta kilit
+      → imzalı çerez + IdleLock.
+[VAR] 16. Genel arama (/) ve bildirim sayacı
+      → üst bar.
+[VAR] 17. EİDS / ilan yetki numarası kaydı
+      → alan var; resmî doğrulama yok (bilinçli).
+[VAR] 18. Abonelik ve demirbaş kaydı (mülk bazlı)
+      → property subscription/fixture.
+
+====================================================================
+B. EKSİKLER VE GÖREV SIRASI (YOK / KISMI)
+====================================================================
+SIRA 1 — Komisyon (%3) + kapora makbuzu
+        Durum: VAR (TUR:25) → komisyon taslağı, %3 varsayılan, indirim gerekçesi zorunlu,
+        onay yetkisiyle kesinleşme; kapora alınınca ilan "kaporalı", iadede "aktif".
+        Kalan: kapora makbuzu yazdırma, komisyonun finansa otomatik düşmesi.
+
+SIRA 2 — Teslim tutanağı + demirbaş listesi (fotoğraflı, imzalı)
+        Durum: KISMI. Demirbaş/abonelik kaydı var; tutanak belgesi, teslim fotoğrafları ve
+        imza akışı yok. Kiracı giriş/çıkış tartışmasının çözümü burada.
+
+SIRA 3 — DASK / poliçe bitiş takibi
+        Durum: YOK. Ana sayfada "planlı" kutularından biri. Poliçe bitişi + 30 gün önce uyarı.
+
+SIRA 4 — TÜİK kira artış oranıyla yenileme hesabı
+        Durum: YOK. Oranın kaynağı ve güncelleme tarihi gösterilmeli; otomatik uygulanmamalı,
+        yetkili onaylamalı (kullanıcının kendi notu).
+
+SIRA 5 — Randevu / yer gösterme modülü
+        Durum: YOK. Aday + portföy + personel + randevu sonucu; sonuçtan teklife bağlantı.
+
+SIRA 6 — Alıcı adayına uygun portföy önerisi
+        Durum: YOK. Adayın bütçe/ilçe/oda alanları hazır; eşleştirme puanı üretilmiyor.
+
+SIRA 7 — Arıza / bakım talebi (kiracıdan)
+        Durum: YOK. Görev modülüyle birlikte tasarlanmalı; fotoğraflı talep + durum.
+
+SIRA 8 — Otomatik hatırlatıcı (SMS/e-posta/push)
+        Durum: YOK. Kira günü, sözleşme bitişi, DASK; izin ve KVKK kurallarıyla.
+
+SIRA 9 — Gider ve mal sahibi hesap ekstresi
+        Durum: KISMI. Aktarım (payout) var; gider kalemi, ekstre ve yazdırma yok.
+
+SIRA 10 — İşlem ve değişiklik geçmişi (kim ne yaptı)
+        Durum: KISMI. Belge onayı, fiyat geçmişi, teklif durumu tutuluyor; genel denetim
+        kaydı (audit) yok. Personel devrinde geçmiş korunmalı (kullanıcı notu).
+
+SIRA 11 — Fotoğraf/video + filigranlı kopya
+        Durum: YOK. Kartta baş harfler var; kapak fotoğrafı, video ve filigran yok.
+
+SIRA 12 — Personel performansı ve ofis raporları
+        Durum: KISMI. Portföy/teklif sayıları gösteriliyor; dönemsel rapor ekranı yok.
+
+SIRA 13 — Mal sahibi paneli (şeffaflık)
+        Durum: YOK. Ayrı giriş, yalnız kendi verisi; "yeni müşteri çeken" ana özellik.
+
+SIRA 14 — Kiracı paneli (sözleşme, ödeme, dekont)
+        Durum: YOK. Ödeme kuruluşu/sanal POS kararı gerekiyor.
+
+SIRA 15 — Mobil uygulama (saha)
+        Durum: YOK. Aynı API üzerinden; Tauri/React Native kararı bu turda verilmedi.
+
+SIRA 16 — WhatsApp / e-posta entegrasyonu
+        Durum: YOK. Toplu bildirimle birlikte, onaylı gönderim kuralıyla.
+
+====================================================================
+C. BENİM ÖNERİLERİM (program hakkında)
+====================================================================
+1) Komisyon ve kapora aynı ekranda olmalı. Ofisin en çok para kaybettiği yer sözlü anlaşma;
+   kapora kaydı bunu kapatır.
+2) Teslim tutanağı fotoğraf + demirbaş + imza üçlüsüyle olmalı; depozito tartışmasını bitirir.
+3) DASK takibi küçük ama kritik: 30 gün önce uyarı, ana sayfada gerçek sayı.
+4) Teklif kabulünde zincir kurulsun: ilan kaporalıya düşsün + komisyon taslağı oluşsun +
+   müşteri alıcı adayına dönsün.
+5) Her ekranda geri tuşu korunmalı; personel yanlış ekrana girince kaybolmamalı.
+6) Para tek kuralda: kuruş tam sayı, ekranda biçimlenir.
+7) Sessiz hata yerine açık uyarı: belge eşleşmediyse "ne yaptım" tek satırda yazılmalı.
+8) Yedek her turda: kod zip + PostgreSQL pg_dump aynı klasöre.
+9) Yeni modüller "önce kayıt, sonra otomasyon" sırasıyla gelmeli (bildirim, otomasyonun
+   üstüne kurulur).
+10) Demo veri ayrı ofiste tutulmalı; gerçek ofis verisiyle karışmamalı.
+
+====================================================================
+D. KAYIT KURALI
+====================================================================
+- Bu dosya silinmez; maddeler yerinde kalır.
+- Bir madde tamamlandığında satırın altına "→ YAPILDI (tarih, TUR)" yazılır.
+- Yeni eksik çıkarsa sonuna SIRA numarası verilerek eklenir.

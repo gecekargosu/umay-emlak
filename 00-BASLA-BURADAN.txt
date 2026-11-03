@@ -207,3 +207,16 @@ Geri tuşu her ekranda çalışır (geçmiş yoksa ana sayfa).
 Belgeler: çoklu yükleme; net eşleşme kendiliğinden bağlanır, eşleşme
 yoksa dosya adıyla kişi açılır, belirsiz örtüşme onaya kalır.
 Sol menüde Satılıklar ve Kiralıklar ayrı ekran.
+
+
+====================================================================
+TUR:25 — KİŞİ SAYFASI, GERİ TUŞU, YOL HARİTASI, KOMİSYON/KAPORA
+====================================================================
+Kişi kartına tıklayınca liste kapanır, kişi dosyası tam sayfa açılır:
+mal sahibinde mülk + portföy değeri + borç, kiracıda sözleşme + kira.
+Her detay panelinde geri tuşu var (Belgeler dahil).
+Sol menüde Sistem → Yol haritası: bilgi bankasıyla karşılaştırma (18 var,
+6 kısmi, 8 yok), 16 maddelik görev sırası ve öneriler.
+Komisyon/kapora: ilan dosyasında %3 varsayılan komisyon, indirimde gerekçe,
+onay yetkisiyle kesinleşme; kapora alınınca ilan kaporalıya düşer.
+Kayıt: 09-BILGI-BANKASI-KARSILASTIRMA.txt. Sıradaki: teslim tutanağı.

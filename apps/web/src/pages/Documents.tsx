@@ -8,6 +8,7 @@ import {
   type PersonRow,
 } from "../api";
 import { InfoNote } from "../components/InfoNote";
+import { BackButton } from "../components/BackButton";
 
 /**
  * Belgeler — "raf" görünümü.
@@ -232,6 +233,7 @@ export function Documents({ canApprove }: { canApprove: boolean }) {
 
       {detail && (
         <div className="panel">
+          <BackButton onBack={() => setDetail(null)} label="Belge rafına dön" />
           <h3>{detail.document.title ?? detail.document.filename}</h3>
           <p className="muted small">
             {detail.document.kindLabel} · {(detail.document.sizeBytes / 1024).toFixed(0)} KB ·{" "}

@@ -307,3 +307,27 @@ K-50 | Belge eşleştirme kuralı.
 K-51 | Satılıklar ve Kiralıklar ayrı ekran.
        Ne: sol menüde iki ekran; tür sabit, raflarda yalnız o tür görünür.
        Komisyon/kapora akışı sonraki dilime bırakıldı (Y-79).
+
+
+K-52 | Kişi dosyası ayrı tam sayfa açılır.
+       Ne: satıra tıklayınca liste gizlenir, kişi sayfası en üstten açılır. Mal
+       sahibinde mülk/portföy/borç, kiracıda sözleşme + oturduğu kayıt. Panel
+       sayfanın altında kalmıyor.
+
+K-53 | Her açılan detayda geri tuşu zorunlu.
+       Ne: üst bar geri tuşu (geçmiş yoksa ana sayfa) + her detay panelinde
+       "← ... listesine dön". Belgeler detayına da eklendi.
+
+K-54 | Yol haritası bilgi bankasıyla eşleşir.
+       Ne: her özellik VAR / KISMI / YOK olarak işaretlenir; YOK ve KISMİ olanlar
+       numaralı görev sırasına girer. Kayıt 09-BILGI-BANKASI-KARSILASTIRMA.txt;
+       satır silinmez, tamamlanana "YAPILDI" eklenir.
+
+K-55 | Komisyon: %3 varsayılan, indirimde gerekçe zorunlu.
+       Ne: taslak oluşturulur, onay yetkisi olan kesinleştirir (K-29). Tutar
+       ilan fiyatından oranla hesaplanır; elle tutar girilirse oran kontrolü
+       yapılır ve indirimde gerekçe istenir.
+
+K-56 | Kapora ilanı kaporalıya düşürür.
+       Ne: kapora tutarı ve tarihi ilanda tutulur; alınınca ilan "kaporalı",
+       iade edilince "aktif" olur. Kapora makbuzu yazdırma sonraki dilimde.
