@@ -287,7 +287,7 @@ export function People({ initialQuery = "" }: { initialQuery?: string }) {
             <span className="muted small">kişi dosyası</span>
           </div>
           <div className="detail-head">
-            <h3>{selected.person.fullName}</h3>
+            {/* Ad sayfa başlığında; burada tekrar edilmiyor. */}
             <span className="badge">{KIND_TR[selected.person.kind] ?? selected.person.kind}</span>
             <span className={`chip ${selected.person.contactPermission === "denied" ? "danger" : selected.person.contactPermission === "allowed" ? "ok" : ""}`}>
               {PERMISSION_TR[selected.person.contactPermission] ?? selected.person.contactPermission}
