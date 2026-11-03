@@ -367,3 +367,10 @@ Y-86 | Randevu / yer gösterme — SIRA 5. YAPILDI (2026-11-04, TUR:31):
        takvimde randevu işareti, randevudan teklife tek tık, hatırlatma.
 Y-87 | Randevuların takvimde görünmesi — YAPILDI (2026-11-04, TUR:32): gün
        panelinde "randevu" rozeti, saat ve "Randevuya git" düğmesi.
+
+Y-88 | Alıcı adayına portföy önerisi — SIRA 6. YAPILDI (2026-11-04, TUR:33):
+       bütçe + ilçe + oda ile puanlama, gerekçeli liste. Kalan: öneriden
+       randevu/teklif açma, puan ağırlıklarının ayarlanması.
+Y-89 | Exe / taşınabilir paket — Aysan'ın bilgisayarında kurulumsuz çalışacak
+       sürüm. embedded Postgres initdb "locale" hatası --locale=C ile aşıldı;
+       paket iskeleti (node.exe + app + veri klasörü) kurulacak.

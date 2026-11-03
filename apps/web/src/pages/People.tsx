@@ -6,6 +6,7 @@ import {
   type OwnerDetail,
   type PersonNote,
   type PersonRow,
+  type PersonSuggestion,
 } from "../api";
 import { InfoNote } from "../components/InfoNote";
 import { BackButton } from "../components/BackButton";
@@ -51,6 +52,28 @@ export function People({ initialQuery = "" }: { initialQuery?: string }) {
   const [ownerFolder, setOwnerFolder] = useState<OwnerDetail | null>(null);
   const [notes, setNotes] = useState<PersonNote[]>([]);
   const [noteText, setNoteText] = useState("");
+  // TUR:33 — adaya uygun portföy önerisi (SIRA 6).
+  const [suggestions, setSuggestions] = useState<PersonSuggestion[] | null>(null);
+  const [suggestFor, setSuggestFor] = useState<string | null>(null);
+  const [suggestBusy, setSuggestBusy] = useState(false);
+  const [suggestError, setSuggestError] = useState<string | null>(null);
+
+  async function loadSuggestions() {
+    if (!selected) return;
+    setSuggestBusy(true);
+    setSuggestError(null);
+    try {
+      const data = await api<{ items: PersonSuggestion[]; hasCriteria: boolean }>(
+        `/people/${selected.person.id}/suggestions`,
+      );
+      setSuggestions(data.items);
+      setSuggestFor(selected.person.id);
+    } catch (caught) {
+      setSuggestError(caught instanceof ApiError ? caught.message : "Öneri alınamadı");
+    } finally {
+      setSuggestBusy(false);
+    }
+  }
   const [candidate, setCandidate] = useState({
     candidateStage: "",
     followUpDate: "",
@@ -476,6 +499,66 @@ export function People({ initialQuery = "" }: { initialQuery?: string }) {
               <p className="hint">
                 Takip tarihi geçen adaylar için hatırlatma modülü henüz yok (Y-54 kısmi).
               </p>
+
+              <div className="row-gap">
+                <button
+                  type="button"
+                  className="secondary"
+                  disabled={suggestBusy}
+                  onClick={() => void loadSuggestions()}
+                >
+                  {suggestBusy ? "Aranıyor…" : "Uygun portföyü bul"}
+                </button>
+                <span className="muted small">
+                  bütçe · ilçe · oda ile puanlanır; program yalnız önerir
+                </span>
+              </div>
+              {suggestError && <p className="error small">{suggestError}</p>}
+              {suggestFor === selected.person.id && suggestions !== null &&
+                (suggestions.length === 0 ? (
+                  <p className="muted small">
+                    Kriterlere uyan aktif portföy yok. Bütçe, ilçe veya oda bilgisini
+                    güncelleyip yeniden deneyin.
+                  </p>
+                ) : (
+                  <div className="table-scroll">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Puan</th>
+                          <th>Mülk</th>
+                          <th>İlçe</th>
+                          <th>Oda / m²</th>
+                          <th className="right">Fiyat</th>
+                          <th>Neden önerildi</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {suggestions.map((row) => (
+                          <tr key={row.listingId}>
+                            <td>
+                              <span className="badge">{row.score}</span>
+                            </td>
+                            <td>
+                              {row.title}
+                              <div className="muted small">
+                                {row.kind === "rent" ? "kiralık" : "satılık"}
+                              </div>
+                            </td>
+                            <td>{row.district ?? "—"}</td>
+                            <td>
+                              {[row.roomCount, row.grossM2 ? `${row.grossM2} m²` : null]
+                                .filter(Boolean)
+                                .join(" · ") || "—"}
+                            </td>
+                            <td className="right">{row.priceText}</td>
+                            <td className="muted small">{row.reasons.join(", ")}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ))}
             </>
           )}
 

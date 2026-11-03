@@ -450,3 +450,14 @@ TUR:32 DURUM — TAKVİM + RANDEVU, GITHUB
 - Calendar.tsx: "randevu" rozeti, 📅 simgesi, "Randevuya git".
 - GitHub: gecekargosu/umay-emlak (private), master dalı; .env/.freebuff hariç.
 Kalan: ana sayfada ayrı "bugünün randevuları" kutusu; randevudan teklife geçiş.
+
+====================================================================
+TUR:33 DURUM — PORTFÖY ÖNERİSİ
+====================================================================
+- GET /people/:id/suggestions: aktif ilanlar + aday kriterleri.
+  Puan: ilçe 40 · oda 30 · bütçe içinde 25 / %10 yakın 15 · 100 m²+ 3 ·
+  bütçenin 1,5 katı üstü −10. Gerekçe metni döner; kayıt değişmez.
+  Kriter yoksa hasCriteria=false, liste boş.
+- People.tsx: aday bölümünde "Uygun portföyü bul" + puan/gerekçe tablosu.
+- GitHub: gecekargosu/umay-emlak (private), master; commit'ler noreply adresle.
+Kalan: öneriden randevu/teklif açma, ağırlıkların ayarlanması, exe paketleme.

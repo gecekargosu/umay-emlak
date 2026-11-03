@@ -541,6 +541,21 @@ export type PolicyList = {
   kinds: Array<{ kind: string; label: string }>;
 };
 
+/** TUR:33 — adaya uygun portföy önerisi. */
+export type PersonSuggestion = {
+  listingId: string;
+  kind: string;
+  title: string;
+  district: string | null;
+  city: string | null;
+  roomCount: string | null;
+  grossM2: number | null;
+  priceKurus: number;
+  priceText: string;
+  score: number;
+  reasons: string[];
+};
+
 /** TUR:31 — randevu / yer gösterme. */
 export type Appointment = {
   id: string;

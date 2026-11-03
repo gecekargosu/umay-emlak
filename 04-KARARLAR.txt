@@ -418,3 +418,13 @@ K-75 | Randevu takvimde saatli iş olarak görünür.
 K-76 | Kaynak kod private GitHub deposunda tutulur.
        Ne: gecekargosu/umay-emlak. .env, .freebuff ve yerel yedek zip'leri depo
        dışında; sırlar hiçbir commit'e girmez (K-19).
+
+K-77 | Portföy önerisi yalnız öneridir.
+       Ne: puan ve gerekçe şeffaf gösterilir; program hiçbir ilanı, kişiyi veya
+       fiyatı değiştirmez. Bütçenin çok üstündeki ilan silinmez, negatif puanla
+       listenin altında kalır.
+
+K-78 | GitHub commit'leri noreply adresle atılır.
+       Ne: hesapta "e-posta gizliliği" açık olduğu için kişisel adresle push
+       reddediliyor; depo gecekargosu/umay-emlak ve commit'ler
+       <id>+gecekargosu@users.noreply.github.com adresiyle.

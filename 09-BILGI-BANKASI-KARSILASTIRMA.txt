@@ -72,7 +72,8 @@ SIRA 5 — Randevu / yer gösterme modülü
         teklife tek tık bağlantı. Aday + portföy + personel + randevu sonucu; sonuçtan teklife bağlantı.
 
 SIRA 6 — Alıcı adayına uygun portföy önerisi
-        Durum: YOK. Adayın bütçe/ilçe/oda alanları hazır; eşleştirme puanı üretilmiyor.
+        Durum: VAR (TUR:33) → YAPILDI (2026-11-04): bütçe/ilçe/oda ile puanlama ve
+        gerekçeli öneri listesi. Kalan: öneriden randevu/teklife geçiş. Adayın bütçe/ilçe/oda alanları hazır; eşleştirme puanı üretilmiyor.
 
 SIRA 7 — Arıza / bakım talebi (kiracıdan)
         Durum: YOK. Görev modülüyle birlikte tasarlanmalı; fotoğraflı talep + durum.

@@ -302,3 +302,13 @@ randevu takvimde gösterilmez.
 Kaynak kod: GitHub → gecekargosu/umay-emlak (private). Sırlar (.env) ve yerel
 yedekler depoya girmez.
 Sıradaki: alıcı adayına portföy önerisi (SIRA 6).
+
+====================================================================
+TUR:33 — ADAYA UYGUN PORTFÖY ÖNERİSİ + GITHUB
+====================================================================
+Kişi kartlarında bir adayı aç; "Aday bilgisi"nde bütçe, istediği ilçe ve oda
+sayısını doldur, "Adayı kaydet" de. Ardından "Uygun portföyü bul":
+program aktif portföyü puanlar ve neden önerdiğini yazar (ilçe uyuyor,
+bütçe içinde, oda uyuyor...). Öneri yalnız bilgidir; hiçbir kaydı değiştirmez.
+Kaynak kod: github.com/gecekargosu/umay-emlak (private, 33 commit).
+Sıradaki: arıza / bakım talebi (SIRA 7).
