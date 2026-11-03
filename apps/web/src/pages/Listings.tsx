@@ -49,15 +49,19 @@ export function Listings({ canApprove }: { canApprove: boolean }) {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const [view, setView] = useState<"raf" | "tablo">("raf");
+  const [allRows, setAllRows] = useState<ListingRow[]>([]);
+  const [filters, setFilters] = useState({ q: "", kind: "", status: "" });
   const [authority, setAuthority] = useState("");
   const [assets, setAssets] = useState<PropertyAssets | null>(null);
   const [subForm, setSubForm] = useState({ kind: "elektrik", provider: "", monthlyText: "" });
-  const [fixtureForm, setFixtureForm] = useState({ name: "", quantity: 1 });
-
-  async function load() {
+  const [fixtureForm, setFixtureForm] = useState({ name: "", quantity: 1 });  async function load(params: { q?: string; kind?: string; status?: string } = {}) {
     try {
-      const data = await api<{ items: ListingRow[] }>("/listings");
+      const search = new URLSearchParams();
+      if (params.q) search.set("q", params.q);
+      if (params.kind) search.set("kind", params.kind);
+      if (params.status) search.set("status", params.status);
+      const qs = search.toString();
+      const data = await api<{ items: ListingRow[] }>(`/listings${qs ? `?${qs}` : ""}`);
       setRows(data.items);
       setError(null);
     } catch {
@@ -65,8 +69,19 @@ export function Listings({ canApprove }: { canApprove: boolean }) {
     }
   }
 
+  /** Raflar filtreden bağımsızdır: kiralıklar ve satılıklar hep tam listelenir. */
+  async function loadAll() {
+    try {
+      const data = await api<{ items: ListingRow[] }>("/listings");
+      setAllRows(data.items);
+    } catch {
+      // raf boş kalır, liste hatayı gösterir
+    }
+  }
+
   useEffect(() => {
     void load();
+    void loadAll();
     void api<{ items: KindOption[] }>("/documents/kinds")
       .then((data) => setKinds(data.items))
       .catch(() => null);
@@ -89,7 +104,7 @@ export function Listings({ canApprove }: { canApprove: boolean }) {
   }
 
   async function refresh() {
-    await load();
+    await Promise.all([load(filters), loadAll()]);
     if (detail) await open(detail.listing.id);
   }
 
@@ -234,22 +249,7 @@ export function Listings({ canApprove }: { canApprove: boolean }) {
       <div className="page-head">
         <h2>Portföy</h2>
         <span className="spacer" />
-        <div className="toolbar" style={{ margin: 0 }}>
-          <button
-            type="button"
-            className={view === "raf" ? "" : "ghost"}
-            onClick={() => setView("raf")}
-          >
-            Raflar
-          </button>
-          <button
-            type="button"
-            className={view === "tablo" ? "" : "ghost"}
-            onClick={() => setView("tablo")}
-          >
-            Tablo
-          </button>
-        </div>
+        <span className="muted small">{rows.length} kayıt</span>
       </div>
       <InfoNote title="İlan, mülkün ticari teklifidir.">
         Aynı daire hem satılık hem kiralık olabilir; bu yüzden ilan ayrı kayıttır. Taslak ilan,
@@ -258,22 +258,80 @@ export function Listings({ canApprove }: { canApprove: boolean }) {
         eklendiğinde buraya fotoğraf gelecek.
       </InfoNote>
 
+      <Shelf
+        title="Kiralıklar"
+        rows={allRows.filter((row) => row.kind === "rent")}
+        selectedId={detail?.listing.id ?? null}
+        onOpen={(id) => void open(id)}
+      />
+      <Shelf
+        title="Satılıklar"
+        rows={allRows.filter((row) => row.kind === "sale")}
+        selectedId={detail?.listing.id ?? null}
+        onOpen={(id) => void open(id)}
+      />
+
+      <h3 style={{ marginTop: 22 }}>Tüm portföy</h3>
+      <form
+        className="toolbar"
+        onSubmit={(event) => {
+          event.preventDefault();
+          void load(filters);
+        }}
+      >
+        <input
+          style={{ flex: "1 1 300px" }}
+          placeholder="Adres, daire, mal sahibi veya kiracı ara…"
+          value={filters.q}
+          onChange={(e) => setFilters({ ...filters, q: e.target.value })}
+        />
+        <select
+          value={filters.kind}
+          onChange={(e) => setFilters({ ...filters, kind: e.target.value })}
+        >
+          <option value="">Kiralık + satılık</option>
+          <option value="rent">Yalnız kiralık</option>
+          <option value="sale">Yalnız satılık</option>
+        </select>
+        <select
+          value={filters.status}
+          onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+        >
+          <option value="">Tüm durumlar</option>
+          <option value="draft">Taslak</option>
+          <option value="active">Aktif</option>
+          <option value="reserved">Kaporalı</option>
+          <option value="closed">Kapandı</option>
+          <option value="archived">Arşiv</option>
+        </select>
+        <button type="submit">Ara</button>
+        <button
+          type="button"
+          className="ghost"
+          onClick={() => {
+            const empty = { q: "", kind: "", status: "" };
+            setFilters(empty);
+            void load(empty);
+          }}
+        >
+          Temizle
+        </button>
+      </form>
+
       {rows.length === 0 ? (
         <p className="muted">
-          Henüz portföy yok. Kişiler ekranından mal sahibi ekleyip içe aktarma yapabilirsiniz.
+          {allRows.length === 0
+            ? "Henüz portföy yok. Kişiler ekranından mal sahibi ekleyip içe aktarma yapabilirsiniz."
+            : "Bu aramaya uyan kayıt yok. Filtreleri temizleyin."}
         </p>
-      ) : view === "raf" ? (
-        <Shelves
-          rows={rows}
-          selectedId={detail?.listing.id ?? null}
-          onOpen={(id) => void open(id)}
-        />
       ) : (
         <table>
           <thead>
             <tr>
               <th>Mülk</th>
-              <th>Konum</th>
+              <th>Adres</th>
+              <th>Mal sahibi</th>
+              <th>Kiracı</th>
               <th>Tür</th>
               <th>Durum</th>
               <th className="right">Fiyat</th>
@@ -286,8 +344,17 @@ export function Listings({ canApprove }: { canApprove: boolean }) {
                 className={detail?.listing.id === row.id ? "selected" : "clickable"}
                 onClick={() => void open(row.id)}
               >
-                <td>{row.title}</td>
-                <td className="muted">{[row.district, row.city].filter(Boolean).join(", ")}</td>
+                <td>
+                  {row.title}
+                  {row.roomCount ? <span className="muted small"> · {row.roomCount}</span> : null}
+                </td>
+                <td className="muted">
+                  {row.address ||
+                    [row.district, row.city].filter(Boolean).join(", ") ||
+                    "adres yok"}
+                </td>
+                <td className="muted">{row.ownerName ?? "—"}</td>
+                <td className="muted">{row.tenantName ?? "—"}</td>
                 <td>{KIND_TR[row.kind] ?? row.kind}</td>
                 <td>{STATUS_TR[row.status] ?? row.status}</td>
                 <td className="right">{row.price}</td>
@@ -572,42 +639,29 @@ const CHIP: Record<string, string> = {
   archived: "",
 };
 
-/** Raf görünümü — kaynak dosyadaki "mal sahibi dosyası" fikrinin ilk adımı. */
-function Shelves({
+/** Raf görünümü: kiralıklar / satılıklar. Kart tıklanınca ilan detayı açılır. */
+function Shelf({
+  title,
   rows,
   selectedId,
   onOpen,
 }: {
+  title: string;
   rows: ListingRow[];
   selectedId: string | null;
   onOpen: (id: string) => void;
 }) {
-  // HATA DÜZELTMESİ (TUR:16): taslak ilan hem "Kiralıklar" hem "Taslaklar"
-  // rafında görünüyordu (aynı kart iki kez). Taslaklar artık tür rafından çıkarılır.
-  const groups = [
-    {
-      key: "rent",
-      label: "Kiralıklar",
-      rows: rows.filter((r) => r.kind === "rent" && r.status !== "draft"),
-    },
-    {
-      key: "sale",
-      label: "Satılıklar",
-      rows: rows.filter((r) => r.kind === "sale" && r.status !== "draft"),
-    },
-    { key: "draft", label: "Taslaklar", rows: rows.filter((r) => r.status === "draft") },
-  ].filter((group) => group.rows.length > 0);
-
   return (
-    <div>
-      {groups.map((group) => (
-        <section key={group.key}>
-          <div className="shelf-bar">
-            <h3>{group.label}</h3>
-            <span className="muted small">{group.rows.length} kayıt</span>
-          </div>
-          <div className="shelf">
-            {group.rows.map((row) => (
+    <section>
+      <div className="shelf-bar">
+        <h3>{title}</h3>
+        <span className="muted small">{rows.length} kayıt</span>
+      </div>
+      {rows.length === 0 ? (
+        <p className="muted small">Bu rafta kayıt yok.</p>
+      ) : (
+        <div className="shelf">
+          {rows.map((row) => (
               <button
                 key={row.id}
                 type="button"
@@ -634,10 +688,9 @@ function Shelves({
                   </span>
                 </div>
               </button>
-            ))}
-          </div>
-        </section>
-      ))}
-    </div>
+          ))}
+        </div>
+      )}
+    </section>
   );
 }

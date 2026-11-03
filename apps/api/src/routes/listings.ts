@@ -8,7 +8,8 @@
  * K-13: fiyat kuruş; her değişiklik fiyat geçmişine düşer.
  */
 import { Hono } from "hono";
-import { and, desc, eq, or } from "drizzle-orm";
+import { and, desc, eq, or, sql, type SQL } from "drizzle-orm";
+import { alias } from "drizzle-orm/pg-core";
 import { z } from "zod";
 import { schema, withTenant } from "@umay/db";
 import {
@@ -34,9 +35,44 @@ const TRANSITIONS: Record<string, string[]> = {
   archived: [],
 };
 
+/**
+ * Portföy listesi + arama.
+ * Tek kutuda adres, mülk adı, mal sahibi, kiracı, oda sayısı ve telefon aranır
+ * (TUR:17 kullanıcı isteği: "adres ya da mal sahibi/kiracı adı girip ulaşmak").
+ */
 listingRoutes.get("/", async (c) => {
   const session = await resolveSession(c);
   requirePasswordChanged(session);
+
+  const q = (c.req.query("q") ?? "").trim();
+  const kind = c.req.query("kind");
+  const status = listingStatusSchema.safeParse(c.req.query("status") ?? undefined);
+
+  const owner = alias(schema.persons, "owner_person");
+  const tenant = alias(schema.persons, "tenant_person");
+
+  const conditions: SQL[] = [];
+  if (kind === "sale" || kind === "rent") conditions.push(eq(schema.listings.kind, kind));
+  if (status.success) conditions.push(eq(schema.listings.status, status.data));
+
+  if (q) {
+    const like = `%${q.toLocaleLowerCase("tr")}%`;
+    const digits = q.replace(/\D/g, "");
+    const parts = [
+      sql`lower(${schema.properties.title}) like ${like}`,
+      sql`lower(coalesce(${schema.properties.address}, '')) like ${like}`,
+      sql`lower(coalesce(${schema.properties.district}, '')) like ${like}`,
+      sql`lower(coalesce(${schema.properties.city}, '')) like ${like}`,
+      sql`lower(coalesce(${schema.properties.roomCount}, '')) like ${like}`,
+      sql`lower(coalesce(${owner.fullName}, '')) like ${like}`,
+      sql`lower(coalesce(${tenant.fullName}, '')) like ${like}`,
+    ];
+    if (digits.length >= 3) {
+      parts.push(sql`coalesce(${owner.phoneDigits}, '') like ${`%${digits}%`}`);
+      parts.push(sql`coalesce(${tenant.phoneDigits}, '') like ${`%${digits}%`}`);
+    }
+    conditions.push(or(...parts)!);
+  }
 
   const rows = await withTenant(session.tenantId, async (tx) =>
     tx
@@ -46,16 +82,32 @@ listingRoutes.get("/", async (c) => {
         kind: schema.listings.kind,
         status: schema.listings.status,
         priceKurus: schema.listings.priceKurus,
+        authorityNo: schema.listings.authorityNo,
         title: schema.properties.title,
         district: schema.properties.district,
         city: schema.properties.city,
+        address: schema.properties.address,
+        roomCount: schema.properties.roomCount,
         publishedAt: schema.listings.publishedAt,
         createdAt: schema.listings.createdAt,
+        ownerName: owner.fullName,
+        tenantName: tenant.fullName,
+        tenantPhone: tenant.phone,
       })
       .from(schema.listings)
       .innerJoin(schema.properties, eq(schema.properties.id, schema.listings.propertyId))
+      .leftJoin(owner, eq(owner.id, schema.properties.ownerPersonId))
+      .leftJoin(
+        schema.contracts,
+        and(
+          eq(schema.contracts.listingId, schema.listings.id),
+          eq(schema.contracts.status, "active"),
+        ),
+      )
+      .leftJoin(tenant, eq(tenant.id, schema.contracts.tenantPersonId))
+      .where(conditions.length > 0 ? and(...conditions) : undefined)
       .orderBy(desc(schema.listings.createdAt))
-      .limit(100),
+      .limit(200),
   );
 
   return c.json({

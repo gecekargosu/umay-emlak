@@ -75,6 +75,12 @@ export type ListingRow = {
   title: string;
   district: string | null;
   city: string | null;
+  address: string | null;
+  roomCount: string | null;
+  ownerName: string | null;
+  tenantName: string | null;
+  tenantPhone: string | null;
+  authorityNo?: string | null;
   publishedAt: string | null;
 };
 

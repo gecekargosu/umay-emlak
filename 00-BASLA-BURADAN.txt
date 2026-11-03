@@ -84,7 +84,7 @@ Ayrıntılı kontrol listesi: 02-GOREV-PROTOKOLU.txt (görev başında 7, sonund
 04-KARARLAR.txt        bağlayıcı kararlar (K-01…K-33)
 05-SORULAR-AYSAN.txt   keşif soruları + Aysan'ın cevapları (2026-11-03)
 06-YAPILMAYAN-SONRAYA-BIRAKILAN.txt  yapılmayan/ertelenen işler + gerekçeleri
-                       (Y-01…Y-60; Y-01, Y-10 ve Y-53…Y-60 kapandı, S-01…S-07 sapma notu)
+                       (Y-01…Y-75; Y-01, Y-10 ve Y-53…Y-60 kapandı, S-01…S-08 sapma notu)
 umay emlak ...txt      ham fikir arşivi (280 KB) — gerektiğinde grep'le bak
 apps/                  api (Hono) — sunucu, oturum, kiracı bağlamı
 packages/db            şema, migration, RLS politikaları, tohum verisi
@@ -135,3 +135,11 @@ YENİ DOSYALAR (TUR:15) — MülkPro devir belgesi
 kaynaklar/MulkPro-Ekip-Devir-Belgesi-2026-11-03.md  belgenin birebir kopyası.
 Sonuç: mimari farklı (tek cihaz lokal kasa vs çok kiracılı sunucu); kod
 devralınmaz, 8 yeni iş kaydı açıldı (Y-53…Y-60), S-07 sapma notu.
+
+====================================================================
+YENİ DOSYA (TUR:18) — MülkPro onay listesi
+====================================================================
+08-MULKPRO-ONAY-LISTESI-ANALIZI.txt  PDF'in analizi + bizde olmayan 66 kalem.
+Kaynak PDF: MulkPro_Gelistirme_Onay_Listesi_ve_Hedef_Ozellikler.pdf (18 sayfa).
+Sonuç: 39 onay maddesi + 240 hedef özellik; hiçbiri onaylı değil. Yeni işler
+Y-61…Y-75 olarak 06'ya yazıldı, kalanlar mevcut kayıtlarla birleştirildi.

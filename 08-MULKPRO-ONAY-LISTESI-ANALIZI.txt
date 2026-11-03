@@ -1,0 +1,186 @@
+UMAY EMLAK — "MulkPro Gelistirme Onay Listesi ve Hedef Ozellikler" ANALIZI
+Tarih: 2026-11-03 · Tur: TUR:18
+Kaynak dosya: MulkPro_Gelistirme_Onay_Listesi_ve_Hedef_Ozellikler.pdf (18 sayfa, 128 KB)
+Metin kopyasi: .freebuff/mulkpro-onay.txt (pdftotext -layout ile cikarildi)
+
+====================================================================
+A) BU DOSYA NEDIR?
+====================================================================
+Iki bolumlu bir karar + hedef belgesi:
+
+  Bolum A — "Gelistirme degerlendirmesi ve uygulama onay listesi"
+    - 39 onay maddesi (O01…O39) + 6 uygulama paketi (P0…P5)
+    - Her madde: onerilen tercih + "kabul ve sinir" (kabul olcutu)
+    - Durum: HICBIRI ONAYLANMADI; hepsi "onay bekliyor"
+    - 14 kritik is sorusu + mevzuat notlari (5464 s. Kanun md.17 kart farki,
+      KVKK silme/yok etme/anonimlestirme)
+
+  Bolum B — "Hedef urun ozellik katalogu"
+    - 240 hedef ozellik (F001…F240), 25 baslik altinda
+    - Acikca "HEDEF URUN TASVIRI" deniyor: "Buradaki ozelliklerin tumu mevcut
+      yazilimda calisiyor degildir... teslim raporu veya satisa hazir urun
+      beyani olarak kullanilmamalidir."
+
+Yani: MulkPro ekibinin "ne yapmayi oneriyoruz, hangi sirayla, hangi kabul
+sartiyla" belgesi. UMAY EMLAK'a uzak degil — ayni isi (kisi → mulk → portfoy →
+belge → kira → tahsilat) anlatiyor, ama MulkPro'nun Flutter/yerel kasa
+mimarisi uzerinden.
+
+====================================================================
+B) BIZE FAYDASI VAR MI? (kisa cevap: EVET, ama sinirli)
+====================================================================
+Faydali oldugu yerler:
+1. Kabul olcutleri: "kanit olmadan bitti denmez" yaklasimi bizim 02 protokolu
+   ile ayni. Ozellikle "yukleme otomatik 'odendi' yapmaz", "belge var != yetki
+   dogrulandi", "imza kutusu != hukuken imzali belge" uyarilari bizim
+   S-02/S-04 kararlarimizi dogruluyor.
+2. Risk listesi: RLS/org_id eklemek izolasyon garantisi degildir (politika +
+   sorgu + dosya erisimi + test gerekir) — bizim iki ofisli testlerimiz bu
+   maddeyi zaten karsiliyor; karsilamadigimiz yer DOSYA erisimi (Y-07).
+3. Kapsam disiplini: kart farki / pazaryeri POS / "her sey otomatik" gibi
+   fikirlere "hayir" gerekceleri bizim K-21/S-04 ile ortusuyor.
+4. Eksikler listesi: asagidaki D bolumu, 240 maddelik katalogdan bizde
+   olmayanlari cikardi; 06 dosyasina Y kaydi olarak islendi.
+
+Faydali olmadigi / dikkat edilecek yerler:
+- Belge MulkPro'nun kendi urun kararlarini savunuyor (Flutter kalsin, yerel
+  kasa kalsin, sunucu sonra). Bizim mimarimiz tersi: cok kiracili sunucu + RLS
+  basta. Bu maddeler bize talimat degil.
+- 240 ozellik "hedef" listesi; hepsini yapmak 2-3 yillik is. Bizim 01'deki
+  dilim plani (D0…D12) daha gercekci.
+- MulkPro'nun mevcut durumu (139 test, Flutter) bizim olcumuz degil; onlarin
+  rakamlarini kabul olcutu olarak almayiz.
+
+====================================================================
+C) BELGENIN EN DEGERLI 10 TESPITI (bizde uygulanan/uygulanacak)
+====================================================================
+1. Kisi, mulk, portfoy ve kiracilik donemi AYRI kayitlar (bizde K-17 + contract).
+2. Mulk dosyasi: galeri + belge + taraflar + fiyat gecmisi + kira + tahsilat +
+   bakim + gecmis tek ekranda (bizde Y-08/Y-52 ile kismi).
+3. Raf + arama + filtreli liste + is akisi ayni veriyi gostermeli (TUR:17'de
+   Gayrimenkuller ekraninda uygulandi).
+4. Eksik/suresi yaklasan belge gorunur olmali (bizde /today + ilan sartlari VAR).
+5. Personel atama/devir gecmisi korunmali (bizde Y-01 ekip + Y-21 devir acik).
+6. Tahakkuk / tahsilat / mahsup ayri (bizde VAR; mahsup coklu borca Y-09 acik).
+7. Tarihten uretilen gunluk aksiyon panosu + sorumlu (bizde /today VAR, sorumlu
+   alani YOK → yeni kayit).
+8. Giris/cikis tutanagi: fotografli durum, demirbas, sayac, anahtar (bizde YOK).
+9. Yedek + kalici taslak + guvenli disa aktarim (bizde Y-29 + Y-57 kismi).
+10. Ekip/musteri portallari ancak sunucu tarafi yetki ve izolasyondan SONRA
+    (bizde Dilim 8; RLS hazir oldugu icin sira dogru).
+
+====================================================================
+D) BIZDE OLMAYANLAR — 240 MADDEDEN CIKAN LISTE
+====================================================================
+(Durum: VAR / KISMI / YOK. Y=06 dosyasindaki kayit numarasi)
+
+GUVENLIK / OFIS
+D1  Sube ve coklu ofis yapisi (F003)                        YOK  → Y-61
+D2  Cihaz oturumlarini listeleme ve sonlandirma (F018)      YOK  → Y-61
+D3  Iki asamali dogrulama (F020)                            YOK  → Y-61
+D4  Tuzel kisi (sirket) kaydi (F021)                        YOK  → Y-62
+D5  Ayni kiside coklu rol (malik+kiraci+aday) (F022)        KISMI (tek kind) → Y-62
+D6  Alan bazli maskeleme / gorunurluk (F015, F067)          KISMI (Y-36) → Y-62
+D7  Ayrilan personelin oturumlarini kapatma (F019)          KISMI (üyelik left) → Y-61
+
+KISI / MULK
+D8  Net/brut alan ayrimi + kaynak (F043)                    KISMI (grossM2)
+D9  Ada/parsel/tapu tanimlayici (F042)                      KISMI (deedRef)
+D10 Oda/banyo/bina yasi/isitma/teknik ozellikler (F044)     YOK  → Y-63
+D11 Balkon/asansor/otopark/site ozellikleri (F045)          YOK  → Y-63
+D12 Hissedarlik gecerlilik donemi (F047)                    KISMI (shareBp)
+D13 Birlikte kiraci / bagimsiz birim modeli (F048, F093-96) YOK  → Y-64
+D14 Emsal arastirmasi + malik fiyat onayi dosyasi (F055)    YOK  → Y-54 (CRM/genislet)
+D15 Uzun sure sonuclanmayan portfoy gozden gecirme (F060)   YOK  → Y-65
+
+RAF / LISTE / DOSYA
+D16 Elle olusturulan ozel raflar/koleksiyonlar (F070)       YOK  → Y-66
+D17 Kolon secimi, siralama, kanban gorunumu (F073-74)       YOK  → Y-66
+D18 Buyuk listede sanallastirma (F075)                      YOK  → Y-38 (sayfalama)
+D19 Kapak fotografi + galeri + siralama/aciklama (F061, F084) YOK → Y-47
+D20 Coklu secim / surukle-birak / ilerleme / devam (F079-82) KISMI (tek dosya) → Y-67
+D21 Belge surumu, asli kimde, onemli isareti (F083-88)      YOK  → Y-67
+D22 Cop kutusu / arsiv / imha ayrimi (F090-91)              YOK  → Y-07 genisletme
+
+KIRACILIK / SOZLESME
+D23 Giris-cikis tutanagi, sayac, anahtar, hasar (F097-101)  YOK  → Y-68
+D24 Depozito hareketleri ve iade degerlendirmesi (F100)     YOK  → Y-14
+D25 Sablon surumu / inceleme durumu (F110)                  KISMI (Y-56 sablon)
+D26 PDF seri no + barkod + belge kimligi (F108)             YOK  → Y-69
+D27 Taslak/imzaya sunulan/taranmis/e-imza durumlari (F111)  YOK  → Y-69
+D28 Polise numara/donem/dosya takibi (F102)                 YOK  → Y-12
+
+FINANS
+D29 Coklu borca mahsup / tek tahsilat cok borc (F129)       YOK  → Y-09
+D30 Fazla odeme = avans/dagitilmamis bakiye (F130)          BILEREK RED (S-04)
+D31 Gider modulu + belge bagi + kimden karsilanacak (F135-137) YOK → Y-70
+D32 Sati/kiralama/yönetim komisyonu ayrimi (F138)           KISMI (Y-06)
+D33 Ekstre kalemlerinin kaynak isleme izlenmesi (F141)      KISMI (Y-16)
+D34 Ofis geliri ile mal sahibi adina para ayrimi (F142)     VAR (K-25)
+D35 29/30/31 odeme gunu kisa ay politikasi (F123)           YOK  → Y-71
+D36 Yillik pesin / ozel donem borclari (F124)               YOK  → Y-71
+D37 Dekont yukleme + kontrol/onay durumu (F126-127)         KISMI (Y-16)
+
+GOREV / SAHA
+D38 Isin sorumlusu + erteleme + yoneticiye yukseltme (F145-149) YOK → Y-72
+D39 Personel is yuku ve sonuc raporu (F173)                 YOK  → Y-72
+D40 Randevu/gosterim/teklif akisi (F172, F163)              YOK  → Y-23
+D41 Bakim/ariza talebi + teklif/maliyet/malik onayi (F174-181) YOK → Y-73
+D42 Personel karti: sorumlu oldugu mal sahipleri (F166)     YOK  → Y-72
+
+PORTALLAR
+D43 Mal sahibi portali (F182-188)                           YOK  → Y-24
+D44 Kiraci portali + dekont + ariza (F189-195)              YOK  → Y-24
+D45 Kiraci bilgilerinin portal gorunurluk siniri (F187)     YOK  → Y-36
+
+RAPOR / TASIMA
+D46 Rapor filtreleri + sahte grafik yok kurali (F196-199)   KISMI (Y-25)
+D47 PDF/Excel/CSV disa aktarim (F200)                       YOK  → Y-25
+D48 Portfoy foyu / ekstre / tutanak / geciken tahsilat cikti (F201) KISMI
+D49 Ofis verisi + dosya + baglanti tasima paketi (F204-205) YOK  → Y-74
+
+MOBIL / PLATFORM
+D50 Mobil gorev kartlari, kamera, belge tarama (F206-208)   YOK  → Y-04/Y-27
+D51 Cevrimdisi kuyruk + sinirli erisim (F209-211)           YOK  → Y-27
+D52 Acik/koyu tema + buyuk yazi (F212)                      YOK  → Y-50/Y-51
+D53 Kurulum/paket/guncelleme/geri donus (F214-215)          YOK  → Y-22
+
+DENETIM / HUKUK
+D54 Kritik degisiklik denetim izi (F219)                    YOK  → Y-30
+D55 Destek kaydinin kisisel veri icermemesi (F220-221)      KISMI
+D56 Sifreli yedek + tatbikat (F222)                         YOK  → Y-29
+D57 Saklama/arsiv/talep/imha islemleri (F223)               YOK  → Y-46
+D58 Pilot/testte sentetik veri (F225)                       VAR (demo veri)
+D59 Her paket analiz+test+kabul kaniti (F226)               VAR (02 protokolu)
+
+DIS HIZMET / TICARI
+D60 E-posta/SMS/WhatsApp/push + ret uygulama (F227-228)     YOK  → Y-19/Y-59
+D61 Banka hareket dosyasi + eslestirme (F229-233)           YOK  → Y-28
+D62 E-fatura / e-imza (F234)                                YOK  → Y-69
+D63 OCR / yapay zeka alan cikarma (F235)                    YOK  → Y-28
+D64 Harita / ilan platformu baglantilari (F237)             YOK  → Y-28
+D65 Paket/limit/deneme/askiya alma (F238-240)               YOK  → Y-26
+D66 Destek kanali + hizmet durumu (F240)                    YOK  → Y-26
+
+====================================================================
+E) BELGENIN BIZE KARŞI TUTARSIZ NOKTALARI
+====================================================================
+1. "Yerel kasa korunmali, sunucu sonra" → bizim urun tanimimiz 18 personelli
+   ofis ve cok kiracili SaaS; bu madde bizim K-02/K-19 kararimizla celisiyor.
+2. "Flutter/Provider cekirdegi korunmali" → biz TypeScript monorepo + web/Tauri.
+3. Onay listesi MulkPro'nun kendi ekibine hitap ediyor; UMAY EMLAK icin
+   "onaylanmis karar" degil, "fikir havuzu" olarak okunur.
+4. 240 maddenin tamami hedef; hicbiri "bugun calisiyor" demek degil. Bizim
+   06 dosyasindaki durum etiketleri (VAR/KISMI/YOK) gercek durumu gosterir.
+
+====================================================================
+F) SONUC
+====================================================================
+Belge, bizim yol haritamizi degistirmiyor ama iki sey kazandirdi:
+(1) Kabul olcutu disiplini (kanit yoksa "bitti" yok) — 02 protokolu ile ayni.
+(2) 240 maddelik katalogdan cikan 66 kalemlik "bizde yok" listesi; bunlarin
+    gercek yenileri 06 dosyasina Y-61…Y-75 olarak yazildi, geri kalanlar
+    mevcut kayitlarla (Y-04/07/09/12/14/19/22/23/24/25/26/27/28/29/30/36/38/47/
+    50/51) birlestirildi. Boylece ayni is iki kayit olarak acilmadi.
+En onemli 3 yeni is: Y-68 (giris/cikis tutanagi), Y-70 (gider modulu),
+Y-72 (isin sorumlusu + erteleme/yukseltme).
