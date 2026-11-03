@@ -415,3 +415,17 @@ TUR:29 DURUM — DASK / POLİÇE TAKİBİ
 - Policies.tsx: tam sayfa; mülk seçimi ilanlardan tekilleştirilir; ekle/düzelt/
   yenile; bitişe göre tablo.
 Kalan: otomatik hatırlatma gönderimi, mülk dosyasında poliçe özeti.
+
+====================================================================
+TUR:30 DURUM — KİRA ARTIŞI + MÜLK DOSYASINDA POLİÇE
+====================================================================
+- rent_revision (0013, RLS): contract_id, effective_period, old_rent_kurus,
+  rate_bp, new_rent_kurus, source (tuik/manual/contract), source_note, status,
+  approved_by_user_id, approved_at. unique(contract_id, effective_period).
+- GET/POST /contracts/:id/rent-revisions, POST /rent-revisions/:id/approve
+  (requireApproval), POST /rent-revisions/:id/cancel.
+- Onay: contract.rent_kurus = new_rent; snapshot'a dokunulmaz; dönem tahakkuku
+  yoksa insert ... on conflict do nothing.
+- RentRevisionPanel.tsx: dönem/oran/kaynak/not, canlı hesap, taslak tablosu.
+- listing-board: property policy özeti (kind, insurer, end_date, days_left).
+Kalan: oranın otomatik çekilmesi, artış bildirimi, yenileme tarihi önerisi.

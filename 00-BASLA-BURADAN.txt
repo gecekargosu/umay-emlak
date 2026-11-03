@@ -270,3 +270,15 @@ Ana sayfada "DASK / poliçe" kutusu artık gerçek sayıyı gösterir; 30 gün i
 bitecek veya süresi geçmiş poliçe varsa aksiyon merkezinde ve "Poliçe
 bitişleri" bölümünde görünür.
 Kayıt: 0012_policy.sql. Sıradaki: TÜİK kira artış hesabı (SIRA 4).
+
+====================================================================
+TUR:30 — KİRA ARTIŞI / YENİLEME + POLİÇE ÖZETİ
+====================================================================
+Sözleşmeler ekranında sözleşmeye tıkla → "Kira artışı / yenileme".
+Dönem (örn. 2027-11), TÜİK'in açıkladığı oran (örn. 25,5) ve oranın kaynağını
+yaz. Program "bugünkü kira → yeni kira" hesabını gösterir, "Taslak oluştur" der.
+Taslak kendiliğinden uygulanmaz: yetkili "Onayla" deyince sözleşme kirası
+güncellenir ve o dönemin tahakkuku yoksa açılır. Yanlışsa "İptal".
+Mülk dosyasında artık "Poliçeler (DASK / sigorta)" satırı da var; bitişe 30 gün
+kala rozet çıkar.
+Kayıt: 0013_rent_revision.sql. Sıradaki: randevu / yer gösterme (SIRA 5).

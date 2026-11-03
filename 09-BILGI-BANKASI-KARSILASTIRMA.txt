@@ -53,7 +53,8 @@ SIRA 1 — Komisyon (%3) + kapora makbuzu
         Kalan: kapora makbuzu yazdırma, komisyonun finansa otomatik düşmesi.
 
 SIRA 2 — Teslim tutanağı + demirbaş listesi (fotoğraflı, imzalı)
-        Durum: KISMI. Demirbaş/abonelik kaydı var; tutanak belgesi, teslim fotoğrafları ve
+        Durum: VAR (TUR:28) → YAPILDI (2026-11-04): giriş/çıkış tutanağı, demirbaş
+        satırları, depozito kesintisi ve iade. Kalan: tutanak fotoğrafı ve imza akışı. Demirbaş/abonelik kaydı var; tutanak belgesi, teslim fotoğrafları ve
         imza akışı yok. Kiracı giriş/çıkış tartışmasının çözümü burada.
 
 SIRA 3 — DASK / poliçe bitiş takibi
@@ -61,7 +62,8 @@ SIRA 3 — DASK / poliçe bitiş takibi
         ekranı, 30 gün öncesi uyarı, ana sayfa kutusu. Kalan: otomatik hatırlatma. Ana sayfada "planlı" kutularından biri. Poliçe bitişi + 30 gün önce uyarı.
 
 SIRA 4 — TÜİK kira artış oranıyla yenileme hesabı
-        Durum: YOK. Oranın kaynağı ve güncelleme tarihi gösterilmeli; otomatik uygulanmamalı,
+        Durum: VAR (TUR:30) → YAPILDI (2026-11-04): oran + kaynak kaydı, taslak,
+        yetkili onayı, sözleşme kirası ve tahakkuk güncellemesi. Kalan: oranın otomatik çekilmesi. Oranın kaynağı ve güncelleme tarihi gösterilmeli; otomatik uygulanmamalı,
         yetkili onaylamalı (kullanıcının kendi notu).
 
 SIRA 5 — Randevu / yer gösterme modülü

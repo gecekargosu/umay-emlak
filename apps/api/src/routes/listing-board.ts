@@ -100,7 +100,19 @@ listingBoardRoutes.get("/:id/board", async (c) => {
       .where(eq(schema.propertyMedia.propertyId, propertyId))
       .orderBy(desc(schema.propertyMedia.createdAt));
 
-    return { listing, contract, charges, fixtures, media };
+    // TUR:30 / Y-85 — poliçe özeti mülk dosyasında: DASK bitişi burada görünsün.
+    const policiesResult = await tx.execute(sql`
+      select p.id, p.kind, p.insurer, p.policy_no as "policyNo",
+             p.end_date::text as "endDate", (p.end_date - current_date)::int as "daysLeft"
+        from policy p
+       where p.property_id = ${propertyId}::uuid
+       order by p.end_date asc
+    `);
+    const policies = (
+      policiesResult as unknown as { rows: Array<Record<string, unknown>> }
+    ).rows;
+
+    return { listing, contract, charges, fixtures, media, policies };
   });
 
   if (!data) throw new HttpError(404, "İlan bulunamadı");
@@ -201,6 +213,14 @@ listingBoardRoutes.get("/:id/board", async (c) => {
       kind: row.kind,
       title: row.title,
       url: `/api/v1/properties/${String(data.listing.propertyId)}/media/${row.id}/file`,
+    })),
+    policies: data.policies.map((row) => ({
+      id: String(row.id),
+      kind: String(row.kind),
+      insurer: row.insurer === null ? null : String(row.insurer),
+      policyNo: row.policyNo === null ? null : String(row.policyNo),
+      endDate: String(row.endDate),
+      daysLeft: Number(row.daysLeft),
     })),
   });
 });

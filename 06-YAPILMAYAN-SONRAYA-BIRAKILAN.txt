@@ -349,11 +349,15 @@ Y-80 | Belge içeriğinden okuma (OCR) — şimdilik eşleşme yalnız dosya ad�
 Y-79 | Komisyon / kapora akışı — KOMİSYON + KAPORA YAPILDI (2026-11-04, TUR:25).
        Kalan: kapora makbuzu yazdırma ve komisyonun finans panosuna düşmesi.
 Y-81 | Teslim tutanağı (fotoğraf + demirbaş + imza) ve çıkışta depozito hesabı — SIRA 2.
+         YAPILDI (2026-11-04, TUR:28): handover_protocol + HandoverPanel; giriş/çıkış,
+         demirbaş, kesinti ve iade sunucuda hesaplanıyor. Kalan: tutanak fotoğrafı/imza.
 Y-82 | DASK/poliçe bitiş takibi — SIRA 3. YAPILDI (2026-11-04, TUR:29):
          policy tablosu + Poliçeler ekranı + 30 gün uyarısı + ana sayfa kutusu.
 Y-83 | TÜİK kira artış oranıyla yenileme hesabı (onaylı) — SIRA 4.
+         YAPILDI (2026-11-04, TUR:30): rent_revision + RentRevisionPanel; oran elle
+         girilir, taslak yetkili onayıyla sözleşmeye işlenir.
 
 Y-84 | Poliçe bitişinde otomatik hatırlatma (e-posta/SMS) — şimdilik uyarı
        yalnız ekranda; mesaj gönderimi Y-19 ile birlikte açılacak.
-Y-85 | Mülk dosyasında poliçe özeti — kiralık/satılık dosyasında "DASK bitiş"
-       satırı yok; Poliçeler ekranından görülüyor.
+Y-85 | Mülk dosyasında poliçe özeti — YAPILDI (2026-11-04, TUR:30): mülk
+       dosyasında "Poliçeler (DASK / sigorta)" satırı, 30 gün/geçti rozetiyle.

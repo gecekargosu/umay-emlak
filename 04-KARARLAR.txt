@@ -388,3 +388,11 @@ K-68 | Poliçe mülke bağlıdır ve silinmez.
 K-69 | "Uyarı" 0-30 gün, geçmiş ayrı durum.
        Ne: bitişe 30 gün ve daha az kaldıysa "bitecek"; bitiş geçtiyse "süresi
        geçti" (kırmızı satır). Prim metin olarak alınır, kuruşa sunucu çevirir.
+
+K-70 | Kira artışı otomatik uygulanmaz.
+       Ne: TÜİK oranı elle girilir, kaynağı (bülten/dönem) kayda yazılır; program
+       taslak üretir, sözleşme kirası ancak yetkili onayıyla değişir.
+
+K-71 | Onayda snapshot korunur, tahakkuk akıllıca açılır.
+       Ne: imza anındaki sözleşme metni değişmez; yeni dönem tahakkuku yoksa
+       oluşturulur, varsa dokunulmaz (tahsilat geçmişi bozulmasın).

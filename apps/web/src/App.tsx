@@ -336,7 +336,7 @@ export function App() {
           {page === "mal-sahipleri" && <Owners />}
           {page === "kisiler" && <People initialQuery={peopleQuery} />}
           {page === "kiralar" && <Rents />}
-          {page === "sozlesmeler" && <Contracts />}
+          {page === "sozlesmeler" && <Contracts canApprove={session.canApprove} />}
           {page === "policeler" && <Policies />}
           {page === "sahipler" && <Payouts />}
           {page === "belgeler" && <Documents canApprove={session.canApprove} />}

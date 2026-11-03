@@ -4,6 +4,7 @@ import { InfoNote } from "../components/InfoNote";
 import { useDraft } from "../hooks/useDraft";
 import { formatKurusText } from "./Rents";
 import { BackButton } from "../components/BackButton";
+import { RentRevisionPanel } from "../components/RentRevisionPanel";
 
 const STATUS_TR: Record<string, string> = { active: "Aktif", ended: "Bitti", cancelled: "İptal" };
 const UTILITY_TR: Record<string, string> = {
@@ -16,7 +17,7 @@ const UTILITY_TR: Record<string, string> = {
  * Sözleşmeler — kiracılığın başladığı yer.
  * Sözleşme açılınca ilan kapanır; kira takvimi ay ay buradan üretilir.
  */
-export function Contracts() {
+export function Contracts({ canApprove = false }: { canApprove?: boolean }) {
   const [rows, setRows] = useState<ContractRow[] | null>(null);
   const [detail, setDetail] = useState<ContractDetail | null>(null);
   const [listings, setListings] = useState<ListingRow[]>([]);
@@ -343,6 +344,8 @@ export function Contracts() {
             Toplam tahakkuk: {formatKurusText(detail.totals.charged)} · Tahsil edilen:{" "}
             {formatKurusText(detail.totals.paid)} · Açık: {formatKurusText(detail.totals.open)}
           </p>
+
+          <RentRevisionPanel contractId={detail.contract.id} canApprove={canApprove} />
 
           <h4>Hukuki metinler</h4>
           <div className="row-gap">

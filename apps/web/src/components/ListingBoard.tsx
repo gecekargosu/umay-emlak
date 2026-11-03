@@ -59,6 +59,14 @@ type Board = {
   openKurus: number;
   openText: string;
   fixtures: Array<{ id: string; name: string; quantity: number; note: string | null }>;
+  policies: Array<{
+    id: string;
+    kind: string;
+    insurer: string | null;
+    policyNo: string | null;
+    endDate: string;
+    daysLeft: number;
+  }>;
 };
 
 const STATUS_TR: Record<string, string> = {
@@ -165,6 +173,28 @@ export function ListingBoard({ listingId }: { listingId: string }) {
         Adres: {property.address ?? "—"} · {[property.district, property.city].filter(Boolean).join(", ") || "konum yok"}
       </p>
       {property.notes && <p className="muted small">Not: {property.notes}</p>}
+
+      <h4>Poliçeler (DASK / sigorta)</h4>
+      {data.policies.length === 0 ? (
+        <p className="muted small">
+          Bu mülk için poliçe kaydı yok. Operasyon → Poliçeler / DASK ekranından eklenir.
+        </p>
+      ) : (
+        <ul className="doc-list">
+          {data.policies.map((policy) => (
+            <li key={policy.id}>
+              <strong>{policy.kind.toUpperCase()}</strong> · bitiş{" "}
+              {formatDate(policy.endDate)}
+              {policy.insurer ? ` · ${policy.insurer}` : ""}
+              {policy.daysLeft < 0 ? (
+                <span className="badge"> {Math.abs(policy.daysLeft)} gün geçti</span>
+              ) : policy.daysLeft <= 30 ? (
+                <span className="badge"> {policy.daysLeft} gün kaldı</span>
+              ) : null}
+            </li>
+          ))}
+        </ul>
+      )}
 
       {data.listing.kind === "rent" && (
         <>

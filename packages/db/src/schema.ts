@@ -639,6 +639,41 @@ export const propertyMedia = pgTable(
 );
 
 /** İçe aktarma defteri — denetim izi (hangi dosya, ne oldu). */
+/** TUR:30 — kira artışı (yenileme) taslağı. Onay yetkilide; kayıt silinmez. */
+export const rentRevisions = pgTable(
+  "rent_revision",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tenantId: uuid("tenant_id")
+      .notNull()
+      .references(() => tenants.id, { onDelete: "cascade" }),
+    contractId: uuid("contract_id")
+      .notNull()
+      .references(() => contracts.id, { onDelete: "cascade" }),
+    effectivePeriod: date("effective_period", { mode: "string" }).notNull(),
+    oldRentKurus: bigint("old_rent_kurus", { mode: "number" }).notNull(),
+    rateBp: integer("rate_bp").notNull(),
+    newRentKurus: bigint("new_rent_kurus", { mode: "number" }).notNull(),
+    source: text("source").notNull().default("tuik"),
+    sourceNote: text("source_note"),
+    status: text("status").notNull().default("proposed"),
+    note: text("note"),
+    approvedByUserId: uuid("approved_by_user_id").references(() => appUsers.id, {
+      onDelete: "set null",
+    }),
+    approvedAt: timestamp("approved_at", { withTimezone: true }),
+    createdByUserId: uuid("created_by_user_id").references(() => appUsers.id, {
+      onDelete: "set null",
+    }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("rent_revision_contract_period_uidx").on(t.contractId, t.effectivePeriod),
+    index("rent_revision_tenant_idx").on(t.tenantId, t.status),
+  ],
+);
+
+/** İçe aktarma defteri — denetim izi (hangi dosya, ne oldu). */
 /** TUR:29 — poliçe (DASK/konut/sorumluluk). Bitiş tarihi esastır; silinmez. */
 export const policies = pgTable(
   "policy",
