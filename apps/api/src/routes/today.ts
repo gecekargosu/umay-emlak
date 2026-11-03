@@ -53,6 +53,8 @@ type ModuleRow = {
   payout_paid: string;
   payout_draft: string;
   commission: string;
+  policies_total: number;
+  policies_warning: number;
 };
 
 type ListingRow = {
@@ -136,6 +138,29 @@ todayRoutes.get("/", async (c) => {
       }
     ).rows;
 
+    // TUR:29 — poliçe bitiş takibi (SIRA 3): 30 gün içinde biten + süresi geçmiş.
+    const policiesResult = await tx.execute(sql`
+      select p.id, pr.title as property_title, pr.district, p.kind,
+             p.end_date::text as end_date, (p.end_date - current_date)::int as days_left
+        from policy p
+        join property pr on pr.id = p.property_id
+       where p.end_date <= current_date + 30
+       order by p.end_date asc
+       limit 10
+    `);
+    const policies = (
+      policiesResult as unknown as {
+        rows: Array<{
+          id: string;
+          property_title: string;
+          district: string | null;
+          kind: string;
+          end_date: string;
+          days_left: number;
+        }>;
+      }
+    ).rows;
+
     const contractsResult = await tx.execute(sql`
       select k.id, k.end_date, (k.end_date - current_date)::int as days_left,
              prop.title as property_title
@@ -182,7 +207,9 @@ todayRoutes.get("/", async (c) => {
         (select coalesce(sum(net_kurus), 0)::bigint from owner_payout
            where period = date_trunc('month', current_date)::date and status = 'draft') as payout_draft,
         (select coalesce(sum(amount_kurus), 0)::bigint from commission
-           where status in ('approved', 'paid')) as commission
+           where status in ('approved', 'paid')) as commission,
+        (select count(*) from policy)::int as policies_total,
+        (select count(*) from policy where end_date <= current_date + 30)::int as policies_warning
     `);
     const modules = (moduleResult as unknown as { rows: ModuleRow[] }).rows[0]!;
 
@@ -199,7 +226,7 @@ todayRoutes.get("/", async (c) => {
       monthResult as unknown as { rows: Array<{ charged: string; collected: string }> }
     ).rows[0] ?? { charged: "0", collected: "0" };
 
-    return { charges, listings, docs, pending, payouts, contracts, month, modules };
+    return { charges, listings, docs, pending, payouts, contracts, policies, month, modules };
   });
 
   // Belge eksiği: belge mülke de ilana da bağlı olabilir; ikisi de sayılır.
@@ -272,6 +299,7 @@ todayRoutes.get("/", async (c) => {
       pendingMatches: data.pending.length,
       draftPayouts: data.payouts.length,
       expiringContracts: data.contracts.length,
+      policyWarnings: data.policies.length,
     },
     charges: { overdue, dueSoon },
     missingDocs,
@@ -294,6 +322,14 @@ todayRoutes.get("/", async (c) => {
       propertyTitle: k.property_title,
       endDate: k.end_date,
       daysLeft: Number(k.days_left),
+    })),
+    policies: data.policies.map((p) => ({
+      id: p.id,
+      propertyTitle: p.property_title,
+      district: p.district,
+      kind: p.kind,
+      endDate: p.end_date,
+      daysLeft: Number(p.days_left),
     })),
     month: {
       period: monthPeriod,
@@ -339,8 +375,13 @@ todayRoutes.get("/", async (c) => {
         payoutDraft: formatTry(Number(data.modules.payout_draft)),
         commission: formatTry(Number(data.modules.commission)),
       },
+      /** TUR:29 — DASK/poliçe kutusu artık gerçek sayı gösterir. */
+      dask: {
+        total: Number(data.modules.policies_total ?? 0),
+        warning: Number(data.modules.policies_warning ?? 0),
+      },
       /** Henüz modülü olmayan kutular — arayüz "planlı" der, sıfır uydurmaz. */
-      notBuilt: ["dask", "tasks", "messages"],
+      notBuilt: ["tasks", "messages"],
     },
   });
 });

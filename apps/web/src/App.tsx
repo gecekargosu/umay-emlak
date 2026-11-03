@@ -12,6 +12,7 @@ import { Payouts } from "./pages/Payouts";
 import { PasswordChange } from "./pages/PasswordChange";
 import { People } from "./pages/People";
 import { Roadmap } from "./pages/Roadmap";
+import { Policies } from "./pages/Policies";
 import { CalendarPage } from "./pages/Calendar";
 import { Rents } from "./pages/Rents";
 import { Team } from "./pages/Team";
@@ -25,6 +26,7 @@ type Page =
   | "kisiler"
   | "kiralar"
   | "sozlesmeler"
+  | "policeler"
   | "sahipler"
   | "belgeler"
   | "aktar"
@@ -64,7 +66,13 @@ const NAV: Array<{ group: string; items: Array<{ page: Page; label: string }> }>
       { page: "sahipler", label: "Sahibe aktarım" },
     ],
   },
-  { group: "Operasyon", items: [{ page: "sozlesmeler", label: "Sözleşmeler" }] },
+  {
+    group: "Operasyon",
+    items: [
+      { page: "sozlesmeler", label: "Sözleşmeler" },
+      { page: "policeler", label: "Poliçeler / DASK" },
+    ],
+  },
   {
     group: "Sistem",
     items: [
@@ -85,6 +93,7 @@ const TITLES: Record<Page, string> = {
   kisiler: "Kişiler",
   kiralar: "Kiralar",
   sozlesmeler: "Sözleşmeler",
+  policeler: "Poliçeler",
   sahipler: "Sahipler",
   belgeler: "Belgeler",
   aktar: "İçe Aktar",
@@ -128,7 +137,13 @@ export function App() {
       .then((data) => {
         const c = data.counts;
         setActionCount(
-          c.overdue + c.dueSoon + c.missingDocs + c.pendingMatches + c.draftPayouts + c.expiringContracts,
+          c.overdue +
+            c.dueSoon +
+            c.missingDocs +
+            c.pendingMatches +
+            c.draftPayouts +
+            c.expiringContracts +
+            c.policyWarnings,
         );
       })
       .catch(() => setActionCount(0));
@@ -322,6 +337,7 @@ export function App() {
           {page === "kisiler" && <People initialQuery={peopleQuery} />}
           {page === "kiralar" && <Rents />}
           {page === "sozlesmeler" && <Contracts />}
+          {page === "policeler" && <Policies />}
           {page === "sahipler" && <Payouts />}
           {page === "belgeler" && <Documents canApprove={session.canApprove} />}
           {page === "aktar" && <Import />}

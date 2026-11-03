@@ -256,3 +256,17 @@ Kişi kartında kişi seçilince başlık ve bilgi notu gizlenir; yalnız kişi 
 Teslim tutanağı eklendi: giriş/çıkış, tarih, demirbaş satırları, depozito,
 kesinti ve iade (iade = depozito − kesinti). Kiralık mülk dosyasında.
 Sıradaki: DASK takibi (SIRA 3).
+
+====================================================================
+TUR:29 — DASK / POLİÇE BİTİŞ TAKİBİ (SIRA 3)
+====================================================================
+Sol menüde Operasyon → "Poliçeler / DASK". Mülk seç, tür (DASK, konut,
+sorumluluk, işyeri, hayat, diğer), sigorta şirketi, poliçe no, başlangıç ve
+bitiş tarihi, prim, not → kaydet.
+Liste bitişe göre sıralı; "30 günde bitecek" ve "süresi geçti" süzgeçleri var.
+Satırda "Düzelt" (yanlış girişi düzelt) ve "Yenile" (bitiş +1 yıl ön dolu,
+eski poliçe geçmişte kalır). Poliçe silinmez.
+Ana sayfada "DASK / poliçe" kutusu artık gerçek sayıyı gösterir; 30 gün içinde
+bitecek veya süresi geçmiş poliçe varsa aksiyon merkezinde ve "Poliçe
+bitişleri" bölümünde görünür.
+Kayıt: 0012_policy.sql. Sıradaki: TÜİK kira artış hesabı (SIRA 4).

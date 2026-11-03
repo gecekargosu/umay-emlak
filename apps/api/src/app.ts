@@ -33,6 +33,7 @@ import { calendarRoutes } from "./routes/calendar.js";
 import { mediaRoutes } from "./routes/media.js";
 import { listingBoardRoutes } from "./routes/listing-board.js";
 import { handoverRoutes } from "./routes/handovers.js";
+import { policyRoutes } from "./routes/policies.js";
 
 export const app = new Hono();
 
@@ -71,6 +72,7 @@ app.route("/api/v1/calendar", calendarRoutes);
 app.route("/api/v1/properties", mediaRoutes);
 app.route("/api/v1/listings", listingBoardRoutes);
 app.route("/api/v1/contracts", handoverRoutes);
+app.route("/api/v1/policies", policyRoutes);
 
 app.get("/api/v1/me", async (c) => {
   const session = await resolveSession(c);

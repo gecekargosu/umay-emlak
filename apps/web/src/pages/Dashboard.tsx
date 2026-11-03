@@ -93,6 +93,14 @@ export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
       tone: "info",
       page: "sahipler",
     },
+    {
+      key: "policies",
+      count: c.policyWarnings,
+      label: "poliçe bitiyor / bitti",
+      sub: "30 gün içinde bitecek veya süresi geçmiş poliçeler",
+      tone: "warn",
+      page: "policeler",
+    },
   ];
 
   const actions = allActions.filter((row) => row.count > 0);
@@ -156,9 +164,13 @@ export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
     {
       key: "dask",
       label: "DASK / poliçe",
-      value: "—",
-      sub: "modül planlı (Y-12): poliçe bitiş takibi henüz yok",
-      page: null,
+      value: String(modules.dask.warning),
+      sub:
+        modules.dask.total === 0
+          ? "poliçe kaydı yok — Poliçeler ekranından ekle"
+          : `${modules.dask.total} poliçe kayıtlı · ${modules.dask.warning} tanesi 30 günde bitiyor`,
+      page: "policeler",
+      tone: modules.dask.warning > 0 ? "warn" : undefined,
     },
     {
       key: "tasks",
@@ -363,6 +375,33 @@ export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
                 </div>
                 <div className="muted small">
                   {row.endDate} · {row.daysLeft} gün kaldı
+                </div>
+              </li>
+            ))}
+          </ul>
+        </Section>
+      )}
+
+      {today.policies.length > 0 && (
+        <Section
+          title="Poliçe bitişleri"
+          hint="DASK/konut poliçesi bitince kira sözleşmesi riskte kalır; 30 gün önce haber verilir."
+          action={{ label: "Poliçeler'e git", onClick: () => go("policeler") }}
+        >
+          <ul className="action-list">
+            {today.policies.map((row) => (
+              <li key={row.id}>
+                <div>
+                  <strong>{row.propertyTitle}</strong>
+                  {row.district && <span className="muted small"> ({row.district})</span>}
+                </div>
+                <div className="muted small">
+                  {row.endDate} ·{" "}
+                  {row.daysLeft < 0
+                    ? `${Math.abs(row.daysLeft)} gün önce bitti`
+                    : row.daysLeft === 0
+                      ? "bugün bitiyor"
+                      : `${row.daysLeft} gün kaldı`}
                 </div>
               </li>
             ))}

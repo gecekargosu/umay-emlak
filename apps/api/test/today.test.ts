@@ -131,7 +131,9 @@ describe("bugün ne yapılmalı", () => {
     expect(today.modules.staff.total).toBeGreaterThan(0);
     expect(today.modules.properties.total).toBeGreaterThan(0);
     expect(today.modules.rent.overdue).toBe(today.counts.overdue);
-    expect(today.modules.notBuilt).toContain("dask");
+    // TUR:29 — DASK modülü açıldı; planlı kalanlar görev ve mesaj kutuları.
+    expect(today.modules.notBuilt).not.toContain("dask");
+    expect(today.modules.notBuilt).toEqual(expect.arrayContaining(["tasks", "messages"]));
 
     // B ofisi aynı kiracıyı göremez
     const bCookie = await login(B_OFIS);

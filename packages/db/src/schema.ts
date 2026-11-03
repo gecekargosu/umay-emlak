@@ -639,6 +639,37 @@ export const propertyMedia = pgTable(
 );
 
 /** İçe aktarma defteri — denetim izi (hangi dosya, ne oldu). */
+/** TUR:29 — poliçe (DASK/konut/sorumluluk). Bitiş tarihi esastır; silinmez. */
+export const policies = pgTable(
+  "policy",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tenantId: uuid("tenant_id")
+      .notNull()
+      .references(() => tenants.id, { onDelete: "cascade" }),
+    propertyId: uuid("property_id")
+      .notNull()
+      .references(() => properties.id, { onDelete: "cascade" }),
+    kind: text("kind").notNull().default("dask"),
+    insurer: text("insurer"),
+    policyNo: text("policy_no"),
+    startDate: date("start_date", { mode: "string" }),
+    endDate: date("end_date", { mode: "string" }).notNull(),
+    premiumKurus: bigint("premium_kurus", { mode: "number" }),
+    note: text("note"),
+    createdByUserId: uuid("created_by_user_id").references(() => appUsers.id, {
+      onDelete: "set null",
+    }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index("policy_tenant_end_idx").on(t.tenantId, t.endDate),
+    index("policy_property_idx").on(t.tenantId, t.propertyId),
+  ],
+);
+
+/** İçe aktarma defteri — denetim izi (hangi dosya, ne oldu). */
 export const importBatches = pgTable(
   "import_batch",
   {

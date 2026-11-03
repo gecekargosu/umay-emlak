@@ -448,6 +448,7 @@ export type Today = {
     pendingMatches: number;
     draftPayouts: number;
     expiringContracts: number;
+    policyWarnings: number;
   };
   charges: {
     overdue: TodayCharge[];
@@ -464,6 +465,14 @@ export type Today = {
     net: string;
   }>;
   contracts: Array<{ id: string; propertyTitle: string; endDate: string; daysLeft: number }>;
+  policies: Array<{
+    id: string;
+    propertyTitle: string;
+    district: string | null;
+    kind: string;
+    endDate: string;
+    daysLeft: number;
+  }>;
   modules: {
     owners: { total: number; portfolio: number };
     properties: { total: number; occupied: number; empty: number; sale: number; rent: number };
@@ -478,6 +487,7 @@ export type Today = {
     };
     contracts: { active: number; expiring: number };
     finance: { payoutPaid: string; payoutDraft: string; commission: string };
+    dask: { total: number; warning: number };
     notBuilt: string[];
   };
   month: {
@@ -503,6 +513,32 @@ export type TodayCharge = {
   daysLeft: number;
   noticeSentAt: string | null;
   level: "reminder" | "formal" | null;
+};
+
+/** TUR:29 — poliçe satırı. */
+export type PolicyRow = {
+  id: string;
+  propertyId: string;
+  propertyTitle: string;
+  district: string | null;
+  kind: string;
+  kindLabel: string;
+  insurer: string | null;
+  policyNo: string | null;
+  startDate: string | null;
+  endDate: string;
+  premiumKurus: number | null;
+  premiumText: string | null;
+  note: string | null;
+  daysLeft: number;
+  expired: boolean;
+  warning: boolean;
+};
+
+export type PolicyList = {
+  count: number;
+  items: PolicyRow[];
+  kinds: Array<{ kind: string; label: string }>;
 };
 
 export type ContractRow = {

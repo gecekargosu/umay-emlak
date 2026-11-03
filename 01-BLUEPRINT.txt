@@ -401,3 +401,17 @@ TUR:28 DURUM — SADE PORTFÖY, TUTANAK
   GET/POST /contracts/:id/handovers; iade sunucuda hesaplanır.
 - ListingBoard: kiralıkta "Teslim tutanağı" paneli (HandoverPanel).
 Kalan: tutanak yazdırma, demirbaş fotoğrafını tutanağa bağlama.
+
+
+====================================================================
+TUR:29 DURUM — DASK / POLİÇE TAKİBİ
+====================================================================
+- policy (0012, RLS): property_id, kind, insurer, policy_no, start_date,
+  end_date, premium_kurus, note, updated_at. Silme yok, PATCH var.
+- GET /policies?filter=warning|expired|all&propertyId=, POST /policies,
+  PATCH /policies/:id. daysLeft/expired/warning sunucuda hesaplanır.
+- today: modules.dask {total, warning}, counts.policyWarnings, policies[10].
+  notBuilt: ["tasks", "messages"] — dask çıktı.
+- Policies.tsx: tam sayfa; mülk seçimi ilanlardan tekilleştirilir; ekle/düzelt/
+  yenile; bitişe göre tablo.
+Kalan: otomatik hatırlatma gönderimi, mülk dosyasında poliçe özeti.

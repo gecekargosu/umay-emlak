@@ -57,7 +57,8 @@ SIRA 2 — Teslim tutanağı + demirbaş listesi (fotoğraflı, imzalı)
         imza akışı yok. Kiracı giriş/çıkış tartışmasının çözümü burada.
 
 SIRA 3 — DASK / poliçe bitiş takibi
-        Durum: YOK. Ana sayfada "planlı" kutularından biri. Poliçe bitişi + 30 gün önce uyarı.
+        Durum: VAR (TUR:29) → YAPILDI (2026-11-04): policy tablosu, Poliçeler
+        ekranı, 30 gün öncesi uyarı, ana sayfa kutusu. Kalan: otomatik hatırlatma. Ana sayfada "planlı" kutularından biri. Poliçe bitişi + 30 gün önce uyarı.
 
 SIRA 4 — TÜİK kira artış oranıyla yenileme hesabı
         Durum: YOK. Oranın kaynağı ve güncelleme tarihi gösterilmeli; otomatik uygulanmamalı,

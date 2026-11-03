@@ -379,3 +379,12 @@ K-67 | Teslim tutanağı ve depozito hesabı.
        Ne: giriş/çıkış tutanağı, demirbaş satırları (ad|adet|durum), kesinti ve
        gerekçe. Çıkışta iade = depozito − kesinti; hesap sunucuda yapılır,
        tutanak silinmez.
+
+K-68 | Poliçe mülke bağlıdır ve silinmez.
+       Ne: aynı daire için DASK, konut ve sorumluluk ayrı satırdır; yanlış giriş
+       PATCH ile düzeltilir, yenileme yeni satır açar. Böylece "geçen yıl hangi
+       poliçe vardı" sorusu cevapsız kalmaz.
+
+K-69 | "Uyarı" 0-30 gün, geçmiş ayrı durum.
+       Ne: bitişe 30 gün ve daha az kaldıysa "bitecek"; bitiş geçtiyse "süresi
+       geçti" (kırmızı satır). Prim metin olarak alınır, kuruşa sunucu çevirir.
