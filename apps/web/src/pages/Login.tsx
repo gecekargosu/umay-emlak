@@ -47,7 +47,7 @@ export function Login({ onLogin }: { onLogin: (session: Session) => void }) {
       >
         <img src="/brand/tm-mark.jpeg" alt="TM Gayrimenkul" className="login-logo" />
         <h1>
-          TM <span>GAYRİMENKUL</span>
+          TRADEMARK <span>GAYRİMENKUL</span>
         </h1>
         <p className="muted">Gayrimenkul yönetim programı</p>
 

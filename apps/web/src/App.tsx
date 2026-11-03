@@ -186,7 +186,11 @@ export function App() {
     <div className="app">
       <header className="topbar">
         <div className="logo">
-          <img src="/brand/tm-mark.jpeg" alt="TM Gayrimenkul" className="brand-logo" />
+          <img src="/brand/tm-mark.jpeg" alt="Trademark Gayrimenkul" className="brand-logo" />
+          <span className="brand-block">
+            <span className="brand-name">TRADEMARK</span>
+            <span className="brand-sub">GAYRİMENKUL</span>
+          </span>
         </div>
         <button
           type="button"

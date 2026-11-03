@@ -158,6 +158,67 @@ export type OwnerDetail = {
   properties: OwnerProperty[];
 };
 
+export type TeamOffer = {
+  id: string;
+  bidderName: string;
+  bidderPhone: string | null;
+  amountKurus: number;
+  amountText: string;
+  status: string;
+  note: string | null;
+  createdAt: string;
+};
+
+export type TeamListing = {
+  listingId: string;
+  propertyId: string;
+  kind: "sale" | "rent";
+  status: string;
+  priceKurus: number;
+  priceText: string;
+  title: string;
+  address: string | null;
+  district: string | null;
+  city: string | null;
+  roomCount: string | null;
+  grossM2: number | null;
+  floor: number | null;
+  siteName: string | null;
+  buildingName: string | null;
+  unitNo: string | null;
+  block: string | null;
+  type: string;
+  enteredAt: string;
+  publishedAt: string | null;
+  ownerName: string | null;
+  ownerPhone: string | null;
+  offers: TeamOffer[];
+};
+
+export type TeamAverage = {
+  district: string;
+  rentCount: number;
+  saleCount: number;
+  avgRentKurus: number;
+  avgRentText: string;
+  avgSaleKurus: number;
+  avgSaleText: string;
+};
+
+export type TeamPortfolio = {
+  member: {
+    id: string;
+    fullName: string;
+    email: string;
+    phone: string | null;
+    role: string;
+    status: string;
+    canApprove: boolean;
+  };
+  listings: TeamListing[];
+  averages: TeamAverage[];
+};
+
 export type TenantRow = {
   id: string;
   fullName: string;

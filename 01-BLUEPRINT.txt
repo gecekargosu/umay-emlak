@@ -317,3 +317,19 @@ Bilgi bankası maddeleri ve karşılığı:
       → ad/telefon + kim + yalnız borçlu
 Eksik: mülk detayına geçiş (Y-77), tutanak (Y-68), arıza (Y-73), dekont.
 Sıradaki: Satılıklar/Kiralıklar ayrı ekranları → Personeller → Finans.
+
+
+====================================================================
+TUR:23 DURUM — PERSONEL, TEKLİF, SÖZLEŞME METNİ
+====================================================================
+- Personel portföyü ucu: GET /team/:memberId/portfolio
+    · ilanlar (satılık/kiralık), mülk detayı, mal sahibi, giriş tarihi
+    · teklifler (offer tablosu, migration 0008, RLS zorunlu)
+    · ilçe ortalaması: aktif ilanlardan satış ve kira ortalaması
+  Yetki: personel kendi portföyü; onay yetkili tüm portföyler.
+- Sözleşme metni: GET /contracts/:id/contract-text (HTML, yazdırılabilir).
+  Y-53: snapshot varsa dondurulmuş taraf/mülk bilgisi kullanılır.
+- Kişi kartı: mal sahibi ise /owners/:id verisiyle mülk + kiracı + borç.
+- Görsel dil: raf vitrinleri ışıldayan çerçeve, modül kutuları turuncu çizgi.
+Eksik: teklif kabul/red akışı, kiracı belge/tutanak (Y-68), komisyon/kapora.
+Sıradaki: Satılıklar/Kiralıklar ekranları → Finans panosu.

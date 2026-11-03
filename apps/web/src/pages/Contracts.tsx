@@ -348,6 +348,14 @@ export function Contracts() {
           <div className="row-gap">
             <button
               type="button"
+              onClick={() =>
+                window.open(`/api/v1/contracts/${detail.contract.id}/contract-text`, "_blank")
+              }
+            >
+              Sözleşme metnini aç
+            </button>
+            <button
+              type="button"
               className="secondary"
               onClick={() =>
                 window.open(`/api/v1/contracts/${detail.contract.id}/output/tahliye`, "_blank")

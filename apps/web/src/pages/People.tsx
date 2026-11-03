@@ -1,5 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
-import { api, ApiError, kurusToText, type PersonNote, type PersonRow } from "../api";
+import {
+  api,
+  ApiError,
+  kurusToText,
+  type OwnerDetail,
+  type PersonNote,
+  type PersonRow,
+} from "../api";
 import { InfoNote } from "../components/InfoNote";
 import { BackButton } from "../components/BackButton";
 
@@ -40,6 +47,8 @@ export function People({ initialQuery = "" }: { initialQuery?: string }) {
   const [form, setForm] = useState({ fullName: "", phone: "", kind: "owner" });
   const [duplicate, setDuplicate] = useState<Duplicate["duplicate"] | null>(null);
   const [selected, setSelected] = useState<PersonDetail | null>(null);
+  /** Mal sahibi seçilince mülkleri, kiracıları ve borcu buradan gelir (TUR:23). */
+  const [ownerFolder, setOwnerFolder] = useState<OwnerDetail | null>(null);
   const [notes, setNotes] = useState<PersonNote[]>([]);
   const [noteText, setNoteText] = useState("");
   const [candidate, setCandidate] = useState({
@@ -82,7 +91,18 @@ export function People({ initialQuery = "" }: { initialQuery?: string }) {
         note: "",
       });
       setNotes((await api<{ items: PersonNote[] }>(`/people/${id}/notes`)).items);
+      if (detail.person.kind === "owner") {
+        void api<OwnerDetail>(`/owners/${id}`)
+          .then(setOwnerFolder)
+          .catch(() => setOwnerFolder(null));
+      } else {
+        setOwnerFolder(null);
+      }
       setError(null);
+      // Kart listeden sonra açılıyordu; kullanıcı boşa tıklamış gibi görünmesin diye kaydır.
+      setTimeout(() => {
+        document.querySelector(".panel")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 80);
     } catch {
       setError("Kişi açılamadı");
     }
@@ -262,6 +282,57 @@ export function People({ initialQuery = "" }: { initialQuery?: string }) {
             {selected.person.email ? ` · ${selected.person.email}` : ""} ·{" "}
             {selected.properties.length} mülk · {selected.contracts.length} sözleşme
           </p>
+
+          {ownerFolder && (
+            <>
+              <h4>Mülkleri, kiracıları ve borcu</h4>
+              <div className="cards">
+                <div className="card">
+                  <div className="card-label">Mülk</div>
+                  <div className="card-value">{ownerFolder.person.propertyCount}</div>
+                  <div className="muted small">{ownerFolder.properties.length} ilan satırı</div>
+                </div>
+                <div className="card">
+                  <div className="card-label">Portföy değeri</div>
+                  <div className="card-value">{ownerFolder.person.portfolioText}</div>
+                </div>
+                <div className={`card${ownerFolder.person.openKurus > 0 ? " card-emphasis" : ""}`}>
+                  <div className="card-label">Açık borç</div>
+                  <div className="card-value">{ownerFolder.person.openText}</div>
+                </div>
+              </div>
+              {ownerFolder.properties.length === 0 ? (
+                <p className="muted small">Bu sahibin kayıtlı mülkü yok.</p>
+              ) : (
+                <div className="table-scroll">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Mülk</th>
+                        <th>Adres</th>
+                        <th>İlan</th>
+                        <th className="right">Fiyat</th>
+                        <th>Kiracı</th>
+                        <th className="right">Açık</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {ownerFolder.properties.map((property) => (
+                        <tr key={`${property.id}-${property.kind ?? "none"}`}>
+                          <td>{property.title}</td>
+                          <td className="muted">{property.address ?? "—"}</td>
+                          <td>{property.kind === "sale" ? "Satılık" : property.kind === "rent" ? "Kiralık" : "ilansız"}</td>
+                          <td className="right">{property.priceText ?? "—"}</td>
+                          <td className="muted">{property.tenantName ?? "—"}</td>
+                          <td className="right">{property.openKurus > 0 ? property.openText : "—"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </>
+          )}
 
           <h4>İletişim izni (KVKK)</h4>
           <div className="inline-form">

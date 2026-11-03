@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { api, ApiError } from "../api";
+import { api, ApiError, type TeamListing, type TeamPortfolio } from "../api";
+import { BackButton } from "../components/BackButton";
 import { InfoNote } from "../components/InfoNote";
+import { TeamPortfolioView } from "./TeamPortfolio";
 
 /**
  * Personeller / ekip — Y-01.
@@ -45,6 +47,7 @@ export function Team({
   const [info, setInfo] = useState<string | null>(null);
   const [tempPassword, setTempPassword] = useState<{ email: string; password: string } | null>(null);
   const [form, setForm] = useState({ fullName: "", email: "", role: "agent" });
+  const [portfolio, setPortfolio] = useState<TeamPortfolio | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -81,6 +84,15 @@ export function Team({
     }
   }
 
+  async function openPortfolio(memberId: string) {
+    setError(null);
+    try {
+      setPortfolio(await api<TeamPortfolio>(`/team/${memberId}/portfolio`));
+    } catch (caught) {
+      setError(caught instanceof ApiError ? caught.message : "Portföy açılamadı");
+    }
+  }
+
   async function patch(member: Member, change: Partial<Pick<Member, "role" | "canApprove" | "status">>) {
     setError(null);
     setInfo(null);
@@ -90,6 +102,10 @@ export function Team({
     } catch (caught) {
       setError(caught instanceof ApiError ? caught.message : "Yetki değiştirilemedi");
     }
+  }
+
+  if (portfolio) {
+    return <TeamPortfolioView data={portfolio} onBack={() => setPortfolio(null)} />;
   }
 
   return (
@@ -162,10 +178,15 @@ export function Team({
         </thead>
         <tbody>
           {data?.members.map((member) => (
-            <tr key={member.id}>
+            <tr
+              key={member.id}
+              className="clickable"
+              onClick={() => void openPortfolio(member.id)}
+              title="Portföyü aç"
+            >
               <td>{member.name}</td>
               <td className="muted">{member.email}</td>
-              <td>
+              <td onClick={(event) => event.stopPropagation()}>
                 {canApprove && member.role !== "owner" ? (
                   <select
                     value={member.role}
@@ -181,7 +202,7 @@ export function Team({
                   (ROLE_TR[member.role] ?? member.role)
                 )}
               </td>
-              <td>
+              <td onClick={(event) => event.stopPropagation()}>
                 {isOwner && member.role !== "owner" ? (
                   <label className="row-gap" style={{ margin: 0 }}>
                     <input
@@ -206,7 +227,7 @@ export function Team({
                   <span className="chip ok">aktif</span>
                 )}
               </td>
-              <td className="right">
+              <td className="right" onClick={(event) => event.stopPropagation()}>
                 {canApprove && member.status === "active" && member.email !== selfEmail && (
                   <button
                     type="button"

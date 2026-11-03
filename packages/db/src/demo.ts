@@ -229,6 +229,14 @@ async function seed(
 
   // --- Mülkler + ilanlar ---------------------------------------------------
   // 90 mülkün 40'ı satılık, 50'si kiralık: i % 9 < 4 → satılık.
+  const members = await client.query<{ id: string }>(
+    `select user_id as id from membership
+      where tenant_id = $1 and status = 'active'
+      order by created_at`,
+    [tenantId],
+  );
+  const responsibleIds = members.rows.map((row) => row.id);
+  const allListings: Array<{ id: string; kind: string; priceKurus: number; status: string }> = [];
   const rentActive: Array<{ listingId: string; rentKurus: number }> = [];
   let idx = 0;
   let sale = 0;
@@ -303,10 +311,11 @@ async function seed(
           status,
           priceKurus,
           `${PREFIX}YETKİ-${String(idx + 1).padStart(4, "0")}`,
-          responsibleUserId,
+          responsibleIds.length > 0 ? responsibleIds[idx % responsibleIds.length]! : responsibleUserId,
           status === "draft" ? null : new Date(),
         ],
       );
+      allListings.push({ id: listingRows[0]!.id, kind, priceKurus, status });
 
       if (kind === "sale") sale++;
       else rent++;
@@ -339,6 +348,30 @@ async function seed(
     );
   }
 
+  // --- Alınan teklifler (her 7. ilana) --------------------------------------
+  let offerCount = 0;
+  for (let i = 0; i < allListings.length; i++) {
+    const listing = allListings[i]!;
+    if (i % 7 !== 0) continue;
+    const discount = listing.kind === "sale" ? 0.93 : 0.97;
+    const amount = Math.round(listing.priceKurus * discount);
+    await client.query(
+      `insert into offer
+         (tenant_id, listing_id, bidder_name, bidder_phone, amount_kurus, status, note)
+       values ($1, $2, $3, $4, $5, $6, $7)`,
+      [
+        tenantId,
+        listing.id,
+        `${PREFIX}${personName(i + 3)}`,
+        phoneFor(600, i),
+        amount,
+        i % 21 === 0 ? "negotiating" : "received",
+        `${PREFIX}telefonla gelen teklif`,
+      ],
+    );
+    offerCount++;
+  }
+
   const statusText = Object.entries(statusCounts)
     .map(([k, v]) => `${k} ${v}`)
     .join(" · ");
@@ -348,6 +381,8 @@ async function seed(
     `mal sahibi ${ownerIds.length}`,
     `mülk ${idx} (satılık ${sale} / kiralık ${rent})`,
     `kiracı ${tenantIds.length} (sözleşmeli ${rentActive.length})`,
+    `teklif ${offerCount}`,
+    `personel dağıtımı ${responsibleIds.length} kişi`,
     `durum: ${statusText}`,
   ].join(" | ");
 }

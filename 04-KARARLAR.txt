@@ -252,3 +252,27 @@ K-41 | Aysan'a kurulum paketi masaüstünde tutulur.
        katlanır: Auto Blocker, bilinmeyen kaynak, Play Protect) + kullanım
        kılavuzu (raflar, OCR, yedekleme, API anahtarı). APK: com.umay.pdfreader
        5.13 (kod 30), Android 8.0+.
+
+
+K-42 | Görsel dil: raflar vitrin, modül kutuları çizgili.
+       Ne: raflar turuncu-mavi ışıldayan çerçeve içinde; kartlar turuncu
+       kenarlı ve hover'da parlıyor. Ana sayfa modül kutuları turuncu çizgili,
+       modülü olmayan kutular kesikli çizgiyle "planlı" görünüyor.
+       Amaç: Umay PDF Reader'daki raf hissini emlağa taşımak.
+
+K-43 | Kişi kartı tıklanınca kişi dosyası açılır.
+       Ne: mal sahibinde mülkleri, kiracıları, portföy değeri ve açık borç;
+       kiracıda oturduğu daire, sözleşme ve ödeme dökümü. Detay paneli
+       açılınca ekran otomatik olarak panele kayar (görünmez kalmasın).
+
+K-44 | Personel portföyü ve teklifler.
+       Ne: personel satırına tıklayınca portföyü açılır: satılık/kiralık
+       rafları, alınan teklifler, mülk dosyası (oda/m²/kat, portföye giriş,
+       mal sahibi, ilçe ortalaması). Teklifler offer tablosunda tutulur;
+       teklif kabul/red akışı henüz yok. İlçe ortalaması kendi aktif
+       ilanlarımızdan hesaplanır — dış piyasa verisi değildir.
+
+K-45 | Sözleşme metni programdan üretilir.
+       Ne: sözleşme detayındaki "Sözleşme metnini aç" yazdırılabilir kira
+       sözleşmesi üretir; snapshot varsa dondurulmuş bilgi kullanılır.
+       Metin örnek şablondur; hukuki geçerlilik için avukat onayı gerekir.

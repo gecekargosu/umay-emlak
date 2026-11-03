@@ -497,3 +497,126 @@ function daysSince(dateStr: string): number {
   const today = new Date(new Date().toISOString().slice(0, 10) + "T00:00:00Z").getTime();
   return Math.max(0, Math.round((today - due) / 86_400_000));
 }
+
+/**
+ * Sözleşme metni — TUR:23 kullanıcı isteği: "sözleşmeler tıklandığında o sözleşme
+ * metni açılmalı, detayları görünmeli."
+ * Y-53 snapshot kuralı: sözleşme açılırken dondurulan taraf/mülk bilgisi varsa o
+ * kullanılır; yoksa canlı kayda düşer. Metin örnek şablondur (avukat onayı gerekir).
+ */
+contractRoutes.get("/:id/contract-text", async (c) => {
+  const session = await resolveSession(c);
+  requirePasswordChanged(session);
+  const id = c.req.param("id");
+
+  const result = await withTenant(session.tenantId, async (tx) =>
+    tx.execute(sql`
+      select ct.id, ct.start_date as "startDate", ct.end_date as "endDate",
+             ct.rent_kurus as "rentKurus", ct.deposit_kurus as "depositKurus",
+             ct.deposit_rent_count as "depositRentCount", ct.due_day as "dueDay",
+             ct.utility_payer as "utilityPayer", ct.status, ct.snapshot,
+             pr.title, pr.address, pr.district, pr.city, pr.room_count as "roomCount",
+             pr.gross_m2 as "grossM2", pr.site_name as "siteName", pr.unit_no as "unitNo",
+             t.full_name as "tenantName", t.phone as "tenantPhone", t.email as "tenantEmail",
+             ow.full_name as "ownerName", ow.phone as "ownerPhone"
+        from contract ct
+        join listing l on l.id = ct.listing_id
+        join property pr on pr.id = l.property_id
+        left join person t on t.id = ct.tenant_person_id
+        left join person ow on ow.id = pr.owner_person_id
+       where ct.id = ${id}::uuid
+       limit 1
+    `),
+  );
+
+  const rows = (result as unknown as { rows: Array<Record<string, unknown>> }).rows;
+  const row = rows[0];
+  if (!row) return c.json({ error: "Sözleşme bulunamadı" }, 404);
+
+  const snapshot = (row.snapshot ?? null) as null | {
+    tenantName?: string;
+    tenantPhone?: string | null;
+    propertyTitle?: string;
+    propertyAddress?: string | null;
+    ownerNames?: string | string[];
+    rentKurus?: number;
+    depositKurus?: number;
+    dueDay?: number;
+  };
+
+  const tenantName = snapshot?.tenantName ?? String(row.tenantName ?? "—");
+  const tenantPhone = snapshot?.tenantPhone ?? (row.tenantPhone ? String(row.tenantPhone) : "—");
+  const propertyTitle = snapshot?.propertyTitle ?? String(row.title ?? "—");
+  const propertyAddress =
+    snapshot?.propertyAddress ??
+    [row.address, row.district, row.city].filter(Boolean).join(", ") ??
+    "—";
+  const ownerNames = Array.isArray(snapshot?.ownerNames)
+    ? snapshot!.ownerNames.join(", ")
+    : (snapshot?.ownerNames ?? (row.ownerName ? String(row.ownerName) : "—"));
+  const rentKurus = Number(snapshot?.rentKurus ?? row.rentKurus ?? 0);
+  const depositKurus = Number(snapshot?.depositKurus ?? row.depositKurus ?? 0);
+  const dueDay = Number(snapshot?.dueDay ?? row.dueDay ?? 1);
+  const utilityPayer =
+    row.utilityPayer === "tenant" ? "Kiracı" : row.utilityPayer === "owner" ? "Mal sahibi" : "Ofis";
+
+  const money = (kurus: number) =>
+    new Intl.NumberFormat("tr-TR", { style: "currency", currency: "TRY" }).format(kurus / 100);
+
+  const html = `<!doctype html>
+<html lang="tr"><head><meta charset="utf-8" />
+<title>Sözleşme · ${propertyTitle}</title>
+<style>
+  body { font-family: Georgia, 'Times New Roman', serif; color: #111; max-width: 760px; margin: 40px auto; line-height: 1.65; padding: 0 20px; }
+  h1 { font-size: 20px; text-align: center; letter-spacing: .06em; }
+  h2 { font-size: 14px; margin-top: 26px; text-transform: uppercase; letter-spacing: .08em; }
+  table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 14px; }
+  td { padding: 6px 8px; border-bottom: 1px solid #ddd; vertical-align: top; }
+  td:first-child { color: #555; width: 42%; }
+  .sign { display: flex; justify-content: space-between; margin-top: 60px; gap: 40px; }
+  .sign div { flex: 1; border-top: 1px solid #333; padding-top: 8px; text-align: center; font-size: 13px; }
+  .note { font-size: 12px; color: #666; margin-top: 30px; }
+  @media print { body { margin: 0; } }
+</style></head>
+<body>
+  <h1>KİRA SÖZLEŞMESİ</h1>
+  <p style="text-align:center;font-size:13px;color:#555">Sözleşme no: ${String(row.id).slice(0, 8)} · Durum: ${row.status}</p>
+
+  <h2>Taraflar</h2>
+  <table>
+    <tr><td>Mal sahibi</td><td>${ownerNames}</td></tr>
+    <tr><td>Kiracı</td><td>${tenantName} · ${tenantPhone}</td></tr>
+    <tr><td>Kiralanan taşınmaz</td><td>${propertyTitle}</td></tr>
+    <tr><td>Adres</td><td>${propertyAddress}</td></tr>
+    <tr><td>Site / daire</td><td>${row.siteName ?? "—"} · ${row.unitNo ?? "—"}</td></tr>
+    <tr><td>Oda / m²</td><td>${row.roomCount ?? "—"} · ${row.grossM2 ? `${row.grossM2} m²` : "—"}</td></tr>
+  </table>
+
+  <h2>Kira koşulları</h2>
+  <table>
+    <tr><td>Aylık kira</td><td>${money(rentKurus)}</td></tr>
+    <tr><td>Ödeme günü</td><td>Her ayın ${dueDay}. günü</td></tr>
+    <tr><td>Depozito</td><td>${money(depositKurus)}${row.depositRentCount ? ` (${row.depositRentCount} kira)` : ""}</td></tr>
+    <tr><td>Aidat / fatura sorumlusu</td><td>${utilityPayer}</td></tr>
+    <tr><td>Başlangıç</td><td>${row.startDate ?? "—"}</td></tr>
+    <tr><td>Bitiş</td><td>${row.endDate ?? "süresiz / yenilenir"}</td></tr>
+  </table>
+
+  <h2>Genel hükümler</h2>
+  <p>Kiracı, kiralanan taşınmazı konut/işyeri olarak kullanacak; kira bedelini her ayın
+  ${dueDay}. gününe kadar ödeyecektir. Depozito, sözleşme sonunda taşınmazın hasarsız teslimi
+  hâlinde iade edilir. Taraflar, taşınmazın demirbaşları ve sayaç değerleri için giriş/çıkış
+  tutanağı düzenlemeyi kabul eder. Sözleşmede yazılı olmayan hususlarda Türk Borçlar Kanunu
+  hükümleri uygulanır.</p>
+
+  <div class="sign">
+    <div>Mal sahibi<br />${ownerNames}</div>
+    <div>Kiracı<br />${tenantName}</div>
+  </div>
+
+  <p class="note">Bu metin programın ürettiği örnek şablondur; hukuki geçerlilik için avukat
+  onayı gerekir. Program hukuki danışmanlık vermez.</p>
+</body></html>`;
+
+  return c.html(html);
+});

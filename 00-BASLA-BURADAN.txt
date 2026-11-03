@@ -181,3 +181,17 @@ Marka: "UMAY EMLAK" yazısı kaldırıldı; TM logosu turuncu-beyaz; tüm h2/h3
 başlıkları turuncu.
 Aysan paketi: Masaüstü → "Aysana gönderilecek" (APK 5.13 + kurulum kılavuzu
 + kullanım kılavuzu + OKU-BENİ).
+
+
+====================================================================
+TUR:23 — GÖRSEL ETKİ, PERSONEL PORTFÖYÜ, SÖZLEŞME METNİ
+====================================================================
+Görsel: raflar ışıldayan çerçeveli vitrin; ana sayfa modül kutuları
+turuncu çizgili, hover'da parlıyor.
+Kişi kartları: satıra tıklayınca dosya açılır (mal sahibinde mülkler,
+kiracılar ve borç; kiracıda daire + ödeme dökümü).
+Personeller: satıra tıkla → o personelin portföyü (satılık/kiralık rafları),
+alınan teklifler, mülk dosyası (oda/m²/kat, portföye giriş, mal sahibi,
+ilçe ortalaması, teklifler). Yeni tablo: offer (migration 0008).
+Sözleşmeler: "Sözleşme metnini aç" → yazdırılabilir kira sözleşmesi.
+Marka: 48 px logo + TRADEMARK / GAYRİMENKUL.

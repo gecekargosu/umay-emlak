@@ -124,3 +124,42 @@ describe("kiracılar", () => {
     expect(detail.contracts.some((contract) => contract.status === "active")).toBe(true);
   });
 });
+
+describe("personel portföyü ve sözleşme metni", () => {
+  it("personelin portföyünü, teklifleri ve ilçe ortalamasını döndürür", async () => {
+    const cookie = await login();
+    const team = (await (await app.request("/api/v1/team", { headers: { cookie } })).json()) as {
+      members: Array<{ id: string; name: string }>;
+    };
+    const member = team.members[0]!;
+
+    const res = await app.request(`/api/v1/team/${member.id}/portfolio`, {
+      headers: { cookie },
+    });
+    expect(res.status).toBe(200);
+    const data = (await res.json()) as {
+      member: { fullName: string };
+      listings: Array<{ kind: string; offers: unknown[]; enteredAt: string }>;
+      averages: Array<{ district: string; avgRentText: string }>;
+    };
+    expect(data.member.fullName).toBeTruthy();
+    expect(data.listings.length).toBeGreaterThan(0);
+    expect(data.listings.every((listing) => listing.enteredAt)).toBe(true);
+    expect(data.averages.length).toBeGreaterThan(0);
+  });
+
+  it("sözleşme metni HTML olarak açılır", async () => {
+    const cookie = await login();
+    const list = (await (await app.request("/api/v1/contracts", { headers: { cookie } })).json()) as {
+      items: Array<{ id: string }>;
+    };
+    expect(list.items.length).toBeGreaterThan(0);
+    const res = await app.request(`/api/v1/contracts/${list.items[0]!.id}/contract-text`, {
+      headers: { cookie },
+    });
+    expect(res.status).toBe(200);
+    const html = await res.text();
+    expect(html).toContain("KİRA SÖZLEŞMESİ");
+    expect(html).toContain("Kira koşulları");
+  });
+});
