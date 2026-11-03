@@ -12,6 +12,8 @@ import { BackButton } from "../components/BackButton";
 import { InfoNote } from "../components/InfoNote";
 import { ListingOffers } from "../components/ListingOffers";
 import { ListingMoney } from "../components/ListingMoney";
+import { ListingBoard } from "../components/ListingBoard";
+import { PropertyMedia } from "../components/PropertyMedia";
 
 const KIND_TR: Record<string, string> = { sale: "Satılık", rent: "Kiralık" };
 const STATUS_TR: Record<string, string> = {
@@ -148,6 +150,8 @@ export function Listings({
     try {
       const data = await api<ListingDetail>(`/listings/${id}`);
       setDetail(data);
+      // Mülk dosyası yeni sayfa gibi açılır: kaydırma en üste alınır.
+      window.scrollTo(0, 0);
       setPriceText(kurusToText(data.listing.priceKurus));
       setNote("");
       setAuthority(data.listing.authorityNo ?? "");
@@ -299,10 +303,17 @@ export function Listings({
   }
 
   if (error && !rows) return <div className="error">{error}</div>;
+
+  // Liste gizlenirken TS `detail`i null'a daraltıyor; seçili kimliği ayrı tutuyoruz.
+  const selectedListingId = detail ? detail.listing.id : null;
   if (!rows) return <p className="muted">Yükleniyor…</p>;
 
   return (
     <div>
+      {/* TUR:27 — kullanıcı isteği: "karta tıkladım, bir şey açılmadı". Detay artık
+          listenin altında değil: liste tamamen gizlenir, mülk dosyası tam sayfa açılır. */}
+      {!detail && (
+        <>
       <div className="page-head">
         <h2>{fixedKind === "sale" ? "Satılıklar" : fixedKind === "rent" ? "Kiralıklar" : "Portföy"}</h2>
         <span className="spacer" />
@@ -319,7 +330,7 @@ export function Listings({
         <Shelf
           title="Satılıklar"
           rows={allRows.filter((row) => row.kind === "sale")}
-          selectedId={detail?.listing.id ?? null}
+          selectedId={selectedListingId}
           onOpen={(id) => void open(id)}
         />
       )}
@@ -327,7 +338,7 @@ export function Listings({
         <Shelf
           title="Kiralıklar"
           rows={allRows.filter((row) => row.kind === "rent")}
-          selectedId={detail?.listing.id ?? null}
+          selectedId={selectedListingId}
           onOpen={(id) => void open(id)}
         />
       )}
@@ -501,7 +512,7 @@ export function Listings({
               {rows.map((row) => (
                 <tr
                   key={row.id}
-                  className={detail?.listing.id === row.id ? "selected" : "clickable"}
+                  className={selectedListingId === row.id ? "selected" : "clickable"}
                   onClick={() => void open(row.id)}
                 >
                   <td>
@@ -529,17 +540,29 @@ export function Listings({
           </table>
         </div>
       )}
+        </>
+      )}
 
       {message && <div className="alert">{message}</div>}
       {error && <div className="error">{error}</div>}
 
       {detail && (
-        <div className="panel">
+        <div className="listing-page">
           <BackButton onBack={() => setDetail(null)} label="Portföy listesine dön" />
+          <div className="page-head">
+            <h2>{detail.property.title}</h2>
+            <span className="spacer" />
+            <span className="badge">
+              {KIND_TR[detail.listing.kind]} · {detail.listing.price}
+            </span>
+          </div>
           <div className="detail-head">
-            <h3>{detail.property.title}</h3>
             <span className="badge">{STATUS_TR[detail.listing.status] ?? detail.listing.status}</span>
           </div>
+
+          <PropertyMedia propertyId={detail.property.id} />
+
+          <ListingBoard listingId={detail.listing.id} />
           <p className="muted small">
             {[detail.property.district, detail.property.city].filter(Boolean).join(", ") || "konum yok"}
             {detail.property.siteName ? ` · ${detail.property.siteName}` : ""}

@@ -349,3 +349,19 @@ K-60 | Gönderilecek APK kuralı.
        Ne: paket, telefondaki kurulu sürümün imzasıyla uyumlu olmalı; aksi
        hâlde güncelleme kurulamaz. Telefondaki 5.3 dosyası ve release anahtarı
        yerini biliyoruz; 5.13 imzalı derleme gerektiğinde yapılır.
+
+
+K-61 | Mülk dosyası tam sayfa açılır.
+       Ne: kart/liste satırına tıklayınca liste ve raflar gizlenir; mülk
+       dosyası en üstten açılır. "← Portföy listesine dön" ile listeye dönülür.
+
+K-62 | Fotoğraf/video ayrı tabloda, içerik adresli depoda.
+       Ne: property_media (tür, sha256, mime, boyut). Aynı dosya iki kez
+       saklanmaz. Belge arşiviyle karışmaz; medya galerisi ilan sayfasındadır.
+
+K-63 | Kiralık detayında kiracı, sözleşme ve kira çizelgesi birlikte.
+       Ne: kira, depozito, kira günü, başlangıç/bitiş, aidat sorumlusu, açık
+       borç; aylık çizelgede ödenen/kalan ve gecikmiş satır kırmızı.
+
+K-64 | Boyut sınırları: belge 25 MB, medya 50 MB.
+       Ne: video dosyaları büyük olduğu için medya ucunda sınır yükseltildi.

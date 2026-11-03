@@ -377,3 +377,15 @@ TUR:26 DURUM — TAKVİM
   bugün mavi çerçeve, seçili gün turuncu; gün panelinde kısayol düğmeleri.
 - Ana sayfa: Dashboard başlığı ve InfoNote kaldırıldı; <Calendar compact> en üstte.
 Kalan: DASK/poliçe, tekrarlayan hatırlatıcı, teslim tutanağı (SIRA 2).
+
+
+====================================================================
+TUR:27 DURUM — MÜLK DOSYASI VE MEDYA
+====================================================================
+- property_media tablosu (RLS'li) + depo sha256.
+  GET/POST /properties/:id/media, GET .../media/:mediaId/file, DELETE.
+  Sınır 50 MB; image/* ve video/*.
+- GET /listings/:id/board: ilan + mülk + mal sahibi + kiracı/sözleşme +
+  kira çizelgesi (24 ay) + demirbaş + medya.
+- Listings.tsx: detay tam sayfa (liste gizlenir, en üste kaydırma, geri tuşu).
+Kalan: demirbaş fotoğrafı, teslim tutanağı, kira çizelgesinden tahsilat.

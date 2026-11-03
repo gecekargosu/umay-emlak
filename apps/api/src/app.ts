@@ -30,6 +30,8 @@ import { tenantRoutes } from "./routes/tenants.js";
 import { offerRoutes } from "./routes/offers.js";
 import { commissionRoutes } from "./routes/commissions.js";
 import { calendarRoutes } from "./routes/calendar.js";
+import { mediaRoutes } from "./routes/media.js";
+import { listingBoardRoutes } from "./routes/listing-board.js";
 
 export const app = new Hono();
 
@@ -65,6 +67,8 @@ app.route("/api/v1/tenants", tenantRoutes);
 app.route("/api/v1/offers", offerRoutes);
 app.route("/api/v1/listings", commissionRoutes);
 app.route("/api/v1/calendar", calendarRoutes);
+app.route("/api/v1/properties", mediaRoutes);
+app.route("/api/v1/listings", listingBoardRoutes);
 
 app.get("/api/v1/me", async (c) => {
   const session = await resolveSession(c);

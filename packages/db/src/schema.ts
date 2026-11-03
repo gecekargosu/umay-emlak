@@ -614,6 +614,30 @@ export const propertyFixtures = pgTable(
   (t) => [index("property_fixture_property_idx").on(t.tenantId, t.propertyId)],
 );
 
+/** TUR:27 — mülk fotoğraf/video. Depo içerik adresli (sha256), tablo yalnız meta. */
+export const propertyMedia = pgTable(
+  "property_media",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tenantId: uuid("tenant_id")
+      .notNull()
+      .references(() => tenants.id, { onDelete: "cascade" }),
+    propertyId: uuid("property_id")
+      .notNull()
+      .references(() => properties.id, { onDelete: "cascade" }),
+    kind: text("kind").$type<"image" | "video">().notNull().default("image"),
+    title: text("title"),
+    sha256: text("sha256").notNull(),
+    mimeType: text("mime_type").notNull(),
+    sizeBytes: integer("size_bytes").notNull(),
+    createdByUserId: uuid("created_by_user_id").references(() => appUsers.id, {
+      onDelete: "set null",
+    }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("property_media_property_idx").on(t.tenantId, t.propertyId)],
+);
+
 /** İçe aktarma defteri — denetim izi (hangi dosya, ne oldu). */
 export const importBatches = pgTable(
   "import_batch",

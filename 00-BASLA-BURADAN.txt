@@ -232,3 +232,15 @@ takvim geldi. Güne tıklayınca o günün kirası/sözleşmesi görünür.
 APK: telefondaki 5.3 dosyası bulundu (telefon-kaynagi/apk/umay-5.3-kurulu.apk),
 en yeni kaynak 5.13 (UmayWork). Gönderilecek paket, kurulu sürümün imzasıyla
 uyumlu olmalı; imzalı derleme için release anahtarı duruyor.
+
+
+====================================================================
+TUR:27 — MÜLK DOSYASI: FOTOĞRAF, VİDEO, KİRALIK DETAYI
+====================================================================
+Mülk kartına tıklayınca liste kapanır, mülk dosyası tam sayfa açılır.
+Fotoğraf ve video yüklenir (çoklu, 50 MB), galeride görünür.
+Satılıkta: mal sahibi, oda, m², kat, blok/daire, site, adres, fiyat,
+portföye giriş, yayın tarihi, yetki no, not.
+Kiralıkta ek: kiracı, kira, depozito, kira günü, tarihler, aidat sorumlusu,
+açık borç, aylık kira çizelgesi (ödenen/kalan/gecikmiş), demirbaş listesi.
+Kayıt: 0010_property_media.sql. Sıradaki: teslim tutanağı + demirbaş fotoğrafı.
