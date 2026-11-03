@@ -58,8 +58,9 @@ afterAll(async () => {
   await admin.connect();
   try {
     await admin.query("delete from property where title like 'Belge Test Daire%'");
-    await admin.query("delete from person where full_name like 'Belge Malik%'");
+    await admin.query("delete from person where full_name like 'Belge%'");
     await admin.query("delete from document where filename like 'Belge%'");
+    await admin.query("delete from document_suggestion where document_id not in (select id from document)");
   } finally {
     await admin.end();
   }
@@ -120,8 +121,9 @@ describe("otomatik eşleştirme", () => {
       })
     ).json()) as { id: string };
 
-    // Bağsız yükleme: dosya adında kişinin adı geçiyor
-    const up = await upload(cookie, "Belge Malik Sabit tapu.pdf", "sabit-tapu-icerigi-2", {
+    // Bağsız yükleme: dosya adı kişiyle KISMEN örtüşüyor (soyad var, ad yok).
+    // TUR:24: net örtüşme artık kendiliğinden bağlanır; belirsiz örtüşme insan onayında kalır.
+    const up = await upload(cookie, "Belge Malik tapu.pdf", "sabit-tapu-icerigi-2", {
       kind: "tapu",
     });
     expect(up.status).toBe(201);
@@ -254,5 +256,40 @@ describe("ilan yayına alma", () => {
     // Kapanmış/açık ilanda geriye dönüş yok
     const backwards = await patch(`/api/v1/listings/${created.id}`, cookie, { status: "draft" });
     expect(backwards.status).toBe(409);
+  });
+});
+
+/**
+ * TUR:24 — kullanıcı isteği: "eşleşme varsa eşleşmeli, yoksa o isme giriş kayıt yapılmalı".
+ * Net örtüşen dosya adı kendiliğinden bağlanır; örtüşme yoksa dosya adıyla kişi açılır.
+ */
+describe("belge adından otomatik eşleşme", () => {
+  it("dosya adı kişiyle net örtüşüyorsa bağ kendiliğinden kurulur", async () => {
+    const cookie = await login(AYSAN);
+    const person = await post("/api/v1/people", cookie, {
+      fullName: "Belge Malik Ayla",
+      kind: "owner",
+    });
+    expect(person.status).toBe(201);
+
+    const res = await upload(cookie, "Belge Malik Ayla tapu.pdf", "otomatik-eslesme-icerigi");
+    expect(res.status).toBe(201);
+    const body = (await res.json()) as { linkedTo: string | null; linkedScore: number | null };
+    expect(body.linkedTo).toBe("Belge Malik Ayla");
+    expect(body.linkedScore).toBeGreaterThanOrEqual(70);
+  });
+
+  it("eşleşme yoksa dosya adıyla kişi kaydı açar", async () => {
+    const cookie = await login(AYSAN);
+    const res = await upload(cookie, "Belge Yeni Musteri Kaya.pdf", "yeni-kisi-icerigi");
+    expect(res.status).toBe(201);
+    const body = (await res.json()) as { createdPerson: string | null };
+    expect(body.createdPerson).toBe("Belge Yeni Musteri Kaya");
+
+    const list = await app.request("/api/v1/people?q=Belge Yeni Musteri Kaya", {
+      headers: { cookie },
+    });
+    const data = (await list.json()) as { items: Array<{ fullName: string }> };
+    expect(data.items.some((p) => p.fullName === "Belge Yeni Musteri Kaya")).toBe(true);
   });
 });

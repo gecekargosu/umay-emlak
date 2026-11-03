@@ -17,6 +17,8 @@ import { Team } from "./pages/Team";
 type Page =
   | "bugun"
   | "portfoy"
+  | "satiliklar"
+  | "kiraliklar"
   | "mal-sahipleri"
   | "kisiler"
   | "kiralar"
@@ -29,7 +31,14 @@ type Page =
 /** Kaynak dosya 6.2: düz 15 maddelik menü değil, 6 grup. */
 const NAV: Array<{ group: string; items: Array<{ page: Page; label: string }> }> = [
   { group: "Bugün", items: [{ page: "bugun", label: "Aksiyon panosu" }] },
-  { group: "Portföy", items: [{ page: "portfoy", label: "Gayrimenkuller" }] },
+  {
+    group: "Portföy",
+    items: [
+      { page: "portfoy", label: "Gayrimenkuller" },
+      { page: "satiliklar", label: "Satılıklar" },
+      { page: "kiraliklar", label: "Kiralıklar" },
+    ],
+  },
   {
     group: "Kişiler",
     items: [
@@ -58,6 +67,8 @@ const NAV: Array<{ group: string; items: Array<{ page: Page; label: string }> }>
 const TITLES: Record<Page, string> = {
   bugun: "Bugün",
   portfoy: "Portföy",
+  satiliklar: "Satılıklar",
+  kiraliklar: "Kiralıklar",
   "mal-sahipleri": "Mal Sahipleri",
   kisiler: "Kişiler",
   kiralar: "Kiralar",
@@ -167,9 +178,14 @@ export function App() {
     setPage(next);
   }
 
+  // TUR:24 — kullanıcı isteği: "sayfalara girince geri çıkamıyoruz". Geçmiş boşsa
+  // geri tuşu artık ana sayfaya döner; hiçbir zaman ölü düğme gibi görünmez.
   function goBack() {
     const previous = pageHistory[pageHistory.length - 1];
-    if (!previous) return;
+    if (!previous) {
+      setPage("bugun");
+      return;
+    }
     setPageHistory((history) => history.slice(0, -1));
     setPage(previous);
   }
@@ -195,9 +211,9 @@ export function App() {
         <button
           type="button"
           className="ghost back-nav"
-          disabled={pageHistory.length === 0}
+          disabled={page === "bugun" && pageHistory.length === 0}
           onClick={goBack}
-          title="Önceki ekrana dön"
+          title="Önceki ekrana dön (geçmiş boşsa ana sayfa)"
         >
           ← Geri
         </button>
@@ -283,6 +299,12 @@ export function App() {
         <main>
           {page === "bugun" && <Dashboard onGo={(next) => go(next as Page)} />}
           {page === "portfoy" && <Listings canApprove={session.canApprove} />}
+          {page === "satiliklar" && (
+            <Listings canApprove={session.canApprove} fixedKind="sale" />
+          )}
+          {page === "kiraliklar" && (
+            <Listings canApprove={session.canApprove} fixedKind="rent" />
+          )}
           {page === "mal-sahipleri" && <Owners />}
           {page === "kisiler" && <People initialQuery={peopleQuery} />}
           {page === "kiralar" && <Rents />}

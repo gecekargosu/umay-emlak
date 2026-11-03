@@ -10,6 +10,7 @@ import {
 } from "../api";
 import { BackButton } from "../components/BackButton";
 import { InfoNote } from "../components/InfoNote";
+import { ListingOffers } from "../components/ListingOffers";
 
 const KIND_TR: Record<string, string> = { sale: "Satılık", rent: "Kiralık" };
 const STATUS_TR: Record<string, string> = {
@@ -70,7 +71,14 @@ const EMPTY_FILTERS: Filters = {
   status: "",
 };
 
-export function Listings({ canApprove }: { canApprove: boolean }) {
+export function Listings({
+  canApprove,
+  /** TUR:24 — "Satılıklar" ve "Kiralıklar" ayrı ekranı: tür sabitlenir, filtreden kaldırılır. */
+  fixedKind,
+}: {
+  canApprove: boolean;
+  fixedKind?: "sale" | "rent";
+}) {
   const [rows, setRows] = useState<ListingRow[] | null>(null);
   const [detail, setDetail] = useState<ListingDetail | null>(null);
   const [kinds, setKinds] = useState<KindOption[]>([]);
@@ -82,7 +90,10 @@ export function Listings({ canApprove }: { canApprove: boolean }) {
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [allRows, setAllRows] = useState<ListingRow[]>([]);
-  const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS);
+  const [filters, setFilters] = useState<Filters>({
+    ...EMPTY_FILTERS,
+    kind: fixedKind ?? "",
+  });
   const [authority, setAuthority] = useState("");
   const [assets, setAssets] = useState<PropertyAssets | null>(null);
   const [subForm, setSubForm] = useState({ kind: "elektrik", provider: "", monthlyText: "" });
@@ -292,7 +303,7 @@ export function Listings({ canApprove }: { canApprove: boolean }) {
   return (
     <div>
       <div className="page-head">
-        <h2>Portföy</h2>
+        <h2>{fixedKind === "sale" ? "Satılıklar" : fixedKind === "rent" ? "Kiralıklar" : "Portföy"}</h2>
         <span className="spacer" />
         <span className="muted small">{rows.length} kayıt</span>
       </div>
@@ -303,18 +314,22 @@ export function Listings({ canApprove }: { canApprove: boolean }) {
         eklendiğinde buraya fotoğraf gelecek.
       </InfoNote>
 
-      <Shelf
-        title="Satılıklar"
-        rows={allRows.filter((row) => row.kind === "sale")}
-        selectedId={detail?.listing.id ?? null}
-        onOpen={(id) => void open(id)}
-      />
-      <Shelf
-        title="Kiralıklar"
-        rows={allRows.filter((row) => row.kind === "rent")}
-        selectedId={detail?.listing.id ?? null}
-        onOpen={(id) => void open(id)}
-      />
+      {fixedKind !== "rent" && (
+        <Shelf
+          title="Satılıklar"
+          rows={allRows.filter((row) => row.kind === "sale")}
+          selectedId={detail?.listing.id ?? null}
+          onOpen={(id) => void open(id)}
+        />
+      )}
+      {fixedKind !== "sale" && (
+        <Shelf
+          title="Kiralıklar"
+          rows={allRows.filter((row) => row.kind === "rent")}
+          selectedId={detail?.listing.id ?? null}
+          onOpen={(id) => void open(id)}
+        />
+      )}
 
       <h3 style={{ marginTop: 22 }}>Tüm gayrimenkuller</h3>
       <p className="muted small" style={{ marginTop: -6 }}>
@@ -450,8 +465,9 @@ export function Listings({ canApprove }: { canApprove: boolean }) {
             type="button"
             className="ghost"
             onClick={() => {
-              setFilters(EMPTY_FILTERS);
-              void load(EMPTY_FILTERS);
+              const cleared = { ...EMPTY_FILTERS, kind: fixedKind ?? "" };
+              setFilters(cleared);
+              void load(cleared);
             }}
           >
             Temizle
@@ -543,6 +559,8 @@ export function Listings({ canApprove }: { canApprove: boolean }) {
                   )
                   .join(", ")}
           </p>
+
+          <ListingOffers listingId={detail.listing.id} />
 
           <h4>Belgeler</h4>
           <ul className="req-list">

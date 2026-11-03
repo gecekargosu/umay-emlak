@@ -338,3 +338,9 @@ Y-77 | Mal sahibi klasöründen mülk detayına geçiş |
        açılmıyor. Portföy detayı ayrı ekranda. | Dilim 7 | O | AÇIK
 
 Açık kayıt sayısı: 66 (Y-01 … Y-77; Y-01, Y-02, Y-10 ve Y-53…Y-60 kapandı) + 8 sapma notu (S-01 … S-08).
+
+
+Y-79 | Komisyon / kapora akışı — satışta %3 varsayılan komisyon, kapora makbuzu,
+       kapora alınınca ilan "kaporalı"ya düşsün. Satılıklar ekranında olacak.
+Y-80 | Belge içeriğinden okuma (OCR) — şimdilik eşleşme yalnız dosya adından;
+       taranmış tapunun içindeki isim okunmuyor.

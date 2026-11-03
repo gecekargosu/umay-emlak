@@ -333,3 +333,19 @@ TUR:23 DURUM — PERSONEL, TEKLİF, SÖZLEŞME METNİ
 - Görsel dil: raf vitrinleri ışıldayan çerçeve, modül kutuları turuncu çizgi.
 Eksik: teklif kabul/red akışı, kiracı belge/tutanak (Y-68), komisyon/kapora.
 Sıradaki: Satılıklar/Kiralıklar ekranları → Finans panosu.
+
+
+====================================================================
+TUR:24 DURUM — TEKLİF, BELGE, AYRI EKRANLAR
+====================================================================
+- GET/POST /offers, PATCH /offers/:id (offer tablosu, RLS'li).
+  Teklif silinmez; received → negotiating → accepted/rejected.
+  İlan dosyasında form + tablo (müşteri kayıtlıysa listeden seçilir).
+- POST /documents çoklu dosya kabul eder (arayüz döngüyle yükler).
+  Eşleşme: puan >= 70 otomatik bağ; 45-69 onay bekler; hiç öneri yoksa
+  dosya adıyla kişi kaydı açılır (aynı ad varsa mevcut kişi kullanılır).
+  "tapu.pdf" gibi tür adı dosyalarından kişi açılmaz.
+- Ayrı ekranlar: /satiliklar ve /kiraliklar (Listings fixedKind ile).
+- Ana sayfa sırası: modüller → aksiyon merkezi.
+Eksik: komisyon/kapora akışı, OCR ile içerik okuma, teklif kabulünde ilan durumu.
+Sıradaki: komisyon + kapora (Satılıklar), sonra Finans panosu.

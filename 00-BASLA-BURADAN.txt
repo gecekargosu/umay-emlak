@@ -195,3 +195,15 @@ alınan teklifler, mülk dosyası (oda/m²/kat, portföye giriş, mal sahibi,
 ilçe ortalaması, teklifler). Yeni tablo: offer (migration 0008).
 Sözleşmeler: "Sözleşme metnini aç" → yazdırılabilir kira sözleşmesi.
 Marka: 48 px logo + TRADEMARK / GAYRİMENKUL.
+
+
+====================================================================
+TUR:24 — MARKA, ANA SAYFA SIRASI, GERİ, TEKLİF, BELGE EŞLEŞTİRME
+====================================================================
+Logo 58 px ve marka turuncusunda; üst bar "TRADEMARK / GAYRİMENKUL".
+Ana sayfa modül kutularıyla başlar; aksiyon merkezi en altta.
+Geri tuşu her ekranda çalışır (geçmiş yoksa ana sayfa).
+İlan dosyasında teklif/görüşme kaydı: müşteri + tutar + not + durum.
+Belgeler: çoklu yükleme; net eşleşme kendiliğinden bağlanır, eşleşme
+yoksa dosya adıyla kişi açılır, belirsiz örtüşme onaya kalır.
+Sol menüde Satılıklar ve Kiralıklar ayrı ekran.

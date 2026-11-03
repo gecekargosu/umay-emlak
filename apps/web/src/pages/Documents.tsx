@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   api,
   ApiError,
@@ -8,7 +8,6 @@ import {
   type PersonRow,
 } from "../api";
 import { InfoNote } from "../components/InfoNote";
-import { BackButton } from "../components/BackButton";
 
 /**
  * Belgeler — "raf" görünümü.
@@ -24,7 +23,9 @@ export function Documents({ canApprove }: { canApprove: boolean }) {
   const [kind, setKind] = useState("tapu");
   const [personId, setPersonId] = useState("");
   const [title, setTitle] = useState("");
-  const [file, setFile] = useState<File | null>(null);
+  // TUR:24 — "karışık belgeler yüklendiğinde": birden çok dosya tek seferde seçilebilir
+  const [files, setFiles] = useState<File[]>([]);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -52,29 +53,52 @@ export function Documents({ canApprove }: { canApprove: boolean }) {
   }, [load]);
 
   async function upload() {
-    if (!file) return;
+    if (files.length === 0) return;
     setBusy(true);
     setError(null);
     setMessage(null);
+    const lines: string[] = [];
+    let lastId: string | null = null;
     try {
-      const body = new FormData();
-      body.append("file", file);
-      body.append("kind", kind);
-      if (personId) body.append("personId", personId);
-      if (title.trim()) body.append("title", title.trim());
-      const result = await api<{ id: string; duplicate: boolean; suggestions: number }>(
-        "/documents",
-        { method: "POST", body },
-      );
-      setMessage(
-        result.duplicate
-          ? "Bu dosya arşivde zaten vardı; ikinci kopya oluşturulmadı."
-          : `Belge arşive girdi.${result.suggestions > 0 ? ` ${result.suggestions} eşleştirme önerisi var, aşağıdan onaylayın.` : ""}`,
-      );
-      setFile(null);
+      for (const file of files) {
+        const body = new FormData();
+        body.append("file", file);
+        body.append("kind", kind);
+        if (personId) body.append("personId", personId);
+        if (title.trim() && files.length === 1) body.append("title", title.trim());
+        const result = await api<{
+          id: string;
+          duplicate: boolean;
+          suggestions: number;
+          linkedTo: string | null;
+          linkedScore: number | null;
+          createdPerson: string | null;
+        }>("/documents", { method: "POST", body });
+
+        if (result.duplicate) {
+          lines.push(`${file.name}: arşivde vardı, ikinci kopya açılmadı.`);
+        } else if (result.linkedTo) {
+          lines.push(
+            `${file.name}: “${result.linkedTo}” ile eşleşti${result.linkedScore ? ` (güven ${result.linkedScore}/100)` : ""}.`,
+          );
+        } else if (result.createdPerson) {
+          lines.push(
+            `${file.name}: eşleşme yok, “${result.createdPerson}” adıyla kişi kaydı açıldı.`,
+          );
+        } else {
+          lines.push(`${file.name}: arşive girdi.`);
+        }
+        if (result.suggestions > 0) {
+          lines.push(`${result.suggestions} belirsiz öneri var, aşağıdan onaylayın.`);
+        }
+        if (!result.duplicate) lastId = result.id;
+      }
+      setMessage(lines.join(" "));
+      setFiles([]);
       setTitle("");
+      if (fileInputRef.current) fileInputRef.current.value = "";
       await load(query);
-      if (!result.duplicate) await open(result.id);
+      if (lastId) await open(lastId);
     } catch (caught) {
       setError(caught instanceof ApiError ? caught.message : "Belge yüklenemedi");
     } finally {
@@ -117,9 +141,10 @@ export function Documents({ canApprove }: { canApprove: boolean }) {
         <h2>Belgeler</h2>
       </div>
       <InfoNote title="Dosyalar içeriğiyle saklanır (sha256).">
-        Aynı dosya iki kez yüklenirse <strong>tek kopya</strong> durur. Sistem yalnız eşleştirme
-        <strong> önerir</strong>; belgeyi kişiye/mülke bağlamak yetkili onayı ister. Yükleme sırasında
-        kişi seçmezsen öneri üretilir, aşağıdan onaylarsın.
+        Aynı dosya iki kez yüklenirse <strong>tek kopya</strong> durur. Karışık belgeleri tek seferde
+        seçebilirsin (Ctrl ile çoklu seçim): dosya adı bir kişi veya mülkle <strong>net örtüşüyorsa
+        bağ kendiliğinden kurulur</strong>; örtüşme yoksa dosya adıyla <strong>yeni kişi kaydı</strong>
+        açılır. Belirsiz örtüşmede sistem yine yalnız öneri üretir, bağı yetkili onaylar.
       </InfoNote>
 
       <div className="toolbar">
@@ -137,13 +162,14 @@ export function Documents({ canApprove }: { canApprove: boolean }) {
       </div>
 
       <div className="panel">
-          <BackButton onBack={() => setDetail(null)} label="Listeye dön" />
         <h3>Belge yükle</h3>
         <div className="inline-form">
           <input
+            ref={fileInputRef}
             type="file"
+            multiple
             accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.txt"
-            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+            onChange={(e) => setFiles([...(e.target.files ?? [])])}
           />
           <select value={kind} onChange={(e) => setKind(e.target.value)}>
             {kinds.map((k) => (
@@ -165,8 +191,8 @@ export function Documents({ canApprove }: { canApprove: boolean }) {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
-          <button type="button" disabled={!file || busy} onClick={() => void upload()}>
-            {busy ? "Yükleniyor…" : "Yükle"}
+          <button type="button" disabled={files.length === 0 || busy} onClick={() => void upload()}>
+            {busy ? "Yükleniyor…" : files.length > 1 ? `Yükle (${files.length} dosya)` : "Yükle"}
           </button>
         </div>
         <p className="hint">En fazla 25 MB. PDF, JPG, PNG, WEBP, DOC/DOCX, TXT.</p>

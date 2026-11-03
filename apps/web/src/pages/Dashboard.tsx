@@ -197,12 +197,33 @@ export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
         </span>
       </div>
       <InfoNote title="Ana sayfa ofisin komuta merkezidir.">
-        Üstteki <strong>aksiyon merkezi</strong> bugün ilgilenilmesi gereken işleri sayar; kırmızı
-        gecikmiş, sarı yaklaşan, mavi "dikkat" demektir. Altındaki modül kutuları ofisin tamamını
-        özetler — bir kutuya tıklayınca ilgili ekran açılır. Modülü henüz olmayan kutular (DASK,
-        görev, mesaj) <strong>"planlı"</strong> yazar; sıfır göstermiyoruz, çünkü yokluk bilgi değil.
+        Önce <strong>modül kutuları</strong> gelir: ofisin tamamını özetler, bir kutuya tıklayınca
+        ilgili ekran açılır. Modülü henüz olmayan kutular (DASK, görev, mesaj) <strong>"planlı"</strong>
+        yazar; sıfır göstermiyoruz, çünkü yokluk bilgi değil. <strong>Aksiyon merkezi</strong> en
+        alttadır: kırmızı gecikmiş, sarı yaklaşan, mavi "dikkat" demektir.
       </InfoNote>
 
+      <h3>Modüller</h3>
+      <div className="module-grid">
+        {tiles.map((tile) => {
+          const Tag = tile.page ? "button" : "div";
+          return (
+            <Tag
+              key={tile.key}
+              {...(tile.page
+                ? { type: "button" as const, onClick: () => go(tile.page as string) }
+                : {})}
+              className={`module-tile${tile.page ? "" : " not-built"}${tile.tone ? ` ${tile.tone}` : ""}`}
+            >
+              <div className="module-title">{tile.label}</div>
+              <div className="module-value">{tile.value}</div>
+              <div className="module-sub">{tile.sub}</div>
+            </Tag>
+          );
+        })}
+      </div>
+
+      {/* TUR:24 — kullanıcı isteği: "modüller başlamalı, aksiyon merkezini en alta al" */}
       <section className="action-center">
         <div className="ac-head">
           <h3>Aksiyon merkezi</h3>
@@ -235,26 +256,6 @@ export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
           {today.month.periodLabel}: tahakkuk {today.month.charged} · tahsil {today.month.collected}
         </p>
       </section>
-
-      <h3 style={{ marginTop: 22 }}>Modüller</h3>
-      <div className="module-grid">
-        {tiles.map((tile) => {
-          const Tag = tile.page ? "button" : "div";
-          return (
-            <Tag
-              key={tile.key}
-              {...(tile.page
-                ? { type: "button" as const, onClick: () => go(tile.page as string) }
-                : {})}
-              className={`module-tile${tile.page ? "" : " not-built"}${tile.tone ? ` ${tile.tone}` : ""}`}
-            >
-              <div className="module-title">{tile.label}</div>
-              <div className="module-value">{tile.value}</div>
-              <div className="module-sub">{tile.sub}</div>
-            </Tag>
-          );
-        })}
-      </div>
 
       {today.charges.overdue.length > 0 && (
         <Section

@@ -276,3 +276,34 @@ K-45 | Sözleşme metni programdan üretilir.
        Ne: sözleşme detayındaki "Sözleşme metnini aç" yazdırılabilir kira
        sözleşmesi üretir; snapshot varsa dondurulmuş bilgi kullanılır.
        Metin örnek şablondur; hukuki geçerlilik için avukat onayı gerekir.
+
+
+K-46 | Logo marka turuncusunda ve daha büyük (58 px).
+       Ne: JPEG logo invert+sepia+saturate+hue-rotate ile #ff7a1a tonuna boyanır,
+       screen blend ile beyaz fon kaybolur. "TRADEMARK" 17 px turuncu,
+       "GAYRİMENKUL" turuncu-kırık alt satır.
+
+K-47 | Ana sayfa modüllerle başlar, aksiyon merkezi en altta.
+       Ne: kullanıcı isteği: "11 yazısı en üstte olmasın, modüller başlasın".
+       Aksiyon merkezi kaldırılmadı, en alta alındı; ileride başka işe
+       dönüştürülebilir.
+
+K-48 | Geri tuşu her ekranda çalışır.
+       Ne: üst bardaki "← Geri" sayfa geçmişini kullanır; geçmiş boşsa
+       ana sayfaya (Aksiyon panosu) döner. Pasif görünmez, yalnız ana
+       sayfada soluklaşır.
+
+K-49 | Teklif/görüşme kaydı.
+       Ne: "müşteriyle görüştüm" bilgisi ilan altında tutulur: müşteri adı,
+       telefon, tutar, not, durum. Teklif silinmez; durumu değişir.
+       Kişi kaydı zorunlu değil (telefonla gelen müşteri), kayıtlıysa seçilir.
+
+K-50 | Belge eşleştirme kuralı.
+       Ne: dosya adı kişi/mülkle net örtüşüyorsa (>=70) bağ kendiliğinden
+       kurulur; 45-69 arası öneri insan onayına kalır (K-32); hiç örtüşme
+       yoksa dosya adıyla kişi kaydı açılır. Yalnız tür adı taşıyan dosyadan
+       ("tapu.pdf") kişi uydurulmaz. OCR yok; eşleşme dosya adından.
+
+K-51 | Satılıklar ve Kiralıklar ayrı ekran.
+       Ne: sol menüde iki ekran; tür sabit, raflarda yalnız o tür görünür.
+       Komisyon/kapora akışı sonraki dilime bırakıldı (Y-79).

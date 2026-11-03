@@ -27,6 +27,7 @@ import { payoutRoutes } from "./routes/payouts.js";
 import { todayRoutes } from "./routes/today.js";
 import { ownerRoutes } from "./routes/owners.js";
 import { tenantRoutes } from "./routes/tenants.js";
+import { offerRoutes } from "./routes/offers.js";
 
 export const app = new Hono();
 
@@ -59,6 +60,7 @@ app.route("/api/v1/payouts", payoutRoutes);
 app.route("/api/v1/today", todayRoutes);
 app.route("/api/v1/owners", ownerRoutes);
 app.route("/api/v1/tenants", tenantRoutes);
+app.route("/api/v1/offers", offerRoutes);
 
 app.get("/api/v1/me", async (c) => {
   const session = await resolveSession(c);

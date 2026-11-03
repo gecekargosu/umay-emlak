@@ -1336,3 +1336,46 @@ main h3,
   border-style: dashed;
   border-color: rgba(120, 134, 158, 0.4);
 }
+
+/* TUR:24 — kullanıcı isteği: logo, markanın turuncusuyla AYNI tonda ve daha büyük.
+   Tint zinciri: resmi siyaha çevirip (#ff7a1a) tonuna boyar; böylece JPEG'in kendi
+   tonu ne olursa olsun marka rengiyle birebir aynı görünür. */
+.brand-logo {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  /* JPEG'in beyaz/siyah fonu "screen" ile kaybolur; kalan çizgiler marka
+     turuncusuna boyanır (#ff7a1a). brightness(0) kullanılmaz: o zaman beyaz
+     fon da turuncu bloğa dönüşüyordu. */
+  mix-blend-mode: screen;
+  filter: invert(1) sepia(1) saturate(24) hue-rotate(-12deg) brightness(1.06)
+    drop-shadow(0 0 8px rgba(255, 122, 26, 0.3));
+}
+
+.login-logo {
+  border: none;
+  background: transparent;
+  filter: invert(1) sepia(1) saturate(24) hue-rotate(-12deg) brightness(1.06);
+}
+
+.brand-name {
+  font-size: 17px;
+  letter-spacing: 0.05em;
+}
+
+.brand-sub {
+  font-size: 10.5px;
+  color: rgba(255, 122, 26, 0.85);
+}
+
+/* Geri tuşu her ekranda görünür kalsın (pasifken de okunur). */
+.topbar .back-nav {
+  opacity: 1;
+}
+
+.topbar .back-nav:disabled {
+  opacity: 0.4;
+}

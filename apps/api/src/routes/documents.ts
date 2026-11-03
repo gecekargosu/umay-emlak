@@ -24,7 +24,7 @@ import {
   resolveMimeType,
   sha256Of,
 } from "../storage.js";
-import { scoreDocument, type MatchTarget } from "../documents/match.js";
+import { scoreDocument, tokensOf, type MatchTarget } from "../documents/match.js";
 
 export const documentRoutes = new Hono();
 
@@ -98,6 +98,186 @@ export async function generateSuggestions(
   });
 }
 
+/**
+ * TUR:24 — kullanıcı isteği: "eşleşme varsa eşleşmeli, yoksa o isme giriş kayıt yapılmalı".
+ *
+ * Eskiden sistem yalnız öneri üretiyor, bağ için yetkili onayı bekliyordu. Artık:
+ *  · Dosya adı bir kişi/mülkle NET örtüşüyorsa (puan >= 70) bağ kendiliğinden kurulur
+ *    ve öneri "onaylandı" işaretlenir (kim kurdu: yükleyen kullanıcı).
+ *  · Örtüşme yoksa dosya adından kişi kaydı açılır (aynı ad varsa o kişi kullanılır).
+ *  · Belirsiz örtüşme (45-69) yine insan onayına kalır (K-32 korunur).
+ */
+const AUTO_LINK_SCORE = 70;
+
+async function autoLinkOrCreate(
+  session: { tenantId: string; userId: string },
+  documentId: string,
+  filename: string,
+  kind: DocumentKind,
+): Promise<{
+  linkedTo: string | null;
+  linkedScore: number | null;
+  createdPerson: string | null;
+  suggestionCount: number;
+}> {
+  await generateSuggestions(session.tenantId, documentId, filename, kind);
+
+  return withTenant(session.tenantId, async (tx) => {
+    const [top] = await tx
+      .select({
+        id: schema.documentSuggestions.id,
+        targetType: schema.documentSuggestions.targetType,
+        targetId: schema.documentSuggestions.targetId,
+        score: schema.documentSuggestions.score,
+      })
+      .from(schema.documentSuggestions)
+      .where(
+        and(
+          eq(schema.documentSuggestions.documentId, documentId),
+          eq(schema.documentSuggestions.status, "pending"),
+        ),
+      )
+      .orderBy(desc(schema.documentSuggestions.score))
+      .limit(1);
+
+    if (top && top.score >= AUTO_LINK_SCORE) {
+      const patch =
+        top.targetType === "person"
+          ? { personId: top.targetId }
+          : top.targetType === "property"
+            ? { propertyId: top.targetId }
+            : { listingId: top.targetId };
+
+      await tx.update(schema.documents).set(patch).where(eq(schema.documents.id, documentId));
+      await tx
+        .update(schema.documentSuggestions)
+        .set({ status: "approved", decidedByUserId: session.userId, decidedAt: new Date() })
+        .where(eq(schema.documentSuggestions.id, top.id));
+
+      let label = "ilan";
+      if (top.targetType === "person") {
+        const [person] = await tx
+          .select({ fullName: schema.persons.fullName })
+          .from(schema.persons)
+          .where(eq(schema.persons.id, top.targetId))
+          .limit(1);
+        label = person?.fullName ?? "(kişi)";
+      } else if (top.targetType === "property") {
+        const [property] = await tx
+          .select({ title: schema.properties.title })
+          .from(schema.properties)
+          .where(eq(schema.properties.id, top.targetId))
+          .limit(1);
+        label = property?.title ?? "(mülk)";
+      }
+
+      const pending = await tx
+        .select({ count: sql<number>`count(*)::int` })
+        .from(schema.documentSuggestions)
+        .where(
+          and(
+            eq(schema.documentSuggestions.documentId, documentId),
+            eq(schema.documentSuggestions.status, "pending"),
+          ),
+        );
+
+      return {
+        linkedTo: label,
+        linkedScore: top.score,
+        createdPerson: null,
+        suggestionCount: Number(pending[0]?.count ?? 0),
+      };
+    }
+
+    // Belirsiz örtüşme (45-69 puan): kullanıcıya "olabilir" demek insan kararıdır. Bu durumda
+    // yeni kişi açmak yanlış olur (aynı kişi iki kayıt olur); bağ onaya kalır.
+    if (top) {
+      const pendingUnclear = await tx
+        .select({ count: sql<number>`count(*)::int` })
+        .from(schema.documentSuggestions)
+        .where(
+          and(
+            eq(schema.documentSuggestions.documentId, documentId),
+            eq(schema.documentSuggestions.status, "pending"),
+          ),
+        );
+      return {
+        linkedTo: null,
+        linkedScore: null,
+        createdPerson: null,
+        suggestionCount: Number(pendingUnclear[0]?.count ?? 0),
+      };
+    }
+
+    // Eşleşme yok: dosya adını kişi adı kabul et ("Ayşe_Yıldız_tapu.pdf" → "Ayşe Yıldız tapu")
+    const name = filename
+      .replace(/\.[a-z0-9]+$/i, "")
+      .replace(/[_.\-]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, 160);
+
+    // "tapu.pdf", "kimlik.pdf" gibi yalnız tür adı taşıyan dosyadan kişi uydurulmaz.
+    if (name.length < 3 || !/[a-zA-ZçğıöşüÇĞİÖŞÜ]/.test(name) || tokensOf(name).length === 0) {
+      const pendingAll = await tx
+        .select({ count: sql<number>`count(*)::int` })
+        .from(schema.documentSuggestions)
+        .where(
+          and(
+            eq(schema.documentSuggestions.documentId, documentId),
+            eq(schema.documentSuggestions.status, "pending"),
+          ),
+        );
+      return {
+        linkedTo: null,
+        linkedScore: null,
+        createdPerson: null,
+        suggestionCount: Number(pendingAll[0]?.count ?? 0),
+      };
+    }
+
+    const [existing] = await tx
+      .select({ id: schema.persons.id, fullName: schema.persons.fullName })
+      .from(schema.persons)
+      .where(sql`lower(${schema.persons.fullName}) = lower(${name})`)
+      .limit(1);
+
+    let personId = existing?.id;
+    if (!personId) {
+      const [createdPerson] = await tx
+        .insert(schema.persons)
+        .values({
+          tenantId: session.tenantId,
+          kind: "candidate",
+          fullName: name,
+          source: "document",
+          notes: "Belgeden otomatik oluşturuldu: dosya adıyla eşleşen kişi yoktu.",
+        })
+        .returning({ id: schema.persons.id });
+      personId = createdPerson!.id;
+    }
+
+    await tx.update(schema.documents).set({ personId }).where(eq(schema.documents.id, documentId));
+
+    const pendingAfter = await tx
+      .select({ count: sql<number>`count(*)::int` })
+      .from(schema.documentSuggestions)
+      .where(
+        and(
+          eq(schema.documentSuggestions.documentId, documentId),
+          eq(schema.documentSuggestions.status, "pending"),
+        ),
+      );
+
+    return {
+      linkedTo: existing?.fullName ?? name,
+      linkedScore: null,
+      createdPerson: existing ? null : name,
+      suggestionCount: Number(pendingAfter[0]?.count ?? 0),
+    };
+  });
+}
+
 /** Yükleme — multipart: file, kind, title?, personId?, propertyId?, listingId? */
 documentRoutes.post("/", async (c) => {
   const session = await resolveSession(c);
@@ -168,16 +348,19 @@ documentRoutes.post("/", async (c) => {
   });
 
   const unlinked = !personId && !propertyId && !listingId;
-  const suggestions =
+  const auto =
     unlinked && !saved.duplicate
-      ? await generateSuggestions(session.tenantId, saved.id, file.name, kind)
-      : 0;
+      ? await autoLinkOrCreate(session, saved.id, file.name, kind)
+      : null;
 
   return c.json(
     {
       id: saved.id,
       duplicate: saved.duplicate,
-      suggestions,
+      suggestions: auto?.suggestionCount ?? 0,
+      linkedTo: auto?.linkedTo ?? null,
+      linkedScore: auto?.linkedScore ?? null,
+      createdPerson: auto?.createdPerson ?? null,
       message: saved.duplicate
         ? "Bu dosya arşivde zaten vardı; ikinci kopya oluşturulmadı."
         : undefined,
