@@ -322,3 +322,10 @@ Klasör: Masaüstü → "Aysana gönderilecek" → UmayEmlak-Beta-2026-11-04
 Program kendi veritabanını (veri/db) ve demo portföyü ilk açılışta kurar;
 kurulum, Docker, Node veya PostgreSQL gerekmez. Zip'i açmadan çalışmaz.
 Kaynak: aynı paket "pack/build.mjs" ile yeniden üretilir.
+
+====================================================================
+TUR:35 — ARIZA / BAKIM TALEBİ
+====================================================================
+Mülk dosyasında (Kiralıklar/Satılıklar → kayda tıkla) "Arıza / bakım"
+bölümü var: talep aç, "İşleme al" → "Bitti" ile ilerlet, masraf yaz,
+fotoğraf ekle. Ana sayfadaki "Görevler" kutusu açık talep sayısını gösterir.

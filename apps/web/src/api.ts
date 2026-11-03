@@ -488,6 +488,8 @@ export type Today = {
     contracts: { active: number; expiring: number };
     finance: { payoutPaid: string; payoutDraft: string; commission: string };
     dask: { total: number; warning: number };
+    /** TUR:35 — arıza/bakım (açık talepler). */
+    tasks: { open: number; urgent: number };
     notBuilt: string[];
   };
   month: {

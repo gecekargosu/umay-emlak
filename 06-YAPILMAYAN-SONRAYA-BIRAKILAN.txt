@@ -102,7 +102,7 @@ C) PLANDA VAR, HENÜZ BAŞLANMADI (dilimler)
 Y-22 | Dilim 6: Tauri masaüstü kabuk + kurulum + imzalama |
        Şu an tarayıcıdan çalışıyor; çift tıkla açılan program yok. |
        Dilim 6 | Y | AÇIK
-Y-23 | Dilim 7: Görev, arıza, saha |
+Y-23 | Dilim 7: Görev, arıza, saha | YAPILDI (2026-11-04, TUR:35): arıza/bakım talebi modülü açıldı (mülk dosyası + ana sayfa sayacı).
        Dilim 7 | O | AÇIK
 Y-24 | Dilim 8: Mal sahibi ve kiracı portalları |
        Dilim 8 | O | AÇIK
@@ -377,3 +377,6 @@ Y-89 | Exe / taşınabilir paket — YAPILDI (2026-11-04, TUR:34): gömülü
 
 Y-90 | Paket kod imzası ve otomatik güncelleme yok — Windows SmartScreen
        uyarabilir; yeni sürüm Aysan'a yine klasör/zip olarak gönderilecek.
+
+Y-91 | Arıza bildirimi ve kiracı erişimi yok — talep ofisten açılıyor, kiracı
+       kendi panelinden bildiremiyor; e-posta/SMS uyarısı gönderilmiyor.

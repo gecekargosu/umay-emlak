@@ -472,3 +472,11 @@ TUR:34 DURUM — TAŞINABİLİR PAKET
   bat + OKU-BENI, boyut raporu.
 - Çıktı: release/umay-emlak (git dışı) → Aysana gönderilecek klasörü + zip.
 Kalan: kod imzalama, otomatik güncelleme, x64 dışı platform.
+
+====================================================================
+TUR:35 DURUM — ARIZA / BAKIM (SIRA 7)
+====================================================================
+- maintenance_request (0015) + property_media.maintenance_id
+- /api/v1/maintenance: liste, aç, durum/masraf/not, fotoğraf
+- MaintenancePanel: mülk dosyasında; Dashboard "Görevler" gerçek sayı
+Kalan: bildirim (e-posta/SMS), kiracı paneli, ayrı arıza listesi ekranı.

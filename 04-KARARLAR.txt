@@ -436,3 +436,8 @@ K-79 | Aysan'a kurulumsuz taşınabilir paket.
 K-80 | Pakete hazır veritabanı konmaz.
        Ne: ilk açılışta şema + ofis + demo veri üretilir; böylece paket temiz
        kalır ve Aysan'ın bilgisayarında yollar karışmaz. Paket imzasızdır.
+
+K-81 | Arıza talebi kaydı silinmez, durumu ilerler.
+       Ne: açık → işlemde → bitti / iptal; "yeniden aç" mümkün. Fotoğraf mülk
+       medyası deposunda ayrı bağlantıyla tutulur ve galeride görünmez.
+       Masraf kuruş olarak saklanır. Talebi ofis açar (kiracı paneli yok).

@@ -37,6 +37,7 @@ import { policyRoutes } from "./routes/policies.js";
 import { rentRevisionRoutes } from "./routes/rent-revisions.js";
 import { appointmentRoutes } from "./routes/appointments.js";
 import { suggestionRoutes } from "./routes/suggestions.js";
+import { maintenanceRoutes } from "./routes/maintenance.js";
 
 export const app = new Hono();
 
@@ -80,6 +81,7 @@ app.route("/api/v1/contracts", rentRevisionRoutes);
 app.route("/api/v1/rent-revisions", rentRevisionRoutes);
 app.route("/api/v1/appointments", appointmentRoutes);
 app.route("/api/v1/people", suggestionRoutes);
+app.route("/api/v1/maintenance", maintenanceRoutes);
 
 app.get("/api/v1/me", async (c) => {
   const session = await resolveSession(c);

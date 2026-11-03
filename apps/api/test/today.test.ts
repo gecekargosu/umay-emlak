@@ -111,6 +111,7 @@ describe("bugün ne yapılmalı", () => {
         properties: { total: number; occupied: number; empty: number; sale: number; rent: number };
         staff: { total: number; approvers: number };
         rent: { overdue: number; overdueFormatted: string };
+        tasks: { open: number; urgent: number };
         notBuilt: string[];
       };
     }>(await app.request("/api/v1/today", { headers: { cookie } }));
@@ -131,9 +132,11 @@ describe("bugün ne yapılmalı", () => {
     expect(today.modules.staff.total).toBeGreaterThan(0);
     expect(today.modules.properties.total).toBeGreaterThan(0);
     expect(today.modules.rent.overdue).toBe(today.counts.overdue);
-    // TUR:29 — DASK modülü açıldı; planlı kalanlar görev ve mesaj kutuları.
+    // TUR:29 DASK, TUR:35 arıza/bakım açıldı; planlı kalan yalnız mesajlar.
     expect(today.modules.notBuilt).not.toContain("dask");
-    expect(today.modules.notBuilt).toEqual(expect.arrayContaining(["tasks", "messages"]));
+    expect(today.modules.notBuilt).not.toContain("tasks");
+    expect(today.modules.notBuilt).toContain("messages");
+    expect(today.modules.tasks.open).toBeGreaterThanOrEqual(0);
 
     // B ofisi aynı kiracıyı göremez
     const bCookie = await login(B_OFIS);

@@ -14,6 +14,7 @@ import { ListingOffers } from "../components/ListingOffers";
 import { ListingMoney } from "../components/ListingMoney";
 import { ListingBoard } from "../components/ListingBoard";
 import { PropertyMedia } from "../components/PropertyMedia";
+import { MaintenancePanel } from "../components/MaintenancePanel";
 
 const KIND_TR: Record<string, string> = { sale: "Satılık", rent: "Kiralık" };
 const STATUS_TR: Record<string, string> = {
@@ -570,6 +571,7 @@ export function Listings({
           <PropertyMedia propertyId={detail.property.id} />
 
           <ListingBoard listingId={detail.listing.id} />
+          <MaintenancePanel propertyId={detail.property.id} />
           <p className="muted small">
             {[detail.property.district, detail.property.city].filter(Boolean).join(", ") || "konum yok"}
             {detail.property.siteName ? ` · ${detail.property.siteName}` : ""}

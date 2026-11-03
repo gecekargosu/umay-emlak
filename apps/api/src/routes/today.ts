@@ -55,6 +55,8 @@ type ModuleRow = {
   commission: string;
   policies_total: number;
   policies_warning: number;
+  maintenance_open: number;
+  maintenance_urgent: number;
 };
 
 type ListingRow = {
@@ -209,7 +211,11 @@ todayRoutes.get("/", async (c) => {
         (select coalesce(sum(amount_kurus), 0)::bigint from commission
            where status in ('approved', 'paid')) as commission,
         (select count(*) from policy)::int as policies_total,
-        (select count(*) from policy where end_date <= current_date + 30)::int as policies_warning
+        (select count(*) from policy where end_date <= current_date + 30)::int as policies_warning,
+        (select count(*) from maintenance_request
+           where status in ('open', 'in_progress'))::int as maintenance_open,
+        (select count(*) from maintenance_request
+           where status in ('open', 'in_progress') and priority = 'urgent')::int as maintenance_urgent
     `);
     const modules = (moduleResult as unknown as { rows: ModuleRow[] }).rows[0]!;
 
@@ -380,8 +386,13 @@ todayRoutes.get("/", async (c) => {
         total: Number(data.modules.policies_total ?? 0),
         warning: Number(data.modules.policies_warning ?? 0),
       },
+      /** TUR:35 — arıza/bakım kutusu artık gerçek sayı gösterir (SIRA 7). */
+      tasks: {
+        open: Number(data.modules.maintenance_open ?? 0),
+        urgent: Number(data.modules.maintenance_urgent ?? 0),
+      },
       /** Henüz modülü olmayan kutular — arayüz "planlı" der, sıfır uydurmaz. */
-      notBuilt: ["tasks", "messages"],
+      notBuilt: ["messages"],
     },
   });
 });

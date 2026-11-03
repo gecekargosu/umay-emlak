@@ -175,8 +175,12 @@ export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
     {
       key: "tasks",
       label: "Görevler",
-      value: "—",
-      sub: "modül planlı (Y-23): arıza/görev kaydı henüz yok",
+      value: String(modules.tasks.open),
+      sub:
+        modules.tasks.open === 0
+          ? "açık arıza talebi yok — mülk dosyasından açılır"
+          : `${modules.tasks.open} açık arıza talebi${modules.tasks.urgent > 0 ? ` · ${modules.tasks.urgent} acil` : ""}`,
+      tone: modules.tasks.urgent > 0 ? "warn" : undefined,
       page: null,
     },
     {

@@ -627,6 +627,8 @@ export const propertyMedia = pgTable(
       .references(() => properties.id, { onDelete: "cascade" }),
     kind: text("kind").$type<"image" | "video">().notNull().default("image"),
     title: text("title"),
+    /** TUR:35 — arıza talebine bağlı fotoğraf (mülk galerisinde görünmez). */
+    maintenanceId: uuid("maintenance_id"),
     sha256: text("sha256").notNull(),
     mimeType: text("mime_type").notNull(),
     sizeBytes: integer("size_bytes").notNull(),
@@ -636,6 +638,40 @@ export const propertyMedia = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [index("property_media_property_idx").on(t.tenantId, t.propertyId)],
+);
+
+/** TUR:35 — arıza / bakım talebi. Silinmez; durum ilerler. */
+export const maintenanceRequests = pgTable(
+  "maintenance_request",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tenantId: uuid("tenant_id")
+      .notNull()
+      .references(() => tenants.id, { onDelete: "cascade" }),
+    propertyId: uuid("property_id")
+      .notNull()
+      .references(() => properties.id, { onDelete: "cascade" }),
+    listingId: uuid("listing_id").references(() => listings.id, { onDelete: "set null" }),
+    personId: uuid("person_id").references(() => persons.id, { onDelete: "set null" }),
+    title: text("title").notNull(),
+    description: text("description"),
+    category: text("category").notNull().default("other"),
+    priority: text("priority").notNull().default("normal"),
+    status: text("status").notNull().default("open"),
+    reportedAt: date("reported_at", { mode: "string" }).notNull().defaultNow(),
+    costKurus: bigint("cost_kurus", { mode: "number" }),
+    note: text("note"),
+    resolvedAt: timestamp("resolved_at", { withTimezone: true }),
+    createdByUserId: uuid("created_by_user_id").references(() => appUsers.id, {
+      onDelete: "set null",
+    }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index("maintenance_tenant_status_idx").on(t.tenantId, t.status),
+    index("maintenance_property_idx").on(t.tenantId, t.propertyId),
+  ],
 );
 
 /** İçe aktarma defteri — denetim izi (hangi dosya, ne oldu). */

@@ -7,6 +7,7 @@
  */
 import { Hono } from "hono";
 import { and, desc, eq } from "drizzle-orm";
+import { isNull } from "drizzle-orm";
 import { sql } from "drizzle-orm";
 import { schema, withTenant } from "@umay/db";
 import { HttpError, requirePasswordChanged, requireWrite, resolveSession } from "../session.js";
@@ -50,7 +51,13 @@ mediaRoutes.get("/:id/media", async (c) => {
         createdAt: schema.propertyMedia.createdAt,
       })
       .from(schema.propertyMedia)
-      .where(eq(schema.propertyMedia.propertyId, propertyId))
+      .where(
+        and(
+          eq(schema.propertyMedia.propertyId, propertyId),
+          // Arıza talebine bağlı fotoğraflar mülk galerisinde görünmez.
+          isNull(schema.propertyMedia.maintenanceId),
+        ),
+      )
       .orderBy(desc(schema.propertyMedia.createdAt)),
   );
 
