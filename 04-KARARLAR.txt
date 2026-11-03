@@ -396,3 +396,17 @@ K-70 | Kira artışı otomatik uygulanmaz.
 K-71 | Onayda snapshot korunur, tahakkuk akıllıca açılır.
        Ne: imza anındaki sözleşme metni değişmez; yeni dönem tahakkuku yoksa
        oluşturulur, varsa dokunulmaz (tahsilat geçmişi bozulmasın).
+
+K-72 | Randevu kaydı silinmez.
+       Ne: randevunun durumu (planlandı/geldi/gelmedi/iptal) ve sonuç notu
+       saklanır; "bu adaya kaç kez gösterdik, geldi mi" sorusu cevaplanabilir.
+
+K-73 | Randevu listesi varsayılan son 30 gün / gelecek 1 yıl.
+       Ne: 60 günlük pencere ileri tarihli randevuyu gizliyordu; aralık
+       genişletildi, istenirse from/to ile daraltılır.
+
+K-74 | Antigravity incelemesinin mimari önerileri uygulanmayacak.
+       Ne: URL router, Tailwind/CSS-modules, React-Query, glassmorphism,
+       dark-mode ve SSR bu tek-ofis masaüstü programında gereksiz risk ve
+       K-42…K-51 görsel diliyle çelişiyor. Somut eksikler (aria-label gibi)
+       alınır; işlevsel sıra (09 dosyası) korunur.

@@ -67,7 +67,9 @@ SIRA 4 — TÜİK kira artış oranıyla yenileme hesabı
         yetkili onaylamalı (kullanıcının kendi notu).
 
 SIRA 5 — Randevu / yer gösterme modülü
-        Durum: YOK. Aday + portföy + personel + randevu sonucu; sonuçtan teklife bağlantı.
+        Durum: VAR (TUR:31) → YAPILDI (2026-11-04): aday + portföy + personel +
+        randevu; sonuç (geldi/gelmedi/iptal) ve not saklanıyor. Kalan: takvim işareti,
+        teklife tek tık bağlantı. Aday + portföy + personel + randevu sonucu; sonuçtan teklife bağlantı.
 
 SIRA 6 — Alıcı adayına uygun portföy önerisi
         Durum: YOK. Adayın bütçe/ilçe/oda alanları hazır; eşleştirme puanı üretilmiyor.

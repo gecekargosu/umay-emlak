@@ -429,3 +429,15 @@ TUR:30 DURUM — KİRA ARTIŞI + MÜLK DOSYASINDA POLİÇE
 - RentRevisionPanel.tsx: dönem/oran/kaynak/not, canlı hesap, taslak tablosu.
 - listing-board: property policy özeti (kind, insurer, end_date, days_left).
 Kalan: oranın otomatik çekilmesi, artış bildirimi, yenileme tarihi önerisi.
+
+====================================================================
+TUR:31 DURUM — RANDEVU
+====================================================================
+- appointment (0014, RLS): person_id, listing_id, staff_user_id, scheduled_at,
+  duration_min, place, status (planned/done/no_show/cancelled), result_note,
+  offer_id. Silme yok; PATCH ile durum/not.
+- GET /appointments?from&to&status (varsayılan son 30 gün / gelecek 1 yıl),
+  POST /appointments, PATCH /appointments/:id.
+- Appointments.tsx: form (kişi, ilan, personel, tarih-saat, süre, yer), güne
+  göre gruplu liste, satır içi sonuç notu + Geldi/Gelmedi/İptal.
+Kalan: takvimde randevu işareti, teklife tek tık bağlantı, hatırlatma.

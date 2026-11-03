@@ -282,3 +282,13 @@ güncellenir ve o dönemin tahakkuku yoksa açılır. Yanlışsa "İptal".
 Mülk dosyasında artık "Poliçeler (DASK / sigorta)" satırı da var; bitişe 30 gün
 kala rozet çıkar.
 Kayıt: 0013_rent_revision.sql. Sıradaki: randevu / yer gösterme (SIRA 5).
+
+====================================================================
+TUR:31 — RANDEVU / YER GÖSTERME
+====================================================================
+Sol menü Bugün → "Randevular". Adayı (kişi), gösterilecek portföyü ve
+gidecek personeli seç; tarih/saat, süre ve yer yaz → "Randevu ekle".
+Liste güne göre gruplu gelir. Planlanan satırda "Ne konuşuldu?" notu yazıp
+Geldi / Gelmedi / İptal düğmesine bas; sonuç ve not kayda geçer, silinmez.
+Kayıt: 0014_appointment.sql. Sıradaki: randevuyu takvimde gösterme, sonra
+alıcı adayına portföy önerisi (SIRA 6).

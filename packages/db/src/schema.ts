@@ -639,6 +639,38 @@ export const propertyMedia = pgTable(
 );
 
 /** İçe aktarma defteri — denetim izi (hangi dosya, ne oldu). */
+/** TUR:31 — randevu / yer gösterme. Sonuç: geldi, gelmedi, iptal. */
+export const appointments = pgTable(
+  "appointment",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tenantId: uuid("tenant_id")
+      .notNull()
+      .references(() => tenants.id, { onDelete: "cascade" }),
+    personId: uuid("person_id")
+      .notNull()
+      .references(() => persons.id, { onDelete: "cascade" }),
+    listingId: uuid("listing_id").references(() => listings.id, { onDelete: "set null" }),
+    staffUserId: uuid("staff_user_id").references(() => appUsers.id, { onDelete: "set null" }),
+    scheduledAt: timestamp("scheduled_at", { withTimezone: true }).notNull(),
+    durationMin: integer("duration_min").notNull().default(30),
+    place: text("place"),
+    status: text("status").notNull().default("planned"),
+    resultNote: text("result_note"),
+    offerId: uuid("offer_id"),
+    createdByUserId: uuid("created_by_user_id").references(() => appUsers.id, {
+      onDelete: "set null",
+    }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index("appointment_tenant_time_idx").on(t.tenantId, t.scheduledAt),
+    index("appointment_person_idx").on(t.tenantId, t.personId),
+  ],
+);
+
+/** İçe aktarma defteri — denetim izi (hangi dosya, ne oldu). */
 /** TUR:30 — kira artışı (yenileme) taslağı. Onay yetkilide; kayıt silinmez. */
 export const rentRevisions = pgTable(
   "rent_revision",

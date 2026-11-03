@@ -57,7 +57,8 @@ describe("kira artışı", () => {
       await app.request(`/api/v1/contracts/${active!.id}/rent-revisions`, { headers: { cookie } })
     ).json()) as { contract: { rentKurus: number }; items: Array<{ id: string }> };
     originalRent = before.contract.rentKurus;
-    expect(before.items.length).toBe(0);
+    // Aynı dönem için önceden kayıt olmamalı (başka dönemler kalabilir).
+    expect(before.items.filter((row) => row.effectivePeriod === PERIOD).length).toBe(0);
 
     const draftRes = await app.request(`/api/v1/contracts/${active!.id}/rent-revisions`, {
       method: "POST",

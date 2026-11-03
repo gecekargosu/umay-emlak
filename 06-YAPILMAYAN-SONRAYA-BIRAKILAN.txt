@@ -361,3 +361,9 @@ Y-84 | Poliçe bitişinde otomatik hatırlatma (e-posta/SMS) — şimdilik uyar�
        yalnız ekranda; mesaj gönderimi Y-19 ile birlikte açılacak.
 Y-85 | Mülk dosyasında poliçe özeti — YAPILDI (2026-11-04, TUR:30): mülk
        dosyasında "Poliçeler (DASK / sigorta)" satırı, 30 gün/geçti rozetiyle.
+
+Y-86 | Randevu / yer gösterme — SIRA 5. YAPILDI (2026-11-04, TUR:31):
+       appointment tablosu + Randevular ekranı + sonuç işaretleme. Kalan:
+       takvimde randevu işareti, randevudan teklife tek tık, hatırlatma.
+Y-87 | Randevuların takvimde görünmesi — şimdilik ayrı ekranda; gün panelinde
+       "randevu" türü yok.

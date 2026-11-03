@@ -541,6 +541,29 @@ export type PolicyList = {
   kinds: Array<{ kind: string; label: string }>;
 };
 
+/** TUR:31 — randevu / yer gösterme. */
+export type Appointment = {
+  id: string;
+  personId: string;
+  personName: string;
+  personPhone: string | null;
+  personStage: string | null;
+  listingId: string | null;
+  propertyTitle: string | null;
+  district: string | null;
+  staffName: string | null;
+  scheduledAt: string;
+  date: string;
+  time: string;
+  dateText: string;
+  durationMin: number;
+  place: string | null;
+  status: string;
+  statusLabel: string;
+  resultNote: string | null;
+  offerId: string | null;
+};
+
 export type ContractRow = {
   id: string;
   status: string;

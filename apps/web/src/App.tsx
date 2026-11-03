@@ -13,6 +13,7 @@ import { PasswordChange } from "./pages/PasswordChange";
 import { People } from "./pages/People";
 import { Roadmap } from "./pages/Roadmap";
 import { Policies } from "./pages/Policies";
+import { Appointments } from "./pages/Appointments";
 import { CalendarPage } from "./pages/Calendar";
 import { Rents } from "./pages/Rents";
 import { Team } from "./pages/Team";
@@ -31,6 +32,7 @@ type Page =
   | "belgeler"
   | "aktar"
   | "takvim"
+  | "randevular"
   | "yol-haritasi"
   | "ekip";
 
@@ -41,6 +43,7 @@ const NAV: Array<{ group: string; items: Array<{ page: Page; label: string }> }>
     items: [
       { page: "bugun", label: "Aksiyon panosu" },
       { page: "takvim", label: "Takvim" },
+      { page: "randevular", label: "Randevular" },
     ],
   },
   {
@@ -86,6 +89,7 @@ const NAV: Array<{ group: string; items: Array<{ page: Page; label: string }> }>
 const TITLES: Record<Page, string> = {
   bugun: "Bugün",
   takvim: "Takvim",
+  randevular: "Randevular",
   portfoy: "Portföy",
   satiliklar: "Satılıklar",
   kiraliklar: "Kiralıklar",
@@ -342,6 +346,7 @@ export function App() {
           {page === "belgeler" && <Documents canApprove={session.canApprove} />}
           {page === "aktar" && <Import />}
           {page === "takvim" && <CalendarPage onGo={(next) => go(next as Page)} />}
+          {page === "randevular" && <Appointments />}
           {page === "yol-haritasi" && <Roadmap />}
           {page === "ekip" && (
             <Team

@@ -19,6 +19,7 @@ export function BackButton({
       type="button"
       className="ghost back-btn"
       title={title}
+      aria-label={title}
       onClick={() => {
         if (onBack) onBack();
         else window.history.back();
