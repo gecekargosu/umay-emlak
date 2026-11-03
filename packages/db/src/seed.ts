@@ -1,15 +1,19 @@
 /**
  * Tohum verisi — SADECE GELİŞTİRME.
- * İki ayrı ofis: izolasyon testi ve ekran geliştirme için.
+ * İki ayrı ofis + giriş yapılabilir demo hesapları.
  * Gerçek müşteri verisi buraya girmez (00 kırmızı çizgi 5).
- * Tekrar çalıştırılabilir (slug/e-posta üzerinden atlar).
+ * Tekrar çalıştırılabilir: slug/e-posta üzerinden atlar, şifreyi tazeler.
  */
 import { Client } from "pg";
 import { withTenant, closePool } from "./client.js";
+import { hashPassword } from "./auth.js";
 import { memberships, persons, properties, listings, contracts, charges } from "./schema.js";
 import { loadEnv, requireEnv } from "./env.js";
 
 loadEnv();
+
+/** Demo şifresi — yalnız geliştirme. Üretimde asla kullanılmaz. */
+export const DEMO_PASSWORD = "Umay!2026";
 
 type TenantSeed = { slug: string; name: string; people: [string, string][]; rent: number };
 
@@ -35,6 +39,7 @@ const TENANTS: TenantSeed[] = [
 async function main(): Promise<void> {
   const client = new Client({ connectionString: requireEnv("MIGRATE_DATABASE_URL") });
   await client.connect();
+  const passwordHash = hashPassword(DEMO_PASSWORD);
 
   try {
     for (const t of TENANTS) {
@@ -64,11 +69,14 @@ async function main(): Promise<void> {
       for (const [fullName, role] of t.people) {
         const email = `${slugify(fullName)}@${t.slug}.local`;
         const user = await client.query<{ id: string }>(
-          `insert into app_user (email, full_name)
-             values ($1, $2)
-             on conflict (email) do update set full_name = excluded.full_name
+          `insert into app_user (email, full_name, password_hash, must_change_password)
+             values ($1, $2, $3, false)
+             on conflict (email) do update
+               set full_name = excluded.full_name,
+                   password_hash = excluded.password_hash,
+                   must_change_password = false
              returning id`,
-          [email, fullName],
+          [email, fullName, passwordHash],
         );
         const userId = user.rows[0]!.id;
         const canApprove = role === "owner" || role === "partner";
@@ -79,6 +87,7 @@ async function main(): Promise<void> {
             .values({ tenantId, userId, role: role as never, canApprove })
             .onConflictDoNothing();
         });
+        console.log(`  kullanıcı: ${email} (${role})`);
       }
 
       // Demo portföy (yalnız ilk kurulumda)
@@ -152,7 +161,7 @@ async function main(): Promise<void> {
       });
     }
 
-    console.log("\n tohum verisi hazır.");
+    console.log(`\n tohum verisi hazır. demo şifre: ${DEMO_PASSWORD}`);
   } finally {
     await client.end();
     await closePool();

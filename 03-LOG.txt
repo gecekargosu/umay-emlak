@@ -31,3 +31,11 @@ YARIM:Dilim 0'in kalan parcalari: arayuz yok (apps/web), Tauri kabugu yok (D6), 
 SORU:yok (Aysan cevaplari geldi)
 SIRADAKI:Dilim 1 — gercek giris (sifre + oturum cerezi), ekip ve rol yonetimi, Aysan+Mehmet onay yetkisi, sifre sifirlama; kabul esigi: 18 personel hesabi acilir, yetkisiz onay denemesi 403 doner, oturum 30 gun surer.
 --------------------------------------------------------------------------------
+[2026-11-03 15:09] TUR:6 | MODUL:M01 kimlik + ekip (Dilim 1) | IS:Gercek giris kuruldu: scrypt sifre hash, 30 gunluk HMAC imzali cerez + veritabaninda iptal edilebilir oturum satiri, ofis degistirme, ekip listesi/davet (gecici sifre tek kez), rol ve onay yetkisi (K-29), sifre degistirme (diger cihazlari kapatir), jetonlu sifre sifirlama, giris hiz siniri (15 dk / 10 deneme), gecici sifreli hesap icin must_change_password kilidi. Migration 0002 uygulandi, tohum hesaplarina sifre eklendi.
+DOSYA:packages/db/migrations/0002_auth.sql, packages/db/src/auth.ts, packages/db/src/{index,seed}.ts, apps/api/src/session.ts, apps/api/src/routes/{auth,team}.ts, apps/api/src/app.ts, apps/api/test/auth.test.ts, 00-BASLA-BURADAN.txt, 01-BLUEPRINT.txt
+TEST:pnpm -r typecheck exit=0 · pnpm test 19/19 gecti (5 izolasyon + 14 kimlik) · gercek HTTP: login 200 + cerez, /session 200, /team 200, logout 200, logout sonrasi /session 401
+KARAR:K-29 uygulandi (sahip+ortak onay yetkisi; personel 403) · oturum kimligi istemciden degil imzali cerezden · sifirlama jetonu uretimde yanitta donmez
+YARIM:arayuz yok (apps/web) · sifirlama e-postasi yok (Dilim 9) · hiz siniri bellek ici (tek surec)
+SORU:yok
+SIRADAKI:Dilim 2 — kisi (mal sahibi/kiraci/aday) + gayrimenkul kaydi, mukerrer birlestirme, Excel'den ice aktarma; ardindan apps/web ilk ekranlari (giris, pano, portfoy).
+--------------------------------------------------------------------------------

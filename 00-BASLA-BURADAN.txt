@@ -88,15 +88,20 @@ packages/shared        para/tarih/doğrulama yardımcıları
 docker-compose.yml     PostgreSQL 16 (dev)
 
 ====================================================================
-6) NEREDE KALDIK
 ====================================================================
-Keşif TAMAMLANDI: Aysan'ın 37 sorusundan iş modelini belirleyen 25'i
-cevaplandı (05 dosyasının sonunda "AYSAN'IN CEVAPLARI" bölümü). Cevap
-değiştiren kararlar K-21…K-33 olarak 04'e yazıldı.
+6) NEREDE KALDIK (2026-11-03 · Dilim 1 bitti)
+====================================================================
+Dilim 0: 11 tablo + RLS FORCE, migration 0001, iki ofisli tohum verisi,
+kuruş tabanlı para modeli, Hono API.
+Dilim 1: e-posta + şifre girişi (scrypt), 30 günlük imzalı çerez +
+veritabanında iptal edilebilir oturum, ofis değiştirme, ekip listesi/davet,
+rol ve onay yetkisi (K-29), şifre değiştirme (diğer cihazları kapatır),
+jetonlu şifre sıfırlama. Giriş denemesi hız sınırı: 15 dakikada 10.
+E-posta servisi olmadığı için sıfırlama jetonu yalnız geliştirmede yanıtta
+döner; üretimde e-posta ile gönderilecek (Dilim 9).
 
-Dilim 0 durumu: monorepo iskeleti + şema (tenant, kişi, gayrimenkul, portföy,
-sözleşme, tahakkuk, tahsilat) + RLS + iki ofis izolasyon testi kuruluyor.
-Sıradaki: Dilim 1 — giriş, ekip, rol/yetki (Aysan + Mehmet onay yetkisi).
+Test: 19/19 yeşil (5 izolasyon + 14 kimlik/yetki).
+Demo giriş (yalnız dev): aysan.yilmaz@umay-emlak.local / Umay!2026
 
-Bilinmeyenler (blokaj değil): portföy ortalama satış/kiralama süresi,
-sahada/ofliste kişi dağılımı, hisseli mülk var mı, aidat/fatura programı.
+SIRADAKİ: Dilim 2 — kişi + gayrimenkul kaydı (mal sahibi / kiracı / aday),
+mükerrer birleştirme, Excel'den içe aktarma; ardından apps/web ilk ekranları.

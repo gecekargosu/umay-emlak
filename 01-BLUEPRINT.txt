@@ -147,3 +147,23 @@ DOĞRULANMIŞ DAVRANIŞ (kayıt: 03-LOG.txt TUR:5):
 
 SIRADAKİ DOSYALAR (henüz yok): apps/web (ekranlar), apps/desktop (Tauri, D6),
 packages/documents (PDF ekstre, D5), storage (belge deposu, D3).
+
+====================================================================
+DİLİM 1 DURUMU — 2026-11-03 (giriş + ekip)
+====================================================================
+YENİ DOSYALAR:
+packages/db/migrations/0002_auth.sql   session, password_reset, kullanıcı bayrakları
+packages/db/src/auth.ts                scrypt hash/doğrulama, jeton, çerez imzası
+apps/api/src/routes/auth.ts            login, logout, session, switch-tenant,
+                                       change-password, reset-request/confirm, tenants
+apps/api/src/routes/team.ts            ekip listesi, davet, rol/onay güncelleme
+apps/api/test/auth.test.ts             14 kimlik/yetki testi
+
+GÜVENLİK KARARLARI (uygulandı):
+- Şifre: scrypt (N=16384), rastgele tuz, timingSafeEqual karşılaştırma.
+- Çerez: httpOnly, SameSite=Lax, üretimde secure, 30 gün, HMAC imzalı.
+- Oturum sunucuda: logout/şifre değişimi/şifre sıfırlama oturumu iptal eder.
+- Kullanıcı yoksa da şifre doğrulaması yapılır (zamanlama sızıntısı yok).
+- Giriş hatası 15 dk / 10 deneme (bellek içi; çok sunucuda taşınacak).
+- Geçici şifreli hesap (must_change_password) veri uçlarına giremez → 403.
+- Ekip ekleme/SQL tamamı parametreli; dize birleştirme yok.

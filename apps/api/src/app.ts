@@ -1,14 +1,21 @@
 /**
  * HTTP katmanı.
- * Her istek: oturum → kiracı bağlamı (withTenant) → repository sorgusu.
- * Kiracı kimliği istemciden ASLA alınmaz; oturumdan gelir (K-07).
+ * Sıra: oturum (imzalı çerez) → kiracı bağlamı (withTenant) → sorgu.
+ * Kiracı kimliği istemciden alınmaz; oturumdan gelir (K-07).
  */
 import { Hono } from "hono";
 import { sql } from "drizzle-orm";
 import { withTenant, getPool, schema } from "@umay/db";
 import { formatTry } from "@umay/shared";
 import { z } from "zod";
-import { HttpError, requireApproval, resolveSession } from "./session.js";
+import {
+  HttpError,
+  requireApproval,
+  requirePasswordChanged,
+  resolveSession,
+} from "./session.js";
+import { authRoutes } from "./routes/auth.js";
+import { teamRoutes } from "./routes/team.js";
 
 export const app = new Hono();
 
@@ -27,19 +34,24 @@ app.get("/health", async (c) => {
   return c.json({ ok: true, migrations: rows[0]?.count ?? 0 });
 });
 
+app.route("/api/v1/auth", authRoutes);
+app.route("/api/v1/team", teamRoutes);
+
 app.get("/api/v1/me", async (c) => {
   const session = await resolveSession(c);
   return c.json({
-    user: { id: session.userId, name: session.fullName },
+    user: { id: session.userId, name: session.fullName, email: session.email },
     tenant: { id: session.tenantId, name: session.tenantName },
     role: session.role,
     canApprove: session.canApprove,
+    mustChangePassword: session.mustChangePassword,
   });
 });
 
 /** Portföy listesi — kiracı bağlamı zorunlu. */
 app.get("/api/v1/listings", async (c) => {
   const session = await resolveSession(c);
+  requirePasswordChanged(session);
 
   const rows = await withTenant(session.tenantId, async (tx) => {
     return tx
@@ -75,6 +87,8 @@ const newListing = z.object({
 
 app.post("/api/v1/listings", async (c) => {
   const session = await resolveSession(c);
+  requirePasswordChanged(session);
+
   const parsed = newListing.safeParse(await c.req.json());
   if (!parsed.success) {
     throw new HttpError(400, `Geçersiz veri: ${parsed.error.issues[0]?.message ?? "bilinmiyor"}`);
@@ -114,6 +128,7 @@ app.post("/api/v1/listings", async (c) => {
 /** Pano özeti — para toplamı kuruş, gösterim biçimlendirilmiş. */
 app.get("/api/v1/summary", async (c) => {
   const session = await resolveSession(c);
+  requirePasswordChanged(session);
 
   const summary = await withTenant(session.tenantId, async (tx) => {
     const result = await tx.execute(sql`
@@ -142,6 +157,7 @@ app.get("/api/v1/summary", async (c) => {
 app.post("/api/v1/commissions/:id/approve", async (c) => {
   const session = await resolveSession(c);
   requireApproval(session, "komisyon onayı");
+  requirePasswordChanged(session);
   const id = c.req.param("id");
 
   const updated = await withTenant(session.tenantId, async (tx) =>
