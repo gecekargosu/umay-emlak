@@ -54,6 +54,10 @@ listingRoutes.get("/", async (c) => {
   const buildingQ = text("building");
   const ownerQ = text("owner");
   const tenantQ = text("tenant");
+  const districtQ = text("district");
+  const roomsQ = text("rooms");
+  const minTl = Number(c.req.query("minTl") ?? "");
+  const maxTl = Number(c.req.query("maxTl") ?? "");
 
   const owner = alias(schema.persons, "owner_person");
   const tenant = alias(schema.persons, "tenant_person");
@@ -93,6 +97,20 @@ listingRoutes.get("/", async (c) => {
   }
   if (tenantQ) {
     conditions.push(sql`lower(coalesce(${tenant.fullName}, '')) like ${like(tenantQ)}`);
+  }
+  if (districtQ) {
+    conditions.push(
+      sql`lower(coalesce(${schema.properties.district}, '')) = ${districtQ.toLocaleLowerCase("tr")}`,
+    );
+  }
+  if (roomsQ) {
+    conditions.push(sql`lower(coalesce(${schema.properties.roomCount}, '')) = ${roomsQ.toLocaleLowerCase("tr")}`);
+  }
+  if (Number.isFinite(minTl) && minTl > 0) {
+    conditions.push(sql`${schema.listings.priceKurus} >= ${Math.round(minTl * 100)}`);
+  }
+  if (Number.isFinite(maxTl) && maxTl > 0) {
+    conditions.push(sql`${schema.listings.priceKurus} <= ${Math.round(maxTl * 100)}`);
   }
 
   if (q) {
@@ -162,6 +180,26 @@ listingRoutes.get("/", async (c) => {
     count: rows.length,
     items: rows.map((r) => ({ ...r, price: formatTry(r.priceKurus) })),
   });
+});
+
+/** Filtre kutusundaki ilçe listesi — veriden gelir, sabit liste tutulmaz. */
+listingRoutes.get("/districts", async (c) => {
+  const session = await resolveSession(c);
+  requirePasswordChanged(session);
+
+  const rows = await withTenant(session.tenantId, async (tx) =>
+    tx
+      .selectDistinct({ district: schema.properties.district })
+      .from(schema.properties)
+      .where(sql`${schema.properties.district} is not null`),
+  );
+
+  const items = rows
+    .map((row) => row.district)
+    .filter((district): district is string => Boolean(district))
+    .sort((a, b) => a.localeCompare(b, "tr"));
+
+  return c.json({ items });
 });
 
 const newListing = z.object({

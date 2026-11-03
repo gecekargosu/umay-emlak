@@ -3,6 +3,7 @@ import { api, ApiError, type ContractDetail, type ContractRow, type ListingRow, 
 import { InfoNote } from "../components/InfoNote";
 import { useDraft } from "../hooks/useDraft";
 import { formatKurusText } from "./Rents";
+import { BackButton } from "../components/BackButton";
 
 const STATUS_TR: Record<string, string> = { active: "Aktif", ended: "Bitti", cancelled: "İptal" };
 const UTILITY_TR: Record<string, string> = {
@@ -142,6 +143,7 @@ export function Contracts() {
       </InfoNote>
 
       <div className="panel">
+          <BackButton onBack={() => setDetail(null)} label="Listeye dön" />
         <h3>Yeni kira sözleşmesi</h3>
         {listings.length === 0 ? (
           <p className="muted">

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { api, ApiError, kurusToText, type PersonNote, type PersonRow } from "../api";
 import { InfoNote } from "../components/InfoNote";
+import { BackButton } from "../components/BackButton";
 
 const KIND_TR: Record<string, string> = {
   owner: "Mal sahibi",
@@ -248,6 +249,7 @@ export function People({ initialQuery = "" }: { initialQuery?: string }) {
 
       {selected && (
         <div className="panel">
+          <BackButton onBack={() => setSelected(null)} label="Kişi listesine dön" />
           <div className="detail-head">
             <h3>{selected.person.fullName}</h3>
             <span className="badge">{KIND_TR[selected.person.kind] ?? selected.person.kind}</span>

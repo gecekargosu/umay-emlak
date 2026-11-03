@@ -67,6 +67,69 @@ const STREETS = [
 
 const ROOMS = ["1+1", "2+1", "2+1", "3+1", "3+1", "4+1"];
 
+/** Demo kişileri gerçek isim taşır (başında DEMO var) — alfabetik raf anlamlı olsun. */
+const FIRST_NAMES = [
+  "Ayşe",
+  "Mehmet",
+  "Zeynep",
+  "Ali",
+  "Fatma",
+  "Mustafa",
+  "Elif",
+  "Hasan",
+  "Emine",
+  "Hüseyin",
+  "Merve",
+  "Ahmet",
+  "Selin",
+  "Burak",
+  "Deniz",
+  "Cem",
+  "Gizem",
+  "Onur",
+  "Pınar",
+  "Serkan",
+  "Yasemin",
+  "Kemal",
+  "Ebru",
+  "Tolga",
+  "Nazlı",
+  "Barış",
+  "Ceren",
+  "Umut",
+  "Sevgi",
+  "Volkan",
+];
+
+const LAST_NAMES = [
+  "Yıldız",
+  "Kaya",
+  "Demir",
+  "Şahin",
+  "Çelik",
+  "Yılmaz",
+  "Aydın",
+  "Öztürk",
+  "Arslan",
+  "Doğan",
+  "Kılıç",
+  "Aslan",
+  "Çetin",
+  "Kara",
+  "Koç",
+  "Kurt",
+  "Özdemir",
+  "Şimşek",
+  "Polat",
+  "Erdoğan",
+];
+
+function personName(index: number): string {
+  const first = FIRST_NAMES[index % FIRST_NAMES.length]!;
+  const last = LAST_NAMES[(index * 7) % LAST_NAMES.length]!;
+  return `${first} ${last}`;
+}
+
 /** Her türde gayrimenkul olsun: daire, dükkan, ofis, müstakil ev, arsa. */
 const TYPES: Array<{ type: string; label: string }> = [
   { type: "apartment", label: "Daire" },
@@ -147,7 +210,7 @@ async function seed(
     const { rows } = await client.query<{ id: string }>(
       `insert into person (tenant_id, kind, full_name, phone, phone_digits)
        values ($1, 'owner', $2, $3, $4) returning id`,
-      [tenantId, `${PREFIX}Mal Sahibi ${pad(i)}`, phone, phone.replace(/\D/g, "")],
+      [tenantId, `${PREFIX}${personName(i - 1)}`, phone, phone.replace(/\D/g, "")],
     );
     ownerIds.push(rows[0]!.id);
   }
@@ -159,7 +222,7 @@ async function seed(
     const { rows } = await client.query<{ id: string }>(
       `insert into person (tenant_id, kind, full_name, phone, phone_digits)
        values ($1, 'tenant', $2, $3, $4) returning id`,
-      [tenantId, `${PREFIX}Kiracı ${pad(i)}`, phone, phone.replace(/\D/g, "")],
+      [tenantId, `${PREFIX}${personName(i + 14)}`, phone, phone.replace(/\D/g, "")],
     );
     tenantIds.push(rows[0]!.id);
   }

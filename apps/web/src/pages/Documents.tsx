@@ -8,6 +8,7 @@ import {
   type PersonRow,
 } from "../api";
 import { InfoNote } from "../components/InfoNote";
+import { BackButton } from "../components/BackButton";
 
 /**
  * Belgeler — "raf" görünümü.
@@ -136,6 +137,7 @@ export function Documents({ canApprove }: { canApprove: boolean }) {
       </div>
 
       <div className="panel">
+          <BackButton onBack={() => setDetail(null)} label="Listeye dön" />
         <h3>Belge yükle</h3>
         <div className="inline-form">
           <input

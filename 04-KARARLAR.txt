@@ -217,3 +217,19 @@ Dilim 8 (portallar) ve Dilim 12 (entegrasyon). Marka: aynı ürün, iki yüz.
 Kullanıcı arşiv okuma yasağını kaldırdı: ajan arşivi GEREKTİĞİNDE okuyabilir.
 Yöntem: önce grep ile bölümü bul, 200-300 satırlık pencere oku; dosyayı baştan
 okuma. Rutin oryantasyon yine 00 + 04 + son log ile yapılır (maliyet kuralı).
+
+
+K-36 | Her detay panelinde geri tuşu zorunludur.
+       Ne: kullanıcı yanlış kayda girerse listeye dönebilmelidir. Panelin
+       içinde "← Geri" (paneli kapatır), üst barda sayfa geçmişi için "← Geri".
+       Panel içi geri, sayfa geçmişine yazmaz; tarayıcı geri tuşuyla karışmaz.
+
+K-37 | Portföy filtreleri yazarken çalışır.
+       Ne: 10 filtrenin her biri 300 ms sonra kendiliğinden uygulanır; "Ara"
+       düğmesine basmak şart değil (düğme yine var, hemen uygular). Aynı bilgiyi
+       taşıyan kayıtlar (site adı, apartman, daire, kiracı) birlikte süzülür.
+
+K-38 | Mal sahibi klasörü üç katmandır.
+       Ne: (1) alfabetik sahip rafı, (2) sahip klasöründe satılık/kiralık rafları,
+       (3) tüm mülkler tablosu (kiracı, kira günü, açık borç, belge sayısı).
+       Raf vitrin, tablo çalışma ekranı (K-34 ile aynı ilke).

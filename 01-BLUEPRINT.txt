@@ -279,3 +279,22 @@ Veri: property.site_name / building_name (migration 0007), demo veri demo.ts.
 SIRADAKİ EKRANLAR (bilgi bankası sırası): mal sahipleri → kiracılar →
 personeller → finans. Mal sahipleri ekranı alfabetik yatay raf + mülk sayısı
 + seçili sahibin mülk rafları olacak.
+
+
+====================================================================
+TUR:21 DURUM — MAL SAHİPLERİ EKRANI (bilgi bankası klasör tarifi)
+====================================================================
+Kaynak dosyadaki "mal sahibi klasörü" maddeleri ve karşılığı:
+  - "alfabetik sırayla sağa sola kaydırılabilen mal sahipleri rafı"
+      → harf şeridi (A…Z) + her harf için yatay kaydırmalı sahip rafı
+  - "seni tıkladığımda her gayrimenkul için raf; 2 raf: kiralıklar/satılıklar"
+      → sahip klasöründe Satılıklar ve Kiralıklar rafları
+  - "her x için klasör: resimler, belgeler, satılık/kiralık, fiyat"
+      → mülk tablosunda belge sayısı, ilan türü/durumu, fiyat; belge/foto
+        ekranı mevcut Belgeler modülünde (mülk detayına geçiş Y-77)
+  - "kiralık kısmında kiracı bilgisi, ne zaman kiralandığı, kira günü"
+      → tabloda kiracı adı, sözleşme başlangıcı, kira günü, açık borç
+  - "adres, site adı, daire bilgisi"
+      → adres, site/apartman, daire no + blok kolonları
+Eksik kalan (06'da): mülk detayına geçiş, mülk fotoğrafları, elle raf.
+Sıradaki ekranlar: kiracılar → satılıklar/kiralıklar → personeller → finans.

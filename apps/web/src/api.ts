@@ -89,6 +89,75 @@ export type ListingRow = {
   publishedAt: string | null;
 };
 
+export type OwnerRow = {
+  id: string;
+  fullName: string;
+  phone: string | null;
+  email: string | null;
+  propertyCount: number;
+  saleCount: number;
+  rentCount: number;
+  contractCount: number;
+  saleKurus: number;
+  saleText: string;
+  rentKurus: number;
+  rentText: string;
+  monthlyRentKurus: number;
+  monthlyRentText: string;
+  openKurus: number;
+  openText: string;
+};
+
+export type OwnerProperty = {
+  id: string;
+  title: string;
+  type: string;
+  city: string | null;
+  district: string | null;
+  address: string | null;
+  roomCount: string | null;
+  grossM2: number | null;
+  siteName: string | null;
+  buildingName: string | null;
+  unitNo: string | null;
+  block: string | null;
+  listingId: string | null;
+  kind: string | null;
+  status: string | null;
+  priceKurus: number;
+  priceText: string | null;
+  authorityNo: string | null;
+  contractId: string | null;
+  rentKurus: number | null;
+  rentText: string | null;
+  dueDay: number | null;
+  startDate: string | null;
+  tenantName: string | null;
+  tenantPhone: string | null;
+  openKurus: number;
+  openText: string;
+  documentCount: number;
+};
+
+export type OwnerDetail = {
+  person: {
+    id: string;
+    fullName: string;
+    phone: string | null;
+    email: string | null;
+    notes: string | null;
+    createdAt: string | null;
+    propertyCount: number;
+    portfolioKurus: number;
+    portfolioText: string;
+    monthlyRentKurus: number;
+    monthlyRentText: string;
+    openKurus: number;
+    openText: string;
+  };
+  properties: OwnerProperty[];
+};
+
 export type PersonRow = {
   id: string;
   kind: "owner" | "tenant" | "candidate";

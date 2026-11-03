@@ -1101,3 +1101,137 @@ tr.overdue td {
 .lock-card input {
   width: 100%;
 }
+
+/* TUR:21 — marka logosu, geri tuşu, mal sahipleri rafı */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+}
+
+.brand-text {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.login-logo {
+  width: 96px;
+  height: 96px;
+  border-radius: 18px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto 12px;
+  border: 1px solid var(--line);
+}
+
+.back-nav {
+  margin-right: 6px;
+}
+
+.back-btn {
+  margin-bottom: 10px;
+}
+
+.letter-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0 16px;
+}
+
+.letter-nav a {
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.letter-nav a:hover {
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.owner-letter {
+  margin-bottom: 18px;
+}
+
+.owner-card {
+  display: grid;
+  gap: 5px;
+  text-align: left;
+  min-width: 230px;
+  max-width: 230px;
+  padding: 12px;
+  background: var(--bg-700);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  color: inherit;
+  cursor: pointer;
+}
+
+.owner-card:hover {
+  border-color: var(--accent);
+}
+
+.owner-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  color: var(--accent);
+  background: linear-gradient(135deg, rgba(77, 163, 255, 0.18), rgba(255, 122, 26, 0.14));
+}
+
+.owner-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.owner-facts {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.owner-value {
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.shelf-card-static {
+  cursor: default;
+}
+
+/* TUR:21 — logo kırpma: koyu zeminli logonun siyah fonu tema üstünde kaybolur */
+.brand-logo {
+  object-fit: cover;
+  object-position: 50% 30%;
+  mix-blend-mode: screen;
+  background: transparent;
+}
+
+.login-logo {
+  object-fit: cover;
+  object-position: 50% 35%;
+}
+
+/* TUR:21 — üst bar işareti: beyaz zeminli JPEG, invert + screen ile şeffaflaşır */
+.brand-logo {
+  object-fit: contain;
+  filter: invert(1);
+  mix-blend-mode: screen;
+  border: none;
+  border-radius: 0;
+}

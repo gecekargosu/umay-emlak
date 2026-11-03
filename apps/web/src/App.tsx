@@ -6,6 +6,7 @@ import { Dashboard } from "./pages/Dashboard";
 import { Documents } from "./pages/Documents";
 import { Import } from "./pages/Import";
 import { Listings } from "./pages/Listings";
+import { Owners } from "./pages/Owners";
 import { Login } from "./pages/Login";
 import { Payouts } from "./pages/Payouts";
 import { PasswordChange } from "./pages/PasswordChange";
@@ -16,6 +17,7 @@ import { Team } from "./pages/Team";
 type Page =
   | "bugun"
   | "portfoy"
+  | "mal-sahipleri"
   | "kisiler"
   | "kiralar"
   | "sozlesmeler"
@@ -28,7 +30,13 @@ type Page =
 const NAV: Array<{ group: string; items: Array<{ page: Page; label: string }> }> = [
   { group: "Bugün", items: [{ page: "bugun", label: "Aksiyon panosu" }] },
   { group: "Portföy", items: [{ page: "portfoy", label: "Gayrimenkuller" }] },
-  { group: "Kişiler", items: [{ page: "kisiler", label: "Mal sahibi / kiracı" }] },
+  {
+    group: "Kişiler",
+    items: [
+      { page: "mal-sahipleri", label: "Mal sahipleri" },
+      { page: "kisiler", label: "Kişi kartları" },
+    ],
+  },
   { group: "Ofis", items: [{ page: "ekip", label: "Personeller" }] },
   {
     group: "Para",
@@ -50,6 +58,7 @@ const NAV: Array<{ group: string; items: Array<{ page: Page; label: string }> }>
 const TITLES: Record<Page, string> = {
   bugun: "Bugün",
   portfoy: "Portföy",
+  "mal-sahipleri": "Mal Sahipleri",
   kisiler: "Kişiler",
   kiralar: "Kiralar",
   sozlesmeler: "Sözleşmeler",
@@ -72,6 +81,8 @@ export function App() {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState<Page>("bugun");
+  /** TUR:21 — geri tuşu: sayfa geçmişi (detay panelleri kendi geri tuşunu taşır). */
+  const [pageHistory, setPageHistory] = useState<Page[]>([]);
   const [search, setSearch] = useState("");
   const [peopleQuery, setPeopleQuery] = useState("");
   const [actionCount, setActionCount] = useState(0);
@@ -150,20 +161,45 @@ export function App() {
     );
   }
 
+  function go(next: Page) {
+    if (next === page) return;
+    setPageHistory((history) => [...history, page]);
+    setPage(next);
+  }
+
+  function goBack() {
+    const previous = pageHistory[pageHistory.length - 1];
+    if (!previous) return;
+    setPageHistory((history) => history.slice(0, -1));
+    setPage(previous);
+  }
+
   function runSearch(event: React.FormEvent) {
     event.preventDefault();
     const term = search.trim();
     if (!term) return;
     setPeopleQuery(term);
-    setPage("kisiler");
+    go("kisiler");
   }
 
   return (
     <div className="app">
       <header className="topbar">
         <div className="logo">
-          UMAY <span>EMLAK</span>
+          <img src="/brand/tm-mark.jpeg" alt="TM Gayrimenkul" className="brand-logo" />
+          <span className="brand-text">
+            UMAY <span>EMLAK</span>
+          </span>
         </div>
+        <button
+          type="button"
+          className="ghost back-nav"
+          disabled={pageHistory.length === 0}
+          onClick={goBack}
+          title="Önceki ekrana dön"
+        >
+          ← Geri
+        </button>
         <form className="global-search" onSubmit={runSearch}>
           <input
             ref={searchRef}
@@ -178,7 +214,7 @@ export function App() {
             type="button"
             className="icon-btn"
             title="Bugünün işleri"
-            onClick={() => setPage("bugun")}
+            onClick={() => go("bugun")}
           >
             Bildirim
             {actionCount > 0 && <span className="count">{actionCount}</span>}
@@ -217,7 +253,7 @@ export function App() {
                     key={item.page}
                     type="button"
                     className={page === item.page ? "active" : ""}
-                    onClick={() => setPage(item.page)}
+                    onClick={() => go(item.page)}
                   >
                     <span className="nav-dot" />
                     {item.label}
@@ -232,12 +268,21 @@ export function App() {
               {session.role === "owner" ? "Ofis sahibi" : session.role}
               {session.canApprove ? " · onay yetkisi var" : " · onay yetkisi yok"}
             </span>
+            <a
+              className="muted small"
+              href="https://tmgayrimenkul.com"
+              target="_blank"
+              rel="noreferrer"
+            >
+              TM Gayrimenkul · tmgayrimenkul.com
+            </a>
           </div>
         </aside>
 
         <main>
-          {page === "bugun" && <Dashboard onGo={(next) => setPage(next as Page)} />}
+          {page === "bugun" && <Dashboard onGo={(next) => go(next as Page)} />}
           {page === "portfoy" && <Listings canApprove={session.canApprove} />}
+          {page === "mal-sahipleri" && <Owners />}
           {page === "kisiler" && <People initialQuery={peopleQuery} />}
           {page === "kiralar" && <Rents />}
           {page === "sozlesmeler" && <Contracts />}

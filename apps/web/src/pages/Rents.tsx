@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { api, ApiError, type ChargeRow } from "../api";
 import { InfoNote } from "../components/InfoNote";
+import { BackButton } from "../components/BackButton";
 
 const METHOD_TR: Record<string, string> = {
   transfer: "Havale / EFT",
@@ -236,6 +237,7 @@ export function Rents() {
 
       {pay && (
         <div className="panel">
+          <BackButton onBack={() => setPay(null)} label="Tahsilat listesine dön" />
           <h3>Tahsilat</h3>
           <div className="inline-form">
             <input

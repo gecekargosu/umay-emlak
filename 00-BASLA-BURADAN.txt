@@ -156,3 +156,15 @@ Portföy (Gayrimenkuller) ekranı: Satılıklar + Kiralıklar rafları (vitrin, 
 altında "Tüm gayrimenkuller" filtrelenebilir liste (Adres, Daire no, Site, Apartman,
 Mal sahibi, Kiracı + tür/durum), sabit başlıklı kaydırılabilir tablo.
 Yeni kolonlar: property.site_name, property.building_name (migration 0007).
+
+
+====================================================================
+TUR:21 — GERİ TUŞU, MARKA, CANLI FİLTRE, MAL SAHİPLERİ
+====================================================================
+Geri: her detay panelinde "← Geri" var; üst barda sayfa geçmişi için "← Geri".
+Marka: logolar apps/web/public/brand/ altında (tm-dark, tm-round, tm-mark).
+       Üst bar + giriş ekranı + sol alt köşede TM Gayrimenkul bağlantısı.
+Canlı filtre: portföy filtreleri yazarken çalışır (300 ms), 10 alan:
+       adres, daire, site, apartman, mal sahibi, kiracı, ilçe, oda, min/max fiyat.
+Mal sahipleri: Kişiler → Mal sahipleri; alfabetik harf şeridi + yatay sahip rafı,
+       sahibe tıklayınca klasör (özet kartları, satılık/kiralık rafları, mülk tablosu).
