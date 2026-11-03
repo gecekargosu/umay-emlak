@@ -74,3 +74,7 @@ YARIM:ekip ekrani · sifre degistirme ekrani · kira artisi/DASK (M08) · pano "
 SORU:yok
 SIRADAKI:Dilim 5 tamamlama — pano "bugun ne yapilmali", kira artisi/DASK yukumlulukleri, bildirim kademelerinin panele baglanmasi; ardindan Dilim 6 (Tauri kabuk).
 --------------------------------------------------------------------------------
+[2026-11-03 16:09] TUR:10-EK | MODUL:demo veri | IS:Testler bir ara demo tahakkukunu (Demo Daire 3+1, Kasim 2026) odemis gorunuyordu; 2 test tahsilati silindi, tahakkuk 'open' durumuna sifirlandi. Pano tekrar 18.500,00 TL acik kira gosteriyor, Kiralar ekraninda 1 kayit var. Testler bu tarihten sonra demo kaydina dokunmuyor (contractId ile ariyor). Testler tekrar kosuldu: 6/6 dosya yesil.
+DOSYA:veritabani (kod degismedi)
+TEST:pnpm test 6 dosya gecti · /summary openKurus=1850000 · /charges?scope=open count=1 · api=200 web=200
+--------------------------------------------------------------------------------
