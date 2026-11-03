@@ -45,9 +45,11 @@ export function Login({ onLogin }: { onLogin: (session: Session) => void }) {
           void submit();
         }}
       >
-        <img src="/brand/tm-dark.jpeg" alt="TM Gayrimenkul" className="login-logo" />
-        <h1>UMAY EMLAK</h1>
-        <p className="muted">Gayrimenkul yönetim programı · TM Gayrimenkul</p>
+        <img src="/brand/tm-mark.jpeg" alt="TM Gayrimenkul" className="login-logo" />
+        <h1>
+          TM <span>GAYRİMENKUL</span>
+        </h1>
+        <p className="muted">Gayrimenkul yönetim programı</p>
 
         <label>
           E-posta

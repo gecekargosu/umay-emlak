@@ -233,3 +233,22 @@ K-38 | Mal sahibi klasörü üç katmandır.
        Ne: (1) alfabetik sahip rafı, (2) sahip klasöründe satılık/kiralık rafları,
        (3) tüm mülkler tablosu (kiracı, kira günü, açık borç, belge sayısı).
        Raf vitrin, tablo çalışma ekranı (K-34 ile aynı ilke).
+
+
+K-39 | Mal sahibi ve kiracı tek ekranda iki raftır.
+       Ne: harf şeridi kaldırıldı; iki yatay raf (mal sahipleri, kiracılar)
+       alfabetik sıralı, altında filtre ve birleşik liste. Karta veya satıra
+       tıklayınca kişi dosyası açılır. Kiracı kaydı ayrı tutulmaz; person +
+       contract aynı kaynaktır (bilgi bankası: tek merkez).
+
+K-40 | Marka TM Gayrimenkul'dür; "UMAY EMLAK" metni kullanılmaz.
+       Ne: üst barda yalnız logo işareti (turuncu-beyaz), giriş ekranında logo
+       ve "TM GAYRİMENKUL" başlığı. Sayfa başlıkları (h2/h3) turuncu.
+       Logo dosyaları JPEG olduğu için renk CSS filtresiyle veriliyor; şeffaf
+       PNG/SVG gelirse filtre kaldırılacak.
+
+K-41 | Aysan'a kurulum paketi masaüstünde tutulur.
+       Ne: "Aysana gönderilecek" klasöründe APK + kurulum kılavuzu (Samsung
+       katlanır: Auto Blocker, bilinmeyen kaynak, Play Protect) + kullanım
+       kılavuzu (raflar, OCR, yedekleme, API anahtarı). APK: com.umay.pdfreader
+       5.13 (kod 30), Android 8.0+.

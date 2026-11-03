@@ -168,3 +168,16 @@ Canlı filtre: portföy filtreleri yazarken çalışır (300 ms), 10 alan:
        adres, daire, site, apartman, mal sahibi, kiracı, ilçe, oda, min/max fiyat.
 Mal sahipleri: Kişiler → Mal sahipleri; alfabetik harf şeridi + yatay sahip rafı,
        sahibe tıklayınca klasör (özet kartları, satılık/kiralık rafları, mülk tablosu).
+
+
+====================================================================
+TUR:22 — MAL SAHİPLERİ / KİRACILAR, MARKA, AYSAN PAKETİ
+====================================================================
+Ekran: Kişiler → "Mal sahipleri / kiracılar". İki raf (yatay kaydırmalı,
+alfabetik) + filtre (ad/telefon, kim, yalnız borçlu) + birleşik liste.
+Karta/satıra tıkla → kişi dosyası (mal sahibi: mülkleri; kiracı: daire,
+sözleşme, ödeme dökümü).
+Marka: "UMAY EMLAK" yazısı kaldırıldı; TM logosu turuncu-beyaz; tüm h2/h3
+başlıkları turuncu.
+Aysan paketi: Masaüstü → "Aysana gönderilecek" (APK 5.13 + kurulum kılavuzu
++ kullanım kılavuzu + OKU-BENİ).

@@ -298,3 +298,22 @@ Kaynak dosyadaki "mal sahibi klasörü" maddeleri ve karşılığı:
       → adres, site/apartman, daire no + blok kolonları
 Eksik kalan (06'da): mülk detayına geçiş, mülk fotoğrafları, elle raf.
 Sıradaki ekranlar: kiracılar → satılıklar/kiralıklar → personeller → finans.
+
+
+====================================================================
+TUR:22 DURUM — KİŞİLER EKRANI (mal sahibi + kiracı)
+====================================================================
+Bilgi bankası maddeleri ve karşılığı:
+  - "mal sahipleri rafı + kiracılar rafı, sağa sola kaydırılabilir"
+      → iki yatay raf, isimler alfabetik
+  - "kiracı bilgileri tek merkezde; mal sahibindeki kiracı aynı kayıt"
+      → kiracı ucu person + contract tablolarından okur, kopya yok
+  - "kiracı profilinde aktif ve geçmiş kiracılıklar"
+      → kiracı dosyasında sözleşmeler (aktif + geçmiş) ve ödeme dökümü
+  - "her x için daire bilgisi, kira, aidat, kiracı"
+      → kiracı dosyasında adres, site/apartman, daire, oda, m², kat,
+        mal sahibi, depozito, kira günü, aidat sorumlusu
+  - "filtre ile kiracı bulma"
+      → ad/telefon + kim + yalnız borçlu
+Eksik: mülk detayına geçiş (Y-77), tutanak (Y-68), arıza (Y-73), dekont.
+Sıradaki: Satılıklar/Kiralıklar ayrı ekranları → Personeller → Finans.

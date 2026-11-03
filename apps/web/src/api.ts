@@ -158,6 +158,101 @@ export type OwnerDetail = {
   properties: OwnerProperty[];
 };
 
+export type TenantRow = {
+  id: string;
+  fullName: string;
+  phone: string | null;
+  email: string | null;
+  contractId: string | null;
+  startDate: string | null;
+  endDate: string | null;
+  dueDay: number | null;
+  rentKurus: number | null;
+  rentText: string | null;
+  propertyId: string | null;
+  propertyTitle: string | null;
+  district: string | null;
+  city: string | null;
+  address: string | null;
+  unitNo: string | null;
+  siteName: string | null;
+  buildingName: string | null;
+  ownerName: string | null;
+  activeContracts: number;
+  pastContracts: number;
+  openKurus: number;
+  openText: string;
+  overdueCount: number;
+  nextDueDate: string | null;
+};
+
+export type TenantCharge = {
+  id: string;
+  period: string;
+  dueDate: string;
+  status: string;
+  amountKurus: number;
+  amountText: string;
+  paidKurus: number;
+  paidText: string;
+  overdue: boolean;
+};
+
+export type TenantContract = {
+  id: string;
+  startDate: string;
+  endDate: string | null;
+  status: string;
+  rentKurus: number;
+  rentText: string;
+  depositKurus: number;
+  depositText: string;
+  depositRentCount: number | null;
+  dueDay: number | null;
+  utilityPayer: string | null;
+  endReason: string | null;
+  propertyId: string | null;
+  propertyTitle: string | null;
+  district: string | null;
+  city: string | null;
+  address: string | null;
+  unitNo: string | null;
+  siteName: string | null;
+  buildingName: string | null;
+  roomCount: string | null;
+  grossM2: number | null;
+  floor: number | null;
+  ownerId: string | null;
+  ownerName: string | null;
+  ownerPhone: string | null;
+  paidKurus: number;
+  paidText: string;
+  openKurus: number;
+  openText: string;
+};
+
+export type TenantDetail = {
+  person: {
+    id: string;
+    fullName: string;
+    phone: string | null;
+    email: string | null;
+    notes: string | null;
+    contactPermission: string | null;
+    createdAt: string | null;
+  };
+  contracts: TenantContract[];
+  charges: TenantCharge[];
+  totals: {
+    chargedKurus: number;
+    chargedText: string;
+    paidKurus: number;
+    paidText: string;
+    openKurus: number;
+    openText: string;
+  };
+};
+
 export type PersonRow = {
   id: string;
   kind: "owner" | "tenant" | "candidate";

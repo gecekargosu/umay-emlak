@@ -33,7 +33,7 @@ const NAV: Array<{ group: string; items: Array<{ page: Page; label: string }> }>
   {
     group: "Kişiler",
     items: [
-      { page: "mal-sahipleri", label: "Mal sahipleri" },
+      { page: "mal-sahipleri", label: "Mal sahipleri / kiracılar" },
       { page: "kisiler", label: "Kişi kartları" },
     ],
   },
@@ -187,9 +187,6 @@ export function App() {
       <header className="topbar">
         <div className="logo">
           <img src="/brand/tm-mark.jpeg" alt="TM Gayrimenkul" className="brand-logo" />
-          <span className="brand-text">
-            UMAY <span>EMLAK</span>
-          </span>
         </div>
         <button
           type="button"

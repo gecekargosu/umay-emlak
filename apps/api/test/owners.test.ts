@@ -91,3 +91,36 @@ describe("mal sahipleri", () => {
     expect(expensive.items.every((row) => row.priceKurus >= 200_000_000)).toBe(true);
   });
 });
+
+describe("kiracılar", () => {
+  it("kiracıları aktif sözleşme, mülk ve kira ile listeler", async () => {
+    const cookie = await login();
+    const res = await app.request("/api/v1/tenants", { headers: { cookie } });
+    expect(res.status).toBe(200);
+
+    const data = (await res.json()) as {
+      items: Array<{ id: string; fullName: string; propertyTitle: string | null; rentKurus: number | null }>;
+    };
+    expect(data.items.length).toBeGreaterThanOrEqual(30);
+    expect(data.items.filter((tenant) => tenant.propertyTitle).length).toBeGreaterThanOrEqual(30);
+    expect(data.items.some((tenant) => (tenant.rentKurus ?? 0) > 0)).toBe(true);
+  });
+
+  it("kiracı dosyası sözleşme ve ödeme dökümü döndürür", async () => {
+    const cookie = await login();
+    const list = (await (await app.request("/api/v1/tenants", { headers: { cookie } })).json()) as {
+      items: Array<{ id: string; fullName: string; propertyTitle: string | null }>;
+    };
+    const tenant = list.items.find((item) => item.propertyTitle)!;
+
+    const res = await app.request(`/api/v1/tenants/${tenant.id}`, { headers: { cookie } });
+    expect(res.status).toBe(200);
+    const detail = (await res.json()) as {
+      person: { fullName: string };
+      contracts: Array<{ status: string }>;
+    };
+    expect(detail.person.fullName).toBe(tenant.fullName);
+    expect(detail.contracts.length).toBeGreaterThanOrEqual(1);
+    expect(detail.contracts.some((contract) => contract.status === "active")).toBe(true);
+  });
+});
