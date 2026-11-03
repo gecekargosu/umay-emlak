@@ -30,6 +30,10 @@ export function Dashboard() {
         <Card label="Aktif portföy" value={String(summary.activeListings)} />
         <Card label="Aktif sözleşme" value={String(summary.activeContracts)} />
         <Card label="Gayrimenkul" value={String(summary.properties)} />
+        <Card label="Belge" value={String(summary.documents)} />
+        {summary.pendingMatches > 0 && (
+          <Card label="Onay bekleyen eşleşme" value={String(summary.pendingMatches)} />
+        )}
       </div>
 
       <p className="muted small">

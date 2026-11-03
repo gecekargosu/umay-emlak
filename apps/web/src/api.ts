@@ -2,6 +2,9 @@
  * API istemcisi.
  * Oturum httpOnly çerezde olduğu için credentials: "include" zorunlu;
  * token tarayıcıda saklanmaz (XSS ile çalınacak bir şey bırakmıyoruz).
+ *
+ * Para: sunucudan hem kuruş hem biçimlenmiş metin gelir. Arayüz kuruş
+ * HESAPLAMAZ; metin girişini sunucu kuruşa çevirir (tek kaynak).
  */
 export class ApiError extends Error {
   constructor(
@@ -35,6 +38,14 @@ export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
   return data as T;
 }
 
+/** Kuruş → "4.300.000,00" (yalnız gösterim; hesap sunucuda). */
+export function kurusToText(kurus: number): string {
+  return (kurus / 100).toLocaleString("tr-TR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
 export type Session = {
   user: { id: string; name: string; email: string };
   tenant: { id: string; name: string };
@@ -50,10 +61,13 @@ export type Summary = {
   openKurus: number;
   openFormatted: string;
   overdueCount: number;
+  documents: number;
+  pendingMatches: number;
 };
 
 export type ListingRow = {
   id: string;
+  propertyId: string;
   kind: "sale" | "rent";
   status: string;
   priceKurus: number;
@@ -61,6 +75,7 @@ export type ListingRow = {
   title: string;
   district: string | null;
   city: string | null;
+  publishedAt: string | null;
 };
 
 export type PersonRow = {
@@ -70,6 +85,96 @@ export type PersonRow = {
   phone: string | null;
   email: string | null;
   createdAt: string;
+};
+
+export type DocumentRow = {
+  id: string;
+  kind: string;
+  kindLabel: string;
+  filename: string;
+  title: string | null;
+  mimeType: string;
+  sizeBytes: number;
+  personId: string | null;
+  propertyId: string | null;
+  listingId: string | null;
+  personName: string | null;
+  propertyTitle: string | null;
+  verifiedAt: string | null;
+  createdAt: string;
+  pendingSuggestions: number;
+};
+
+export type DocumentSuggestion = {
+  id: string;
+  documentId: string;
+  targetType: "person" | "property" | "listing";
+  targetId: string;
+  targetLabel: string;
+  score: number;
+  reasons: string[];
+  status: "pending" | "approved" | "rejected";
+};
+
+export type DocumentDetail = {
+  document: DocumentRow;
+  suggestions: DocumentSuggestion[];
+};
+
+export type KindOption = { kind: string; label: string };
+
+export type Requirement = { key: string; label: string; met: boolean };
+
+export type ListingDetail = {
+  listing: {
+    id: string;
+    propertyId: string;
+    kind: "sale" | "rent";
+    status: string;
+    priceKurus: number;
+    price: string;
+    publishedAt: string | null;
+  };
+  property: {
+    id: string;
+    title: string;
+    city: string | null;
+    district: string | null;
+    address: string | null;
+    roomCount: string | null;
+    grossM2: number | null;
+    block: string | null;
+    unitNo: string | null;
+  };
+  owners: Array<{ personId: string; fullName: string; phone: string | null; shareBp: number | null }>;
+  documents: Array<{
+    id: string;
+    kind: string;
+    kindLabel: string;
+    filename: string;
+    title: string | null;
+    createdAt: string;
+    personId: string | null;
+    listingId: string | null;
+  }>;
+  requirements: Requirement[];
+  missing: string[];
+  priceHistory: Array<{
+    id: string;
+    oldKurus: number;
+    newKurus: number;
+    note: string | null;
+    createdAt: string;
+  }>;
+  statusHistory: Array<{
+    id: string;
+    fromStatus: string;
+    toStatus: string;
+    forced: boolean;
+    note: string | null;
+    createdAt: string;
+  }>;
+  canPublish: boolean;
 };
 
 export type ImportResult = {

@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
 import { api, type Session } from "./api";
 import { Dashboard } from "./pages/Dashboard";
+import { Documents } from "./pages/Documents";
 import { Import } from "./pages/Import";
 import { Listings } from "./pages/Listings";
 import { Login } from "./pages/Login";
 import { People } from "./pages/People";
 
-type Page = "pano" | "portfoy" | "kisiler" | "aktar";
+type Page = "pano" | "portfoy" | "kisiler" | "belgeler" | "aktar";
 
 const TITLES: Record<Page, string> = {
   pano: "Pano",
   portfoy: "Portföy",
   kisiler: "Kişiler",
+  belgeler: "Belgeler",
   aktar: "İçe Aktar",
 };
 
@@ -66,8 +68,9 @@ export function App() {
 
       <main>
         {page === "pano" && <Dashboard />}
-        {page === "portfoy" && <Listings />}
+        {page === "portfoy" && <Listings canApprove={session.canApprove} />}
         {page === "kisiler" && <People />}
+        {page === "belgeler" && <Documents canApprove={session.canApprove} />}
         {page === "aktar" && <Import />}
       </main>
     </div>

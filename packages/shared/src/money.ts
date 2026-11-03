@@ -13,10 +13,17 @@ export function parseTryToKurus(input: string): Kurus {
   if (!raw) throw new Error("Tutar boş olamaz");
 
   // Türk biçimi: 1.234,56 → 1234.56
-  const normalized =
-    raw.includes(",") && raw.lastIndexOf(",") > raw.lastIndexOf(".")
-      ? raw.replace(/\./g, "").replace(",", ".")
-      : raw.replace(/,/g, "");
+  // Türkçe yazımda nokta binlik ayırıcıdır: "4.300.000" = 4300000.
+  // Virgül yoksa ve noktalar üçlü gruplar hâlindeyse binlik kabul edilir.
+  let normalized: string;
+  if (raw.includes(",")) {
+    normalized = raw.replace(/\./g, "").replace(",", ".");
+  } else if (/^-?\d{1,3}(\.\d{3})+$/.test(raw)) {
+    normalized = raw.replace(/\./g, "");
+  } else {
+    // "12500.5" gibi tek nokta ondalık ayırıcı olarak okunur
+    normalized = raw;
+  }
 
   if (!/^-?\d+(\.\d{1,2})?$/.test(normalized)) {
     throw new Error(`Geçersiz tutar: ${input}`);

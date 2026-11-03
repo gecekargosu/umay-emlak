@@ -4,6 +4,9 @@ build/
 coverage/
 *.log
 
+# Belge deposu (sha256 içerik adresli sunucu verisi)
+.data/
+
 # Sırlar — asla commit edilmez (K-19)
 .env
 .env.*

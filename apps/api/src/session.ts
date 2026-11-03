@@ -152,6 +152,13 @@ export function requireOwner(session: Session, action: string): void {
   }
 }
 
+/** İzleyici rolü yalnız okur; veri değiştiren uçlar bunu çağırır. */
+export function requireWrite(session: Session, action: string): void {
+  if (session.role === "viewer") {
+    throw new HttpError(403, `İzleyici rolü bu işlemi yapamaz: ${action}`);
+  }
+}
+
 /** Şifresi geçici olan kullanıcı veri uçlarına erişemez. */
 export function requirePasswordChanged(session: Session): void {
   if (session.mustChangePassword) {

@@ -5,9 +5,8 @@
  */
 import { Hono } from "hono";
 import { sql } from "drizzle-orm";
-import { withTenant, getPool, schema } from "@umay/db";
+import { withTenant, getPool } from "@umay/db";
 import { formatTry } from "@umay/shared";
-import { z } from "zod";
 import {
   HttpError,
   requireApproval,
@@ -19,6 +18,8 @@ import { teamRoutes } from "./routes/team.js";
 import { peopleRoutes } from "./routes/people.js";
 import { propertyRoutes } from "./routes/properties.js";
 import { importRoutes } from "./routes/import.js";
+import { listingRoutes } from "./routes/listings.js";
+import { documentRoutes } from "./routes/documents.js";
 
 export const app = new Hono();
 
@@ -42,6 +43,8 @@ app.route("/api/v1/team", teamRoutes);
 app.route("/api/v1/people", peopleRoutes);
 app.route("/api/v1/properties", propertyRoutes);
 app.route("/api/v1/import", importRoutes);
+app.route("/api/v1/listings", listingRoutes);
+app.route("/api/v1/documents", documentRoutes);
 
 app.get("/api/v1/me", async (c) => {
   const session = await resolveSession(c);
@@ -52,83 +55,6 @@ app.get("/api/v1/me", async (c) => {
     canApprove: session.canApprove,
     mustChangePassword: session.mustChangePassword,
   });
-});
-
-/** Portföy listesi — kiracı bağlamı zorunlu. */
-app.get("/api/v1/listings", async (c) => {
-  const session = await resolveSession(c);
-  requirePasswordChanged(session);
-
-  const rows = await withTenant(session.tenantId, async (tx) => {
-    return tx
-      .select({
-        id: schema.listings.id,
-        kind: schema.listings.kind,
-        status: schema.listings.status,
-        priceKurus: schema.listings.priceKurus,
-        title: schema.properties.title,
-        district: schema.properties.district,
-        city: schema.properties.city,
-      })
-      .from(schema.listings)
-      .innerJoin(schema.properties, sql`${schema.properties.id} = ${schema.listings.propertyId}`)
-      .orderBy(sql`${schema.listings.createdAt} desc`)
-      .limit(100);
-  });
-
-  return c.json({
-    count: rows.length,
-    items: rows.map((r) => ({ ...r, price: formatTry(r.priceKurus) })),
-  });
-});
-
-const newListing = z.object({
-  propertyTitle: z.string().min(2).max(200),
-  ownerPersonId: z.uuid(),
-  kind: z.enum(["sale", "rent"]),
-  priceKurus: z.number().int().nonnegative(),
-  city: z.string().max(80).optional(),
-  district: z.string().max(80).optional(),
-});
-
-app.post("/api/v1/listings", async (c) => {
-  const session = await resolveSession(c);
-  requirePasswordChanged(session);
-
-  const parsed = newListing.safeParse(await c.req.json());
-  if (!parsed.success) {
-    throw new HttpError(400, `Geçersiz veri: ${parsed.error.issues[0]?.message ?? "bilinmiyor"}`);
-  }
-  const input = parsed.data;
-
-  const created = await withTenant(session.tenantId, async (tx) => {
-    const [property] = await tx
-      .insert(schema.properties)
-      .values({
-        tenantId: session.tenantId,
-        ownerPersonId: input.ownerPersonId,
-        title: input.propertyTitle,
-        city: input.city ?? null,
-        district: input.district ?? null,
-      })
-      .returning({ id: schema.properties.id });
-
-    const [listing] = await tx
-      .insert(schema.listings)
-      .values({
-        tenantId: session.tenantId,
-        propertyId: property!.id,
-        kind: input.kind,
-        status: "draft",
-        priceKurus: input.priceKurus,
-        responsibleUserId: session.userId,
-      })
-      .returning({ id: schema.listings.id });
-
-    return listing!;
-  });
-
-  return c.json({ id: created.id }, 201);
 });
 
 /** Pano özeti — para toplamı kuruş, gösterim biçimlendirilmiş. */
@@ -143,7 +69,9 @@ app.get("/api/v1/summary", async (c) => {
         (select count(*)::int from contract where status = 'active')           as active_contracts,
         (select count(*)::int from property)                                   as properties,
         (select coalesce(sum(amount_kurus), 0)::bigint from charge where status in ('open','partial')) as open_kurus,
-        (select count(*)::int from charge where status in ('open','partial') and due_date < current_date) as overdue_count
+        (select count(*)::int from charge where status in ('open','partial') and due_date < current_date) as overdue_count,
+        (select count(*)::int from document)                                   as documents,
+        (select count(*)::int from document_suggestion where status = 'pending') as pending_matches
     `);
     return (result as unknown as { rows: Array<Record<string, number | string>> }).rows[0]!;
   });
@@ -156,6 +84,8 @@ app.get("/api/v1/summary", async (c) => {
     openKurus,
     openFormatted: formatTry(openKurus),
     overdueCount: Number(summary.overdue_count ?? 0),
+    documents: Number(summary.documents ?? 0),
+    pendingMatches: Number(summary.pending_matches ?? 0),
   });
 });
 

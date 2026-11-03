@@ -216,3 +216,25 @@ KURALLAR:
 
 BİLİNEN: port çakışması düzeltildi — API artık API_PORT okur (ortam değişkeni
 PORT'u başka amaçla atayabiliyor; sunucu rastgele porta düşmüştü).
+
+====================================================================
+BELGE + İLAN (Dilim 3) — 2026-11-03
+====================================================================
+packages/shared/src/documents.ts  belge türleri, TÜR MATRİSİ (tek kaynak),
+                                  requiredForListing / requiredForPerson
+apps/api/src/storage.ts           sha256 içerik adresli depo (.data/documents)
+apps/api/src/documents/match.ts   dosya adından öneri motoru (puan + gerekçe)
+apps/api/src/routes/documents.ts  yükleme, raf listesi, tür listesi, matris,
+                                  dosya indirme, öneri onay/red
+apps/api/src/routes/listings.ts   liste, açma, detay, fiyat/durum değiştirme
+packages/db/migrations/0004_documents.sql
+                                  document ek alanları, document_suggestion,
+                                  listing_price_change, listing_status_change + RLS
+
+KURALLAR:
+- Aynı içerik (sha256) iki kez saklanmaz; ikinci yükleme mevcut kaydı döndürür.
+- Eşleştirme ÖNERİR; bağ yalnız yetkili (canApprove) onayıyla kurulur (K-29/K-32).
+- Taslak ilan, zorunlu belgeler tamamlanmadan yayına alınamaz (409). Yetkili
+  "zorla" derse durum geçmişine forced=true yazılır.
+- Fiyat/durum değişiklikleri geçmiş tablolarına yazılır; geçmiş silinmez.
+- Para metni ("4.300.000") sunucuda kuruşa çevrilir; arayüz para hesabı yapmaz.

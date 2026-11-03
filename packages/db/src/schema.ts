@@ -334,12 +334,97 @@ export const documents = pgTable(
     uploadedByUserId: uuid("uploaded_by_user_id").references(() => appUsers.id, {
       onDelete: "set null",
     }),
+    /** Dosyanın kendi adından farklı, insanın verdiği ad ("Aysan Bey tapu") */
+    title: text("title"),
+    notes: text("notes"),
+    /** "Gördüm, doğru belge" işareti — onaylayan ve zamanı saklanır */
+    verifiedAt: timestamp("verified_at", { withTimezone: true }),
+    verifiedByUserId: uuid("verified_by_user_id").references(() => appUsers.id, {
+      onDelete: "set null",
+    }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [
     uniqueIndex("document_tenant_sha_uidx").on(t.tenantId, t.sha256),
     index("document_tenant_person_idx").on(t.tenantId, t.personId),
+    index("document_tenant_kind_idx").on(t.tenantId, t.kind),
   ],
+);
+
+/**
+ * K-32: otomatik eşleştirme ÖNERİR, bağlamaz.
+ * Bağ, onaylandığında document satırına yazılır; öneri kendi başına yetki vermez.
+ */
+export const documentSuggestions = pgTable(
+  "document_suggestion",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tenantId: uuid("tenant_id")
+      .notNull()
+      .references(() => tenants.id, { onDelete: "cascade" }),
+    documentId: uuid("document_id")
+      .notNull()
+      .references(() => documents.id, { onDelete: "cascade" }),
+    targetType: text("target_type").$type<"person" | "property" | "listing">().notNull(),
+    targetId: uuid("target_id").notNull(),
+    score: integer("score").notNull(),
+    reasons: jsonb("reasons").$type<string[]>().notNull().default([]),
+    status: text("status").$type<"pending" | "approved" | "rejected">().notNull().default("pending"),
+    decidedByUserId: uuid("decided_by_user_id").references(() => appUsers.id, {
+      onDelete: "set null",
+    }),
+    decidedAt: timestamp("decided_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("document_suggestion_uidx").on(t.documentId, t.targetType, t.targetId),
+    index("document_suggestion_tenant_status_idx").on(t.tenantId, t.status),
+  ],
+);
+
+/** Fiyat geçmişi: pazarlık yazılı kalsın. */
+export const listingPriceChanges = pgTable(
+  "listing_price_change",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tenantId: uuid("tenant_id")
+      .notNull()
+      .references(() => tenants.id, { onDelete: "cascade" }),
+    listingId: uuid("listing_id")
+      .notNull()
+      .references(() => listings.id, { onDelete: "cascade" }),
+    oldKurus: bigint("old_kurus", { mode: "number" }).notNull(),
+    newKurus: bigint("new_kurus", { mode: "number" }).notNull(),
+    note: text("note"),
+    changedByUserId: uuid("changed_by_user_id").references(() => appUsers.id, {
+      onDelete: "set null",
+    }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("listing_price_change_listing_idx").on(t.tenantId, t.listingId)],
+);
+
+/** Durum geçmişi: yayına alma belge şartıyla mı, yetkiyle mi geçildi? */
+export const listingStatusChanges = pgTable(
+  "listing_status_change",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tenantId: uuid("tenant_id")
+      .notNull()
+      .references(() => tenants.id, { onDelete: "cascade" }),
+    listingId: uuid("listing_id")
+      .notNull()
+      .references(() => listings.id, { onDelete: "cascade" }),
+    fromStatus: listingStatus("from_status").notNull(),
+    toStatus: listingStatus("to_status").notNull(),
+    forced: boolean("forced").notNull().default(false),
+    note: text("note"),
+    changedByUserId: uuid("changed_by_user_id").references(() => appUsers.id, {
+      onDelete: "set null",
+    }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("listing_status_change_listing_idx").on(t.tenantId, t.listingId)],
 );
 
 /** Hisseli mülk: bir gayrimenkulde birden fazla malik (K-17). */
