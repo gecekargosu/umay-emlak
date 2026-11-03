@@ -33,6 +33,8 @@ UMAY-EMLAK/
   03-LOG.txt                kayıt defteri (var, eklemeli)
   04-KARARLAR.txt           kararlar (var)
   05-SORULAR-AYSAN.txt      keşif (var)
+  06-YAPILMAYAN-SONRAYA-BIRAKILAN.txt  yapılmayan/ertelenen işler (var;
+                            her tur sonunda güncellenir, iş bitince satır silinmez)
   [apps/web/]               masaüstü arayüzü (React + TS + Vite)
   [apps/shell/]             Tauri kabuğu (Dilim 6)
   [apps/api/]               Hono + Zod — tek süreç: API + zamanlayıcı

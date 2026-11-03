@@ -1,5 +1,6 @@
 UMAY EMLAK — BURADAN BAŞLA
-Son güncelleme: 2026-11-03 · Durum: DİLİM 0 (iskelet kuruluyor)
+Son güncelleme: 2026-11-03 · Durum: Dilim 3 bitti, kira hattı (D4+D5) çalışıyor
+YAPILMAYANLAR: 06-YAPILMAYAN-SONRAYA-BIRAKILAN.txt — her tur sonunda güncellenir.
 
 ====================================================================
 0) BU KLASÖR NEDİR (tek cümle)
@@ -82,6 +83,8 @@ Ayrıntılı kontrol listesi: 02-GOREV-PROTOKOLU.txt (görev başında 7, sonund
 03-LOG.txt             TARİHLİ, EKLEMELİ kayıt defteri (asla üzerine yazılmaz)
 04-KARARLAR.txt        bağlayıcı kararlar (K-01…K-33)
 05-SORULAR-AYSAN.txt   keşif soruları + Aysan'ın cevapları (2026-11-03)
+06-YAPILMAYAN-SONRAYA-BIRAKILAN.txt  yapılmayan/ertelenen işler + gerekçeleri
+                       (Y-01…Y-46 açık kayıt, S-01…S-05 sapma notu)
 umay emlak ...txt      ham fikir arşivi (280 KB) — gerektiğinde grep'le bak
 apps/                  api (Hono) — sunucu, oturum, kiracı bağlamı
 packages/db            şema, migration, RLS politikaları, tohum verisi
@@ -117,3 +120,6 @@ Belgeler .data/documents altında (git dışı).
 
 SIRADAKİ: Dilim 5 tamamlama — pano "bugün ne yapılmalı", kira artışı/DASK
 yükümlülükleri ve bildirim kademelerinin panele bağlanması. Sonra Dilim 6 (Tauri kabuk).
+
+BU TURDA AÇIK KALANLAR: 06-YAPILMAYAN-SONRAYA-BIRAKILAN.txt (Y-10 pano,
+Y-01/Y-02 ekip + şifre ekranı, Y-07 belge arşivleme, Y-09 ters kayıt vb.)

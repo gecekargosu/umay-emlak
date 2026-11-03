@@ -30,6 +30,9 @@ B) GÖREV SONUNDA — 9 MADDE (otomatik, hatırlatma beklemeden)
    komutu ve sonucu yaz. Kırık test bırakma.
 2. ÇALIŞTIR: uygulama tek komutla ayağa kalkıyor mu? (dilim sonu ise zorunlu)
 3. LOG EKLE: 03-LOG.txt'nin SONUNA yeni kayıt (aşağıdaki format). Üzerine yazma.
+3b. YAPILMAYANLAR: yarım kalan/ertelenen her işi
+    06-YAPILMAYAN-SONRAYA-BIRAKILAN.txt'ye ekle (kimlik, gerekçe, dilim,
+    öncelik). Kapanan kaydı silme; sonuna "YAPILDI (tarih, commit)" yaz.
 4. KARAR: yeni bir karar aldıysan 04-KARARLAR.txt'ye K-xx olarak ekle
    (karar + gerekçe + ne zaman gözden geçirilir).
 5. HARİTA: yeni dosya/klasör/tablo eklediysen 01-BLUEPRINT.txt'i güncelle.

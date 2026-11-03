@@ -78,3 +78,11 @@ SIRADAKI:Dilim 5 tamamlama — pano "bugun ne yapilmali", kira artisi/DASK yukum
 DOSYA:veritabani (kod degismedi)
 TEST:pnpm test 6 dosya gecti · /summary openKurus=1850000 · /charges?scope=open count=1 · api=200 web=200
 --------------------------------------------------------------------------------
+[2026-11-03 16:13] TUR:11 | MODUL:dosya duzeni | IS:Kullanici talebiyle "yapilmayan / sonraya birakilan" isler icin kalici takip dosyasi acildi: 06-YAPILMAYAN-SONRAYA-BIRAKILAN.txt. Simdiye kadarki tum eksikler tek tek kaydedildi: 46 acik kayit (Y-01..Y-46) ve 5 sapma/gerekce notu (S-01..S-05). Alanlar: kimlik, ne, neden yapilmadi, dilim, oncelik (Y/O/D), durum. Kural: is bitince satir silinmez, sonuna "YAPILDI (tarih, commit)" yazilir; her tur sonunda dosya guncellenir. 00/01/02 bu dosyaya baglandi (00: ust bilgi + dosya listesi + acik kalanlar; 01: klasor agaci; 02: tur sonu 3b maddesi).
+DOSYA:06-YAPILMAYAN-SONRAYA-BIRAKILAN.txt, 00-BASLA-BURADAN.txt, 01-BLUEPRINT.txt, 02-GOREV-PROTOKOLU.txt
+TEST:kod degismedi; dosya icerigi kontrol edildi (Y-01..Y-46, S-01..S-05 sayimi), git durumu temiz
+KARAR:yapilmayan isler icin ayri dosya zorunlu; log yalniz tur bazli kayit tutar, 06 ise konu bazli acik listeyi tutar · iki dosya celismez, log "YARIM:" satiri 06'daki kimlige isaret eder
+YARIM:06 dosyasindaki 46 kayit (oncelik sirasi: Y-01/Y-02 ekip+sifre ekrani, Y-10 pano, Y-07 belge arsivleme, Y-09 ters kayit)
+SORU:yok
+SIRADAKI:Dilim 5 tamamlama — pano "bugun ne yapilmali" (Y-10), ardindan ekip ve sifre ekranlari (Y-01/Y-02); sonra Dilim 6 Tauri kabuk (Y-22).
+--------------------------------------------------------------------------------
