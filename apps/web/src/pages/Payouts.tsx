@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { api, ApiError, type PayoutPreviewRow, type PayoutRow } from "../api";
+import { InfoNote } from "../components/InfoNote";
 
 /**
  * Sahipler — mal sahibine dönem aktarımı.
@@ -79,11 +80,13 @@ export function Payouts() {
 
   return (
     <div>
-      <h2>Mal sahiplerine aktarım</h2>
-      <p className="muted">
-        Aktarım tahsil edilen paraya göre hesaplanır; tahsil edilmeyen kira sahibe aktarılmaz.
-        Kira takip bedelini siz yazarsınız.
-      </p>
+      <div className="page-head">
+        <h2>Sahibe aktarım</h2>
+      </div>
+      <InfoNote title="Aktarım, tahsil edilen paraya göre hesaplanır.">
+        Tahsil edilmeyen kira sahibe aktarılmaz. Net = tahsil − kira takip bedeli (elle) − masraf.
+        Dönem başına tek aktarım açılır; ekstre yazdırılabilir (tarayıcıdan PDF).
+      </InfoNote>
 
       <div className="toolbar">
         <input type="month" value={period} onChange={(e) => setPeriod(e.target.value)} />

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { api, ApiError, type ImportResult } from "../api";
+import { InfoNote } from "../components/InfoNote";
 
 /**
  * İçe aktarma ekranı.
@@ -39,11 +40,14 @@ export function Import() {
 
   return (
     <div>
-      <h2>Excel / CSV içe aktar</h2>
-      <p className="muted">
-        Dosyada “Ad Soyad” sütunu olmalı. Telefon, mülk, ilçe, fiyat, satılık/kiralık sütunları
-        varsa otomatik eşlenir. Önce önizleme yapılır, hiçbir şey yazılmaz.
-      </p>
+      <div className="page-head">
+        <h2>İçe aktar</h2>
+      </div>
+      <InfoNote title="Önce önizleme, sonra yazma.">
+        Dosyada “Ad Soyad” sütunu olmalı; telefon, mülk, ilçe, fiyat ve satılık/kiralık sütunları
+        varsa otomatik eşlenir. Önizleme onaylanmadan <strong>tek satır bile yazılmaz</strong>; aynı
+        dosyayı tekrar yüklemek mükerrer kayıt açmaz.
+      </InfoNote>
 
       <div className="toolbar">
         <input

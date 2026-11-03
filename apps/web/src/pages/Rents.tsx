@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { api, ApiError, type ChargeRow } from "../api";
+import { InfoNote } from "../components/InfoNote";
 
 const METHOD_TR: Record<string, string> = {
   transfer: "Havale / EFT",
@@ -108,11 +109,15 @@ export function Rents() {
 
   return (
     <div>
-      <h2>Kiralar</h2>
-      <p className="muted">
-        Tahsilat kaydı silinmez, ters kayıtla düzeltilir. Fazla ödeme kabul edilmez; elden
-        tahsilatta teslim alan kişi yazılır.
-      </p>
+      <div className="page-head">
+        <h2>Kiralar</h2>
+      </div>
+      <InfoNote title="Tahsilat tahakkuka mahsup edilir.">
+        Fazla ödeme reddedilir, kısmi ödeme serbesttir ve kalan borç görünür. <strong>Elden
+        nakitte teslim alan kişi zorunludur</strong> (K-21). Kayıt silinmez; hatalı kayıt ters
+        kayıtla düzeltilecek (henüz ekranı yok). Gecikmede 3 gün hatırlatma, 15 gün ihtarname
+        adayı sayılır.
+      </InfoNote>
 
       <div className="toolbar">
         {[

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api, type Summary, type Today } from "../api";
+import { InfoNote } from "../components/InfoNote";
 
 /**
  * Pano — "bugün ne yapılmalı".
@@ -34,7 +35,14 @@ export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
 
   return (
     <div>
-      <h2>Pano</h2>
+      <div className="page-head">
+        <h2>Bugün</h2>
+      </div>
+      <InfoNote title="Bu ekran ofisin bugünkü iş listesidir.">
+        Sıralama: <strong>gecikmiş → bu hafta → eksik belge → bekleyen onay → taslak aktarım →
+        bitecek sözleşme</strong>. Her başlık ilgili ekrana götürür; işlem orada yapılır. Kırmızı
+        gecikmiş, sarı yaklaşan, mavi "dikkat" demektir.
+      </InfoNote>
       <p className="muted small">
         {new Date(`${today.date}T00:00:00`).toLocaleDateString("tr-TR", {
           day: "numeric",

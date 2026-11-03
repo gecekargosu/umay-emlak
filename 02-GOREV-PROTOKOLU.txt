@@ -77,6 +77,11 @@ E) YASAKLAR (kısa liste)
 - Test etmeden "bitti/çalışıyor" demek.
 - Log'u üzerine yazmak veya boş bırakmak.
 - Kapsam dışı özellik eklemek ("bir de şunu ekledim").
+- Tasarım tarifini okumadan ekran yazmak. Yeni ekran/ekran değişikliğinden önce
+  kaynak dosyanın tasarım bölümleri okunacak: satır 790-800 (renk/atmosfer),
+  3845 (üst bar), 3870-3900 (6 gruplu menü + "Bugün" panosu),
+  3974-3995 (tasarım tokenları). Bu kural S-06'dan sonra eklendi.
+
 - Kırık bırakmak: derlenmeyen kod, yarım dosya, yarım migration.
 - Gerçek müşteri verisiyle test.
 - Kararları sessizce değiştirmek (04'ü güncellemeden farklı davranmak).

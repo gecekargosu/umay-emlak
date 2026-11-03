@@ -84,7 +84,7 @@ Ayrıntılı kontrol listesi: 02-GOREV-PROTOKOLU.txt (görev başında 7, sonund
 04-KARARLAR.txt        bağlayıcı kararlar (K-01…K-33)
 05-SORULAR-AYSAN.txt   keşif soruları + Aysan'ın cevapları (2026-11-03)
 06-YAPILMAYAN-SONRAYA-BIRAKILAN.txt  yapılmayan/ertelenen işler + gerekçeleri
-                       (Y-01…Y-46 açık kayıt, S-01…S-05 sapma notu)
+                       (Y-01…Y-52; Y-10 kapandı, S-01…S-06 sapma notu)
 umay emlak ...txt      ham fikir arşivi (280 KB) — gerektiğinde grep'le bak
 apps/                  api (Hono) — sunucu, oturum, kiracı bağlamı
 packages/db            şema, migration, RLS politikaları, tohum verisi

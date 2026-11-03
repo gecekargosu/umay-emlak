@@ -7,6 +7,7 @@ import {
   type KindOption,
   type PersonRow,
 } from "../api";
+import { InfoNote } from "../components/InfoNote";
 
 /**
  * Belgeler — "raf" görünümü.
@@ -111,11 +112,14 @@ export function Documents({ canApprove }: { canApprove: boolean }) {
 
   return (
     <div>
-      <h2>Belgeler</h2>
-      <p className="muted">
-        Dosyalar içeriğine göre saklanır: aynı dosya iki kez yüklenirse tek kopya durur. Sistem
-        yalnız <strong>öneri</strong> üretir; belgeyi kişiye/mülke bağlamak yetkili onayı ister.
-      </p>
+      <div className="page-head">
+        <h2>Belgeler</h2>
+      </div>
+      <InfoNote title="Dosyalar içeriğiyle saklanır (sha256).">
+        Aynı dosya iki kez yüklenirse <strong>tek kopya</strong> durur. Sistem yalnız eşleştirme
+        <strong> önerir</strong>; belgeyi kişiye/mülke bağlamak yetkili onayı ister. Yükleme sırasında
+        kişi seçmezsen öneri üretilir, aşağıdan onaylarsın.
+      </InfoNote>
 
       <div className="toolbar">
         <input

@@ -157,6 +157,28 @@ Y-44 | Lisans sözleşmesi metni ve fiyatlandırma | Y | AÇIK
 Y-45 | Mali müşavir onayı: tahsilat/aktarım kayıtlarının resmi statüsü | Y | AÇIK
 Y-46 | KVKK aydınlatma metni, saklama süreleri, imha politikası | Y | AÇIK
 
+Y-47 | Portföy raf kartlarında kapak fotoğrafı | O | AÇIK
+       Ne: kart şu an mülkün baş harflerini gradyan zeminde gösteriyor.
+       Neden: belge deposu var ama görsel küçültme (thumbnail) ve kapak
+       seçimi yok. Dilim 9 (ilan yayını ile birlikte).
+Y-48 | Global arama sonuç sayfası | Y | AÇIK
+       Ne: üst bardaki arama yalnız Kişiler ekranını filtreliyor.
+       Gerekli: kişi + mülk/ilan + sözleşme + belge üzerinde tek arama,
+       sonuçları türüne göre gruplayıp ilgili kayda gitmek.
+Y-49 | Bildirim merkezi paneli | Y | AÇIK
+       Ne: üst bardaki "Bildirim 2" sayacı /today sayılarından geliyor,
+       tıklanınca açılan liste/panel yok. Okundu işaretleme de yok.
+Y-50 | Açık tema / tema seçici | D | AÇIK
+       Ne: kaynak tarif gece lacivert; gündüz ofis kullanımı için açık tema
+       istenirse token tabanlı ikinci palet eklenecek.
+Y-51 | Klavye kısayolları ve erişilebilirlik | D | AÇIK
+       Ne: şu an yalnız "/" arama kısayolu var; kayıtlar arası klavye
+       gezinmesi, odak halkası ve ekran okuyucu denemesi yapılmadı.
+Y-52 | Mal sahibi raf dosyası | O | AÇIK
+       Ne: kaynak tarifteki "mal sahibi dosyası" fikri: bir kişinin tüm
+       mülkleri, ilanları, sözleşmeleri, belgeleri ve ödemeleri tek ekranda
+       özet. Şu an kişi detayında yalnız temel bilgi ve mülk listesi var.
+
 ====================================================================
 F) BİLEREK ERTELENEN / SAPMALAR (gerekçeli)
 ====================================================================
@@ -174,6 +196,12 @@ S-05 | Testler sıralı koşuyor (fileParallelism: false). Gerekçe: auth testle
        şifre değiştiriyor. Kalıcı çözüm: her test dosyasına kendi kullanıcısı. |
        Dilim 6 (Y-40 ile birlikte).
 
+S-06 | Arayüz ilk turda kaynak tarife uymadı (açık tema, sade yeşil, üst bar ve
+       gruplu menü yok, bilgi notu yok). Kullanıcı fark etti; TUR:13'te
+       styles.css + App.tsx + InfoNote ile tarif uygulandı.
+       Kalan farklar Y-47 … Y-52 olarak açıldı. Ders: yeni ekran yazmadan önce
+       kaynak dosyadaki tasarım bölümü okunacak (02 protokolüne eklendi). | TUR:13
+
 ====================================================================
 G) BU DOSYANIN KAPANIŞ KONTROLÜ
 ====================================================================
@@ -182,4 +210,4 @@ Her tur sonunda sorulacak üç soru:
 2) Yapılan bir iş bir Y kaydını kapattı mı? → satırı silme, "YAPILDI" ekle.
 3) Önceliği değişen kayıt var mı?           → öncelik alanını güncelle.
 
-Açık kayıt sayısı: 45 (Y-01 … Y-46; Y-10 kapandı) + 5 sapma notu (S-01 … S-05).
+Açık kayıt sayısı: 51 (Y-01 … Y-52; Y-10 kapandı) + 6 sapma notu (S-01 … S-06).

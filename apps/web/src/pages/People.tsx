@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { api, ApiError, type PersonRow } from "../api";
+import { InfoNote } from "../components/InfoNote";
 
 const KIND_TR: Record<string, string> = {
   owner: "Mal sahibi",
@@ -9,7 +10,7 @@ const KIND_TR: Record<string, string> = {
 
 type Duplicate = { duplicate?: { id: string; fullName: string } };
 
-export function People() {
+export function People({ initialQuery = "" }: { initialQuery?: string }) {
   const [rows, setRows] = useState<PersonRow[]>([]);
   const [query, setQuery] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -30,8 +31,9 @@ export function People() {
   );
 
   useEffect(() => {
-    void load("");
-  }, [load]);
+    setQuery(initialQuery);
+    void load(initialQuery);
+  }, [load, initialQuery]);
 
   async function save(force = false) {
     setError(null);
@@ -55,7 +57,14 @@ export function People() {
 
   return (
     <div>
-      <h2>Kişiler</h2>
+      <div className="page-head">
+        <h2>Kişiler</h2>
+      </div>
+      <InfoNote title="Mal sahibi, kiracı ve aday aynı havuzda.">
+        Aynı telefon veya aynı ad soyad girilince sistem uyarır; "yine de ekle" derseniz iki ayrı kayıt
+        olur. Birleştirme kaydı <strong>silmez</strong>, kaybedeni kazanana bağlar; geçmişi ve belgeleri
+        durur. Yukarıdaki arama çubuğu tüm kişilerde isim ve telefonla arar.
+      </InfoNote>
 
       <div className="toolbar">
         <input

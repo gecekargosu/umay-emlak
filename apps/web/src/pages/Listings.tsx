@@ -7,6 +7,7 @@ import {
   type ListingDetail,
   type ListingRow,
 } from "../api";
+import { InfoNote } from "../components/InfoNote";
 
 const KIND_TR: Record<string, string> = { sale: "Satılık", rent: "Kiralık" };
 const STATUS_TR: Record<string, string> = {
@@ -47,6 +48,7 @@ export function Listings({ canApprove }: { canApprove: boolean }) {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [view, setView] = useState<"raf" | "tablo">("raf");
 
   async function load() {
     try {
@@ -149,12 +151,43 @@ export function Listings({ canApprove }: { canApprove: boolean }) {
 
   return (
     <div>
-      <h2>Portföy</h2>
+      <div className="page-head">
+        <h2>Portföy</h2>
+        <span className="spacer" />
+        <div className="toolbar" style={{ margin: 0 }}>
+          <button
+            type="button"
+            className={view === "raf" ? "" : "ghost"}
+            onClick={() => setView("raf")}
+          >
+            Raflar
+          </button>
+          <button
+            type="button"
+            className={view === "tablo" ? "" : "ghost"}
+            onClick={() => setView("tablo")}
+          >
+            Tablo
+          </button>
+        </div>
+      </div>
+      <InfoNote title="İlan, mülkün ticari teklifidir.">
+        Aynı daire hem satılık hem kiralık olabilir; bu yüzden ilan ayrı kayıttır. Taslak ilan,
+        zorunlu belgeler (tapu, yetki, kimlik) tamamlanmadan <strong>yayına alınamaz</strong>.
+        Raf görünümünde kartın üzerindeki kısaltma mülkün baş harfleridir; kapak fotoğrafı
+        eklendiğinde buraya fotoğraf gelecek.
+      </InfoNote>
 
       {rows.length === 0 ? (
         <p className="muted">
           Henüz portföy yok. Kişiler ekranından mal sahibi ekleyip içe aktarma yapabilirsiniz.
         </p>
+      ) : view === "raf" ? (
+        <Shelves
+          rows={rows}
+          selectedId={detail?.listing.id ?? null}
+          onOpen={(id) => void open(id)}
+        />
       ) : (
         <table>
           <thead>
@@ -334,6 +367,74 @@ export function Listings({ canApprove }: { canApprove: boolean }) {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+const CHIP: Record<string, string> = {
+  draft: "warn",
+  active: "ok",
+  reserved: "info",
+  closed: "",
+  archived: "",
+};
+
+/** Raf görünümü — kaynak dosyadaki "mal sahibi dosyası" fikrinin ilk adımı. */
+function Shelves({
+  rows,
+  selectedId,
+  onOpen,
+}: {
+  rows: ListingRow[];
+  selectedId: string | null;
+  onOpen: (id: string) => void;
+}) {
+  const groups = [
+    { key: "rent", label: "Kiralıklar", rows: rows.filter((r) => r.kind === "rent") },
+    { key: "sale", label: "Satılıklar", rows: rows.filter((r) => r.kind === "sale") },
+    { key: "draft", label: "Taslaklar", rows: rows.filter((r) => r.status === "draft") },
+  ].filter((group) => group.rows.length > 0);
+
+  return (
+    <div>
+      {groups.map((group) => (
+        <section key={group.key}>
+          <div className="shelf-bar">
+            <h3>{group.label}</h3>
+            <span className="muted small">{group.rows.length} kayıt</span>
+          </div>
+          <div className="shelf">
+            {group.rows.map((row) => (
+              <button
+                key={row.id}
+                type="button"
+                className="shelf-card"
+                style={selectedId === row.id ? { borderColor: "var(--accent)" } : undefined}
+                onClick={() => onOpen(row.id)}
+              >
+                <div className="shelf-cover">
+                  {row.title
+                    .split(" ")
+                    .filter(Boolean)
+                    .slice(0, 2)
+                    .map((part) => part[0]?.toLocaleUpperCase("tr"))
+                    .join("")}
+                </div>
+                <div className="shelf-body">
+                  <div className="shelf-title">{row.title}</div>
+                  <div className="shelf-meta">
+                    {[row.district, row.city].filter(Boolean).join(", ") || "konum yok"}
+                  </div>
+                  <div className="shelf-price">{row.price}</div>
+                  <span className={`chip ${CHIP[row.status] ?? ""}`}>
+                    {STATUS_TR[row.status] ?? row.status}
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </section>
+      ))}
     </div>
   );
 }

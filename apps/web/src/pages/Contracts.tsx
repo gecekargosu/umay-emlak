@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { api, ApiError, type ContractDetail, type ContractRow, type ListingRow, type PersonRow } from "../api";
+import { InfoNote } from "../components/InfoNote";
 import { formatKurusText } from "./Rents";
 
 const STATUS_TR: Record<string, string> = { active: "Aktif", ended: "Bitti", cancelled: "İptal" };
@@ -129,7 +130,14 @@ export function Contracts() {
 
   return (
     <div>
-      <h2>Sözleşmeler</h2>
+      <div className="page-head">
+        <h2>Sözleşmeler</h2>
+      </div>
+      <InfoNote title="Sözleşme kiralık ilana bağlanır.">
+        Açılınca ilan kapanır ve durum geçmişine yazılır. Depozito gelir değildir, ayrı alanda
+        durur. Kira takvimi ay ay üretilir; <strong>aynı dönem ikinci kez işlenmez</strong>.
+        Tahsilat "Kiralar" ekranından yapılır.
+      </InfoNote>
 
       <div className="panel">
         <h3>Yeni kira sözleşmesi</h3>
