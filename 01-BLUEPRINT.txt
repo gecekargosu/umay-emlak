@@ -194,3 +194,25 @@ apps/api/test/people.test.ts            7 test
   otomatik seçilir; "1.850.000 TL" gibi yazımlar kuruşa çevrilir.
 
 BİLİNEN SINIR: .xls (eski Excel) okunmaz → kullanıcıya ".xlsx olarak kaydet" denir.
+
+====================================================================
+ARAYÜZ (apps/web) — 2026-11-03
+====================================================================
+apps/web/package.json        Vite + React 19 + TS
+apps/web/vite.config.ts      /api → 127.0.0.1:3100 proxy (çerez tek kökenden gider)
+apps/web/src/api.ts          fetch sarmalayıcı (credentials: include, Türkçe hata)
+apps/web/src/App.tsx         oturum kontrolü + sol menü kabuğu
+apps/web/src/pages/Login.tsx giriş; çoklu ofiste ofis seçimi
+apps/web/src/pages/Dashboard.tsx  pano kartları + gecikmiş uyarısı
+apps/web/src/pages/Listings.tsx   portföy tablosu
+apps/web/src/pages/People.tsx     arama + ekleme + mükerrer uyarısı (yine de ekle)
+apps/web/src/pages/Import.tsx     dosya seç → önizle → onayla → aktar
+apps/web/src/styles.css      sade, okunaklı arayüz
+
+KURALLAR:
+- Oturum tokeni tarayıcıda TUTULMAZ; httpOnly çerez kullanılır (XSS'e malzeme yok).
+- Arayüz iş kuralı hesaplamaz: tutar, izin, mükerrer kararı sunucudan gelir.
+- İçe aktarma iki adımlıdır: kuru çalıştırma sonucu gösterilmeden yazma yok.
+
+BİLİNEN: port çakışması düzeltildi — API artık API_PORT okur (ortam değişkeni
+PORT'u başka amaçla atayabiliyor; sunucu rastgele porta düşmüştü).

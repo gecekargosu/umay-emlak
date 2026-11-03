@@ -5,7 +5,9 @@ import { app } from "./app.js";
 
 loadEnv();
 
-const port = Number(process.env.PORT ?? 3000);
+// API_PORT öncelikli: bazı barındırma/araç ortamları genel PORT değişkenini
+// kendileri için ayarlıyor ve sunucu rastgele bir porta düşüyor (yaşandı).
+const port = Number(process.env.API_PORT ?? process.env.PORT ?? 3100);
 
 const server = serve({ fetch: app.fetch, port }, (info) => {
   console.log(`UMAY EMLAK API — http://localhost:${info.port}`);

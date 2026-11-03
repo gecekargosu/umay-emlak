@@ -54,6 +54,7 @@ pnpm db:seed            iki ofis + demo kullanıcı ekle (yalnız dev)
 pnpm test               birim + izolasyon testleri (vitest)
 pnpm typecheck          tsc --noEmit (tüm paketler)
 pnpm dev                API'yi başlat (http://localhost:3100)
+pnpm dev:web            arayüzü başlat (http://127.0.0.1:5173, /api proxy'li)
 
 Dilim 0 kabul eşiği: yeni bilgisayarda kurulum ≤15 dk, giriş çalışır,
 A ofisinin kullanıcısı B ofisinin tek kaydını göremez (test yeşil).
@@ -90,15 +91,20 @@ docker-compose.yml     PostgreSQL 16 (dev)
 ====================================================================
 ====================================================================
 ====================================================================
-6) NEREDE KALDIK (2026-11-03 · Dilim 2 bitti)
+====================================================================
+6) NEREDE KALDIK (2026-11-03 · Dilim 2 + arayüz bitti)
 ====================================================================
 Dilim 0: şema + RLS + para modeli + API iskeleti.
 Dilim 1: giriş (scrypt), imzalı çerez + iptal edilebilir oturum, ekip, yetki.
-Dilim 2: kişi (mal sahibi/kiracı/aday), gayrimenkul, HİSSELİ malik,
-         mükerrer birleştirme (silmeden arşiv), Excel/CSV içe aktarma.
+Dilim 2: kişi / gayrimenkul / hisseli malik / birleştirme / Excel-CSV aktarma.
+Arayüz (apps/web): giriş, pano, portföy, kişiler, içe aktarma ekranları.
 
-Test: 26/26 yeşil (5 izolasyon + 14 kimlik + 7 kişi/mülk/içe aktarma).
+İKİ SUNUCU BİRLİKTE ÇALIŞIR:
+  pnpm dev        → API  http://127.0.0.1:3100
+  pnpm dev:web    → arayüz http://127.0.0.1:5173  (/api proxy ile API'ye gider)
+
+Test: 26/26 yeşil. Tarayıcıda giriş → pano akışı doğrulandı.
 Demo giriş (yalnız dev): aysan.yilmaz@umay-emlak.local / Umay!2026
 
-SIRADAKİ: apps/web — giriş ekranı, pano (vadesi geçen kiralar), portföy
-listesi ve kişi ekranı. Ardından Dilim 3 (portföy + belge + raf).
+SIRADAKİ: Dilim 3 — portföy ekranı (ilan açma/fiyat/yetki belgesi), belge deposu
+(sha256 + tür matrisi + onaylı otomatik eşleştirme) ve "raf" görünümü.

@@ -47,3 +47,12 @@ YARIM:arayuz yok · belge yukleme (D3) yok · ice aktarma eslemesi kullanici ona
 SORU:yok
 SIRADAKI:Dilim 3 oncesi apps/web: giris ekrani, pano (vadesi gecen/yaklasan kiralar), portfoy listesi ve kisi ekrani; sonra Dilim 3 (portfoy + belge + raf).
 --------------------------------------------------------------------------------
+[2026-11-03 15:27] TUR:8 | MODUL:arayuz (apps/web) + port duzeltmesi | IS:Vite+React arayuzu kuruldu: giris (coklu ofis secimi), pano (tahsil edilecek/vadesi gecen/portfoy/sözlesme kartlari), portfoy tablosu, kisiler (arama, ekleme, mukerrer uyarisi + yine de ekle), ice aktarma (dosya sec -> onizleme -> onayla). /api proxy ile cerez tek kokenden gider. API portu artik API_PORT okur: kabuk ortamindaki genel PORT degiskeni .env'i ezip sunucuyu rastgele porta dusuruyordu (58139/60116), bu gercek bir hataydi ve duzeltildi.
+DOSYA:apps/web/{package.json,tsconfig.json,vite.config.ts,index.html,src/{main.tsx,App.tsx,api.ts,styles.css,pages/{Login,Dashboard,Listings,People,Import}.tsx}}, apps/api/src/index.ts, .env.example, 00-BASLA-BURADAN.txt, 01-BLUEPRINT.txt, package.json (dev:web, build:web)
+TEST:pnpm -r typecheck exit=0 · pnpm --filter @umay/web build exit=0 (35 modul, 232 KB) · proxy: login 200, summary 200 (18.500,00 TL), people 200, listings 200 · TARAYICI: giris ekrani -> POST /auth/login 200 -> session 200 -> summary 200 -> pano gorundu
+KARAR:oturum tokeni tarayicida tutulmaz (httpOnly cerez) · arayuz is kurali hesaplamaz, karar sunucudan · ice aktarma iki adimli (onizleme olmadan yazma yok)
+DUZELTME:TUR:7 kaydinda "gercek HTTP multipart yukleme" ifadesi o anda DOGRULANMAMISTI (test komutundaki mktemp yolu Windows curl tarafindan okunamadi, HTTP 000). Ayni kontrol bu turda tekrarlandi: HTTP 200, dogru esleme ve sayilar. Urun hatasi yoktu; kayit simdi kanitli.
+YARIM:ekip ekrani (API hazir, arayuz yok) · belge yukleme (D3) · sifre degistirme ekrani · mobil duzen yok
+SORU:yok
+SIRADAKI:Dilim 3 — portfoy ekrani (ilan acma, fiyat, yetki belgesi) + belge deposu (sha256, tur matrisi, ONAYLI otomatik eslestirme) + raf gorunumu.
+--------------------------------------------------------------------------------

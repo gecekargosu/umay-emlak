@@ -8,6 +8,8 @@
   },
   "scripts": {
     "dev": "pnpm --filter @umay/api dev",
+    "dev:web": "pnpm --filter @umay/web dev",
+    "build:web": "pnpm --filter @umay/web build",
     "db:migrate": "pnpm --filter @umay/db migrate",
     "db:seed": "pnpm --filter @umay/db seed",
     "test": "vitest run",
