@@ -202,6 +202,22 @@ export type Today = {
     net: string;
   }>;
   contracts: Array<{ id: string; propertyTitle: string; endDate: string; daysLeft: number }>;
+  modules: {
+    owners: { total: number; portfolio: number };
+    properties: { total: number; occupied: number; empty: number; sale: number; rent: number };
+    tenants: { active: number; leaving: number };
+    staff: { total: number; approvers: number };
+    rent: {
+      charged: string;
+      collected: string;
+      overdue: number;
+      overdueKurus: number;
+      overdueFormatted: string;
+    };
+    contracts: { active: number; expiring: number };
+    finance: { payoutPaid: string; payoutDraft: string; commission: string };
+    notBuilt: string[];
+  };
   month: {
     period: string;
     periodLabel: string;
@@ -217,6 +233,7 @@ export type TodayCharge = {
   tenantName: string;
   tenantPhone: string | null;
   propertyTitle: string;
+  district: string | null;
   remainingKurus: number;
   remaining: string;
   dueDate: string;

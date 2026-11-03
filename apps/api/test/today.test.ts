@@ -106,6 +106,13 @@ describe("bugün ne yapılmalı", () => {
       counts: { overdue: number };
       charges: { overdue: Array<{ tenantName: string; daysOverdue: number; level: string | null }> };
       month: { period: string; charged: string; collected: string };
+      modules: {
+        owners: { total: number; portfolio: number };
+        properties: { total: number; occupied: number; empty: number; sale: number; rent: number };
+        staff: { total: number; approvers: number };
+        rent: { overdue: number; overdueFormatted: string };
+        notBuilt: string[];
+      };
     }>(await app.request("/api/v1/today", { headers: { cookie } }));
 
     expect(today.counts.overdue).toBeGreaterThan(0);
@@ -118,6 +125,13 @@ describe("bugün ne yapılmalı", () => {
     expect(today.month.period).toMatch(/^\d{4}-\d{2}-01$/);
     expect(today.month.charged).toContain(",");
     expect(today.month.collected).toContain(",");
+
+    // Ana sayfa modülleri: gerçek sayımlar gelir, modülsüz kutular "yok" der.
+    expect(today.modules.owners.total).toBeGreaterThan(0);
+    expect(today.modules.staff.total).toBeGreaterThan(0);
+    expect(today.modules.properties.total).toBeGreaterThan(0);
+    expect(today.modules.rent.overdue).toBe(today.counts.overdue);
+    expect(today.modules.notBuilt).toContain("dask");
 
     // B ofisi aynı kiracıyı göremez
     const bCookie = await login(B_OFIS);

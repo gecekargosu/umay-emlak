@@ -869,3 +869,156 @@ tr.overdue td {
     display: none;
   }
 }
+
+/* ------------------------------------------------------------ ana sayfa modülleri */
+.action-center {
+  background: var(--bg-800);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: 14px 16px;
+  margin: 14px 0;
+}
+
+.ac-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.ac-head h3 {
+  margin: 0;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+}
+
+.ac-count {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.ac-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.ac-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  background: var(--bg-700);
+  border: 1px solid var(--line);
+  border-left-width: 3px;
+  border-radius: var(--radius-card);
+  color: var(--text);
+  font-weight: 400;
+  padding: 10px 12px;
+}
+
+.ac-row .ac-num {
+  font-size: 22px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.ac-row .ac-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ac-row .ac-text strong {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.ac-row.danger {
+  border-left-color: var(--danger);
+}
+
+.ac-row.warn {
+  border-left-color: var(--warn);
+}
+
+.ac-row.info {
+  border-left-color: var(--info);
+}
+
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+  gap: 10px;
+  margin: 12px 0 4px;
+}
+
+.module-tile {
+  display: grid;
+  gap: 4px;
+  text-align: left;
+  background: var(--bg-800);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  color: var(--text);
+  font-weight: 400;
+  padding: 12px 14px;
+  min-height: 104px;
+  align-content: start;
+}
+
+.module-tile:hover {
+  border-color: var(--accent);
+}
+
+.module-tile .module-title {
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.module-tile .module-value {
+  font-size: 24px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.15;
+}
+
+.module-tile .module-sub {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.module-tile.danger .module-value {
+  color: var(--danger);
+}
+
+.module-tile.warn .module-value {
+  color: var(--warn);
+}
+
+.module-tile.not-built {
+  background: repeating-linear-gradient(
+    135deg,
+    var(--bg-800),
+    var(--bg-800) 8px,
+    var(--bg-700) 8px,
+    var(--bg-700) 16px
+  );
+  opacity: 0.75;
+  cursor: default;
+}
+
+@media (max-width: 760px) {
+  .ac-grid,
+  .module-grid {
+    grid-template-columns: 1fr;
+  }
+}

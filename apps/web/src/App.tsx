@@ -9,6 +9,7 @@ import { Login } from "./pages/Login";
 import { Payouts } from "./pages/Payouts";
 import { People } from "./pages/People";
 import { Rents } from "./pages/Rents";
+import { Team } from "./pages/Team";
 
 type Page =
   | "bugun"
@@ -18,13 +19,15 @@ type Page =
   | "sozlesmeler"
   | "sahipler"
   | "belgeler"
-  | "aktar";
+  | "aktar"
+  | "ekip";
 
 /** Kaynak dosya 6.2: düz 15 maddelik menü değil, 6 grup. */
 const NAV: Array<{ group: string; items: Array<{ page: Page; label: string }> }> = [
   { group: "Bugün", items: [{ page: "bugun", label: "Aksiyon panosu" }] },
   { group: "Portföy", items: [{ page: "portfoy", label: "Gayrimenkuller" }] },
   { group: "Kişiler", items: [{ page: "kisiler", label: "Mal sahibi / kiracı" }] },
+  { group: "Ofis", items: [{ page: "ekip", label: "Personeller" }] },
   {
     group: "Para",
     items: [
@@ -51,6 +54,7 @@ const TITLES: Record<Page, string> = {
   sahipler: "Sahipler",
   belgeler: "Belgeler",
   aktar: "İçe Aktar",
+  ekip: "Personeller",
 };
 
 function initials(name: string): string {
@@ -203,6 +207,9 @@ export function App() {
           {page === "sahipler" && <Payouts />}
           {page === "belgeler" && <Documents canApprove={session.canApprove} />}
           {page === "aktar" && <Import />}
+          {page === "ekip" && (
+            <Team canApprove={session.canApprove} isOwner={session.role === "owner"} />
+          )}
         </main>
       </div>
     </div>

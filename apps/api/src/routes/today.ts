@@ -32,8 +32,27 @@ type ChargeRow = {
   tenant_name: string;
   tenant_phone: string | null;
   property_title: string;
+  district: string | null;
   days_overdue: number;
   notice_sent_at: string | null;
+};
+
+/** Ana sayfa modül sayıları (kaynak dosya 6.4 "ana sayfa nasıl olmalı"). */
+type ModuleRow = {
+  owners: number;
+  properties_total: number;
+  sale: number;
+  rent: number;
+  occupied: number;
+  staff: number;
+  approvers: number;
+  active_contracts: number;
+  expiring: number;
+  active_tenants: number;
+  listings_total: number;
+  payout_paid: string;
+  payout_draft: string;
+  commission: string;
 };
 
 type ListingRow = {
@@ -56,7 +75,7 @@ todayRoutes.get("/", async (c) => {
              coalesce((select sum(p.amount_kurus) from payment p where p.charge_id = ch.id), 0)::bigint
                as paid_kurus,
              per.full_name as tenant_name, per.phone as tenant_phone,
-             prop.title as property_title,
+             prop.title as property_title, prop.district as district,
              (current_date - ch.due_date)::int as days_overdue,
              ch.notice_sent_at
         from charge ch
@@ -139,6 +158,34 @@ todayRoutes.get("/", async (c) => {
       }
     ).rows;
 
+    // Ana sayfa modülleri: tek sorguda sayımlar. Modülü olmayanlar (DASK,
+    // görev, mesaj) bilerek 0 değil "yok" olarak döner — sahte sıfır yazmayız.
+    const moduleResult = await tx.execute(sql`
+      select
+        (select count(*) from person where kind = 'owner' and merged_into_id is null)::int as owners,
+        (select count(*) from property)::int as properties_total,
+        (select count(*) from listing where kind = 'sale'
+            and status in ('draft','active','reserved'))::int as sale,
+        (select count(*) from listing where kind = 'rent'
+            and status in ('draft','active','reserved'))::int as rent,
+        (select count(distinct l.property_id) from contract k
+            join listing l on l.id = k.listing_id where k.status = 'active')::int as occupied,
+        (select count(*) from membership where status = 'active')::int as staff,
+        (select count(*) from membership where status = 'active' and can_approve)::int as approvers,
+        (select count(*) from contract where status = 'active')::int as active_contracts,
+        (select count(*) from contract where status = 'active' and end_date is not null
+            and end_date <= current_date + 30)::int as expiring,
+        (select count(distinct tenant_person_id) from contract where status = 'active')::int as active_tenants,
+        (select count(*) from listing)::int as listings_total,
+        (select coalesce(sum(net_kurus), 0)::bigint from owner_payout
+           where period = date_trunc('month', current_date)::date and status = 'paid') as payout_paid,
+        (select coalesce(sum(net_kurus), 0)::bigint from owner_payout
+           where period = date_trunc('month', current_date)::date and status = 'draft') as payout_draft,
+        (select coalesce(sum(amount_kurus), 0)::bigint from commission
+           where status in ('approved', 'paid')) as commission
+    `);
+    const modules = (moduleResult as unknown as { rows: ModuleRow[] }).rows[0]!;
+
     const monthResult = await tx.execute(sql`
       select coalesce(sum(ch.amount_kurus), 0)::bigint as charged,
              coalesce((select sum(p.amount_kurus)
@@ -152,7 +199,7 @@ todayRoutes.get("/", async (c) => {
       monthResult as unknown as { rows: Array<{ charged: string; collected: string }> }
     ).rows[0] ?? { charged: "0", collected: "0" };
 
-    return { charges, listings, docs, pending, payouts, contracts, month };
+    return { charges, listings, docs, pending, payouts, contracts, month, modules };
   });
 
   // Belge eksiği: belge mülke de ilana da bağlı olabilir; ikisi de sayılır.
@@ -199,6 +246,7 @@ todayRoutes.get("/", async (c) => {
       tenantName: row.tenant_name,
       tenantPhone: row.tenant_phone,
       propertyTitle: row.property_title,
+      district: row.district,
       remainingKurus,
       remaining: formatTry(remainingKurus),
       dueDate: row.due_date,
@@ -254,6 +302,45 @@ todayRoutes.get("/", async (c) => {
       collected: formatTry(Number(data.month.collected)),
       chargedKurus: Number(data.month.charged),
       collectedKurus: Number(data.month.collected),
+    },
+    modules: {
+      owners: {
+        total: data.modules.owners,
+        portfolio: data.modules.listings_total,
+      },
+      properties: {
+        total: data.modules.properties_total,
+        occupied: data.modules.occupied,
+        empty: Math.max(0, data.modules.properties_total - data.modules.occupied),
+        sale: data.modules.sale,
+        rent: data.modules.rent,
+      },
+      tenants: {
+        active: data.modules.active_tenants,
+        leaving: data.modules.expiring,
+      },
+      staff: {
+        total: data.modules.staff,
+        approvers: data.modules.approvers,
+      },
+      rent: {
+        charged: formatTry(Number(data.month.charged)),
+        collected: formatTry(Number(data.month.collected)),
+        overdue: overdue.length,
+        overdueKurus: overdue.reduce((sum, ch) => sum + ch.remainingKurus, 0),
+        overdueFormatted: formatTry(overdue.reduce((sum, ch) => sum + ch.remainingKurus, 0)),
+      },
+      contracts: {
+        active: data.modules.active_contracts,
+        expiring: data.modules.expiring,
+      },
+      finance: {
+        payoutPaid: formatTry(Number(data.modules.payout_paid)),
+        payoutDraft: formatTry(Number(data.modules.payout_draft)),
+        commission: formatTry(Number(data.modules.commission)),
+      },
+      /** Henüz modülü olmayan kutular — arayüz "planlı" der, sıfır uydurmaz. */
+      notBuilt: ["dask", "tasks", "messages"],
     },
   });
 });

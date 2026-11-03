@@ -3,10 +3,13 @@ import { api, type Summary, type Today } from "../api";
 import { InfoNote } from "../components/InfoNote";
 
 /**
- * Pano — "bugün ne yapılmalı".
- * Sayı değil İŞ gösterir: gecikmiş kira, bu hafta vadesi gelen, belgesi eksik
- * portföy, onay bekleyen eşleştirme, taslak aktarım, bitecek sözleşme.
- * Her başlık ilgili ekrana götürür; eylem orada yapılır.
+ * Ana sayfa — kaynak dosya "8. Ana sayfa nasıl olmalı?" (satır 357-410).
+ *
+ * Tarif: üstte büyük AKSİYON MERKEZİ, altında modül kutuları
+ * (Mal sahipleri, Gayrimenkuller, Kiracılar, Personeller, Kira takibi,
+ * Sözleşmeler, DASK, Görevler, Finans, Mesajlar).
+ * Kural: Aysan ekrana baktığında ilk 10 saniyede ofiste ne olduğunu anlamalı.
+ * Modülü olmayan kutu "planlı" der; sıfır uydurulmaz (Y-12/Y-23/Y-19).
  */
 export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
   const [summary, setSummary] = useState<Summary | null>(null);
@@ -25,62 +28,246 @@ export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
   if (error) return <div className="error">{error}</div>;
   if (!summary || !today) return <p className="muted">Yükleniyor…</p>;
 
-  const totalActions =
-    today.counts.overdue +
-    today.counts.dueSoon +
-    today.counts.missingDocs +
-    today.counts.pendingMatches +
-    today.counts.draftPayouts +
-    today.counts.expiringContracts;
+  const c = today.counts;
+  const modules = today.modules;
+  const districts = [
+    ...new Set(today.charges.overdue.map((ch) => ch.district).filter(Boolean) as string[]),
+  ].slice(0, 3);
+  const dueSoonDistricts = [
+    ...new Set(today.charges.dueSoon.map((ch) => ch.district).filter(Boolean) as string[]),
+  ].slice(0, 3);
+
+  const allActions: Array<{
+    key: string;
+    count: number;
+    label: string;
+    sub: string;
+    tone: "danger" | "warn" | "info";
+    page: string;
+  }> = [
+    {
+      key: "overdue",
+      count: c.overdue,
+      label: "gecikmiş kira",
+      sub: districts.length > 0 ? districts.join(", ") : "kontrol edilmeli",
+      tone: "danger",
+      page: "kiralar",
+    },
+    {
+      key: "dueSoon",
+      count: c.dueSoon,
+      label: "kira günü yaklaşıyor",
+      sub: dueSoonDistricts.length > 0 ? `${dueSoonDistricts.join(", ")} · önümüzdeki 7 gün` : "önümüzdeki 7 gün",
+      tone: "warn",
+      page: "kiralar",
+    },
+    {
+      key: "expiring",
+      count: c.expiringContracts,
+      label: "sözleşme yenilenecek",
+      sub: "önümüzdeki 30 gün",
+      tone: "warn",
+      page: "sozlesmeler",
+    },
+    {
+      key: "missingDocs",
+      count: c.missingDocs,
+      label: "portföyün belgesi eksik",
+      sub: "tapu / yetki / kimlik tamamlanmadan yayına girmez",
+      tone: "info",
+      page: "portfoy",
+    },
+    {
+      key: "pendingMatches",
+      count: c.pendingMatches,
+      label: "belge eşleştirmesi onay bekliyor",
+      sub: "sistem önerdi, yetkili onayı gerekli",
+      tone: "info",
+      page: "belgeler",
+    },
+    {
+      key: "draftPayouts",
+      count: c.draftPayouts,
+      label: "taslak mal sahibi aktarımı",
+      sub: "oluşturulmuş ama ödendi işaretlenmemiş",
+      tone: "info",
+      page: "sahipler",
+    },
+  ];
+
+  const actions = allActions.filter((row) => row.count > 0);
+
+  const totalActions = actions.reduce((sum, row) => sum + row.count, 0);
+  const go = (page: string) => onGo?.(page);
+
+  const tiles: Array<{
+    key: string;
+    label: string;
+    value: string;
+    sub: string;
+    page: string | null;
+    tone?: "danger" | "warn";
+  }> = [
+    {
+      key: "owners",
+      label: "Mal sahipleri",
+      value: String(modules.owners.total),
+      sub: `${modules.owners.portfolio} portföy kaydı`,
+      page: "kisiler",
+    },
+    {
+      key: "properties",
+      label: "Gayrimenkuller",
+      value: String(modules.properties.total),
+      sub: `${modules.properties.empty} boş · ${modules.properties.occupied} dolu · ${modules.properties.sale} satılık · ${modules.properties.rent} kiralık`,
+      page: "portfoy",
+    },
+    {
+      key: "tenants",
+      label: "Kiracılar",
+      value: String(modules.tenants.active),
+      sub: `${modules.tenants.leaving} sözleşme 30 günde bitiyor`,
+      page: "kisiler",
+      tone: modules.tenants.leaving > 0 ? "warn" : undefined,
+    },
+    {
+      key: "staff",
+      label: "Personeller",
+      value: String(modules.staff.total),
+      sub: `${modules.staff.approvers} onay yetkili`,
+      page: "ekip",
+    },
+    {
+      key: "rent",
+      label: "Kira takibi",
+      value: String(modules.rent.overdue),
+      sub: `geciken · ${modules.rent.overdueFormatted} · beklenen ${modules.rent.charged} / ödenen ${modules.rent.collected}`,
+      page: "kiralar",
+      tone: modules.rent.overdue > 0 ? "danger" : undefined,
+    },
+    {
+      key: "contracts",
+      label: "Sözleşmeler",
+      value: String(modules.contracts.active),
+      sub: `${modules.contracts.expiring} tanesi 30 günde yenilenecek`,
+      page: "sozlesmeler",
+      tone: modules.contracts.expiring > 0 ? "warn" : undefined,
+    },
+    {
+      key: "dask",
+      label: "DASK / poliçe",
+      value: "—",
+      sub: "modül planlı (Y-12): poliçe bitiş takibi henüz yok",
+      page: null,
+    },
+    {
+      key: "tasks",
+      label: "Görevler",
+      value: "—",
+      sub: "modül planlı (Y-23): arıza/görev kaydı henüz yok",
+      page: null,
+    },
+    {
+      key: "finance",
+      label: "Finans",
+      value: modules.finance.payoutDraft,
+      sub: `taslak aktarım · ödenen ${modules.finance.payoutPaid} · komisyon ${modules.finance.commission}`,
+      page: "sahipler",
+    },
+    {
+      key: "messages",
+      label: "Mesajlar",
+      value: "—",
+      sub: "modül planlı (Y-19): e-posta/SMS gönderimi henüz yok",
+      page: null,
+    },
+  ];
 
   return (
     <div>
       <div className="page-head">
         <h2>Bugün</h2>
+        <span className="spacer" />
+        <span className="muted small">
+          {new Date(`${today.date}T00:00:00`).toLocaleDateString("tr-TR", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })}
+        </span>
       </div>
-      <InfoNote title="Bu ekran ofisin bugünkü iş listesidir.">
-        Sıralama: <strong>gecikmiş → bu hafta → eksik belge → bekleyen onay → taslak aktarım →
-        bitecek sözleşme</strong>. Her başlık ilgili ekrana götürür; işlem orada yapılır. Kırmızı
-        gecikmiş, sarı yaklaşan, mavi "dikkat" demektir.
+      <InfoNote title="Ana sayfa ofisin komuta merkezidir.">
+        Üstteki <strong>aksiyon merkezi</strong> bugün ilgilenilmesi gereken işleri sayar; kırmızı
+        gecikmiş, sarı yaklaşan, mavi "dikkat" demektir. Altındaki modül kutuları ofisin tamamını
+        özetler — bir kutuya tıklayınca ilgili ekran açılır. Modülü henüz olmayan kutular (DASK,
+        görev, mesaj) <strong>"planlı"</strong> yazar; sıfır göstermiyoruz, çünkü yokluk bilgi değil.
       </InfoNote>
-      <p className="muted small">
-        {new Date(`${today.date}T00:00:00`).toLocaleDateString("tr-TR", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-        })}{" "}
-        · {today.month.periodLabel}: tahakkuk {today.month.charged}, tahsil {today.month.collected}
-      </p>
 
-      {totalActions === 0 ? (
-        <div className="alert">
-          Bugün acil iş yok. Gecikmiş kira, eksik belge ve bekleyen onay bulunmuyor.
+      <section className="action-center">
+        <div className="ac-head">
+          <h3>Aksiyon merkezi</h3>
+          <span className="ac-count">{totalActions} işlem</span>
         </div>
-      ) : (
-        <p className="muted">
-          Bugün ilgilenilmesi gereken <strong>{totalActions}</strong> kayıt var.
+        {totalActions === 0 ? (
+          <p className="muted small">
+            Bugün acil iş yok. Gecikmiş kira, eksik belge, bekleyen onay ve bitecek sözleşme
+            bulunmuyor.
+          </p>
+        ) : (
+          <div className="ac-grid">
+            {actions.map((row) => (
+              <button
+                key={row.key}
+                type="button"
+                className={`ac-row ${row.tone}`}
+                onClick={() => go(row.page)}
+              >
+                <span className="ac-num">{row.count}</span>
+                <span className="ac-text">
+                  <strong>{row.label}</strong>
+                  <span className="muted small">{row.sub}</span>
+                </span>
+              </button>
+            ))}
+          </div>
+        )}
+        <p className="muted small" style={{ marginTop: 10 }}>
+          {today.month.periodLabel}: tahakkuk {today.month.charged} · tahsil {today.month.collected}
         </p>
-      )}
+      </section>
 
-      <div className="cards">
-        <Card label="Tahsil edilecek" value={summary.openFormatted} emphasis />
-        <Card label="Vadesi geçen" value={String(summary.overdueCount)} />
-        <Card label="Aktif portföy" value={String(summary.activeListings)} />
-        <Card label="Aktif sözleşme" value={String(summary.activeContracts)} />
-        <Card label="Belge" value={String(summary.documents)} />
+      <h3 style={{ marginTop: 22 }}>Modüller</h3>
+      <div className="module-grid">
+        {tiles.map((tile) => {
+          const Tag = tile.page ? "button" : "div";
+          return (
+            <Tag
+              key={tile.key}
+              {...(tile.page
+                ? { type: "button" as const, onClick: () => go(tile.page as string) }
+                : {})}
+              className={`module-tile${tile.page ? "" : " not-built"}${tile.tone ? ` ${tile.tone}` : ""}`}
+            >
+              <div className="module-title">{tile.label}</div>
+              <div className="module-value">{tile.value}</div>
+              <div className="module-sub">{tile.sub}</div>
+            </Tag>
+          );
+        })}
       </div>
 
       {today.charges.overdue.length > 0 && (
         <Section
           title="Gecikmiş kiralar"
           hint="Vadesi geçen ve hâlâ kapanmayan tahakkuklar. İhtarname adayları işaretli."
-          action={onGo ? { label: "Kiralar'a git", onClick: () => onGo("kiralar") } : undefined}
+          action={{ label: "Kiralar'a git", onClick: () => go("kiralar") }}
         >
           <ul className="action-list">
             {today.charges.overdue.slice(0, 8).map((ch) => (
               <li key={ch.id}>
                 <div>
                   <strong>{ch.tenantName}</strong> · {ch.propertyTitle}
+                  {ch.district && <span className="muted small"> ({ch.district})</span>}
                   {ch.level === "formal" && <span className="badge">ihtarname adayı</span>}
                   {ch.level === "reminder" && ch.noticeSentAt === null && (
                     <span className="badge">hatırlatma</span>
@@ -97,12 +284,16 @@ export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
       )}
 
       {today.charges.dueSoon.length > 0 && (
-        <Section title="Bu hafta vadesi gelenler">
+        <Section
+          title="Bu hafta vadesi gelenler"
+          action={{ label: "Kiralar'a git", onClick: () => go("kiralar") }}
+        >
           <ul className="action-list">
             {today.charges.dueSoon.slice(0, 8).map((ch) => (
               <li key={ch.id}>
                 <div>
                   <strong>{ch.tenantName}</strong> · {ch.propertyTitle}
+                  {ch.district && <span className="muted small"> ({ch.district})</span>}
                 </div>
                 <div className="muted small">
                   {ch.daysLeft === 0 ? "bugün" : `${ch.daysLeft} gün sonra`} · {ch.remaining}
@@ -117,16 +308,14 @@ export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
         <Section
           title="Belgesi eksik portföy"
           hint="Yayına alma belge şartına takılır; eksikler tamamlanınca ilan yayına girer."
-          action={onGo ? { label: "Portföy'e git", onClick: () => onGo("portfoy") } : undefined}
+          action={{ label: "Portföy'e git", onClick: () => go("portfoy") }}
         >
           <ul className="action-list">
             {today.missingDocs.map((row) => (
               <li key={row.listingId}>
                 <div>
                   <strong>{row.title}</strong>{" "}
-                  <span className="muted small">
-                    ({row.status === "draft" ? "taslak" : "aktif"})
-                  </span>
+                  <span className="muted small">({row.status === "draft" ? "taslak" : "aktif"})</span>
                 </div>
                 <div className="muted small">eksik: {row.missing.join(", ")}</div>
               </li>
@@ -139,7 +328,7 @@ export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
         <Section
           title="Onay bekleyen belge eşleştirmesi"
           hint="Sistem öneri üretti; bağı kurmak için yetkili onayı gerekiyor."
-          action={onGo ? { label: "Belgeler'e git", onClick: () => onGo("belgeler") } : undefined}
+          action={{ label: "Belgeler'e git", onClick: () => go("belgeler") }}
         >
           <ul className="action-list">
             {today.pendingMatches.map((row) => (
@@ -158,7 +347,7 @@ export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
         <Section
           title="Taslak mal sahibi aktarımı"
           hint="Aktarım oluşturulmuş ama ödendi işaretlenmemiş."
-          action={onGo ? { label: "Sahipler'e git", onClick: () => onGo("sahipler") } : undefined}
+          action={{ label: "Sahipler'e git", onClick: () => go("sahipler") }}
         >
           <ul className="action-list">
             {today.payouts.map((row) => (
@@ -177,7 +366,7 @@ export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
         <Section
           title="Bitecek sözleşmeler"
           hint="30 gün içinde bitenler: yenileme veya çıkış konuşulmalı."
-          action={onGo ? { label: "Sözleşmeler'e git", onClick: () => onGo("sozlesmeler") } : undefined}
+          action={{ label: "Sözleşmeler'e git", onClick: () => go("sozlesmeler") }}
         >
           <ul className="action-list">
             {today.contracts.map((row) => (
@@ -195,17 +384,8 @@ export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
       )}
 
       <p className="muted small">
-        Not: tutarlar kuruş hassasiyetinde saklanır; panoda yalnız gösterilir.
+        Not: tutarlar kuruş hassasiyetinde saklanır; ana sayfada yalnız gösterilir.
       </p>
-    </div>
-  );
-}
-
-function Card({ label, value, emphasis }: { label: string; value: string; emphasis?: boolean }) {
-  return (
-    <div className={`card${emphasis ? " card-emphasis" : ""}`}>
-      <div className="card-label">{label}</div>
-      <div className="card-value">{value}</div>
     </div>
   );
 }

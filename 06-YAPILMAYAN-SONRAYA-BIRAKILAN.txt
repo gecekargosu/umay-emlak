@@ -20,7 +20,10 @@ A) ARAYÜZ (EKRAN) EKSİKLERİ
 ====================================================================
 Y-01 | Ekip yönetimi ekranı (liste, davet, rol/onay yetkisi) |
        API hazır (/api/v1/team), arayüz yok. Davet edilen kişi geçici şifreyi
-       ekranda görüyor ama yönetim ekranı yok. | Dilim 5-6 | Y | AÇIK
+       ekranda görüyor ama yönetim ekranı yok. | Dilim 5-6 | Y |
+       YAPILDI (2026-11-03 · TUR:14) — apps/web/src/pages/Team.tsx:
+       liste, davet (geçici şifre tek kez), rol değişimi, onay yetkisi,
+       "ayrıldı/geri al". Not: geçici şifreli hesap Y-02 yüzünden hâlâ kilitli.
 Y-02 | Şifre değiştirme ekranı |
        mustChangePassword akışı API'de var (veri uçları 403 döner) ama
        arayüzde ekran yok: geçici şifreyle giren kullanıcı kilitli kalır.
@@ -210,4 +213,4 @@ Her tur sonunda sorulacak üç soru:
 2) Yapılan bir iş bir Y kaydını kapattı mı? → satırı silme, "YAPILDI" ekle.
 3) Önceliği değişen kayıt var mı?           → öncelik alanını güncelle.
 
-Açık kayıt sayısı: 51 (Y-01 … Y-52; Y-10 kapandı) + 6 sapma notu (S-01 … S-06).
+Açık kayıt sayısı: 50 (Y-01 … Y-52; Y-01 ve Y-10 kapandı) + 6 sapma notu (S-01 … S-06).
