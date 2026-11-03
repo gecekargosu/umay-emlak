@@ -23,3 +23,6 @@ Thumbs.db
 apps/web/.next/
 apps/desktop/src-tauri/target/
 .freebuff/
+
+# yerel yedek zip dosyalari
+kaynaklar/yedek/
