@@ -62,7 +62,9 @@ const LIST_SQL = sql`
   select a.id, a.person_id as "personId", p.full_name as "personName",
          p.phone as "personPhone", p.candidate_stage as "personStage",
          a.listing_id as "listingId", pr.title as "propertyTitle", pr.district,
-         u.full_name as "staffName", a.scheduled_at as "scheduledAt",
+         u.full_name as "staffName",
+         to_char(a.scheduled_at at time zone 'Europe/Istanbul',
+                 'YYYY-MM-DD"T"HH24:MI:SS') as "scheduledAt",
          a.duration_min as "durationMin", a.place, a.status,
          a.result_note as "resultNote", a.offer_id as "offerId"
     from appointment a
@@ -163,7 +165,7 @@ appointmentRoutes.post("/", async (c) => {
          place, created_by_user_id)
       values (${session.tenantId}::uuid, ${input.personId}::uuid,
               ${input.listingId ?? null}::uuid, ${input.staffUserId ?? session.userId}::uuid,
-              ${input.scheduledAt}::timestamptz, ${input.durationMin},
+              (${input.scheduledAt}::timestamp AT TIME ZONE 'Europe/Istanbul'), ${input.durationMin},
               ${input.place?.trim() || null}, ${session.userId}::uuid)
       returning id
     `);
@@ -194,7 +196,7 @@ appointmentRoutes.patch("/:id", async (c) => {
       update appointment
          set status = coalesce(${input.status ?? null}, status),
              result_note = coalesce(${input.resultNote ?? null}, result_note),
-             scheduled_at = coalesce(${input.scheduledAt ?? null}::timestamptz, scheduled_at),
+             scheduled_at = coalesce((${input.scheduledAt ?? null}::timestamp AT TIME ZONE 'Europe/Istanbul'), scheduled_at),
              place = coalesce(${input.place ?? null}, place),
              offer_id = coalesce(${input.offerId ?? null}::uuid, offer_id),
              updated_at = now()

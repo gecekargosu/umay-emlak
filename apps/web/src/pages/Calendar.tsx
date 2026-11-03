@@ -11,7 +11,7 @@ import { BackButton } from "../components/BackButton";
  * `compact` = ana sayfaya gömülü küçük sürüm (ay + seçili gün özeti).
  */
 type CalendarItem = {
-  type: "rent" | "contract-end" | "contract-start";
+  type: "rent" | "contract-end" | "contract-start" | "appointment";
   title: string;
   sub: string;
   date: string;
@@ -186,6 +186,9 @@ export function Calendar({ compact = false, onGo }: { compact?: boolean; onGo?: 
                   {items.some((i) => i.type === "contract-end") && (
                     <span className="cal-badge contract">bitiş</span>
                   )}
+                  {items.some((i) => i.type === "appointment") && (
+                    <span className="cal-badge soft">randevu</span>
+                  )}
                   {items.some((i) => i.type === "contract-start") && !day?.rentCount && (
                     <span className="cal-badge soft">başlangıç</span>
                   )}
@@ -222,7 +225,13 @@ export function Calendar({ compact = false, onGo }: { compact?: boolean; onGo?: 
             {selectedItems.map((item, index) => (
               <li key={`${item.type}-${index}`} className={item.urgent ? "urgent" : ""}>
                 <div className="cal-item-title">
-                  {item.type === "rent" ? "₺" : item.type === "contract-end" ? "⏳" : "📄"}{" "}
+                  {item.type === "rent"
+                    ? "₺"
+                    : item.type === "contract-end"
+                      ? "⏳"
+                      : item.type === "appointment"
+                        ? "📅"
+                        : "📄"}{" "}
                   {item.title}
                 </div>
                 <div className="muted small">{item.sub}</div>
@@ -233,7 +242,11 @@ export function Calendar({ compact = false, onGo }: { compact?: boolean; onGo?: 
                     className="ghost small-btn"
                     onClick={() => onGo(item.page)}
                   >
-                    {item.page === "kiralar" ? "Tahsilata git" : "Sözleşmeye git"}
+                    {item.page === "kiralar"
+                      ? "Tahsilata git"
+                      : item.page === "randevular"
+                        ? "Randevuya git"
+                        : "Sözleşmeye git"}
                   </button>
                 )}
               </li>

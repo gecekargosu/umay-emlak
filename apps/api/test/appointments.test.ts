@@ -91,5 +91,13 @@ describe("randevu", () => {
       })
     ).json()) as { items: Array<{ id: string; personName: string }> };
     expect(list.items.some((row) => row.id === body.id)).toBe(true);
+
+    // TUR:32 — randevu takvimde saatli iş olarak görünür (iptal hariç).
+    const calendar = (await (
+      await app.request("/api/v1/calendar?month=2030-01", { headers: { cookie } })
+    ).json()) as { days: Array<{ date: string; items: Array<{ type: string; title: string }> }> };
+    const day = calendar.days.find((row) => row.date === "2030-01-15");
+    expect(day?.items.some((item) => item.type === "appointment")).toBe(true);
+    expect(day?.items.some((item) => item.title.includes("14:30"))).toBe(true);
   });
 });

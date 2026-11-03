@@ -410,3 +410,11 @@ K-74 | Antigravity incelemesinin mimari önerileri uygulanmayacak.
        dark-mode ve SSR bu tek-ofis masaüstü programında gereksiz risk ve
        K-42…K-51 görsel diliyle çelişiyor. Somut eksikler (aria-label gibi)
        alınır; işlevsel sıra (09 dosyası) korunur.
+
+K-75 | Randevu takvimde saatli iş olarak görünür.
+       Ne: gün panelinde saat + kişi + mülk/yer; iptal edilen randevu gösterilmez
+       (gün yanlışlıkla dolu görünmesin). Tarih/saat İstanbul saat dilimine çevrilir.
+
+K-76 | Kaynak kod private GitHub deposunda tutulur.
+       Ne: gecekargosu/umay-emlak. .env, .freebuff ve yerel yedek zip'leri depo
+       dışında; sırlar hiçbir commit'e girmez (K-19).

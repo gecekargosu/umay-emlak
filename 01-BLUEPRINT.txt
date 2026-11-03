@@ -441,3 +441,12 @@ TUR:31 DURUM — RANDEVU
 - Appointments.tsx: form (kişi, ilan, personel, tarih-saat, süre, yer), güne
   göre gruplu liste, satır içi sonuç notu + Geldi/Gelmedi/İptal.
 Kalan: takvimde randevu işareti, teklife tek tık bağlantı, hatırlatma.
+
+====================================================================
+TUR:32 DURUM — TAKVİM + RANDEVU, GITHUB
+====================================================================
+- GET /calendar: rent + contract-start/end + appointment (iptal hariç).
+  Saat ve tarih Europe/Istanbul'a çevrilir; item.page = "randevular".
+- Calendar.tsx: "randevu" rozeti, 📅 simgesi, "Randevuya git".
+- GitHub: gecekargosu/umay-emlak (private), master dalı; .env/.freebuff hariç.
+Kalan: ana sayfada ayrı "bugünün randevuları" kutusu; randevudan teklife geçiş.

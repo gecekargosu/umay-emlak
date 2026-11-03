@@ -17,13 +17,13 @@ export const calendarRoutes = new Hono();
 const MONTH_RE = /^\d{4}-\d{2}$/;
 
 type CalendarItem = {
-  type: "rent" | "contract-end" | "contract-start";
+  type: "rent" | "contract-end" | "contract-start" | "appointment";
   title: string;
   sub: string;
   date: string;
   amountKurus: number;
   amountText: string | null;
-  page: "kiralar" | "sozlesmeler";
+  page: "kiralar" | "sozlesmeler" | "randevular";
   /** Ödenmemiş kira / biten sözleşme gibi acil olanlar */
   urgent: boolean;
 };
@@ -98,7 +98,38 @@ calendarRoutes.get("/", async (c) => {
       }
     ).rows;
 
-    return { rents, contracts };
+    // TUR:32 — randevular takvimde: saatli iş olarak gün panelinde görünür.
+    const appointmentResult = await tx.execute(sql`
+      select a.id, a.status, a.place,
+             to_char(a.scheduled_at at time zone 'Europe/Istanbul', 'HH24:MI') as time,
+             (a.scheduled_at at time zone 'Europe/Istanbul')::date::text as date,
+             per.full_name as person_name,
+             prop.title as property_title, prop.district
+        from appointment a
+        join person per on per.id = a.person_id
+        left join listing l on l.id = a.listing_id
+        left join property prop on prop.id = l.property_id
+       where a.scheduled_at >= ${start}::date
+         and a.scheduled_at < (${end}::date + 1)
+         and a.status <> 'cancelled'
+       order by a.scheduled_at
+    `);
+    const appointments = (
+      appointmentResult as unknown as {
+        rows: Array<{
+          id: string;
+          status: string;
+          place: string | null;
+          time: string;
+          date: string;
+          person_name: string;
+          property_title: string | null;
+          district: string | null;
+        }>;
+      }
+    ).rows;
+
+    return { rents, contracts, appointments };
   });
 
   const items: CalendarItem[] = [];
@@ -144,6 +175,20 @@ calendarRoutes.get("/", async (c) => {
         urgent: false,
       });
     }
+  }
+
+  for (const row of data.appointments) {
+    const place = [row.property_title, row.district, row.place].filter(Boolean).join(" · ");
+    items.push({
+      type: "appointment",
+      title: `${row.person_name} · randevu ${row.time}`,
+      sub: place || "yer belirtilmedi",
+      date: row.date,
+      amountKurus: 0,
+      amountText: null,
+      page: "randevular",
+      urgent: false,
+    });
   }
 
   const byDate = new Map<string, CalendarItem[]>();

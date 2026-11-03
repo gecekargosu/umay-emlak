@@ -5256,5 +5256,155 @@ Hazırlanan bu doküman, mevcut kodun kapsamlı bir analizini, hataları, eksikl
 19:12
 
 
+UMAY EMLAK – Mevcut Durum, Hatalar, Eksikler ve Detaylı Düzeltilme / Geliştirme Önerileri
+Bu belgeyi doğrudan ajana (kodlama ajanına) paylaşabilirsin. İçinde dosya yollarına tıklayarak ilgili kaynak koduna hızlıca ulaşabilirsin.
 
+1️⃣ Proje Özeti (Mevcut Koddan Çıkarımlar)
+Dosya	Açıklama	Durum
+App.tsx
+Uygulamanın kök komponenti; oturum, menü, sayfa yönlendirme, bildiriler.	Router (page state) yok → URL‑tabanlı navigation eksik.
+pages/Listings.tsx
+Portföy tablo + filtre + detay paneli.	800 satır → SRP ihlali, çok büyük tek dosya.
+components/ListingBoard.tsx
+Tek bir gayrimenkulün ayrıntılı görüntüsü (belgeler, kiracı, ödeme, demirbaş).	State yönetimi dağınık, API‑error‑handling tekrarı.
+components/BackButton.tsx
+“Geri” düğmesi (paneli kapat veya tarayıcı geri).	aria‑label eksik → erişilebilirlik sorunu.
+[styles.css]	Global stil dosyası.	Scoped‑class çakışması, responsive/dark‑mode yok.
+[umay emlak program detayları benim yazdığım.txt]	İş süreci, veri modeli, UI/UX, mimari önerileri, eksiklerin ve risklerin uzun bir değerlendirmesi (≈ 4 k satır).	İçerik çok detaylı, kodda eksik pek çok öneri bulunuyor.
+2️⃣ Kritik Hatalar ve Nedenleri
+#	Alan	Hata / Eksik	Açıklama (Neden)	Çözüm (Kısa)
+1	Routing	Sayfalar useState<Page> ile yönetiliyor, URL yok.	Kullanıcı bir sayfaya doğrudan link (ör. /listings) veremez, SEO ve paylaşım imkansız.	react-router-dom ekle, BrowserRouter içinde <Route path="/listings" element={<Listings />} /> vb.
+2	State Management	Listings, Dashboard, ListingBoard ayrı useState’lerde aynı API’yi tekrar çekiyor.	Çoklu fetch, yarış (race) durumları, tutarsız UI.	
+3	Bileşen Boyutu	Listings.tsx 800 satır, 10+ sorumluluk (filtre, tablo, detay, form).	Single‑Responsibility Principle ihlali → bakım ve test çok zor.	
+4	API Wrapper (api.ts)	Hata bloğu her yerde catch{ setError('…') } tekrarı.	Tekrarlı kod, hataların tip‑güvenliği düşük.	
+5	Stil / UI‑UX	Tek global styles.css, sınıf isimleri çakışma riski, responsive yok, koyu‑tema eksik.		
+6	Erişilebilirlik (a11y)	BackButton sadece görsel “← Geri”, aria-label yok; diğer düğmeler aria‑pressed vb. eksik.		
+7	Performans	Tüm gayrimenkuller allRows içinde tutuluyor, tablo içinde virtualization yok.		
+8	Veri Senkronizasyonu / Depolama	Belgeler sadece telefon hafızasında (yerel).		
+9	Güvenlik	Rol kontrolü sadece frontend (session.role).		
+10	Ödeme Entegrasyonu	Tek bir “fiyat güncelle” butonu; sanal POS yok, komisyon hesaplama sadece UI’da.		
+11	Test & CI	vitest.config.ts var fakat testler yok, CI pipeline eksik.		
+12	Bildirim / Otomasyon	Cron‑tabanlı hatırlatıcılar koda gömülü değil, sadece UI’da “bugün” sayaçları.		
+13	Rol‑tabanlı Paneller	Tek bir UI, farklı kullanıcı (admin / personel / mal sahibi / kiracı) için farklı görünüm yok.		
+14	Veritabanı Modeli	Şu an kodda doğrudan Listing, Owner, Tenant gibi tipler var ama çok‑çok ilişkiler tanımlı değil.		
+15	Doküman/Medya Yönetimi	Dosya yolu doğrudan API’ye FormData ile gönderiliyor, meta veri yok, watermark eksik.		
+16	Kod Kalitesi	Hard‑coded Türkçe stringler ("Kiracı", "Satılık").		
+17	Responsive / Mobil	UI sadece geniş ekran için tasarlanmış, mobilde “swipe‑raf” çalışmayabilir.		
+3️⃣ Eksik Fonksiyonel Özellikler (Metin Dosyasındaki Gereksinimler)
+Modül	Gereksinim	Mevcut Durum	Nasıl Eklenir
+Mal Sahibi Paneli	Kişisel portföy, belgeler, ödeme takibi, şeffaf raporlar.	UI’da sadece Owners listesi var, detay eksik.	Yeni OwnerDetail bileşeni → Property listesi, documents, rentHistory, commission.
+Kiracı Paneli	Sözleşme PDF, ödeme butonu, dekont upload, arıza talebi.	People sayfası temel liste; ödeme ve arıza yok.	TenantDashboard → LeaseInfo, PaymentForm, IssueTicket.
+Personel Yönetimi	Atama/delegasyon, performans geçmişi, görev listesi.	Team ve TeamPortfolio var ancak atama ve log yok.	PersonnelDetail → assignedProperties, taskLog, performanceChart.
+Raf / Kategorileme	Dinamik raflar (Satılık/Kiralık, Bölgesel, Öne Çıkan, Kişisel).	Sadece statik “raf” UI’sı.	Raf yönetimi API: GET /shelves, POST /shelves, PATCH /shelves/:id. Front‑end Shelf bileşeni, drag‑&‑drop (react‑beautiful‑dnd).
+Ödeme & Komisyon	Kira + komisyon (ör. 30 000 TL + 3 000 TL), dekont yükleme, banka havalesi.	Tek savePrice/saveAuthority; komisyon otomatik yok.	Payment Service: POST /payments (amount, commission, payer, propertyId). UI: PaymentCard with breakdown, UploadReceipt.
+Bildirim & Hatırlatıcı	Kira gün → 4 gün önce, DASK bitişi, sözleşme yenileme, geciken ödeme.	Sadece “bugün” sayaç.	
+CRM / Potansiyel Alıcı	Müşteri adayları, iletişim, takip, randevu, teklif geçmişi.	Dosyada öneri, kodda yok.	
+Raporlama / Finans	Gelir‑gider, komisyon raporu, mal sahibi hesabı ekstresi.	ListingMoney var ama rapor yok.	
+Çoklu Dil / i18n	UI metinlerinin çevirilebilir olması.	Hard‑coded Türkçe.	
+Offline / Cache	Saha ortamında veri offline çalışmalı, senkronize olmalı.	Yalnızca tarayıcı önbelleği var.	
+Güvenlik	2FA / email‑login, veri şifreleme, rol‑bazlı API erişimi.	.env içinde token, ama 2FA yok.	
+Dosya Filigran	Fotoğraflara otomatik logo / tarih filigranı.	Yok.	
+Doküman Şablon Otomasyonu	Kira / satış sözleşmesi şablonları otomatik doldurulup PDF üretilmeli.	Sadece manual upload.	
+Kullanıcı Onboarding	İlk kurulumda rol, ofis, ortak, personel ayarları.	Tek session login.	
+4️⃣ Mimari ve Teknoloji Önerileri (Önerilen Yol Haritası)
+4.1 Genel Mimari
+
+UMAY EMLAK (SaaS)  
+ ├─ Frontend (React + TS)                 ← Masaüstü yönetim paneli  
+ ├─ Mobil (React Native + Expo)           ← Saha uygulaması  
+ ├─ Backend (FastAPI)                     ← Tek API, tek veri kaynağı  
+ ├─ DB (PostgreSQL)                       ← İlişkisel model, migration (Alembic)  
+ ├─ Dosya Depolama (S3 / MinIO)            ← Belgeler, foto/ video, watermark  
+ ├─ İş Zekası / Raporlama (SQL‑based)      ← Finans, KPI, CRM  
+ ├─ Task Scheduler (APScheduler)          ← Otomatik hatırlatıcılar, cron jobs  
+ ├─ Auth (JWT + OAuth2) + RBAC middleware  ← Rol‑tabanlı güvenlik  
+ └─ CI/CD (Docker‑Compose + GitHub Actions) → Test, lint, build, deploy
+4.2 Adım‑Adım Geliştirme Planı (3 aylık Sprint)
+Sprint	Hedef	Alt‑görevler	Çıktı
+1	Altyapı & Çekirdek Backend	• FastAPI boilerplate → /auth, /users, /properties
+• PostgreSQL + SQLAlchemy modeller (User, Role, Property, Owner, Lease, Document, Payment, Shelf)
+• Docker‑Compose (db, api, s3‑local)
+• JWT + RBAC middleware	Çalışır API, Docker dev ortamı.
+2	React + Vite Yönetim UI	• react-router-dom entegrasyonu
+• Global state → React‑Query (fetch, cache)
+• UI Kit: TailwindCSS + CSS‑Modules
+• İlk sayfa: Dashboard (istatistik, aksiyon merkezi)	Çalışan Admin paneli, URL tabanlı gezinme.
+3	Modüler Bileşenler	• ListingTable, FilterPanel, ListingDetail
+• OwnerDetail, TenantDashboard, PersonnelCard
+• Virtualized tablo (react‑window)
+• Accessible button / aria‑labels	UI kodu SRP’ye uygun, performans arttı.
+4	Dosya & Medya Depolama	• S3‑compatible storage (MinIO local)
+• API: /files/upload, /files/:id/download
+• Watermark service (Pillow)
+• Frontend: drag‑&‑drop + preview
+• Offline cache (service‑worker)	Belgeler bulutta, offline senkronizasyon.
+5	Ödeme & Komisyon Modülü	• Sanal POS entegrasyonu (Iyzico sandbox)
+• Payment schema: amount, commission, status
+• UI: PaymentCard (breakdown), receipt upload
+• Backend webhook listener (ödeme onayı)	Güvenli tahsilat, komisyon raporu.
+6	Bildirim & Otomasyon	• APScheduler jobs (kira hatırlatıcı, DASK yenileme)
+• E‑mail (SMTP) + push (WebSocket)
+• Dashboard “Action Center” widget	Olay bazlı hatırlatıcılar.
+7	Rol‑tabanlı Paneller	• Admin / Personel / Owner / Tenant UI rotaları
+• Frontend route guard (<Protected />)
+• API ACL (Depends(get_current_user, RoleCheck))	Güvenli erişim, farklı görünüm.
+8	Test, CI & Deploy	• Vitest + React Testing Library
+• End‑to‑end test (Playwright)
+• GitHub Actions: lint → test → build → Docker push
+• Staging ortamı (Docker‑Swarm veya Render)	Geliştirme akışı otomatik, kalite güvencesi.
+9	Mobil (React Native) İlk Versiyon	• API client (axios)
+• Kamera + file upload (expo-image-picker)
+• Offline queue (expo‑task‑manager)
+• Saha‑odaklı UI (rappel, swift navigation)	Saha ekipleri için mobil uygulama.
+5️⃣ Veri Model Önerileri (ER‑Diagram)
+
+User (id, name, email, password_hash, role)           <-- RBAC
+Role (id, name)                                       <-- admin / staff / owner / tenant
+Owner (id, name, phone, email)                       <-- can have many PropertyOwners
+Property (id, address, city, district, type, area_m2, rooms, floor, block, unit_no)
+PropertyOwner (property_id, owner_id, share_percent) <-- many‑to‑many
+Listing (id, property_id, kind [sale|rent], status, price, entered_at, published_at, authority_no)
+Lease (id, property_id, tenant_id, start_date, end_date, rent_price, deposit, status)
+Tenant (id, name, phone, email)
+Document (id, property_id, listing_id?, tenant_id?, type, filename, url, is_important, uploaded_by, uploaded_at)
+Payment (id, lease_id, amount, commission, method, status, created_at, receipt_url)
+Shelf (id, name, owner_id?, tenant_id?, user_id?, filter_json)   <-- dynamic raf
+TaskLog (id, property_id, user_id, action, description, timestamp)
+Alan‑bazlı ve zaman‑bazlı sorgulamalar (WHERE price BETWEEN ? AND ?, WHERE lease.end_date < now() + interval '30 days').
+Soft delete (is_active flag) ile tarihsel veri kaybı önlenir.
+Audit (TaskLog) sayesinde “kim ne zaman neyi değiştirdi” sorusuna tarih‑kullanıcı cevabı verir.
+6️⃣ UI/UX – Premium Tasarım Önerileri (Gemini‑stiline paralel)
+Bölüm	Tasarım İpucu	Teknoloji
+Renk Paleti	Gece laciverti #0A0E27, neon turuncu #FF7F00, açık mavi #4ABEFF, metin beyaz #F5F5F5.	Tailwind bg-[#0A0E27], text-[#FF7F00]
+Typography	Google Inter (weights 400/600) + Outfit başlıklar.	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Outfit:wght@400;600" rel="stylesheet">
+Glassmorphism Card	background: rgba(255,255,255,0.12); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);	
+Micro‑Animasyon	Hover’da transform: translateY(-2px); box-shadow: 0 8px 12px rgba(0,0,0,0.2);
+Butonlarda transition: all 0.2s.	
+Responsive Grid	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+Mobile’da flex-col.	
+Dark‑Mode	prefers-color-scheme: dark media query, otomatik switch.	
+Skeleton Loader	Tablo/Detay yüklenirken gri placeholder (skeleton sınıfları).	
+Notification “Action Center”	Renk kodlu kartlar (kırmızı‑geciken, sarı‑yaklaşan, mavi‑bugün).	
+Drag‑&‑Drop Raf	react-beautiful-dnd ile raflar arasında taşıma, “important” işaretleme.	
+PDF/Doc Viewer	Umay PDF Reader entegrasyonu: inline iframe + anotasyon toolbar.	
+7️⃣ En Önemli “Kırmızı Bayraklar” (Acil Düzeltme)
+Router ve URL eksikliği – acil: react-router-dom kur, App.tsx’yi BrowserRouter içinde sarmala.
+Rollenin sadece Front‑end’te kontrol edilmesi – yüksek: Backend RBAC middleware ekle, token‑tabanlı kimlik doğrulama.
+Doğrudan telefon hafızasında belge depolama – kritik: Bulut depolamaya geç, dosya metadatasını DB’ye kaydet.
+Ödeme/komisyon mantığının UI’da sabit kodlanması – yüksek: Sanal POS entegrasyonu ve komisyon tablosu oluştur.
+Geniş monolitik bileşen (Listings) – yüksek: Bileşenleri böl, useReducer/React‑Query ile state yönet.
+8️⃣ Çıktı – Özet Yol Haritası (Kısa)
+Backend → FastAPI + PostgreSQL + RBAC + S3.
+Frontend (Masaüstü) → React‑TS + Vite + React‑Router + React‑Query + Tailwind + Framer‑Motion.
+Kritik Modüller: Dashboard, Property CRUD, Owner/Tenant panelleri, Payment, Notification, Shelf‑manager.
+Mobil → React‑Native (Expo) → aynı API.
+CI/CD → Docker‑Compose + GitHub Actions (test → lint → build → deploy).
+Dokümantasyon → README, API‑spec (OpenAPI), ER‑diagram, UI mockup (Figma veya generated images).
+9️⃣ Sonraki Adım
+Bu belgeyi (tam makale) ajara gönder → "Bu gereksinim ve hata listesini al, bir sonraki sprint için plan oluştur ve kod üret."
+Ajandan “implementation_plan.md” oluşturulurken aşağıdaki Priority‑1 iş listesine (router, auth, veri modeli) öncelik ver.
+Araştırma: FastAPI‑JWT‑RBAC örnekleri, S3‑MinIO Python SDK, Iyzico sandbox entegrasyonu.
+Not: Belirtilen tüm dosya yolları mutlaktir ve Windows‑formatında (c:/...). Dosyaları düzenlerken file:/// ile link vererek doğrudan erişim sağlayabilirsin.
+
+Hazırlanan bu doküman, mevcut kodun kapsamlı bir analizini, hataları, eksikleri ve uygulanması gereken tam bir yol haritasını içerir. Ajan bu planı izleyerek yöneticinin (senin) istediği “premium, güvenli ve ölçeklenebilir” UMAY EMLAK platformunu oluşturabilir.
 

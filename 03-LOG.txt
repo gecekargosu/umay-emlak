@@ -265,3 +265,13 @@ KARAR:K-72 randevu kaydı silinmez; sonuç (geldi/gelmedi/iptal) + not saklanır
 YARIM:Randevu takvimde ayrı işaret olarak görünmüyor (yalnız Randevular ekranında) · randevudan tek tıkla teklif açma yok, teklif bağlantısı alan olarak duruyor · hatırlatma gönderimi yok
 SIRADAKI:Randevuyu takvimde gösterme + alıcı adayına portföy önerisi (SIRA 6).
 --------------------------------------------------------------------------------
+
+[2026-11-04 19:45] TUR:32 | MODUL:Takvimde randevu (Y-87) + GitHub deposu | IS:(1) Takvim ucu (GET /calendar) artık ay içindeki randevuları da döndürüyor: iptal edilenler hariç, saat (Europe/Istanbul), kişi adı, mülk ve yer. Gün panelinde "📅" simgesi ve "randevu" rozeti; düğme "Randevuya git" → Randevular ekranı. Ana sayfadaki kompakt takvim de aynı veriyi gösteriyor. (2) GitHub: gecekargosu hesabında private "umay-emlak" deposu açıldı, master dalı tam geçmişle gönderildi; .env ve .freebuff git dışında (K-19). (3) Antigravity'nin ikinci raporu değerlendirildi: FastAPI'ye geçiş, JWT/2FA, S3, sanal POS, React-Query, Tailwind/glassmorphism, i18n önerileri reddedildi (K-74 gerekçeleri); gerçek eksik olarak yalnız denetim kaydı (SIRA 10), filigran (SIRA 11), yükleme göstergesi ve panel ayrımı (SIRA 13/14) listeye alındı.
+HATA ANALIZI: (a) Takvimde randevu "gün" anahtarı timestamptz'den türetilirken saat dilimi kayması olabilirdi; tarih ve saat Europe/Istanbul'a çevrilerek alınıyor, böylece 00:30 randevusu önceki güne düşmüyor. (b) İptal edilen randevu takvimde kalırsa gün yanlışlıkla dolu görünür → status <> 'cancelled' süzgeci. (c) Testte randevu 2030-01'e yazıldığı için takvim testi de o ayla sınırlı; demo verisi etkilenmiyor.
+DOGRULAMA: typecheck 0 · web build 0 · pnpm test 15 dosya / 61 test geçti (randevu testi artık takvimde 14:30 randevusunu da doğruluyor). Tarayıcıda Randevular'da kayıtlı randevunun takvim gününde "randevu" rozetiyle göründüğü kontrol edildi.
+DOSYA:apps/api/src/routes/calendar.ts, apps/web/src/pages/Calendar.tsx, apps/api/test/appointments.test.ts, 00/01/03/04/06 + kaynaklar/yedek, GitHub deposu
+TEST:typecheck 0 · build 0 · test 15/61
+KARAR:K-75 randevular takvimde saatli iş olarak görünür; iptal edilen randevu takvimde gösterilmez · K-76 kaynak kod private GitHub deposunda (gecekargosu/umay-emlak); sırlar ve yerel yedekler depo dışında
+YARIM:Ana sayfada "bugünün randevusu" ayrı kutu değil, takvim gününde görünüyor · randevudan tek tık teklif hâlâ yok
+SIRADAKI:Alıcı adayına portföy önerisi (SIRA 6), sonra arıza/bakım talebi (SIRA 7).
+--------------------------------------------------------------------------------

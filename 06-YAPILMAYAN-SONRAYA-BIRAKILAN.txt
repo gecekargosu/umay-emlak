@@ -365,5 +365,5 @@ Y-85 | Mülk dosyasında poliçe özeti — YAPILDI (2026-11-04, TUR:30): mülk
 Y-86 | Randevu / yer gösterme — SIRA 5. YAPILDI (2026-11-04, TUR:31):
        appointment tablosu + Randevular ekranı + sonuç işaretleme. Kalan:
        takvimde randevu işareti, randevudan teklife tek tık, hatırlatma.
-Y-87 | Randevuların takvimde görünmesi — şimdilik ayrı ekranda; gün panelinde
-       "randevu" türü yok.
+Y-87 | Randevuların takvimde görünmesi — YAPILDI (2026-11-04, TUR:32): gün
+       panelinde "randevu" rozeti, saat ve "Randevuya git" düğmesi.
