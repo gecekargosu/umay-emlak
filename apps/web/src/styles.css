@@ -395,6 +395,24 @@ tr.selected {
   color: var(--danger);
 }
 
+.action-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: grid;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.action-list li {
+  border-left: 3px solid var(--line);
+  padding: 2px 0 2px 10px;
+}
+
+.action-list li:has(.badge) {
+  border-left-color: #d9a53a;
+}
+
 .doc-list,
 .suggestion-list {
   list-style: none;

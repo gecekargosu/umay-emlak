@@ -73,7 +73,7 @@ export function App() {
       </aside>
 
       <main>
-        {page === "pano" && <Dashboard />}
+        {page === "pano" && <Dashboard onGo={(next) => setPage(next as Page)} />}
         {page === "portfoy" && <Listings canApprove={session.canApprove} />}
         {page === "kisiler" && <People />}
         {page === "kiralar" && <Rents />}

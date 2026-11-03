@@ -86,3 +86,11 @@ YARIM:06 dosyasindaki 46 kayit (oncelik sirasi: Y-01/Y-02 ekip+sifre ekrani, Y-1
 SORU:yok
 SIRADAKI:Dilim 5 tamamlama — pano "bugun ne yapilmali" (Y-10), ardindan ekip ve sifre ekranlari (Y-01/Y-02); sonra Dilim 6 Tauri kabuk (Y-22).
 --------------------------------------------------------------------------------
+[2026-11-03 16:24] TUR:12 | MODUL:pano (Y-10) | IS:"Bugun ne yapilmali" panosu yapildi. Yeni /api/v1/today ucu tek sorgu setinde su isleri donduruyor: gecikmis kiralar (gun sayisi + ihtarname/hatirlatma kademesi), bu hafta vadesi gelenler, belgesi eksik portfoy (tur matrisine gore), onay bekleyen belge eslestirmesi, taslak mal sahibi aktarimi, 30 gun icinde bitecek sozlesmeler ve ay ozeti (tahakkuk/tahsil). Pano artik sayi degil IS gosteriyor; her baslik ilgili ekrana goturuyor. 06 dosyasinda Y-10 YAPILDI olarak isaretlendi.
+DOSYA:apps/api/src/routes/today.ts, apps/api/src/app.ts, apps/api/test/today.test.ts, apps/web/src/{api.ts,App.tsx,styles.css,pages/Dashboard.tsx}, 00-BASLA-BURADAN.txt, 01-BLUEPRINT.txt, 06-YAPILMAYAN-SONRAYA-BIRAKILAN.txt
+TEST:pnpm -r typecheck exit=0 · pnpm test 7/7 dosya gecti (yeni today.test.ts dahil) · web build exit=0 (264 KB) · canli /today: counts overdue=0, dueSoon=1 (Demo Kiracı 18.500,00 TL, 2 gun), missingDocs=1 (Demo Daire: Tapu + kimlik), ay ozeti Kasim 2026 · yeni test: gecmis donem tahakkuku gecikmis olarak listeleniyor ve B ofisine sizmiyor
+KARAR:pano hesap yapmaz, liste + gerekce doner; eylem ilgili ekranda yapilir (onay yetkisi orada uygulanir) · "bugun" tanimi 7 gun icinde vadesi gelen, gecikme 3+ gun hatirlatma, 15+ gun ihtarname adayi · belge eksigi hem ilan hem mulk bagindaki belgelerden hesaplanir
+YARIM:ekip ekrani (Y-01), sifre degistirme ekrani (Y-02), belge arsivleme (Y-07), ters kayit (Y-09), kira artisi/DASK (Y-11/Y-12)
+SORU:yok
+SIRADAKI:Y-01 + Y-02 — ekip yonetimi ve zorunlu sifre degistirme ekranlari (API hazir); ardindan Y-07 belge arsivleme, Y-09 ters kayit.
+--------------------------------------------------------------------------------

@@ -105,6 +105,8 @@ Dilim 2: kişi / gayrimenkul / hisseli malik / birleştirme / Excel-CSV aktarma.
 Dilim 3: belge deposu (sha256), tür matrisi, onaylı eşleştirme, ilan detayı, raf.
 Dilim 4+5 (birlikte): sözleşme → aylık tahakkuk → tahsilat (elden nakit dahil)
         → gecikme kademeleri → mal sahibine dönem aktarımı + yazdırılabilir ekstre.
+Dilim 5 pano: "bugün ne yapılmalı" — gecikmiş kira, bu hafta vadesi gelen,
+        belgesi eksik portföy, onay bekleyen eşleşme, taslak aktarım, bitecek sözleşme.
 Arayüz: Pano, Portföy, Kişiler, Kiralar, Sözleşmeler, Sahipler, Belgeler, İçe Aktar.
 
 İKİ SUNUCU BİRLİKTE ÇALIŞIR:
@@ -118,8 +120,9 @@ YEREL KULLANICI AÇMA (dev):
 Test: 30+ test, 6 dosya, sıralı koşu (auth testleri şifre değiştirdiği için).
 Belgeler .data/documents altında (git dışı).
 
-SIRADAKİ: Dilim 5 tamamlama — pano "bugün ne yapılmalı", kira artışı/DASK
-yükümlülükleri ve bildirim kademelerinin panele bağlanması. Sonra Dilim 6 (Tauri kabuk).
+SIRADAKİ: Y-01 + Y-02 — ekip yönetimi ekranı ve zorunlu şifre değiştirme ekranı
+(API'leri hazır, arayüz yok). Sonra Y-07 belge arşivleme, Y-09 ters kayıt,
+Y-22 Tauri kabuk.
 
-BU TURDA AÇIK KALANLAR: 06-YAPILMAYAN-SONRAYA-BIRAKILAN.txt (Y-10 pano,
-Y-01/Y-02 ekip + şifre ekranı, Y-07 belge arşivleme, Y-09 ters kayıt vb.)
+BU TURDA AÇIK KALANLAR: 06-YAPILMAYAN-SONRAYA-BIRAKILAN.txt (Y-01/Y-02 ekip +
+şifre ekranı, Y-07 belge arşivleme, Y-09 ters kayıt, Y-11 kira artışı, Y-12 DASK vb.)

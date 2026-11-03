@@ -251,7 +251,9 @@ apps/api/src/routes/contracts.ts        sözleşme açma/liste/detay, aylık tah
 apps/api/src/routes/charges.ts          açık/gecikmiş tahakkuklar, tahsilat,
                                         hatırlatma/ihtarname kaydı
 apps/api/src/routes/payouts.ts          dönem önizleme, aktarım, ekstre (A4 HTML)
+apps/api/src/routes/today.ts            "bugün ne yapılmalı" iş listesi (/api/v1/today)
 apps/web/src/pages/{Rents,Contracts,Payouts}.tsx
+apps/web/src/pages/Dashboard.tsx        iş listesi panosu (başlık → ilgili ekran)
 
 KURALLAR:
 - Sözleşme İLANA bağlanır; açılınca ilan kapanır ve durum geçmişine yazılır.

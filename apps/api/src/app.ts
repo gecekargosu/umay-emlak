@@ -23,6 +23,7 @@ import { documentRoutes } from "./routes/documents.js";
 import { contractRoutes } from "./routes/contracts.js";
 import { chargeRoutes } from "./routes/charges.js";
 import { payoutRoutes } from "./routes/payouts.js";
+import { todayRoutes } from "./routes/today.js";
 
 export const app = new Hono();
 
@@ -51,6 +52,7 @@ app.route("/api/v1/documents", documentRoutes);
 app.route("/api/v1/contracts", contractRoutes);
 app.route("/api/v1/charges", chargeRoutes);
 app.route("/api/v1/payouts", payoutRoutes);
+app.route("/api/v1/today", todayRoutes);
 
 app.get("/api/v1/me", async (c) => {
   const session = await resolveSession(c);

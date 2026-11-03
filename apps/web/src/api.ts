@@ -177,6 +177,55 @@ export type ListingDetail = {
   canPublish: boolean;
 };
 
+export type Today = {
+  date: string;
+  counts: {
+    overdue: number;
+    dueSoon: number;
+    missingDocs: number;
+    pendingMatches: number;
+    draftPayouts: number;
+    expiringContracts: number;
+  };
+  charges: {
+    overdue: TodayCharge[];
+    dueSoon: TodayCharge[];
+  };
+  missingDocs: Array<{ listingId: string; title: string; status: string; missing: string[] }>;
+  pendingMatches: Array<{ id: string; documentId: string; score: number; documentTitle: string }>;
+  payouts: Array<{
+    id: string;
+    propertyTitle: string;
+    period: string;
+    periodLabel: string;
+    netKurus: number;
+    net: string;
+  }>;
+  contracts: Array<{ id: string; propertyTitle: string; endDate: string; daysLeft: number }>;
+  month: {
+    period: string;
+    periodLabel: string;
+    charged: string;
+    collected: string;
+    chargedKurus: number;
+    collectedKurus: number;
+  };
+};
+
+export type TodayCharge = {
+  id: string;
+  tenantName: string;
+  tenantPhone: string | null;
+  propertyTitle: string;
+  remainingKurus: number;
+  remaining: string;
+  dueDate: string;
+  daysOverdue: number;
+  daysLeft: number;
+  noticeSentAt: string | null;
+  level: "reminder" | "formal" | null;
+};
+
 export type ContractRow = {
   id: string;
   status: string;
