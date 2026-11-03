@@ -13,7 +13,8 @@
   "scripts": {
     "migrate": "node --import tsx src/migrate.ts",
     "seed": "node --import tsx src/seed.ts",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "user": "node --import tsx src/dev-user.ts"
   },
   "dependencies": {
     "drizzle-orm": "^0.44.0",

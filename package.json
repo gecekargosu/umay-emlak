@@ -12,6 +12,7 @@
     "build:web": "pnpm --filter @umay/web build",
     "db:migrate": "pnpm --filter @umay/db migrate",
     "db:seed": "pnpm --filter @umay/db seed",
+    "db:user": "pnpm --filter @umay/db user",
     "test": "vitest run",
     "typecheck": "pnpm -r typecheck"
   },

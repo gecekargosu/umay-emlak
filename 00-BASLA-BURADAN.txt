@@ -93,21 +93,27 @@ docker-compose.yml     PostgreSQL 16 (dev)
 ====================================================================
 ====================================================================
 ====================================================================
-6) NEREDE KALDIK (2026-11-03 · Dilim 3 bitti)
+====================================================================
+6) NEREDE KALDIK (2026-11-03 · Dilim 3 + kira hattı bitti)
 ====================================================================
 Dilim 0: şema + RLS + para modeli + API iskeleti.
 Dilim 1: giriş (scrypt), imzalı çerez + iptal edilebilir oturum, ekip, yetki.
 Dilim 2: kişi / gayrimenkul / hisseli malik / birleştirme / Excel-CSV aktarma.
-Dilim 3: belge deposu (sha256), tür matrisi, onaylı eşleştirme, ilan detayı,
-         fiyat ve durum geçmişi, "raf" ekranı.
-Arayüz: giriş, pano, portföy (+ilan detayı), kişiler, belgeler, içe aktarma.
+Dilim 3: belge deposu (sha256), tür matrisi, onaylı eşleştirme, ilan detayı, raf.
+Dilim 4+5 (birlikte): sözleşme → aylık tahakkuk → tahsilat (elden nakit dahil)
+        → gecikme kademeleri → mal sahibine dönem aktarımı + yazdırılabilir ekstre.
+Arayüz: Pano, Portföy, Kişiler, Kiralar, Sözleşmeler, Sahipler, Belgeler, İçe Aktar.
 
 İKİ SUNUCU BİRLİKTE ÇALIŞIR:
   pnpm dev        → API  http://127.0.0.1:3100
   pnpm dev:web    → arayüz http://127.0.0.1:5173  (/api proxy ile API'ye gider)
 
-Test: 30/30 yeşil (5 dosya). Belgeler .data/documents altında (git dışı).
-Demo giriş (yalnız dev): aysan.yilmaz@umay-emlak.local / Umay!2026
+YEREL KULLANICI AÇMA (dev):
+  pnpm db:user <e-posta> <şifre> [rol] [ofis-slug] ["Ad Soyad"]
+  Şifre en az 8 karakter ister (hashPassword kuralı).
 
-SIRADAKİ: Dilim 4 — sözleşme, kira tahakkuku ve tahsilat (elden nakit dahil),
-gecikme kademeleri (hatırlatma/ihtarname), mal sahibine toplu aktarım + PDF.
+Test: 30+ test, 6 dosya, sıralı koşu (auth testleri şifre değiştirdiği için).
+Belgeler .data/documents altında (git dışı).
+
+SIRADAKİ: Dilim 5 tamamlama — pano "bugün ne yapılmalı", kira artışı/DASK
+yükümlülükleri ve bildirim kademelerinin panele bağlanması. Sonra Dilim 6 (Tauri kabuk).

@@ -177,6 +177,113 @@ export type ListingDetail = {
   canPublish: boolean;
 };
 
+export type ContractRow = {
+  id: string;
+  status: string;
+  startDate: string;
+  endDate: string | null;
+  rentKurus: number;
+  rent: string;
+  depositKurus: number;
+  deposit: string;
+  dueDay: number;
+  utilityPayer: string;
+  tenantName: string;
+  tenantPhone: string | null;
+  propertyTitle: string;
+  listingId: string;
+};
+
+export type ContractCharge = {
+  id: string;
+  period: string;
+  kind: string;
+  amountKurus: number;
+  amount: string;
+  dueDate: string;
+  status: string;
+  remindedAt: string | null;
+  noticeSentAt: string | null;
+  paidKurus: number;
+  paid: string;
+  remainingKurus: number;
+  remaining: string;
+  daysOverdue: number;
+};
+
+export type ContractDetail = {
+  contract: {
+    id: string;
+    status: string;
+    startDate: string;
+    endDate: string | null;
+    rentKurus: number;
+    rent: string;
+    depositKurus: number;
+    deposit: string;
+    dueDay: number;
+    utilityPayer: string;
+    endReason: string | null;
+  };
+  tenant: { id: string; fullName: string; phone: string | null; email: string | null };
+  property: { id: string; title: string; city: string | null; district: string | null };
+  charges: ContractCharge[];
+  totals: { charged: number; paid: number; open: number };
+};
+
+export type ChargeRow = {
+  id: string;
+  contractId: string;
+  period: string;
+  kind: string;
+  amountKurus: number;
+  amount: string;
+  paidKurus: number;
+  paid: string;
+  remainingKurus: number;
+  remaining: string;
+  dueDate: string;
+  status: string;
+  remindedAt: string | null;
+  noticeSentAt: string | null;
+  daysOverdue: number;
+  nextAction: "reminder" | "formal" | null;
+  tenantName: string;
+  tenantPhone: string | null;
+  propertyTitle: string;
+};
+
+export type PayoutRow = {
+  id: string;
+  period: string;
+  periodLabel: string;
+  grossKurus: number;
+  gross: string;
+  feeKurus: number;
+  fee: string;
+  expenseKurus: number;
+  expense: string;
+  netKurus: number;
+  net: string;
+  status: "draft" | "paid";
+  paidAt: string | null;
+  note: string | null;
+  contractId: string;
+  propertyTitle: string;
+  ownerName: string | null;
+};
+
+export type PayoutPreviewRow = {
+  contractId: string;
+  tenantName: string;
+  ownerName: string;
+  propertyTitle: string;
+  rentKurus: number;
+  rent: string;
+  grossKurus: number;
+  gross: string;
+};
+
 export type ImportResult = {
   dryRun: boolean;
   filename: string;

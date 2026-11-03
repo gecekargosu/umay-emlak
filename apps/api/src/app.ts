@@ -20,6 +20,9 @@ import { propertyRoutes } from "./routes/properties.js";
 import { importRoutes } from "./routes/import.js";
 import { listingRoutes } from "./routes/listings.js";
 import { documentRoutes } from "./routes/documents.js";
+import { contractRoutes } from "./routes/contracts.js";
+import { chargeRoutes } from "./routes/charges.js";
+import { payoutRoutes } from "./routes/payouts.js";
 
 export const app = new Hono();
 
@@ -45,6 +48,9 @@ app.route("/api/v1/properties", propertyRoutes);
 app.route("/api/v1/import", importRoutes);
 app.route("/api/v1/listings", listingRoutes);
 app.route("/api/v1/documents", documentRoutes);
+app.route("/api/v1/contracts", contractRoutes);
+app.route("/api/v1/charges", chargeRoutes);
+app.route("/api/v1/payouts", payoutRoutes);
 
 app.get("/api/v1/me", async (c) => {
   const session = await resolveSession(c);

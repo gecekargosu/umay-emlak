@@ -93,7 +93,7 @@ export function Login({ onLogin }: { onLogin: (session: Session) => void }) {
         </button>
 
         <p className="hint">
-          Geliştirme hesabı: aysan.yilmaz@umay-emlak.local / Umay!2026
+          Geliştirme hesabı: aysan.kilic@umay-emlak.local / Umay!2026
         </p>
       </form>
     </div>

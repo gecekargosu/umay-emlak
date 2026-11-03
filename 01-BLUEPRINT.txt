@@ -238,3 +238,24 @@ KURALLAR:
   "zorla" derse durum geçmişine forced=true yazılır.
 - Fiyat/durum değişiklikleri geçmiş tablolarına yazılır; geçmiş silinmez.
 - Para metni ("4.300.000") sunucuda kuruşa çevrilir; arayüz para hesabı yapmaz.
+
+====================================================================
+KİRA HATTI (Dilim 4+5 birlikte) — 2026-11-03
+====================================================================
+packages/db/migrations/0005_rents.sql   sözleşme bitişi, charge_notice,
+                                        owner_payout + RLS
+apps/api/src/routes/contracts.ts        sözleşme açma/liste/detay, aylık tahakkuk,
+                                        sözleşme bitirme
+apps/api/src/routes/charges.ts          açık/gecikmiş tahakkuklar, tahsilat,
+                                        hatırlatma/ihtarname kaydı
+apps/api/src/routes/payouts.ts          dönem önizleme, aktarım, ekstre (A4 HTML)
+apps/web/src/pages/{Rents,Contracts,Payouts}.tsx
+
+KURALLAR:
+- Sözleşme İLANA bağlanır; açılınca ilan kapanır ve durum geçmişine yazılır.
+- Tahakkuk dönem başına tek: aynı ay ikinci kez üretilmez.
+- Tahsilat tahakkuka mahsup edilir; fazla ödeme REDDEDİLİR, kısmi ödeme serbest.
+- Elden nakit/ofis tahsilatında teslim alan kişi zorunlu (K-21).
+- Sahibe aktarım TAHSİL EDİLENDEN hesaplanır; tahsil edilmeyen kira aktarılmaz.
+  net = tahsil - takip bedeli (elle) - masraf. Dönem başına tek aktarım.
+- Ekstre yazdırılabilir HTML; tarayıcıdan PDF alınır (tasarımlı PDF sırada).

@@ -22,7 +22,7 @@ const TENANTS: TenantSeed[] = [
     slug: "umay-emlak",
     name: "Umay Emlak (pilot)",
     people: [
-      ["Aysan Yılmaz", "owner"],
+      ["Aysan Kılıç", "owner"],
       ["Mehmet Kaya", "partner"],
       ["Elif Demir", "agent"],
     ],

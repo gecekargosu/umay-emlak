@@ -16,7 +16,9 @@ import {
 
 export const authRoutes = new Hono();
 
-const LOGIN_LIMIT = 10;
+// Test koşuları aynı hesapla onlarca kez giriş yapar; sınır testte yükseltilir,
+// üretimde 15 dakikada 10 deneme kalır (brute-force koruması).
+const LOGIN_LIMIT = Number(process.env.LOGIN_RATE_LIMIT ?? 10);
 const LOGIN_WINDOW_MS = 15 * 60_000;
 const attempts = new Map<string, { count: number; resetAt: number }>();
 

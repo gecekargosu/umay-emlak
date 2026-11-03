@@ -237,6 +237,8 @@ export const contracts = pgTable(
     dueDay: integer("due_day").notNull().default(1),
     utilityPayer: utilityPayer("utility_payer").notNull().default("tenant"),
     status: contractStatus("status").notNull().default("active"),
+    endedAt: timestamp("ended_at", { withTimezone: true }),
+    endReason: text("end_reason"),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [index("contract_tenant_status_idx").on(t.tenantId, t.status)],
@@ -258,6 +260,9 @@ export const charges = pgTable(
     amountKurus: bigint("amount_kurus", { mode: "number" }).notNull(),
     dueDate: date("due_date", { mode: "string" }).notNull(),
     status: chargeStatus("status").notNull().default("open"),
+    /** K-28: gecikme kademeleri — hatırlatma ve ihtarname tarihleri */
+    remindedAt: timestamp("reminded_at", { withTimezone: true }),
+    noticeSentAt: timestamp("notice_sent_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [
@@ -425,6 +430,60 @@ export const listingStatusChanges = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [index("listing_status_change_listing_idx").on(t.tenantId, t.listingId)],
+);
+
+/** Gecikme bildirimi kaydı — kim, hangi kanaldan, ne zaman (K-28). */
+export const chargeNotices = pgTable(
+  "charge_notice",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tenantId: uuid("tenant_id")
+      .notNull()
+      .references(() => tenants.id, { onDelete: "cascade" }),
+    chargeId: uuid("charge_id")
+      .notNull()
+      .references(() => charges.id, { onDelete: "cascade" }),
+    level: text("level").$type<"reminder" | "formal">().notNull(),
+    channel: text("channel").notNull().default("phone"),
+    note: text("note"),
+    sentByUserId: uuid("sent_by_user_id").references(() => appUsers.id, { onDelete: "set null" }),
+    sentAt: timestamp("sent_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("charge_notice_tenant_idx").on(t.tenantId, t.chargeId)],
+);
+
+/**
+ * Mal sahibine dönem aktarımı (K-25).
+ * Tahsilat değildir: kiracıdan gelen para ile mal sahibine giden para ayrı kayıttır.
+ */
+export const ownerPayouts = pgTable(
+  "owner_payout",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    tenantId: uuid("tenant_id")
+      .notNull()
+      .references(() => tenants.id, { onDelete: "cascade" }),
+    contractId: uuid("contract_id")
+      .notNull()
+      .references(() => contracts.id, { onDelete: "restrict" }),
+    period: date("period", { mode: "string" }).notNull(),
+    grossKurus: bigint("gross_kurus", { mode: "number" }).notNull(),
+    feeKurus: bigint("fee_kurus", { mode: "number" }).notNull().default(0),
+    expenseKurus: bigint("expense_kurus", { mode: "number" }).notNull().default(0),
+    netKurus: bigint("net_kurus", { mode: "number" }).notNull(),
+    status: text("status").$type<"draft" | "paid">().notNull().default("draft"),
+    paidAt: timestamp("paid_at", { withTimezone: true }),
+    method: paymentMethod("method"),
+    note: text("note"),
+    createdByUserId: uuid("created_by_user_id").references(() => appUsers.id, {
+      onDelete: "set null",
+    }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("owner_payout_contract_period_uidx").on(t.contractId, t.period),
+    index("owner_payout_tenant_period_idx").on(t.tenantId, t.period),
+  ],
 );
 
 /** Hisseli mülk: bir gayrimenkulde birden fazla malik (K-17). */

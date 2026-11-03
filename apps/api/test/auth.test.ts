@@ -9,7 +9,7 @@ import { eq } from "drizzle-orm";
 import { closePool, getPool, schema, withTenant } from "@umay/db";
 import { app } from "../src/app.js";
 
-const AYSAN = "aysan.yilmaz@umay-emlak.local";
+const AYSAN = "aysan.kilic@umay-emlak.local";
 const ELIF = "elif.demir@umay-emlak.local";
 const B_OFIS = "b.ofis.sahibi@test-ofis-b.local";
 const PASSWORD = "Umay!2026";
@@ -54,7 +54,7 @@ describe("giriş", () => {
     });
     expect(res.status).toBe(200);
     const body = (await res.json()) as { user: { name: string }; role: string };
-    expect(body.user.name).toBe("Aysan Yılmaz");
+    expect(body.user.name).toBe("Aysan Kılıç");
     expect(body.role).toBe("owner");
     expect(cookieFrom(res)).toMatch(/^umay_sid=/);
   });

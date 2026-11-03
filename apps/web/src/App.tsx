@@ -6,13 +6,19 @@ import { Import } from "./pages/Import";
 import { Listings } from "./pages/Listings";
 import { Login } from "./pages/Login";
 import { People } from "./pages/People";
+import { Rents } from "./pages/Rents";
+import { Contracts } from "./pages/Contracts";
+import { Payouts } from "./pages/Payouts";
 
-type Page = "pano" | "portfoy" | "kisiler" | "belgeler" | "aktar";
+type Page = "pano" | "portfoy" | "kisiler" | "kiralar" | "sozlesmeler" | "sahipler" | "belgeler" | "aktar";
 
 const TITLES: Record<Page, string> = {
   pano: "Pano",
   portfoy: "Portföy",
   kisiler: "Kişiler",
+  kiralar: "Kiralar",
+  sozlesmeler: "Sözleşmeler",
+  sahipler: "Sahipler",
   belgeler: "Belgeler",
   aktar: "İçe Aktar",
 };
@@ -70,6 +76,9 @@ export function App() {
         {page === "pano" && <Dashboard />}
         {page === "portfoy" && <Listings canApprove={session.canApprove} />}
         {page === "kisiler" && <People />}
+        {page === "kiralar" && <Rents />}
+        {page === "sozlesmeler" && <Contracts />}
+        {page === "sahipler" && <Payouts />}
         {page === "belgeler" && <Documents canApprove={session.canApprove} />}
         {page === "aktar" && <Import />}
       </main>

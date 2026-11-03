@@ -8,7 +8,7 @@ import { afterAll, describe, expect, it } from "vitest";
 import { closePool, getPool } from "@umay/db";
 import { app } from "../src/app.js";
 
-const AYSAN = "aysan.yilmaz@umay-emlak.local";
+const AYSAN = "aysan.kilic@umay-emlak.local";
 const B_OFIS = "b.ofis.sahibi@test-ofis-b.local";
 const PASSWORD = "Umay!2026";
 
