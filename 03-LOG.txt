@@ -182,3 +182,8 @@ YARIM:Kiracı dosyasındaki belge/foto ve tutanak yok (Y-68/Y-73) · teklif duru
 SORU:Aysan'a: personel portföyünde teklif kabul edilince ilan "kaporalı"ya mı düşsün, yoksa ayrı onay mı gereksin?
 SIRADAKI:Satılıklar/Kiralıklar ayrı ekranları + komisyon/kapora akışı; sonra Finans panosu ve kiracı ödemeleri.
 --------------------------------------------------------------------------------
+[2026-11-04 05:12] TUR:23/EK | MODUL:Kişi kartı mülk sayısı düzeltmesi | IS:Kullanıcı senaryosuyla yakalandı: kişi listesinde "DEMO Ahmet Şimşek · 0 mülk · 0 sözleşme" yazıyordu, aynı kişi tıklanınca mal sahibi klasörü 8 mülk gösteriyordu. Sebep: GET /people/:id mülkleri yalnız property_owner (hisseli malik) tablosundan okuyordu; normal kayıtta sahiplik property.owner_person_id alanında duruyor. Düzeltme: owned sorgusu property + property_owner sol birleşimine çevrildi, aynı mülk iki yoldan da gelirse selectDistinct ile tek satır. Boş SELECT'lerde liste boş dönmediği için iki kaynak birlikte okunuyor. Regresyon testi eklendi: "kişi kartı mal sahibinin mülklerini gösterir".
+DOGRULAMA: pnpm -r typecheck 0 · people.test.ts 8 test + owners.test.ts 7 test = 15/15 geçti · tarayıcıda "Kişi kartları" → mal sahibi satırı → panel başlığı "8 mülk" gösteriyor.
+DOSYA:apps/api/src/routes/people.ts, apps/api/test/people.test.ts
+TEST:pnpm -r typecheck 0 · pnpm --filter @umay/api exec vitest run test/people.test.ts test/owners.test.ts 15/15
+--------------------------------------------------------------------------------

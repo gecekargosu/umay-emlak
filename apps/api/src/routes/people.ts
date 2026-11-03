@@ -184,17 +184,27 @@ peopleRoutes.get("/:id", async (c) => {
       .limit(1);
     if (!person) return null;
 
+    // HATA DÜZELTMESİ (TUR:23): mülk sahibi yalnız property_owner (hisse) tablosundan
+    // okunuyordu; normal kayıtta sahiplik property.owner_person_id alanında durduğu için
+    // kişi kartı "0 mülk" diyor, mal sahibi klasörü ise 8 mülk gösteriyordu. Artık ikisi
+    // birlikte okunuyor (aynı mülk iki yoldan da gelirse tek satır).
     const owned = await tx
-      .select({
+      .selectDistinct({
         id: schema.properties.id,
         title: schema.properties.title,
         city: schema.properties.city,
         district: schema.properties.district,
         shareBp: schema.propertyOwners.shareBp,
       })
-      .from(schema.propertyOwners)
-      .innerJoin(schema.properties, eq(schema.properties.id, schema.propertyOwners.propertyId))
-      .where(eq(schema.propertyOwners.personId, id));
+      .from(schema.properties)
+      .leftJoin(
+        schema.propertyOwners,
+        and(
+          eq(schema.propertyOwners.propertyId, schema.properties.id),
+          eq(schema.propertyOwners.personId, id),
+        ),
+      )
+      .where(or(eq(schema.properties.ownerPersonId, id), eq(schema.propertyOwners.personId, id)));
 
     const contracts = await tx
       .select({

@@ -98,6 +98,27 @@ describe("kişi kaydı", () => {
     const res = await app.request(`/api/v1/people/${id}`, { headers: { cookie: b } });
     expect(res.status).toBe(404);
   });
+
+  // HATA DÜZELTMESİ (TUR:23): kişi kartı "0 mülk" diyordu çünkü sahiplik yalnız
+  // hisse tablosundan okunuyordu; mülkün owner_person_id alanı yok sayılıyordu.
+  it("kişi kartı mal sahibinin mülklerini gösterir", async () => {
+    const cookie = await login(AYSAN);
+    const suffix = Date.now();
+    const owner = (await (
+      await post("/api/v1/people", cookie, { fullName: `Test Malik ${suffix}`, kind: "owner" })
+    ).json()) as { id: string };
+
+    const property = await post("/api/v1/properties", cookie, {
+      title: `Aktarim Ev ${suffix}`,
+      owners: [{ personId: owner.id }],
+    });
+    expect(property.status).toBe(201);
+
+    const detail = (await (
+      await app.request(`/api/v1/people/${owner.id}`, { headers: { cookie } })
+    ).json()) as { properties: Array<{ id: string }> };
+    expect(detail.properties.length).toBe(1);
+  });
 });
 
 describe("birleştirme", () => {
