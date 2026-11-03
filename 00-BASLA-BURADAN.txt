@@ -84,7 +84,7 @@ Ayrıntılı kontrol listesi: 02-GOREV-PROTOKOLU.txt (görev başında 7, sonund
 04-KARARLAR.txt        bağlayıcı kararlar (K-01…K-33)
 05-SORULAR-AYSAN.txt   keşif soruları + Aysan'ın cevapları (2026-11-03)
 06-YAPILMAYAN-SONRAYA-BIRAKILAN.txt  yapılmayan/ertelenen işler + gerekçeleri
-                       (Y-01…Y-52; Y-01 ve Y-10 kapandı, S-01…S-06 sapma notu)
+                       (Y-01…Y-60; Y-01 ve Y-10 kapandı, S-01…S-07 sapma notu)
 umay emlak ...txt      ham fikir arşivi (280 KB) — gerektiğinde grep'le bak
 apps/                  api (Hono) — sunucu, oturum, kiracı bağlamı
 packages/db            şema, migration, RLS politikaları, tohum verisi
@@ -126,3 +126,12 @@ Y-22 Tauri kabuk.
 
 BU TURDA AÇIK KALANLAR: 06-YAPILMAYAN-SONRAYA-BIRAKILAN.txt (Y-01/Y-02 ekip +
 şifre ekranı, Y-07 belge arşivleme, Y-09 ters kayıt, Y-11 kira artışı, Y-12 DASK vb.)
+
+====================================================================
+YENİ DOSYALAR (TUR:15) — MülkPro devir belgesi
+====================================================================
+07-MULKPRO-KARSILASTIRMA.txt  Aysan'ın gönderdiği devir belgesinin incelemesi,
+                              bizim planla karşılaştırma, alınacaklar/almayacaklar.
+kaynaklar/MulkPro-Ekip-Devir-Belgesi-2026-11-03.md  belgenin birebir kopyası.
+Sonuç: mimari farklı (tek cihaz lokal kasa vs çok kiracılı sunucu); kod
+devralınmaz, 8 yeni iş kaydı açıldı (Y-53…Y-60), S-07 sapma notu.

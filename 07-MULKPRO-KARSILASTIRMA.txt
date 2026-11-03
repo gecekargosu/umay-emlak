@@ -1,0 +1,132 @@
+UMAY EMLAK — MÜLKPRO DEVİR BELGESİ İNCELEMESİ VE KARŞILAŞTIRMA
+Tarih: 2026-11-03 · Tur: TUR:15 · Kaynak: Aysan'ın gönderdiği 7 bölümlük devir metni
+Belgenin kopyası: kaynaklar/MulkPro-Ekip-Devir-Belgesi-2026-11-03.md
+Bu dosya karar değil, İNCELEME kaydıdır. Yeni işler 06 dosyasına Y kaydı olarak yazıldı.
+
+====================================================================
+A) TEK CÜMLELİK ÖZET
+====================================================================
+MülkPro, TEK CİHAZDA şifreli yerel kasayla çalışan Flutter tabanlı bir emlak
+programı; UMAY EMLAK ise çok kiracılı (SaaS) sunucu + PostgreSQL + web/Tauri
+mimarisinde bir OFİS yönetim programı. Aynı iş alanını (kişi → mülk → sözleşme →
+belge → tahsilat) anlatıyorlar ama aynı ürün değiller: biri bireysel danışmanın
+cep kasası, diğeri 18 kişilik ofisin komuta merkezi.
+
+Sonuç: belge BİZİM PLANIMIZI ÇÜRÜTMÜYOR, üç yerde besliyor, iki yerde bizim
+mimari kararımızı doğruluyor. Kod devralma önerilmez (farklı dil, farklı veri
+modeli, K-19 gereği müşteriye kaynak kod gitmiyor).
+
+====================================================================
+B) MİMARİ KARŞILAŞTIRMA
+====================================================================
+Konu            MülkPro                          UMAY EMLAK
+--------------  -------------------------------  ---------------------------
+Çalışma yeri    Tek cihaz, şifreli yerel kasa    Sunucu + PostgreSQL, çok cihaz
+Dil / yığın     Flutter (Dart)                   TypeScript monorepo (web+Tauri)
+Kullanıcı       Tek kişi (ekip "planlanıyor")    18 kişilik ofis, rol + onay (K-29)
+İzolasyon       Cihaz sınırı                     tenant_id + RLS FORCE + testler
+Para            "hassasiyet geliştirilmeli"      kuruş tam sayı (K-13), float yok
+Belge           Kasa içi PDF                     sha256 içerik adresli depo + onay
+Tahsilat        Manuel tam/kısmi ödeme           tahakkuk + tahsilat + kademeler
+Mal sahibi      Yok (bireysel kullanım)          dönem aktarımı + A4 ekstre (K-25)
+Mobil           Flutter (mobil öncelikli)        Aşama 11 (web önce, sonra mobil)
+Satış modeli    Tek seferlik kutu ürün           Kiracı başına abonelik (SaaS)
+
+====================================================================
+C) TUTARLI NOKTALAR (aynı şeyi söylüyoruz — değişiklik gerekmez)
+====================================================================
+1. Kişi / mülk / ilişki ayrımı: "müşterinin mülkle ilgilenmesi onu malik veya
+   kiracı yapmaz" → bizim K-17 (gayrimenkul ≠ ilan) ve person.role ayrımıyla aynı.
+2. Manuel tahsilat ≠ banka doğrulaması → bizim K-21 ve S-04 ile birebir.
+3. PDF/barkod ≠ e-imza → bizde de tasarımlı PDF yerine yazdırılabilir ekstre (S-02);
+   e-imza hiç konuşulmadı, gerekmiyor.
+4. Finans ≠ tam muhasebe → bizim "program para tutmaz, kayıt tutar" çizgimizle aynı.
+5. Şifreli yedek + geri yükleme önceliği → bizde Y-29 (yedek tatbikatı) zaten açık.
+6. EİDS numarası resmî doğrulama değildir → bizde EİDS hiç yok; kayıt alanı
+   olarak eklenmesi yeterli (Y-60).
+7. "Eksik bilgi kesin eşleşme gösterilmemeli" → bizim belge eşleştirme onayı
+   (skor + onay) zaten bu kurala uyuyor.
+
+====================================================================
+D) ONLARDA OLUP BİZDE OLMAYANLAR → 06'YA YAZILDI
+====================================================================
+Y-53  Sözleşme anlık görüntüsü (imza anındaki kişi/mülk/kira bilgisi donar).
+      Bizim contract tablosu yalnız kimlik (id) tutuyor: kişinin adı veya mülkün
+      başlığı sonradan değişirse eski sözleşme sessizce değişmiş görünür.
+      Onların belgesi bunu açık risk olarak yazmış; haklılar. Öncelik: Y.
+Y-54  Aday CRM'i: aşama, takip tarihi, görüşme notu, bütçe/bölge eşleştirmesi.
+      Bizde person.kind='candidate' var ama aşama/takip yok. (Y-25'in içinden
+      çıkarıldı, Dilim 9'da birlikte yapılacak.)
+Y-55  Mülk abonelikleri (elektrik/su/internet) + demirbaş listesi. Onların
+      "Mülkler" modülünde var; bizde yok. Öncelik: D.
+Y-56  Tahliye taahhüdü ve kefaletname şablonları. Bizde belge türü 'kefil' var
+      ama hazır şablon/PDF yok. Öncelik: O.
+Y-57  Form otomatik kaydetme / kalıcı taslak. Bizde uzun form (sözleşme açma,
+      aktarım) sekme kapanınca sıfırlanıyor. Öncelik: O.
+Y-58  Boşta oturum kilidi (ekran kilidi). Bizde oturum 30 gün; sahada açık kalan
+      ekran için kilit yok. Öncelik: O.
+Y-59  İletişim izni/ret geçmişi (KVKK). Y-36'yı tamamlar; onların "iletişim
+      tercihi izin geçmişinin yerine geçmez" tespiti doğru. Öncelik: Y.
+Y-60  EİDS / ilan yetki numarası alanı (kayıt; resmî doğrulama değil). Öncelik: D.
+
+====================================================================
+E) BİZDE OLUP ONLARDA OLMAYANLAR (satış argümanı — korunacak)
+====================================================================
+- Ofis/ekip: 6 rol, onay yetkisi (K-29), "ayrılan personel geçmişi görmez".
+- Kiracı izolasyonu: RLS + iki ofisli testler (onlarda tek cihaz, sorun değil ama
+  çok kullanıcıya geçince çözmeleri gerekecek).
+- Mal sahibine dönem aktarımı + yazdırılabilir A4 ekstre.
+- Belge tür matrisi + yayına alma belge şartı + onaylı otomatik eşleştirme.
+- Excel/CSV içe aktarma (mükerrer tespiti + defter).
+- Gecikme kademeleri (3/15 gün), ihtarname adayı işaretleme.
+- "Bugün" aksiyon panosu + 10 modüllü ana sayfa.
+- Para: kuruş tam sayı; onların "para hassasiyeti" açık işi bizde kapalı.
+- Fiyat/durum geçmişi (pazarlık yazılı kalır).
+
+====================================================================
+F) BİLEREK ALMAYACAKLARIMIZ (gerekçeli)
+====================================================================
+1. Yerel şifreli kasa mimarisi: 18 personelin aynı portföyü görmesi gerekiyor;
+   tek cihaz modeli bizim ürün tanımına aykırı (K-02/K-19).
+2. Flutter/Dart: monorepo TypeScript kararı (web + Tauri) duruyor; ikinci dil
+   ikinci bakım maliyeti demek.
+3. "Kasa kilidi/açma" kavramı: bizde oturum + şifre var; kasa yerine Y-58
+   (boşta kilit) yeterli.
+4. Sanal POS / pazaryeri ödeme: kırmızı çizgi (S-04) — değişmiyor.
+5. Tasarım stüdyosu/prototip ekranlar: ürün bağlantısı olmayan prototip, devir
+   borcu; bizde her ekran gerçek uca bağlı.
+6. MülkPro kaynak kodunu devralmak: farklı veri modeli, K-19 (kaynak müşteriye
+   gitmez, lisans satılır). Belge yalnız iş kuralı referansı olarak kullanılır.
+
+====================================================================
+G) ONLARIN RİSK LİSTESİ → BİZDEKİ KARŞILIĞI
+====================================================================
+Yedekleme/geri yükleme yok        → Y-29 (açık, bizde de yapılmadı)
+Cihazlar arası eşitleme yok       → bizde sunucu var; sorun değil
+Kilitte kaydedilmemiş form kaybı  → Y-57 (otomatik taslak) + Y-58 (kilit)
+Kasa dışı hızlı kontrat           → bizde böyle bir kaçış yolu yok (her şey tenant içinde)
+Manuel tahsilat ≠ banka           → K-21 / S-04, kabul edilmiş sınır
+EİDS ≠ resmî doğrulama            → Y-60 (alan), doğrulama iddiası yok
+PDF ≠ e-imza                      → S-02, kabul edilmiş sınır
+İletişim tercihi ≠ izin geçmişi   → Y-59 (yeni)
+Finans ≠ muhasebe                 → kapsam dışı, Y-45 (mali müşavir onayı)
+
+====================================================================
+H) AYSAN'A SORULACAKLAR (karar gerekiyor)
+====================================================================
+1. MülkPro ayrı bir ürün olarak mı kalacak, yoksa UMAY EMLAK'a veri taşınacak mı?
+   (Taşınacaksa: MülkPro'daki kişi/mülk/sözleşme kayıtlarını dışa aktarma dosyası
+   isteyeceğiz — Excel/CSV yeterli, içe aktarma aracımız hazır.)
+2. "Kasa" alışkanlığından gelen kullanıcılar için boşta kilit (Y-58) şart mı?
+3. Aday CRM'i (Y-54) hangi dilimde olsun — mevcut Dilim 9 mu, öne mi çekilsin?
+4. Tahliye/kefaletname şablonlarını avukat mı hazırlayacak (Y-56, hukuki metin)?
+5. MülkPro'nun 139 testi bizim için ölçü değil; pilot kabul ölçütümüz 05'teki
+   senaryolar. Ek kabul ölçütü ister mi?
+
+====================================================================
+I) SONUÇ
+====================================================================
+Belge, bizim yol haritamızı değiştirmiyor; 8 yeni açık kayıt ekledi (Y-53…Y-60)
+ve iki mimari kararımızı doğruladı (sunucu/RLS zorunlu; para kuruş tam sayı).
+En değerli tespit: Y-53 sözleşme anlık görüntüsü — bu gerçek bir hukuki risk,
+"Dilim 6"da değil bir sonraki turda kapatılmalı.
