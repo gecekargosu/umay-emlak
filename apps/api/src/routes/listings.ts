@@ -44,28 +44,71 @@ listingRoutes.get("/", async (c) => {
   const session = await resolveSession(c);
   requirePasswordChanged(session);
 
-  const q = (c.req.query("q") ?? "").trim();
+  const text = (name: string) => (c.req.query(name) ?? "").trim();
+  const q = text("q");
   const kind = c.req.query("kind");
   const status = listingStatusSchema.safeParse(c.req.query("status") ?? undefined);
+  const addressQ = text("address");
+  const unitQ = text("unitNo");
+  const siteQ = text("site");
+  const buildingQ = text("building");
+  const ownerQ = text("owner");
+  const tenantQ = text("tenant");
 
   const owner = alias(schema.persons, "owner_person");
   const tenant = alias(schema.persons, "tenant_person");
+  const like = (value: string) => `%${value.toLocaleLowerCase("tr")}%`;
 
   const conditions: SQL[] = [];
   if (kind === "sale" || kind === "rent") conditions.push(eq(schema.listings.kind, kind));
   if (status.success) conditions.push(eq(schema.listings.status, status.data));
 
+  // Alan bazlı filtreler (TUR:20): her biri ayrı kutu, hepsi birlikte daraltır.
+  if (addressQ) {
+    conditions.push(
+      sql`lower(coalesce(${schema.properties.address}, '')) like ${like(addressQ)}`,
+    );
+  }
+  if (unitQ) {
+    // "12" daire numarası ya da blok adı olabilir → ikisi OR ile aranır (AND olsa hiç eşleşmez).
+    conditions.push(
+      or(
+        sql`lower(coalesce(${schema.properties.unitNo}, '')) like ${like(unitQ)}`,
+        sql`lower(coalesce(${schema.properties.block}, '')) like ${like(unitQ)}`,
+      )!,
+    );
+  }
+  if (siteQ) {
+    conditions.push(
+      sql`lower(coalesce(${schema.properties.siteName}, '')) like ${like(siteQ)}`,
+    );
+  }
+  if (buildingQ) {
+    conditions.push(
+      sql`lower(coalesce(${schema.properties.buildingName}, '')) like ${like(buildingQ)}`,
+    );
+  }
+  if (ownerQ) {
+    conditions.push(sql`lower(coalesce(${owner.fullName}, '')) like ${like(ownerQ)}`);
+  }
+  if (tenantQ) {
+    conditions.push(sql`lower(coalesce(${tenant.fullName}, '')) like ${like(tenantQ)}`);
+  }
+
   if (q) {
-    const like = `%${q.toLocaleLowerCase("tr")}%`;
+    const wide = like(q);
     const digits = q.replace(/\D/g, "");
     const parts = [
-      sql`lower(${schema.properties.title}) like ${like}`,
-      sql`lower(coalesce(${schema.properties.address}, '')) like ${like}`,
-      sql`lower(coalesce(${schema.properties.district}, '')) like ${like}`,
-      sql`lower(coalesce(${schema.properties.city}, '')) like ${like}`,
-      sql`lower(coalesce(${schema.properties.roomCount}, '')) like ${like}`,
-      sql`lower(coalesce(${owner.fullName}, '')) like ${like}`,
-      sql`lower(coalesce(${tenant.fullName}, '')) like ${like}`,
+      sql`lower(${schema.properties.title}) like ${wide}`,
+      sql`lower(coalesce(${schema.properties.address}, '')) like ${wide}`,
+      sql`lower(coalesce(${schema.properties.district}, '')) like ${wide}`,
+      sql`lower(coalesce(${schema.properties.city}, '')) like ${wide}`,
+      sql`lower(coalesce(${schema.properties.roomCount}, '')) like ${wide}`,
+      sql`lower(coalesce(${schema.properties.unitNo}, '')) like ${wide}`,
+      sql`lower(coalesce(${schema.properties.siteName}, '')) like ${wide}`,
+      sql`lower(coalesce(${schema.properties.buildingName}, '')) like ${wide}`,
+      sql`lower(coalesce(${owner.fullName}, '')) like ${wide}`,
+      sql`lower(coalesce(${tenant.fullName}, '')) like ${wide}`,
     ];
     if (digits.length >= 3) {
       parts.push(sql`coalesce(${owner.phoneDigits}, '') like ${`%${digits}%`}`);
@@ -88,6 +131,11 @@ listingRoutes.get("/", async (c) => {
         city: schema.properties.city,
         address: schema.properties.address,
         roomCount: schema.properties.roomCount,
+        block: schema.properties.block,
+        unitNo: schema.properties.unitNo,
+        floor: schema.properties.floor,
+        siteName: schema.properties.siteName,
+        buildingName: schema.properties.buildingName,
         publishedAt: schema.listings.publishedAt,
         createdAt: schema.listings.createdAt,
         ownerName: owner.fullName,

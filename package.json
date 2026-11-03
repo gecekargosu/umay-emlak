@@ -13,6 +13,8 @@
     "db:migrate": "pnpm --filter @umay/db migrate",
     "db:seed": "pnpm --filter @umay/db seed",
     "db:user": "pnpm --filter @umay/db user",
+    "demo:seed": "pnpm --filter @umay/db demo:seed",
+    "demo:clean": "pnpm --filter @umay/db demo:clean",
     "test": "vitest run",
     "typecheck": "pnpm -r typecheck"
   },

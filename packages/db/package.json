@@ -13,6 +13,8 @@
   "scripts": {
     "migrate": "node --import tsx src/migrate.ts",
     "seed": "node --import tsx src/seed.ts",
+    "demo:seed": "node --import tsx src/demo.ts seed",
+    "demo:clean": "node --import tsx src/demo.ts clean",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "user": "node --import tsx src/dev-user.ts"
   },

@@ -77,6 +77,11 @@ export type ListingRow = {
   city: string | null;
   address: string | null;
   roomCount: string | null;
+  block: string | null;
+  unitNo: string | null;
+  floor: number | null;
+  siteName: string | null;
+  buildingName: string | null;
   ownerName: string | null;
   tenantName: string | null;
   tenantPhone: string | null;
@@ -174,6 +179,9 @@ export type ListingDetail = {
     grossM2: number | null;
     block: string | null;
     unitNo: string | null;
+    floor: number | null;
+    siteName: string | null;
+    buildingName: string | null;
   };
   owners: Array<{ personId: string; fullName: string; phone: string | null; shareBp: number | null }>;
   documents: Array<{

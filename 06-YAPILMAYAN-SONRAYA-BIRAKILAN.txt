@@ -326,4 +326,10 @@ Her tur sonunda sorulacak üç soru:
 2) Yapılan bir iş bir Y kaydını kapattı mı? → satırı silme, "YAPILDI" ekle.
 3) Önceliği değişen kayıt var mı?           → öncelik alanını güncelle.
 
-Açık kayıt sayısı: 64 (Y-01 … Y-75; Y-01, Y-02, Y-10 ve Y-53…Y-60 kapandı) + 8 sapma notu (S-01 … S-08).
+Y-76 | Portföy filtresinde fiyat aralığı, m², oda sayısı ve ilçe |
+       Ne: TUR:20'de adres, daire no, site, apartman, mal sahibi ve kiracı
+       filtreleri eklendi. Bilgi bankasındaki "ilçe, fiyat, metrekare, oda
+       sayısı" filtreleri (satır 11) henüz yok; ilçe seçicisi ve fiyat
+       aralığı 90 kayıtta da işe yarar. | Dilim 7 | D | AÇIK
+
+Açık kayıt sayısı: 65 (Y-01 … Y-76; Y-01, Y-02, Y-10 ve Y-53…Y-60 kapandı) + 8 sapma notu (S-01 … S-08).

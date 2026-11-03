@@ -143,3 +143,16 @@ YENİ DOSYA (TUR:18) — MülkPro onay listesi
 Kaynak PDF: MulkPro_Gelistirme_Onay_Listesi_ve_Hedef_Ozellikler.pdf (18 sayfa).
 Sonuç: 39 onay maddesi + 240 hedef özellik; hiçbiri onaylı değil. Yeni işler
 Y-61…Y-75 olarak 06'ya yazıldı, kalanlar mevcut kayıtlarla birleştirildi.
+
+
+====================================================================
+TUR:20 — DEMO VERİSİ VE PORTFÖY EKRANI
+====================================================================
+Demo verisi (yalnız geliştirme; her kayıt "DEMO " ile başlar):
+  pnpm demo:seed    → İzmir'de 30 mal sahibi, 90 mülk, 40 satılık + 50 kiralık
+  pnpm demo:clean   → yalnız DEMO kayıtlarını siler (gerçek veriye dokunmaz)
+
+Portföy (Gayrimenkuller) ekranı: Satılıklar + Kiralıklar rafları (vitrin, ilk 10),
+altında "Tüm gayrimenkuller" filtrelenebilir liste (Adres, Daire no, Site, Apartman,
+Mal sahibi, Kiracı + tür/durum), sabit başlıklı kaydırılabilir tablo.
+Yeni kolonlar: property.site_name, property.building_name (migration 0007).

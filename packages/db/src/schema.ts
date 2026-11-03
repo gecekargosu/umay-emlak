@@ -193,6 +193,10 @@ export const properties = pgTable(
     block: text("block"),
     unitNo: text("unit_no"),
     floor: integer("floor"),
+    /** TUR:20 — portföy filtresi: "Güneş Sitesi" gibi site adı */
+    siteName: text("site_name"),
+    /** TUR:20 — site dışı apartman / iş hanı adı */
+    buildingName: text("building_name"),
     /** "3+1" gibi serbest metin: daire tipleri standart değil */
     roomCount: text("room_count"),
     deedRef: text("deed_ref"),

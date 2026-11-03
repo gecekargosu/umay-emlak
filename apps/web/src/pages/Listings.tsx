@@ -38,6 +38,29 @@ const NEXT_STATUS: Record<string, Array<{ status: string; label: string }>> = {
   archived: [],
 };
 
+/** TUR:20 — alan bazlı portföy filtresi. Hepsi birlikte daraltır. */
+type Filters = {
+  address: string;
+  unitNo: string;
+  site: string;
+  building: string;
+  owner: string;
+  tenant: string;
+  kind: string;
+  status: string;
+};
+
+const EMPTY_FILTERS: Filters = {
+  address: "",
+  unitNo: "",
+  site: "",
+  building: "",
+  owner: "",
+  tenant: "",
+  kind: "",
+  status: "",
+};
+
 export function Listings({ canApprove }: { canApprove: boolean }) {
   const [rows, setRows] = useState<ListingRow[] | null>(null);
   const [detail, setDetail] = useState<ListingDetail | null>(null);
@@ -50,16 +73,16 @@ export function Listings({ canApprove }: { canApprove: boolean }) {
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [allRows, setAllRows] = useState<ListingRow[]>([]);
-  const [filters, setFilters] = useState({ q: "", kind: "", status: "" });
+  const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS);
   const [authority, setAuthority] = useState("");
   const [assets, setAssets] = useState<PropertyAssets | null>(null);
   const [subForm, setSubForm] = useState({ kind: "elektrik", provider: "", monthlyText: "" });
-  const [fixtureForm, setFixtureForm] = useState({ name: "", quantity: 1 });  async function load(params: { q?: string; kind?: string; status?: string } = {}) {
+  const [fixtureForm, setFixtureForm] = useState({ name: "", quantity: 1 });  async function load(params: Partial<Filters> = {}) {
     try {
       const search = new URLSearchParams();
-      if (params.q) search.set("q", params.q);
-      if (params.kind) search.set("kind", params.kind);
-      if (params.status) search.set("status", params.status);
+      for (const [key, value] of Object.entries(params)) {
+        if (typeof value === "string" && value.trim() !== "") search.set(key, value.trim());
+      }
       const qs = search.toString();
       const data = await api<{ items: ListingRow[] }>(`/listings${qs ? `?${qs}` : ""}`);
       setRows(data.items);
@@ -259,63 +282,112 @@ export function Listings({ canApprove }: { canApprove: boolean }) {
       </InfoNote>
 
       <Shelf
-        title="Kiralıklar"
-        rows={allRows.filter((row) => row.kind === "rent")}
-        selectedId={detail?.listing.id ?? null}
-        onOpen={(id) => void open(id)}
-      />
-      <Shelf
         title="Satılıklar"
         rows={allRows.filter((row) => row.kind === "sale")}
         selectedId={detail?.listing.id ?? null}
         onOpen={(id) => void open(id)}
       />
+      <Shelf
+        title="Kiralıklar"
+        rows={allRows.filter((row) => row.kind === "rent")}
+        selectedId={detail?.listing.id ?? null}
+        onOpen={(id) => void open(id)}
+      />
 
-      <h3 style={{ marginTop: 22 }}>Tüm portföy</h3>
+      <h3 style={{ marginTop: 22 }}>Tüm gayrimenkuller</h3>
+      <p className="muted small" style={{ marginTop: -6 }}>
+        Raflar vitrin (ilk 10 kayıt); arama ve filtreler aşağıdaki listede çalışır, liste
+        aşağı yukarı kaydırılabilir.
+      </p>
       <form
-        className="toolbar"
+        className="filter-panel"
         onSubmit={(event) => {
           event.preventDefault();
           void load(filters);
         }}
       >
-        <input
-          style={{ flex: "1 1 300px" }}
-          placeholder="Adres, daire, mal sahibi veya kiracı ara…"
-          value={filters.q}
-          onChange={(e) => setFilters({ ...filters, q: e.target.value })}
-        />
-        <select
-          value={filters.kind}
-          onChange={(e) => setFilters({ ...filters, kind: e.target.value })}
-        >
-          <option value="">Kiralık + satılık</option>
-          <option value="rent">Yalnız kiralık</option>
-          <option value="sale">Yalnız satılık</option>
-        </select>
-        <select
-          value={filters.status}
-          onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-        >
-          <option value="">Tüm durumlar</option>
-          <option value="draft">Taslak</option>
-          <option value="active">Aktif</option>
-          <option value="reserved">Kaporalı</option>
-          <option value="closed">Kapandı</option>
-          <option value="archived">Arşiv</option>
-        </select>
-        <button type="submit">Ara</button>
-        <button
-          type="button"
-          className="ghost"
-          onClick={() => {
-            const empty = { q: "", kind: "", status: "" };
-            setFilters(empty);
-            void load(empty);
-          }}
-        >
-          Temizle
-        </button>
+        <div className="filter-grid">
+          <label>
+            Adres
+            <input
+              placeholder="sokak, cadde, mahalle"
+              value={filters.address}
+              onChange={(e) => setFilters({ ...filters, address: e.target.value })}
+            />
+          </label>
+          <label>
+            Daire no
+            <input
+              placeholder="örn. 12"
+              value={filters.unitNo}
+              onChange={(e) => setFilters({ ...filters, unitNo: e.target.value })}
+            />
+          </label>
+          <label>
+            Site
+            <input
+              placeholder="site adı"
+              value={filters.site}
+              onChange={(e) => setFilters({ ...filters, site: e.target.value })}
+            />
+          </label>
+          <label>
+            Apartman
+            <input
+              placeholder="apartman / blok adı"
+              value={filters.building}
+              onChange={(e) => setFilters({ ...filters, building: e.target.value })}
+            />
+          </label>
+          <label>
+            Mal sahibi
+            <input
+              placeholder="ad soyad"
+              value={filters.owner}
+              onChange={(e) => setFilters({ ...filters, owner: e.target.value })}
+            />
+          </label>
+          <label>
+            Kiracı
+            <input
+              placeholder="ad soyad"
+              value={filters.tenant}
+              onChange={(e) => setFilters({ ...filters, tenant: e.target.value })}
+            />
+          </label>
+        </div>
+        <div className="toolbar" style={{ margin: 0 }}>
+          <select
+            value={filters.kind}
+            onChange={(e) => setFilters({ ...filters, kind: e.target.value })}
+          >
+            <option value="">Kiralık + satılık</option>
+            <option value="rent">Yalnız kiralık</option>
+            <option value="sale">Yalnız satılık</option>
+          </select>
+          <select
+            value={filters.status}
+            onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+          >
+            <option value="">Tüm durumlar</option>
+            <option value="draft">Taslak</option>
+            <option value="active">Aktif</option>
+            <option value="reserved">Kaporalı</option>
+            <option value="closed">Kapandı</option>
+            <option value="archived">Arşiv</option>
+          </select>
+          <button type="submit">Filtrele</button>
+          <button
+            type="button"
+            className="ghost"
+            onClick={() => {
+              setFilters(EMPTY_FILTERS);
+              void load(EMPTY_FILTERS);
+            }}
+          >
+            Temizle
+          </button>
+        </div>
       </form>
 
       {rows.length === 0 ? (
@@ -324,44 +396,52 @@ export function Listings({ canApprove }: { canApprove: boolean }) {
             ? "Henüz portföy yok. Kişiler ekranından mal sahibi ekleyip içe aktarma yapabilirsiniz."
             : "Bu aramaya uyan kayıt yok. Filtreleri temizleyin."}
         </p>
-      ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Mülk</th>
-              <th>Adres</th>
-              <th>Mal sahibi</th>
-              <th>Kiracı</th>
-              <th>Tür</th>
-              <th>Durum</th>
-              <th className="right">Fiyat</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr
-                key={row.id}
-                className={detail?.listing.id === row.id ? "selected" : "clickable"}
-                onClick={() => void open(row.id)}
-              >
-                <td>
-                  {row.title}
-                  {row.roomCount ? <span className="muted small"> · {row.roomCount}</span> : null}
-                </td>
-                <td className="muted">
-                  {row.address ||
-                    [row.district, row.city].filter(Boolean).join(", ") ||
-                    "adres yok"}
-                </td>
-                <td className="muted">{row.ownerName ?? "—"}</td>
-                <td className="muted">{row.tenantName ?? "—"}</td>
-                <td>{KIND_TR[row.kind] ?? row.kind}</td>
-                <td>{STATUS_TR[row.status] ?? row.status}</td>
-                <td className="right">{row.price}</td>
+      ) : (        <div className="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Mülk</th>
+                <th>Adres</th>
+                <th>Site / Apartman</th>
+                <th>Daire</th>
+                <th>Mal sahibi</th>
+                <th>Kiracı</th>
+                <th>Tür</th>
+                <th>Durum</th>
+                <th className="right">Fiyat</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {rows.map((row) => (
+                <tr
+                  key={row.id}
+                  className={detail?.listing.id === row.id ? "selected" : "clickable"}
+                  onClick={() => void open(row.id)}
+                >
+                  <td>
+                    {row.title}
+                    {row.roomCount ? <span className="muted small"> · {row.roomCount}</span> : null}
+                  </td>
+                  <td className="muted">
+                    {row.address || [row.district, row.city].filter(Boolean).join(", ") || "adres yok"}
+                  </td>
+                  <td className="muted">
+                    {[row.siteName, row.buildingName].filter(Boolean).join(" · ") || "—"}
+                  </td>
+                  <td className="muted">
+                    {row.unitNo ?? "—"}
+                    {row.block ? <span className="small"> / {row.block}</span> : null}
+                  </td>
+                  <td className="muted">{row.ownerName ?? "—"}</td>
+                  <td className="muted">{row.tenantName ?? "—"}</td>
+                  <td>{KIND_TR[row.kind] ?? row.kind}</td>
+                  <td>{STATUS_TR[row.status] ?? row.status}</td>
+                  <td className="right">{row.price}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
       {message && <div className="alert">{message}</div>}
@@ -375,6 +455,8 @@ export function Listings({ canApprove }: { canApprove: boolean }) {
           </div>
           <p className="muted small">
             {[detail.property.district, detail.property.city].filter(Boolean).join(", ") || "konum yok"}
+            {detail.property.siteName ? ` · ${detail.property.siteName}` : ""}
+            {detail.property.buildingName ? ` · ${detail.property.buildingName}` : ""}
             {detail.property.roomCount ? ` · ${detail.property.roomCount}` : ""}
             {detail.property.grossM2 ? ` · ${detail.property.grossM2} m²` : ""}
             {detail.property.unitNo ? ` · daire ${detail.property.unitNo}` : ""}
@@ -651,17 +733,20 @@ function Shelf({
   selectedId: string | null;
   onOpen: (id: string) => void;
 }) {
+  const total = rows.length;
+  const shown = rows.slice(0, 10);
+
   return (
     <section>
       <div className="shelf-bar">
         <h3>{title}</h3>
-        <span className="muted small">{rows.length} kayıt</span>
+        <span className="muted small">{total} kayıt</span>
       </div>
-      {rows.length === 0 ? (
+      {total === 0 ? (
         <p className="muted small">Bu rafta kayıt yok.</p>
       ) : (
         <div className="shelf">
-          {rows.map((row) => (
+          {shown.map((row) => (
               <button
                 key={row.id}
                 type="button"
@@ -690,6 +775,12 @@ function Shelf({
               </button>
           ))}
         </div>
+      )}
+      {total > shown.length && (
+        <p className="muted small">
+          Rafta ilk {shown.length} kayıt gösteriliyor; {total - shown.length} kayıt daha var —
+          tümü aşağıdaki listede.
+        </p>
       )}
     </section>
   );

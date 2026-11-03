@@ -555,6 +555,52 @@ td {
   font-variant-numeric: tabular-nums;
 }
 
+/* TUR:20 — portföy: kaydırılabilir liste + alan bazlı filtre kutusu */
+.table-scroll {
+  max-height: 560px;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--bg-800);
+}
+
+.table-scroll table {
+  border: none;
+  border-radius: 0;
+}
+
+.table-scroll thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--bg-700);
+  box-shadow: inset 0 -1px 0 var(--line);
+}
+
+.filter-panel {
+  background: var(--bg-800);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: 12px;
+  margin: 10px 0 14px;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.filter-grid label {
+  display: grid;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
 tbody tr:last-child td {
   border-bottom: none;
 }

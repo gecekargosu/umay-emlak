@@ -263,3 +263,19 @@ KURALLAR:
 - Sahibe aktarım TAHSİL EDİLENDEN hesaplanır; tahsil edilmeyen kira aktarılmaz.
   net = tahsil - takip bedeli (elle) - masraf. Dönem başına tek aktarım.
 - Ekstre yazdırılabilir HTML; tarayıcıdan PDF alınır (tasarımlı PDF sırada).
+
+
+====================================================================
+TUR:20 DURUM — PORTFÖY (GAYRİMENKULLER) EKRANI
+====================================================================
+Bilgi bankasındaki iki ilke uygulandı: "raf vitrin, liste esas" ve
+"mal sahibi/kiracı adıyla mülke ulaşma".
+  - Satılıklar rafı ........ ilk 10 kart (tür, ilçe, fiyat, durum) + kalan sayısı
+  - Kiralıklar rafı ........ aynı düzen
+  - Tüm gayrimenkuller .... 6 alan filtresi + tür/durum, 91 satır, kaydırılabilir
+Filtre alanları: adres, daire no (blok dahil), site adı, apartman adı,
+mal sahibi adı, kiracı adı (aktif sözleşmeden).
+Veri: property.site_name / building_name (migration 0007), demo veri demo.ts.
+SIRADAKİ EKRANLAR (bilgi bankası sırası): mal sahipleri → kiracılar →
+personeller → finans. Mal sahipleri ekranı alfabetik yatay raf + mülk sayısı
++ seçili sahibin mülk rafları olacak.
