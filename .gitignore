@@ -26,3 +26,6 @@ apps/desktop/src-tauri/target/
 
 # yerel yedek zip dosyalari
 kaynaklar/yedek/
+
+# yerel paket ciktisi
+release/

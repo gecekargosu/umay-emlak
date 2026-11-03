@@ -371,6 +371,9 @@ Y-87 | Randevuların takvimde görünmesi — YAPILDI (2026-11-04, TUR:32): gün
 Y-88 | Alıcı adayına portföy önerisi — SIRA 6. YAPILDI (2026-11-04, TUR:33):
        bütçe + ilçe + oda ile puanlama, gerekçeli liste. Kalan: öneriden
        randevu/teklif açma, puan ağırlıklarının ayarlanması.
-Y-89 | Exe / taşınabilir paket — Aysan'ın bilgisayarında kurulumsuz çalışacak
-       sürüm. embedded Postgres initdb "locale" hatası --locale=C ile aşıldı;
-       paket iskeleti (node.exe + app + veri klasörü) kurulacak.
+Y-89 | Exe / taşınabilir paket — YAPILDI (2026-11-04, TUR:34): gömülü
+       PostgreSQL + node.exe + bat ile kurulumsuz paket; /health ve giriş
+       doğrulandı, Aysana gönderilecek klasörüne kondu.
+
+Y-90 | Paket kod imzası ve otomatik güncelleme yok — Windows SmartScreen
+       uyarabilir; yeni sürüm Aysan'a yine klasör/zip olarak gönderilecek.

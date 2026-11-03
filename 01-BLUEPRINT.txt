@@ -461,3 +461,14 @@ TUR:33 DURUM — PORTFÖY ÖNERİSİ
 - People.tsx: aday bölümünde "Uygun portföyü bul" + puan/gerekçe tablosu.
 - GitHub: gecekargosu/umay-emlak (private), master; commit'ler noreply adresle.
 Kalan: öneriden randevu/teklif açma, ağırlıkların ayarlanması, exe paketleme.
+
+====================================================================
+TUR:34 DURUM — TAŞINABİLİR PAKET
+====================================================================
+- apps/api/src/pack-server.ts: embedded-postgres (55432, veri/db) → rol + db →
+  14 migration → ilk açılışta seed + demo → Hono static + API, 3100.
+- pack/build.mjs: vite build → dist/public, esbuild (server, api, seed, demo),
+  npm install (pg, embedded-postgres, windows-x64, exceljs), node.exe kopyası,
+  bat + OKU-BENI, boyut raporu.
+- Çıktı: release/umay-emlak (git dışı) → Aysana gönderilecek klasörü + zip.
+Kalan: kod imzalama, otomatik güncelleme, x64 dışı platform.

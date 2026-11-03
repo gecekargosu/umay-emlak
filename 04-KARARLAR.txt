@@ -428,3 +428,11 @@ K-78 | GitHub commit'leri noreply adresle atılır.
        Ne: hesapta "e-posta gizliliği" açık olduğu için kişisel adresle push
        reddediliyor; depo gecekargosu/umay-emlak ve commit'ler
        <id>+gecekargosu@users.noreply.github.com adresiyle.
+
+K-79 | Aysan'a kurulumsuz taşınabilir paket.
+       Ne: gömülü PostgreSQL + node.exe + tek klasör; veri "veri" klasöründe,
+       klasörle birlikte taşınır. Kurulum/Docker/Node gerekmez.
+
+K-80 | Pakete hazır veritabanı konmaz.
+       Ne: ilk açılışta şema + ofis + demo veri üretilir; böylece paket temiz
+       kalır ve Aysan'ın bilgisayarında yollar karışmaz. Paket imzasızdır.

@@ -312,3 +312,13 @@ program aktif portföyü puanlar ve neden önerdiğini yazar (ilçe uyuyor,
 bütçe içinde, oda uyuyor...). Öneri yalnız bilgidir; hiçbir kaydı değiştirmez.
 Kaynak kod: github.com/gecekargosu/umay-emlak (private, 33 commit).
 Sıradaki: arıza / bakım talebi (SIRA 7).
+
+====================================================================
+TUR:34 — AYSAN'A GİDEN PAKET
+====================================================================
+Klasör: Masaüstü → "Aysana gönderilecek" → UmayEmlak-Beta-2026-11-04
+  umay-emlak/UMAY-EMLAK-BASLAT.bat  → çift tıkla
+  Giriş: aysan.kilic@umay-emlak.local / Umay!2026
+Program kendi veritabanını (veri/db) ve demo portföyü ilk açılışta kurar;
+kurulum, Docker, Node veya PostgreSQL gerekmez. Zip'i açmadan çalışmaz.
+Kaynak: aynı paket "pack/build.mjs" ile yeniden üretilir.
