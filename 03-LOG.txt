@@ -307,3 +307,13 @@ KARAR:K-81 Arıza talebi silinmez, durum ilerler; fotoğraf mülk medyasında ay
 YARIM:Talep bildirimi (e-posta/SMS) yok · kiracı kendi panelinden talep açamıyor · talep listesi için ayrı "Arızalar" ekranı yok (mülk dosyasından görülüyor)
 SIRADAKI:Denetim kaydı (SIRA 10), sonra kapak fotoğrafı + filigran (SIRA 11).
 --------------------------------------------------------------------------------
+
+[2026-11-04 21:45] TUR:36 | MODUL:Taşınabilir paket düzeltmesi (Y-89) | IS:Aysan paketi Türkçe karakterli klasörde açılmıyordu. Kök neden bulundu: gömülü PostgreSQL'in initdb/postgres ikilileri paket klasörünün içinde duruyor; klasör yolunda "ö" gibi bir harf olunca initdb "invalid byte sequence for encoding UTF8: 0xf6 0x6e 0x64 0x65" verip duruyor. Veritabanı klasörünü ASCII yola taşımak yetmedi (ikililer hâlâ Türkçe yolda), çalışma dizinini değiştirmek de yetmedi. Çözüm: (1) paket ASCII klasörde çalıştırılır: "Desktop/Aysana-gonderilecek/UmayEmlak-Beta-2026-11-04/umay-emlak"; (2) yine de Türkçe yolda açılırsa veritabanı "%LOCALAPPDATA%\UmayEmlak\<özet>-v2\db" ASCII klasöründe tutulur ve yeri "veri/db-yeri.txt" dosyasına yazılır; (3) paket sunucusu artık junction/8.3 kısa yol denemiyor, sessiz hata bırakmıyor.
+HATA ANALIZI: (a) İlk iki düzeltme (8.3 kısa yol, mklink /J junction) sessizce düştü: fsutil erişim istedi, cmd mklink Türkçe hedefi kabul etmedi; ikisi de kaldırıldı, yerine açık ASCII klasör kuralı kondu. (b) Yama sırasında heredoc kaçış hatası iki string'i böldü (TS1002 Unterminated string) → blok yeniden yazıldı, typecheck 0. (c) İlk ASCII denemede eski junction artığı "ENOENT mkdir" verdi → klasör adı "-v2" ile sürümlendi. (d) Paket sunucusunda kalan "process.chdir(APP_DIR)" denendi ve kaldırılmadı (statik dosyalar göreli); sorunun kaynağı olmadığı ölçüldü.
+DOGRULAMA: ASCII klasörde paket: /health {"ok":true,"migrations":15}, giriş POST 200, /api/v1/maintenance 401 (uç var, yetki istiyor), ana sayfa HTML 200, ilk açılış 14 sn. Zip: "Desktop/Aysana-gonderilecek/UmayEmlak-Beta-2026-11-04.zip" 288 MB; klasör 296 MB.
+DOSYA:apps/api/src/pack-server.ts, 03/04/06/09 + Aysana-gonderilecek klasörü
+TEST:paket çalıştırma (ASCII yol) · health 200 · login 200 · maintenance 401 · html 200 · typecheck 0
+KARAR:K-82 Paket ASCII klasörde çalıştırılır; Türkçe karakterli yolda veritabanı ASCII klasöre taşınır ve yeri veri/db-yeri.txt'ye yazılır; sessiz junction/kısa yol hilesi kullanılmaz
+YARIM:OKU-BENI ve zip içi uyarı metni "Türkçe karakterli klasöre açmayın" satırıyla güncellenecek (Y-93) · kod imzalama ve otomatik güncelleme yok (Y-90)
+SIRADAKI:Denetim kaydı (SIRA 10), sonra kapak fotoğrafı + filigran (SIRA 11).
+--------------------------------------------------------------------------------

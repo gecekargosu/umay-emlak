@@ -441,3 +441,11 @@ K-81 | Arıza talebi kaydı silinmez, durumu ilerler.
        Ne: açık → işlemde → bitti / iptal; "yeniden aç" mümkün. Fotoğraf mülk
        medyası deposunda ayrı bağlantıyla tutulur ve galeride görünmez.
        Masraf kuruş olarak saklanır. Talebi ofis açar (kiracı paneli yok).
+
+K-82 | Paket ASCII klasörde çalışır.
+       Ne: Gömülü PostgreSQL'in ikilileri paket klasöründe olduğu için klasör yolunda
+       Türkçe karakter olursa initdb "invalid byte sequence" veriyor. Paket ASCII
+       yolda çalıştırılır ("Aysana-gonderilecek"). Yine de Türkçe yolda açılırsa
+       veritabanı %LOCALAPPDATA%\UmayEmlak\<özet>-v2\db altında tutulur, yeri
+       veri/db-yeri.txt dosyasına yazılır. Junction / 8.3 kısa yol hilesi yok:
+       sessizce düşüyordu, yanlış güven veriyordu.

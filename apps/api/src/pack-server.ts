@@ -11,7 +11,7 @@ import { spawn } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { randomBytes } from "node:crypto";
+import { createHash, randomBytes } from "node:crypto";
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
 import { serveStatic } from "@hono/node-server/serve-static";
@@ -33,6 +33,48 @@ const APP_PORT = Number(process.env.API_PORT ?? 3100);
 mkdirSync(DATA_ROOT, { recursive: true });
 mkdirSync(DOC_DIR, { recursive: true });
 
+/**
+ * PostgreSQL araclari (initdb/pg_ctl) Windows'ta ASCII olmayan klasor yolunu
+ * okuyamiyor: "Aysana gonderilecek" gibi bir yerde initdb "invalid byte sequence"
+ * hatasi veriyor. Boyle bir yolda veritabani kullaniciya ait ASCII bir klasorde
+ * tutulur; yeri veri/db-yeri.txt dosyasina yazilir.
+ */
+function asciiBase(): string {
+  const candidates = [process.env.LOCALAPPDATA, process.env.ProgramData, "C:\\UmayEmlak"];
+  for (const candidate of candidates) {
+    if (!candidate || !/^[\x20-\x7E]+$/.test(candidate)) continue;
+    try {
+      mkdirSync(candidate, { recursive: true });
+      return candidate;
+    } catch {
+      /* yazilamayan adayi gec */
+    }
+  }
+  return process.cwd();
+}
+
+function pgDataPath(realPath: string): string {
+  if (/^[\x20-\x7E]*$/.test(realPath)) return realPath;
+  const hash = createHash("sha1").update(realPath.toLowerCase()).digest("hex").slice(0, 12);
+  const base = join(asciiBase(), "UmayEmlak", hash + "-v2");
+  mkdirSync(base, { recursive: true });
+  const fallback = join(base, "db");
+  mkdirSync(fallback, { recursive: true });
+  writeFileSync(
+    join(DATA_ROOT, "db-yeri.txt"),
+    [
+      "PostgreSQL verisi burada: " + fallback,
+      "Sebep: program klasorunun yolunda Turkce karakter var; PostgreSQL o yolu okuyamiyor.",
+      "",
+    ].join(String.fromCharCode(10)),
+    "utf8",
+  );
+  console.log("[UMAY] veritabani ASCII klasorde: " + fallback);
+  return fallback;
+}
+
+const PG_DATA_DIR = pgDataPath(PG_DIR);
+
 function secretOnce(name: string): string {
   const file = join(DATA_ROOT, name);
   if (existsSync(file)) return readFileSync(file, "utf8").trim();
@@ -46,7 +88,7 @@ function log(message: string): void {
 }
 
 const pg = new EmbeddedPostgres({
-  databaseDir: PG_DIR,
+  databaseDir: PG_DATA_DIR,
   user: "postgres",
   password: PG_SUPER_PASSWORD,
   port: PG_PORT,
@@ -55,7 +97,7 @@ const pg = new EmbeddedPostgres({
 });
 
 async function startDatabase(): Promise<void> {
-  if (!existsSync(join(PG_DIR, "PG_VERSION"))) {
+  if (!existsSync(join(PG_DATA_DIR, "PG_VERSION"))) {
     log("veritabanı ilk kez hazırlanıyor (birkaç dakika sürebilir)…");
     await pg.initialise();
   }
