@@ -204,3 +204,12 @@ K. TUR:48 GÜNCELLEMELERİ (2026-11-04)
 [KISMI] Fotoğraflar stok görsel (16 kare döner); mülke özel çekim değil. Gerçek fotoğraf yüklenince
       onun yerini alır (galeri zaten yükleme kabul ediyor).
 [YOK] Kişi vesikalık fotoğrafı: yüz fotoğrafı üretilmedi; alan açılmadı.
+
+====================================================================
+L. TUR:49 GÜNCELLEMELERİ (2026-11-04)
+====================================================================
+[VAR] api.ts bölündü: istemci 66 satır, tipler api-types.ts; dışa aktarım korundu (import değişmedi).
+[VAR] documents.ts bölündü: eşleştirme mantığı documents/link.ts (250 satır), uçlar ince kaldı (477).
+[VAR] Listings.tsx bölündü: raf (ListingShelf), filtre formu (ListingFilters), etiketler (listing-labels).
+[KISMI] Listings.tsx 700 satır: mülk dosyası (detay) bloğu hâlâ sayfada — sıradaki bölme.
+[KISMI] api-types.ts 682 satır: tamamı saf tip, konuya göre bölünmedi.

@@ -417,3 +417,12 @@ NOT:İndirilen fotoğraflar gerçek stok fotoğraf (picsum/Unsplash); belgeler �
 TEST:typecheck 0 · pnpm test 17 dosya / 64 test 0
 SIRADAKİ:M6 — K-1/K-2/K-3 dosya bölme.
 --------------------------------------------------------------------------------
+
+[2026-11-05 02:55] TUR:49 | MODUL:M6 — K-1/K-2/K-3 dosya bölme (davranış değişmedi) | IS:(1) apps/web/src/api.ts 725→66 satır: yalnız istemci + hata/biçim yardımcıları kaldı; 682 satırlık tip tanımları api-types.ts'e taşındı, api.ts `export * from "./api-types"` ile yeniden dışa aktarıyor (mevcut `from "../api"` importları değişmedi). (2) pages/Listings.tsx 943→700 satır: Shelf bileşeni components/ListingShelf.tsx'e, filtre tipi + form components/ListingFilters.tsx'e (187 satır), KIND_TR/STATUS_TR components/listing-labels.ts'e taşındı; kopya yok, taşıma yapıldı. (3) routes/documents.ts 716→477 satır: öneri üretimi + otomatik bağ mantığı documents/link.ts'e (250 satır) taşındı; uçlar `generateSuggestions`/`autoLinkOrCreate`'i oradan alıyor. Taşıma, blok kes-yapıştır betiğiyle yapıldı (elle yeniden yazılmadı), betikler silindi.
+DOSYA:apps/web/src/api.ts, apps/web/src/api-types.ts (yeni), apps/web/src/components/ListingShelf.tsx (yeni), ListingFilters.tsx (yeni), listing-labels.ts (yeni), apps/web/src/pages/Listings.tsx, apps/api/src/routes/documents.ts, apps/api/src/documents/link.ts (yeni)
+DOGRULAMA (ekran): Portföy → 20 raf kartı, 20/20 fotoğraf yüklü; filtre formu 8 kutu + 4 seçim + "Hemen filtrele"/"Temizle"; tablo 60 satır ve "60 / 91 kayıt gösteriliyor (K-10)" sayacı; raf kartından mülk dosyası açıldı (Fotoğraflar, Mülk bilgileri, Poliçeler, Teklifler, Komisyon, Belgeler, Fiyat başlıkları), "Portföy listesine dön" ile geri dönüldü.
+HATA ANALIZI:(a) İlk taşımada yerel KIND_TR/STATUS_TR tanımları kaldığı için TS2440 çıktı → tanımlar silindi, etiketler listing-labels.ts'ten geliyor. (b) Etiket bloğu silinirken NEXT_STATUS da silindi (tek satırlık KIND_TR yüzünden kapanış sayımı kaydı) → blok geri eklendi. (c) Filtre bileşeni ilk denemede <p> içine yerleşti → paragrafın dışına alındı.
+TEST:typecheck 0 · pnpm test 17 dosya / 64 test 0
+KALAN (KISMI): Listings.tsx 700 satır — mülk dosyası (detay) bloğu hâlâ sayfada; ayrı bileşene alınacak. api-types.ts 682 satır ama tamamı saf tip; konuya göre (ilan/kişi/para/belge) bölünecek.
+SIRADAKİ:M6 kalanı (detay bloğu + api-types bölünmesi), sonra M7 (paket OKU-BENI + H-11).
+--------------------------------------------------------------------------------

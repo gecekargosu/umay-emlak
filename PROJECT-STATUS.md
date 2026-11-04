@@ -1,6 +1,6 @@
 # PROJECT-STATUS
 
-Son güncelleme: 2026-11-05 01:40 · Aktif tur: TUR:48 bitti — demo portföy fotoğraflı ve belgeli
+Son güncelleme: 2026-11-05 02:55 · Aktif tur: TUR:49 bitti — M6 bölme KISMI (api.ts, documents.ts bitti; Listings detay bloğu kaldı)
 
 ## Şu an çalışan (doğrulandı)
 - Giriş/oturum, boşta kilit, şifre değiştirme; ofis/personel/onay yetkisi.
@@ -33,7 +33,7 @@ M4 · **K-6 audit_log** → YAPILDI (2026-11-04, TUR:46) — "kim ne yaptı" kay
      Bitiş: bir işlem yapılıp kaydı DB'den okunur.
 M5 · **H-15 + K-10** → YAPILDI (2026-11-04, TUR:47) — belgeler ekranında liste/arama önce gelsin; portföy listesi sanal liste.
      Bitiş: 91 kartta kaydırma akıcı, belge listesi ilk bakışta görünür.
-M6 · **K-1 / K-2 / K-3** — Listings.tsx 914, api.ts 725, documents.ts 716 satır bölünür.
+M6 · **K-1 / K-2 / K-3** → KISMI (2026-11-05, TUR:49) — Listings.tsx 914, api.ts 725, documents.ts 716 satır bölünür.
      Bitiş: davranış aynı, typecheck + test yeşil, ekran kontrolü.
 M7 · **Y-93 + H-11** — paket OKU-BENI uyarısı ve sürüm notu; paket ASCII klasörde açılır.
      Bitiş: zip yeniden üretilip /health 200.
@@ -41,7 +41,7 @@ M7 · **Y-93 + H-11** — paket OKU-BENI uyarısı ve sürüm notu; paket ASCII 
 Kural: aynı anda tek mission; kapsam büyütülmez, bitmeyen mission yeni mission açmaz.
 
 ## Sıradaki adım (tek cümle)
-M6: Listings.tsx 914, api.ts 725, documents.ts 716 satır — davranış değişmeden bölünür (K-1/K-2/K-3).
+Kalan M6: Listings.tsx içindeki mülk dosyası (detay) bloğunu ayır, api-types.ts’i konuya göre böl (her dosya 400 satır altı).
 
 ## Sorular (kullanıcıdan bekleyen)
 - Aysan kirayı mal sahibine mi yatırıyor, ofis hesabından mı geçiyor? (para akışı modeli)
