@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { api, ApiError, type PersonRow } from "../api";
+import { api, ApiError, logOnly, type PersonRow } from "../api";
 
 /**
  * Teklif / görüşme kaydı — TUR:24.
@@ -53,7 +53,7 @@ export function ListingOffers({ listingId }: { listingId: string }) {
     void load();
     void api<{ items: PersonRow[] }>("/people")
       .then((data) => setPeople(data.items))
-      .catch(() => null);
+      .catch((caught) => logOnly(caught, "teklif formu için kişi listesi alınamadı"));
   }, [load]);
 
   async function save() {

@@ -411,3 +411,7 @@ Y-96 | Kalan işler ve sıra (2026-11-04, kaynak dosyadaki kullanıcı istekleri
 Y-97 | H-7 + H-8 — YAPILDI (2026-11-04, TUR:44): Görevler sayfası eklendi, Mesajlar yol haritasına
        bağlandı, kira takibi satırı etiketlendi. AÇIK: gerçek mesajlaşma (SIRA 16) ve otomatik
        hatırlatıcı (SIRA 8). | Dilim 8 | S | YAPILDI
+
+Y-98 | K-4 + K-9 — YAPILDI (2026-11-04, TUR:45): sessiz catch'ler kapatıldı, hata mesajları
+       sade Türkçe + kayıt numarası oldu, ham teknik metin ekrana çıkmıyor.
+       AÇIK KALAN: JSON log + request_id (K-6, M4). | Dilim 8 | S | YAPILDI

@@ -1,6 +1,6 @@
 # PROJECT-STATUS
 
-Son güncelleme: 2026-11-04 23:25 · Aktif tur: TUR:44 bitti — M2 (H-7 + H-8) kapandı
+Son güncelleme: 2026-11-04 23:45 · Aktif tur: TUR:45 bitti — M3 (K-4 + K-9) kapandı
 
 ## Şu an çalışan (doğrulandı)
 - Giriş/oturum, boşta kilit, şifre değiştirme; ofis/personel/onay yetkisi.
@@ -25,7 +25,7 @@ M1 · **H-13 + H-14** → YAPILDI (2026-11-04, TUR:42) — sözleşmeler listeyl
      Bitiş: typecheck 0, test yeşil, iki akış preview'da tıklandı, TUR + commit + push.
 M2 · **H-7 + H-8** → YAPILDI (2026-11-04, TUR:44) — ana sayfadaki Görevler/Mesajlar kutuları tıklanabilsin; kira takibi satırı
      "geciken tahakkuk / beklenen / ödenen" olarak ayrışsın. Bitiş: aynı ölçüt.
-M3 · **K-4 + K-9** — 11 sessiz catch kullanıcıya sade Türkçe mesaj + kayıt numarası versin;
+M3 · **K-4 + K-9** → YAPILDI (2026-11-04, TUR:45) — 11 sessiz catch kullanıcıya sade Türkçe mesaj + kayıt numarası versin;
      teknik ayrıntı log'a. Bitiş: hata üreten akış ekranda görülür, test yeşil.
 M4 · **K-6 audit_log** — "kim ne yaptı" kaydı (tablo + yazma uçları + JSON log + request_id).
      Bitiş: bir işlem yapılıp kaydı DB'den okunur.
@@ -39,7 +39,7 @@ M7 · **Y-93 + H-11** — paket OKU-BENI uyarısı ve sürüm notu; paket ASCII 
 Kural: aynı anda tek mission; kapsam büyütülmez, bitmeyen mission yeni mission açmaz.
 
 ## Sıradaki adım (tek cümle)
-M3: 11 sessiz catch kullanıcıya sade Türkçe mesaj versin (K-4), teknik ayrıntı log'a gitsin (K-9).
+M4: "kim ne yaptı" kaydı (audit_log + JSON log + request_id) eklensin (K-6).
 
 ## Sorular (kullanıcıdan bekleyen)
 - Aysan kirayı mal sahibine mi yatırıyor, ofis hesabından mı geçiyor? (para akışı modeli)

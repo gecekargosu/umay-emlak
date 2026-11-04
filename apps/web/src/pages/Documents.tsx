@@ -7,6 +7,7 @@ import {
   type KindOption,
   type PersonRow,
 } from "../api";
+import { userError } from "../api";
 import { InfoNote } from "../components/InfoNote";
 import { BackButton } from "../components/BackButton";
 
@@ -47,10 +48,10 @@ export function Documents({ canApprove }: { canApprove: boolean }) {
     void load("");
     void api<{ items: KindOption[] }>("/documents/kinds")
       .then((data) => setKinds(data.items))
-      .catch(() => null);
+      .catch((caught) => setError(userError(caught, "Belge türleri yüklenemedi")));
     void api<{ items: PersonRow[] }>("/people")
       .then((data) => setPeople(data.items))
-      .catch(() => null);
+      .catch((caught) => setError(userError(caught, "Kişi listesi yüklenemedi")));
   }, [load]);
 
   async function upload() {

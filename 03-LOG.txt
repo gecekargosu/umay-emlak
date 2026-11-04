@@ -385,3 +385,11 @@ HATA ANALIZI:pnpm test ilk koşuda 3 test kırıldı (403 beklenirken 201/200). 
 TEST:typecheck 0 · pnpm test 17 dosya / 64 test 0
 SIRADAKİ:M3 — K-4 sessiz catch + K-9 hata dili.
 --------------------------------------------------------------------------------
+
+[2026-11-04 23:45] TUR:45 | MODUL:M3 — K-4 sessiz catch + K-9 hata dili | IS:(1) apps/web/src/api.ts'e iki yardımcı eklendi: userError(caught, fallback) → sunucu mesajı varsa onu, yoksa "… (kayıt no: K-XXXX)" döndürür ve teknik ayrıntıyı console.error'a yazar; logOnly(caught, ne) → yalnız log'lar. (2) Sunucuda app.onError artık beklenmeyen hatada "Beklenmeyen bir hata oldu. Bu numarayla bildirin: S-XXXX" döndürüyor; yığın izi yalnız sunucu log'unda, yanıtta teknik ayrıntı yok. (3) Sessiz catch'ler kapatıldı: App (oturum + bildirim sayacı → log), Documents (belge türleri, kişiler → görünür uyarı), Listings (raflar, belge türleri, ilçeler → görünür uyarı; demirbaş → log), Appointments (kişi/ilan/personel listeleri → görünür uyarı), Policies (mülk listesi → görünür uyarı), Payouts (aktarımlar → görünür uyarı), ListingOffers (kişi listesi → log), useDraft (3 catch → console.warn; form çalışmaya devam eder). (4) `(caught as Error).message` ile ham teknik mesaj basan yerler (Appointments, Policies, Payouts) userError'a çevrildi; ApiError ithalatı kaldırıldı.
+DOSYA:apps/web/src/api.ts, apps/web/src/App.tsx, pages/Documents.tsx, pages/Listings.tsx, pages/Appointments.tsx, pages/Policies.tsx, pages/Payouts.tsx, components/ListingOffers.tsx, hooks/useDraft.ts, apps/api/src/app.ts
+DOGRULAMA (preview 5175): Poliçeler isteği bilerek düşürüldü (fetch engellendi) → ekranda "Poliçeler yüklenemedi (kayıt no: K-2J5R5T)" göründü; kayıt numarası formatı doğrulandı, ham hata metni ekrana sızmadı. Sayfa yenilenip normal hâle döndürüldü.
+HATA ANALIZI:typecheck ilk turda 2 hata verdi (Payouts.tsx'te kalan ApiError kullanımı); userError'a çevrilince 0'a döndü.
+TEST:typecheck 0 · pnpm test 17 dosya / 64 test 0
+SIRADAKİ:M4 — audit_log + JSON log + request_id (K-6).
+--------------------------------------------------------------------------------

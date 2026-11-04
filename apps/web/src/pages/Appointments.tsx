@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { api, type Appointment, type ListingRow, type PersonRow } from "../api";
+import { api, userError, type Appointment, type ListingRow, type PersonRow } from "../api";
 
 /**
  * Randevular — TUR:31 (yol haritası SIRA 5).
@@ -59,7 +59,7 @@ export function Appointments() {
       setItems(data.items);
       setError(null);
     } catch (caught) {
-      setError((caught as Error).message);
+      setError(userError(caught, "Randevular yüklenemedi"));
     }
   }, [filter]);
 
@@ -74,15 +74,15 @@ export function Appointments() {
           [...data.items].sort((a, b) => a.fullName.localeCompare(b.fullName, "tr")),
         ),
       )
-      .catch(() => setPeople([]));
+      .catch((caught) => setError(userError(caught, "Kişi listesi yüklenemedi")));
     void api<{ items: ListingRow[] }>("/listings")
       .then((data) =>
         setListings(data.items.filter((row) => row.status !== "closed" && row.status !== "archived")),
       )
-      .catch(() => setListings([]));
+      .catch((caught) => setError(userError(caught, "İlan listesi yüklenemedi")));
     void api<{ members: Member[] }>("/team")
       .then((data) => setMembers(data.members.filter((m) => m.status === "active")))
-      .catch(() => setMembers([]));
+      .catch((caught) => setError(userError(caught, "Personel listesi yüklenemedi")));
   }, []);
 
   const grouped = useMemo(() => {
@@ -119,7 +119,7 @@ export function Appointments() {
       setForm({ ...form, place: "" });
       await load();
     } catch (caught) {
-      setError((caught as Error).message);
+      setError(userError(caught, "Randevu kaydedilemedi"));
     } finally {
       setBusy(false);
     }
@@ -146,7 +146,7 @@ export function Appointments() {
       );
       await load();
     } catch (caught) {
-      setError((caught as Error).message);
+      setError(userError(caught, "Randevu kaydedilemedi"));
     } finally {
       setBusy(false);
     }

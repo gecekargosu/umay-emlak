@@ -163,3 +163,12 @@ G. TUR:44 GÜNCELLEMELERİ (2026-11-04)
 [VAR] "Mesajlar" kutusu ölü değil: yol haritasına gidiyor, metin "yol haritasında" diyor (H-7).
 [VAR] Kira takibi alt satırı etiketli: "N geciken tahakkuk · açık bakiye X · beklenen Y / ödenen Z" (H-8).
 [KISMI] Mesajlaşma/e-posta/SMS modülü hâlâ yok (SIRA 8 + SIRA 16).
+
+====================================================================
+H. TUR:45 GÜNCELLEMELERİ (2026-11-04)
+====================================================================
+[VAR] Hata dili tek yerden: userError() sade Türkçe cümle + "kayıt no: K-XXXX" verir, teknik ayrıntı
+      yalnız konsola gider; sunucu 500 yanıtı "S-XXXX" numarası taşır (K-9).
+[VAR] Sessiz catch kalmadı: belge türü/kişi/ilçe/aktarım/randevu listeleri düşerse ekranda sebep
+      yazıyor; oturum, sayaç, demirbaş ve taslak hataları kayıt numarasıyla log'a düşüyor (K-4).
+[KISMI] JSON log + request_id: 500 yanıtı numara taşıyor ama log hâlâ düz metin (M4'ün parçası).

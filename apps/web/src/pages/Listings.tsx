@@ -8,6 +8,7 @@ import {
   type ListingRow,
   type PropertyAssets,
 } from "../api";
+import { logOnly, userError } from "../api";
 import { BackButton } from "../components/BackButton";
 import { InfoNote } from "../components/InfoNote";
 import { ListingOffers } from "../components/ListingOffers";
@@ -121,8 +122,9 @@ export function Listings({
     try {
       const data = await api<{ items: ListingRow[] }>("/listings");
       setAllRows(data.items);
-    } catch {
-      // raf boş kalır, liste hatayı gösterir
+    } catch (caught) {
+      // Raflar boş kalmasın: kullanıcıya sebep söylenir, ayrıntı log'a gider.
+      setError(userError(caught, "Raflar yüklenemedi"));
     }
   }
 
@@ -132,10 +134,10 @@ export function Listings({
     void loadAll();
     void api<{ items: KindOption[] }>("/documents/kinds")
       .then((data) => setKinds(data.items))
-      .catch(() => null);
+      .catch((caught) => setError(userError(caught, "Belge türleri yüklenemedi")));
     void api<{ items: string[] }>("/listings/districts")
       .then((data) => setDistricts(data.items))
-      .catch(() => null);
+      .catch((caught) => setError(userError(caught, "İlçe listesi yüklenemedi")));
   }, []);
 
   /** TUR:21 — filtre yazarken kendiliğinden çalışır; "Filtrele"ye basmak gerekmez. */
@@ -158,7 +160,10 @@ export function Listings({
       setAuthority(data.listing.authorityNo ?? "");
       void api<PropertyAssets>(`/properties/${data.listing.propertyId}/assets`)
         .then(setAssets)
-        .catch(() => setAssets(null));
+        .catch((caught) => {
+          logOnly(caught, "mülk demirbaş/abonelik bilgisi alınamadı");
+          setAssets(null);
+        });
       setError(null);
     } catch {
       setError("İlan açılamadı");

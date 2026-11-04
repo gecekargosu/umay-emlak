@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { api, type Session, type Today } from "./api";
+import { api, logOnly, type Session, type Today } from "./api";
 import { IdleLock, useIdleLock } from "./components/IdleLock";
 import { Contracts } from "./pages/Contracts";
 import { Dashboard } from "./pages/Dashboard";
@@ -134,7 +134,11 @@ export function App() {
   useEffect(() => {
     api<Session>("/auth/session")
       .then(setSession)
-      .catch(() => setSession(null))
+      .catch((caught) => {
+        // Oturum okunamazsa giriş ekranı çıkar; sebep kaybolmasın diye log'lanır.
+        logOnly(caught, "oturum bilgisi alınamadı");
+        setSession(null);
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -154,7 +158,10 @@ export function App() {
             c.policyWarnings,
         );
       })
-      .catch(() => setActionCount(0));
+      .catch((caught) => {
+        logOnly(caught, "bildirim sayacı alınamadı");
+        setActionCount(0);
+      });
   }, [session, page]);
 
   // Kaynak dosya 6.1: "/" ile aramaya, Esc ile kapat

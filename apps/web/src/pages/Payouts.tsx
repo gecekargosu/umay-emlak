@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { api, ApiError, type PayoutPreviewRow, type PayoutRow } from "../api";
+import { api, userError, type PayoutPreviewRow, type PayoutRow } from "../api";
 import { InfoNote } from "../components/InfoNote";
 
 /**
@@ -24,7 +24,7 @@ export function Payouts() {
       setPreview(data.items);
       setError(null);
     } catch (caught) {
-      setError(caught instanceof ApiError ? caught.message : "Önizleme yüklenemedi");
+      setError(userError(caught, "Önizleme yüklenemedi"));
     }
   }, []);
 
@@ -32,8 +32,8 @@ export function Payouts() {
     try {
       const data = await api<{ items: PayoutRow[] }>("/payouts");
       setPayouts(data.items);
-    } catch {
-      setError("Aktarımlar yüklenemedi");
+    } catch (caught) {
+      setError(userError(caught, "Aktarımlar yüklenemedi"));
     }
   }, []);
 
@@ -58,7 +58,7 @@ export function Payouts() {
       setMessage(`Aktarım oluşturuldu. Net: ${created.net}`);
       await loadPayouts();
     } catch (caught) {
-      setError(caught instanceof ApiError ? caught.message : "Aktarım oluşturulamadı");
+      setError(userError(caught, "Aktarım oluşturulamadı"));
     } finally {
       setBusy(false);
     }
@@ -72,7 +72,7 @@ export function Payouts() {
       setMessage("Aktarım ödendi olarak işaretlendi.");
       await loadPayouts();
     } catch (caught) {
-      setError(caught instanceof ApiError ? caught.message : "İşaretlenemedi");
+      setError(userError(caught, "İşaretlenemedi"));
     } finally {
       setBusy(false);
     }

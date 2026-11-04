@@ -45,8 +45,13 @@ app.onError((error, c) => {
   if (error instanceof HttpError) {
     return c.json({ error: error.message }, error.status);
   }
-  console.error("beklenmeyen hata:", error);
-  return c.json({ error: "Sunucu hatası" }, 500);
+  // K-9: kullanıcıya sade cümle + kayıt numarası; teknik ayrıntı yalnız log'a.
+  const ref = `S-${Date.now().toString(36).toUpperCase().slice(-6)}`;
+  console.error(`[UMAY] ${ref} ${c.req.method} ${c.req.path}`, error);
+  return c.json(
+    { error: `Beklenmeyen bir hata oldu. Bu numarayla bildirin: ${ref}`, ref },
+    500,
+  );
 });
 
 app.get("/health", async (c) => {

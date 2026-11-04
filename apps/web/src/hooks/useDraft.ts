@@ -14,7 +14,9 @@ export function useDraft<T extends Record<string, unknown>>(
       const raw = window.localStorage.getItem(key);
       if (!raw) return initial;
       return { ...initial, ...(JSON.parse(raw) as Partial<T>) };
-    } catch {
+    } catch (caught) {
+      // Bozuk taslak formu kilitlemesin; sebep kaybolmasın.
+      console.warn(`[UMAY] ${key} taslağı okunamadı`, caught);
       return initial;
     }
   });
@@ -22,16 +24,17 @@ export function useDraft<T extends Record<string, unknown>>(
   useEffect(() => {
     try {
       window.localStorage.setItem(key, JSON.stringify(value));
-    } catch {
+    } catch (caught) {
       // Kota dolu veya depolama kapalı: taslak yazılamazsa form çalışmaya devam eder.
+      console.warn(`[UMAY] ${key} taslağı yazılamadı`, caught);
     }
   }, [key, value]);
 
   function clear() {
     try {
       window.localStorage.removeItem(key);
-    } catch {
-      // yoksay
+    } catch (caught) {
+      console.warn(`[UMAY] ${key} taslağı silinemedi`, caught);
     }
     setValue(initial);
   }

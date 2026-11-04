@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { api, type ListingRow, type PolicyList, type PolicyRow } from "../api";
+import { api, userError, type ListingRow, type PolicyList, type PolicyRow } from "../api";
 
 /**
  * Poliçeler — TUR:29 (yol haritası SIRA 3).
@@ -58,8 +58,8 @@ export function Policies() {
       const data = await api<PolicyList>(`/policies?filter=${filter}`);
       setList(data);
       setError(null);
-    } catch (err) {
-      setError((err as Error).message);
+    } catch (caught) {
+      setError(userError(caught, "Poliçeler yüklenemedi"));
     }
   }, [filter]);
 
@@ -81,7 +81,7 @@ export function Policies() {
             .sort((a, b) => a.title.localeCompare(b.title, "tr")),
         );
       })
-      .catch(() => setProperties([]));
+      .catch((caught) => setError(userError(caught, "Mülk listesi yüklenemedi")));
   }, []);
 
   const filteredProperties = useMemo(() => {
@@ -185,7 +185,7 @@ export function Policies() {
       resetForm();
       await load();
     } catch (err) {
-      setError((err as Error).message);
+      setError(userError(err, "Poliçe kaydedilemedi"));
     } finally {
       setBusy(false);
     }
