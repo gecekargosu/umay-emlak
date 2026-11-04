@@ -358,3 +358,8 @@ YEDEK:kaynaklar/yedek/umay-emlak-2026-11-04.zip (kod) + umay-emlak-db-2026-11-04
 TEST:kod değişikliği yok (son koşu typecheck 0, 17/64 test)
 SIRADAKİ:M1 — H-13 sözleşme listesi + H-14 mülk seçici arama.
 --------------------------------------------------------------------------------
+
+[2026-11-04 22:34] TUR:41-EK | MODUL:Veritabanı yedeği düzeltmesi | IS:pg_dump `-f /tmp/...` konteyner içinde yazamadı (Windows'ta /tmp eşlemesi yok) → çıktı stdout'a alınıp yerel dosyaya yönlendirildi. Doğrulama: `pg_restore -l` arşivi okudu (dbname umay_dev, TOC 336, 257 KB).
+YEDEK:kaynaklar/yedek/umay-emlak-db-2026-11-04.dump (pg_dump -Fc, doğrulandı) + umay-emlak-2026-11-04.zip (kod)
+SIRADAKİ:M1 — H-13 sözleşme listesi + H-14 mülk seçici arama.
+--------------------------------------------------------------------------------
