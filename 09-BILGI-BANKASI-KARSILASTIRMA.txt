@@ -268,3 +268,11 @@ Sonuç: 26 var · 13 kısmi · 9 yok (yol haritası ekranındaki "Eksikler ve g�
 [YOK] Otomatik hatırlatma (SMS/e-posta) · ters kayıt + çok borca mahsup · birlikte kiracı/bağımsız birim · mal sahibi paneli · toplu bildirim + KVKK ret · mobil saha (PWA) · banka eşleştirme + OCR · SaaS lisans/paket · erişilebilirlik (klavye/tema).
 Sıra gerekçesi: ilk altı madde doğrudan para kaybını ve güveni kapatıyor; 7-11 günlük akışı tamamlıyor; 12-16 görünürlük ve müşteriye dönük yüz; 17-22 platform ve satış katmanı.
 Not: Üç ajanın ortak tespiti — "eksik belge dosyayı kilitlemeli", "restore tatbikatı yapılmamış yedek yedek değildir", "para kuruş tam sayı, düzeltme ters kayıtla" — sırasıyla 3, 5 ve 7. maddede karşılık buldu.
+
+====================================================================
+M. TUR:57 GÜNCELLEMELERİ (2026-11-05)
+====================================================================
+[VAR] Ana sayfada "Bu ay bitecekler" tek listesi: sözleşme bitişi, poliçe bitişi ve yaklaşan kira günü birlikte; tarih + "N gün kaldı/bitti" + tür rozeti + ilgili ekrana geçiş.
+[VAR] Sıra mantığı: süresi geçenler en yeni önce (en fazla 5), sonra yaklaşanlar en yakın önce; toplam 20 satır.
+[VAR] Demo veri düzeltildi: sözleşmeler artık bitiş tarihli (1 yıl), 6 DASK poliçesi üretiliyor (biri geçmiş, biri 30 gün içinde) — pano kutuları boş kalmıyor.
+[KISMI] Uyarı hâlâ yalnız ekranda; e-posta/SMS gönderimi ve "okundu/ertele" işareti yok (yol haritası 15. madde).

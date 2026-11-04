@@ -294,6 +294,44 @@ todayRoutes.get("/", async (c) => {
   const overdue = mapped.filter((ch) => ch.daysOverdue > 0);
   const dueSoon = mapped.filter((ch) => ch.daysOverdue === 0 && ch.daysLeft <= 7);
 
+  // TUR:57 — "bu ay bitecekler": sözleşme bitişi + poliçe bitişi + yaklaşan kira günü
+  // tek listede, tarihe göre sıralı. Gün farkı sunucuda hesaplanır (K-8); ekran yalnız yazar.
+  const merged = [
+    ...data.contracts.map((k) => ({
+      kind: "contract" as const,
+      id: k.id,
+      title: k.property_title,
+      detail: "sözleşme bitişi",
+      date: k.end_date,
+      daysLeft: Number(k.days_left),
+    })),
+    ...data.policies.map((p) => ({
+      kind: "policy" as const,
+      id: p.id,
+      title: p.property_title,
+      detail: `${p.kind} poliçesi`,
+      date: p.end_date,
+      daysLeft: Number(p.days_left),
+    })),
+    ...mapped
+      .filter((ch) => ch.daysOverdue === 0 && ch.daysLeft <= 30)
+      .map((ch) => ({
+        kind: "rent" as const,
+        id: ch.id,
+        title: `${ch.tenantName} · ${ch.propertyTitle}`,
+        detail: `kira ${ch.remaining}`,
+        date: ch.dueDate,
+        daysLeft: ch.daysLeft,
+      })),
+  ];
+  // Sıra: süresi geçenler (en yeni önce) → yaklaşanlar (en yakın önce).
+  // 300 gün önce bitmiş sözleşme listenin başında durup gerçeği gizlemesin.
+  const upcomSorted = merged.sort((a, b) => a.date.localeCompare(b.date));
+  const upcoming = [
+    ...upcomSorted.filter((row) => row.daysLeft < 0).slice(-5).reverse(),
+    ...upcomSorted.filter((row) => row.daysLeft >= 0),
+  ].slice(0, 20);
+
   const monthPeriod = `${new Date().toISOString().slice(0, 7)}-01`;
 
   return c.json({
@@ -306,7 +344,10 @@ todayRoutes.get("/", async (c) => {
       draftPayouts: data.payouts.length,
       expiringContracts: data.contracts.length,
       policyWarnings: data.policies.length,
+      /** TUR:57 — "bu ay bitecekler" tek liste uzunluğu. */
+      upcoming: upcoming.length,
     },
+    upcoming,
     charges: { overdue, dueSoon },
     missingDocs,
     pendingMatches: data.pending.map((p) => ({

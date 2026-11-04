@@ -1,6 +1,6 @@
 # PROJECT-STATUS
 
-Son güncelleme: 2026-11-05 07:00 · Aktif tur: TUR:56 bitti — yol haritası iş listesi bilgi bankasından tazelendi (26 var · 13 kısmi · 9 yok)
+Son güncelleme: 2026-11-05 08:30 · Aktif tur: TUR:57 bitti — panoda "Bu ay bitecekler" tek listesi
 
 ## Şu an çalışan (doğrulandı)
 - Giriş/oturum, boşta kilit, şifre değiştirme; ofis/personel/onay yetkisi.
@@ -45,7 +45,7 @@ M8 · **Yol haritası 1** → YAPILDI (2026-11-05, TUR:55) — kiracı kendi ar�
 Kural: aynı anda tek mission; kapsam büyütülmez, bitmeyen mission yeni mission açmaz.
 
 ## Sıradaki adım (tek cümle)
-M8: YAPILDI (TUR:55). Sırada: 1. madde — otomatik hatırlatma (kira günü + sözleşme/poliçe bitişi, önce tek liste sonra e-posta/SMS).
+M9: YAPILDI (TUR:57) — "Bu ay bitecekler" listesi (sözleşme + poliçe + kira). Sırada: 2. madde — gider kalemleri + mal sahibi ekstresi.
 
 ## Sorular (kullanıcıdan bekleyen)
 - Aysan kirayı mal sahibine mi yatırıyor, ofis hesabından mı geçiyor? (para akışı modeli)

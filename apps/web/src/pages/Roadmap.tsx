@@ -61,8 +61,8 @@ const ROWS_OPEN: Row[] = [
   {
     key: "hatirlat",
     title: "Otomatik hatırlatma: kira günü, sözleşme ve poliçe bitişi",
-    status: "yok",
-    note: "Üç ajanın da birleştiği en pahalı eksik: uyarı yalnız ekranda, kimseye mesaj gitmiyor. Önce \"bu ay bitecekler\" tek listesi, sonra e-posta/SMS (Y-18, Y-19, Y-84).",
+    status: "kismi",
+    note: "Tek liste yapıldı (TUR:57): sözleşme + poliçe + kira panoda \"Bu ay bitecekler\". Kalan: e-posta/SMS gönderimi, okundu/ertele işareti (Y-18, Y-19, Y-84).",
   },
   {
     key: "gider",

@@ -140,7 +140,9 @@ async function main(): Promise<void> {
             tenantId,
             listingId: listing!.id,
             tenantPersonId: tenantPerson!.id,
-            startDate: "2026-01-01",
+            // TUR:57 — sözleşmenin bitişi de yazılır: "bitecek sözleşmeler" listesi boş kalmasın.
+            startDate: "2025-12-01",
+            endDate: "2026-11-30",
             rentKurus: t.rent,
             depositKurus: t.rent * 2, // K-23: 2 kira depozito (elle değişebilir)
             depositRentCount: 2,

@@ -32,6 +32,8 @@ export type Today = {
     draftPayouts: number;
     expiringContracts: number;
     policyWarnings: number;
+    /** TUR:57 — "bu ay bitecekler" tek liste uzunluğu. */
+    upcoming: number;
   };
   charges: {
     overdue: TodayCharge[];
@@ -56,6 +58,8 @@ export type Today = {
     endDate: string;
     daysLeft: number;
   }>;
+  /** TUR:57 — sözleşme bitişi + poliçe bitişi + yaklaşan kira günü, tarihe göre. */
+  upcoming: TodayUpcoming[];
   modules: {
     owners: { total: number; portfolio: number };
     properties: { total: number; occupied: number; empty: number; sale: number; rent: number };
@@ -83,6 +87,15 @@ export type Today = {
     chargedKurus: number;
     collectedKurus: number;
   };
+};
+
+export type TodayUpcoming = {
+  kind: "contract" | "policy" | "rent";
+  id: string;
+  title: string;
+  detail: string;
+  date: string;
+  daysLeft: number;
 };
 
 export type TodayCharge = {

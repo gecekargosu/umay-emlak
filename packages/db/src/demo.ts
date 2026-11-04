@@ -451,10 +451,12 @@ async function seed(
   for (let i = 0; i < rentActive.length; i++) {
     const entry = rentActive[i]!;
     await client.query(
+      // TUR:57 — bitiş tarihi olmayan sözleşme "yenilenecek" listesine hiç düşmüyordu;
+      // demo sözleşmeleri 1 yıllık: start_date + 1 yıl.
       `insert into contract
-         (tenant_id, listing_id, tenant_person_id, start_date, rent_kurus,
+         (tenant_id, listing_id, tenant_person_id, start_date, end_date, rent_kurus,
           deposit_kurus, deposit_rent_count, due_day, utility_payer)
-       values ($1, $2, $3, $4, $5, $6, 2, $7, 'tenant')`,
+       values ($1, $2, $3, $4, ($4::date + interval '1 year')::date, $5, $6, 2, $7, 'tenant')`,
       [
         tenantId,
         entry.listingId,
@@ -463,6 +465,30 @@ async function seed(
         entry.rentKurus,
         entry.rentKurus * 2,
         (i % 5) + 1,
+      ],
+    );
+  }
+
+  // --- DASK poliçeleri (TUR:57) --------------------------------------------
+  // Panoda "poliçe bitiyor" kutusu boş kalıyordu: demo veride hiç poliçe yoktu.
+  // Bitiş tarihleri bugüne göre dağıtılır (biri geçmiş, biri 30 gün içinde).
+  const policyEnds = [12, -3, 25, 120, 8, 60];
+  for (let i = 0; i < Math.min(policyEnds.length, rentActive.length); i++) {
+    await client.query(
+      `insert into policy
+         (tenant_id, property_id, kind, insurer, policy_no, start_date, end_date,
+          premium_kurus, note)
+       select $1, l.property_id, 'dask', 'Demo Sigorta', $2,
+              ((current_date + $3::int) - interval '1 year')::date,
+              (current_date + $3::int)::date,
+              $4, 'DEMO poliçe'
+         from listing l where l.id = $5`,
+      [
+        tenantId,
+        `${PREFIX}DASK-${String(i + 1).padStart(3, "0")}`,
+        policyEnds[i]!,
+        125_000 + i * 15_000,
+        rentActive[i]!.listingId,
       ],
     );
   }

@@ -484,3 +484,12 @@ YARIM:Liste hâlâ koda gömülü (tur sonunda elle tazeleniyor); canlı veri de
 SORU:yok
 SIRADAKİ:1. madde — otomatik hatırlatma: önce ana sayfada "bu ay bitecekler" tek listesi (sözleşme bitişi + poliçe bitişi + kira günü), sonra e-posta/SMS kararı.
 --------------------------------------------------------------------------------
+[2026-11-05 08:30] TUR:57 | MODUL:Yol haritası 1. madde (otomatik hatırlatma ilk adımı) | IS:Ana sayfaya "Bu ay bitecekler" tek listesi eklendi: sözleşme bitişi + poliçe bitişi + yaklaşan kira günü, tarihe göre; süresi geçenler en yeni önce, yaklaşanlar en yakın önce (20 satır sınırı). Her satırda tür rozeti (sözleşme/poliçe/kira), tarih, "N gün kaldı/bitti" ve ilgili ekrana "Aç" düğmesi. Gün farkı sunucuda (K-8). Demo veri boşluğu kapatıldı: sözleşmelerin end_date'i yoktu (hiçbiri "yenilenecek" listesine düşmüyordu) ve demo veride hiç poliçe yoktu — seed/demo artık sözleşmeye 1 yıllık bitiş, 6 DASK poliçesi (biri geçmiş, biri 30 gün içinde) üretiyor.
+DOSYA:apps/api/src/routes/today.ts, apps/api/test/today.test.ts, apps/web/src/api-types-money.ts, apps/web/src/pages/Dashboard.tsx, packages/db/src/{demo,seed}.ts
+TEST:typecheck 0 · pnpm test 19 dosya / 67 test 0 · web build 0 (415,09 KB) · API: /api/v1/today upcoming=15 (sözleşme+poliçe+kira), /api/v1/listings 200 · ekran: panoda "Bu ay bitecekler" bölümü listede, satırlarda rozet + tarih + gün
+HATA ANALIZI:1) Gün sıralaması ilk yazımda salt tarihe göreydi; 300 gün önce bitmiş sözleşmeler listenin başındaydı → süresi geçenler en yeni önce, yaklaşanlar en yakın önce olarak yeniden dizildi, test de buna göre yazıldı. 2) Senaryo taramasında Gayrimenkuller/Satılıklar bir ara HTTP-500 verdi: node --watch API'yi yeniden başlatırken düşen istek (bilinen tuzak); tekrar denemede 200.
+KARAR:K-89 "Bu ay bitecekler" listesi tek yerde: sözleşme + poliçe + kira; e-posta/SMS gönderimi ayrı iş (madde 15) · K-90 demo veri gerçek akışı göstermeli: sözleşmede bitiş tarihi ve poliçe kaydı olmadan pano eksik kalıyor
+YARIM:Liste yalnız 30 gün; e-posta/SMS gönderimi ve okundu/erteleme işareti yok
+SORU:yok
+SIRADAKİ:2. madde — gider kalemleri + mal sahibi hesap ekstresi (yazdırılabilir).
+--------------------------------------------------------------------------------

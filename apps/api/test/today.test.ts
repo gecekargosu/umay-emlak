@@ -103,7 +103,8 @@ describe("bugün ne yapılmalı", () => {
     expect(charge.status).toBe(200);
 
     const today = await json<{
-      counts: { overdue: number };
+      counts: { overdue: number; upcoming: number };
+      upcoming: Array<{ kind: string; id: string; date: string; daysLeft: number; title: string }>;
       charges: { overdue: Array<{ tenantName: string; daysOverdue: number; level: string | null }> };
       month: { period: string; charged: string; collected: string };
       modules: {
@@ -117,6 +118,19 @@ describe("bugün ne yapılmalı", () => {
     }>(await app.request("/api/v1/today", { headers: { cookie } }));
 
     expect(today.counts.overdue).toBeGreaterThan(0);
+
+    // TUR:57 — "bu ay bitecekler": sözleşme/poliçe/kira tek liste, tarihe göre sıralı.
+    expect(Array.isArray(today.upcoming)).toBe(true);
+    expect(today.counts.upcoming).toBe(today.upcoming.length);
+    for (const row of today.upcoming) {
+      expect(["contract", "policy", "rent"]).toContain(row.kind);
+      expect(row.daysLeft).toBeLessThanOrEqual(30);
+    }
+    // Sıra: süresi geçenler en yeni önce, yaklaşanlar en yakın önce.
+    const past = today.upcoming.filter((row) => row.daysLeft < 0).map((row) => row.date);
+    const future = today.upcoming.filter((row) => row.daysLeft >= 0).map((row) => row.date);
+    expect(past).toEqual([...past].sort().reverse());
+    expect(future).toEqual([...future].sort());
     const row = today.charges.overdue.find((c) => c.tenantName.includes("Gunun Test Kiraci"));
     expect(row, "gecikmiş kira listede yok").toBeTruthy();
     expect(row!.daysOverdue).toBeGreaterThan(0);

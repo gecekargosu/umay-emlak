@@ -263,6 +263,41 @@ export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
         </p>
       </section>
 
+      {/* TUR:57 — "bu ay bitecekler": sözleşme + poliçe + kira günü tek listede,
+          tarihe göre. Üç ayrı listeye bakmadan konuşulan tek ekran. */}
+      {today.upcoming.length > 0 && (
+        <Section
+          title="Bu ay bitecekler"
+          hint="Önümüzdeki 30 gün: sözleşme bitişi, poliçe bitişi ve yaklaşan kira günü tek listede."
+        >
+          <ul className="action-list">
+            {today.upcoming.map((row) => {
+              const page = row.kind === "contract" ? "sozlesmeler" : row.kind === "policy" ? "policeler" : "kiralar";
+              const label = row.kind === "contract" ? "sözleşme" : row.kind === "policy" ? "poliçe" : "kira";
+              return (
+                <li key={`${row.kind}-${row.id}`}>
+                  <div>
+                    <span className="badge">{label}</span> <strong>{row.title}</strong>
+                    <span className="muted small"> · {row.detail}</span>
+                  </div>
+                  <div className="muted small">
+                    {new Date(`${row.date}T00:00:00`).toLocaleDateString("tr-TR")} ·{" "}
+                    {row.daysLeft < 0
+                      ? `${Math.abs(row.daysLeft)} gün önce bitti`
+                      : row.daysLeft === 0
+                        ? "bugün"
+                        : `${row.daysLeft} gün kaldı`}{" "}
+                    <button type="button" className="ghost" onClick={() => go(page)}>
+                      Aç
+                    </button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </Section>
+      )}
+
       {today.charges.overdue.length > 0 && (
         <Section
           title="Gecikmiş kiralar"
