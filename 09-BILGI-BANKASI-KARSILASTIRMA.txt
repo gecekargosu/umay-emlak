@@ -241,3 +241,10 @@ M. TUR:53 GÜNCELLEMELERİ (2026-11-04)
 [VAR] İşlem kaydı ekranı: kişi, tarih aralığı, arama; satırda işlem, kayıt, yol, kayıt no.
 [VAR] Uç süzgeçleri sunucuda (userId/from/to/q); toplam sayı limit dışında.
 [VAR] Ekran salt okunur: denetim kaydı silinemez/değiştirilemez.
+
+====================================================================
+M. TUR:54 GÜNCELLEMELERİ (2026-11-04)
+====================================================================
+[VAR] Portföy listesi sanal: yalnız görünen ~27 satır basılıyor, 91/2000+ kayıtta aynı.
+[VAR] "Sonraki 60" düğmesi kalktı; kaydırma çubuğu tüm listeyi temsil ediyor (K-10).
+[VAR] Satır yüksekliği sabit (38px), uzun hücreler tek satırda kesiliyor — sanal liste şartı.

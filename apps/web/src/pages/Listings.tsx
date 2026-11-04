@@ -14,6 +14,7 @@ import { KIND_TR, STATUS_TR } from "../components/listing-labels";
 import { Shelf } from "../components/ListingShelf";
 import { ListingFilters, EMPTY_FILTERS, type Filters } from "../components/ListingFilters";
 import { ListingDetailPage } from "../components/ListingDetailPage";
+import { VirtualTable } from "../components/VirtualTable";
 
 /** İzin verilen geçişler sunucudaki kuralla aynı; sunucu yine kendi kontrolünü yapar. */
 
@@ -44,8 +45,6 @@ export function Listings({
   });
   const [authority, setAuthority] = useState("");
   const [assets, setAssets] = useState<PropertyAssets | null>(null);
-  /** K-10: 500+ kayıtta tüm satırları basmayalım; liste 60'lık parçalarla açılır. */
-  const [shown, setShown] = useState(60);
   const [subForm, setSubForm] = useState({ kind: "elektrik", provider: "", monthlyText: "" });
   const [fixtureForm, setFixtureForm] = useState({ name: "", quantity: 1 });  async function load(params: Partial<Filters> = {}) {
     try {
@@ -56,7 +55,6 @@ export function Listings({
       const qs = search.toString();
       const data = await api<{ items: ListingRow[] }>(`/listings${qs ? `?${qs}` : ""}`);
       setRows(data.items);
-      setShown(60);
       setError(null);
     } catch {
       setError("Portföy yüklenemedi");
@@ -323,66 +321,51 @@ export function Listings({
             ? "Henüz portföy yok. Kişiler ekranından mal sahibi ekleyip içe aktarma yapabilirsiniz."
             : "Bu aramaya uyan kayıt yok. Filtreleri temizleyin."}
         </p>
-      ) : (        <div className="table-scroll">
-          <table>
-            <thead>
-              <tr>
-                <th>Mülk</th>
-                <th>Adres</th>
-                <th>Site / Apartman</th>
-                <th>Daire</th>
-                <th>Mal sahibi</th>
-                <th>Kiracı</th>
-                <th>Tür</th>
-                <th>Durum</th>
-                <th className="right">Fiyat</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.slice(0, shown).map((row) => (
-                <tr
-                  key={row.id}
-                  className={selectedListingId === row.id ? "selected" : "clickable"}
-                  onClick={() => void open(row.id)}
-                >
-                  <td>
-                    {row.title}
-                    {row.roomCount ? <span className="muted small"> · {row.roomCount}</span> : null}
-                  </td>
-                  <td className="muted">
-                    {row.address || [row.district, row.city].filter(Boolean).join(", ") || "adres yok"}
-                  </td>
-                  <td className="muted">
-                    {[row.siteName, row.buildingName].filter(Boolean).join(" · ") || "—"}
-                  </td>
-                  <td className="muted">
-                    {row.unitNo ?? "—"}
-                    {row.block ? <span className="small"> / {row.block}</span> : null}
-                  </td>
-                  <td className="muted">{row.ownerName ?? "—"}</td>
-                  <td className="muted">{row.tenantName ?? "—"}</td>
-                  <td>{KIND_TR[row.kind] ?? row.kind}</td>
-                  <td>{STATUS_TR[row.status] ?? row.status}</td>
-                  <td className="right">{row.price}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-          {rows.length > shown && (
-            <p className="muted small">
-              {shown} / {rows.length} kayıt gösteriliyor (K-10).
-              <button
-                type="button"
-                className="secondary"
-                style={{ marginLeft: 10 }}
-                onClick={() => setShown(shown + 60)}
-              >
-                Sonraki 60
-              </button>
-            </p>
+      ) : (                <VirtualTable
+          rows={rows}
+          columns={9}
+          head={
+            <tr>
+              <th>Mülk</th>
+              <th>Adres</th>
+              <th>Site / Apartman</th>
+              <th>Daire</th>
+              <th>Mal sahibi</th>
+              <th>Kiracı</th>
+              <th>Tür</th>
+              <th>Durum</th>
+              <th className="right">Fiyat</th>
+            </tr>
+          }
+          renderRow={(row) => (
+            <tr
+              key={row.id}
+              className={selectedListingId === row.id ? "selected" : "clickable"}
+              onClick={() => void open(row.id)}
+            >
+              <td>
+                {row.title}
+                {row.roomCount ? <span className="muted small"> · {row.roomCount}</span> : null}
+              </td>
+              <td className="muted">
+                {row.address || [row.district, row.city].filter(Boolean).join(", ") || "adres yok"}
+              </td>
+              <td className="muted">
+                {[row.siteName, row.buildingName].filter(Boolean).join(" · ") || "—"}
+              </td>
+              <td className="muted">
+                {row.unitNo ?? "—"}
+                {row.block ? <span className="small"> / {row.block}</span> : null}
+              </td>
+              <td className="muted">{row.ownerName ?? "—"}</td>
+              <td className="muted">{row.tenantName ?? "—"}</td>
+              <td>{KIND_TR[row.kind] ?? row.kind}</td>
+              <td>{STATUS_TR[row.status] ?? row.status}</td>
+              <td className="right">{row.price}</td>
+            </tr>
           )}
+        />
+      )}
         </>
       )}
         </>

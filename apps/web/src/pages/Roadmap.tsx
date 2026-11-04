@@ -48,7 +48,7 @@ const ROWS_VAR: Row[] = [
   { key: "gorev", title: "Görev listesi (arıza, bakım, hatırlatma)", status: "var", note: "Operasyon → Görevler; kiracı kendi talebini giremez (aşağıda 4. madde).", turn: "TUR:44" },
   { key: "hata", title: "Anlaşılır hata mesajı + kayıt numarası", status: "var", note: "500'de \"Bu numarayla bildirin: R-…\"; aynı numara sunucu log'unda.", turn: "TUR:45" },
   { key: "denetim", title: "İşlem kaydı altyapısı (audit_log)", status: "var", note: "Her yazma isteği kim/ofis/uç/kayıt ile saklanıyor; Sistem → İşlem kaydı ekranından okunuyor (TUR:53).", turn: "TUR:46" },
-  { key: "uzunListe", title: "Portföy listesi 500 kayıtta akıcı", status: "var", note: "Liste 100'lük parçalarla açılıyor (K-10, TUR:47). Tam sanal liste değil.", turn: "TUR:47" },
+  { key: "uzunListe", title: "Portföy listesi 500 kayıtta akıcı", status: "var", note: "Sanal liste: yalnız görünen satırlar basılıyor, kaydırma çubuğu tam uzunluğu gösteriyor (K-10, TUR:54).", turn: "TUR:54" },
 ];
 
 /** Henüz olmayan / yarım olanlar. Sıra numarası bu dizinin sırasıdır. */
@@ -133,31 +133,28 @@ const CLOSED: Closed[] = [
   { title: "Portföy listesi parçalı gösterim", turn: "TUR:47", what: "İlk 100 kayıt + 'sonraki 100'; 500 kayıtta DOM şişmiyor (K-10)." },
   { title: "Teslim tutanağı PDF (fotoğraf + imza alanı)", turn: "TUR:52", what: "Kayıtlı tutanaktan A4 PDF: taşınmaz, taraflar, demirbaş, depozito hesabı, mülkün 3 fotoğrafı ve imza alanları; mülk dosyasından açılıyor." },
   { title: "İşlem kaydı ekranı (kim ne yaptı)", turn: "TUR:53", what: "Sistem → İşlem kaydı: kişi, tarih aralığı ve arama süzgeci; her satırda işlem, kayıt, yol ve R-… numarası. Kayıt değiştirilemez." },
+  { title: "Portföy listesinde tam sanal liste", turn: "TUR:54", what: "Yalnız görünen satırlar basılıyor; 2000+ kayıtta da sayfa ağırlaşmıyor, 'sonraki 60' düğmesi kalktı (K-10)." },
 ];
 
 const SUGGESTIONS: Array<{ title: string; body: string }> = [
   {
-    title: "1) Portföy listesinde tam sanal liste",
-    body: "Şimdi 100'lük parçalarla açılıyor; kayıt 2000'i geçince yine yavaşlar. Görünmeyen satırları hiç basmayan sanal liste (kendi bileşenimiz, ek paket yok) sıradaki adım olmalı.",
-  },
-  {
-    title: "2) Kiracı talebini kiracı açsın",
+    title: "1) Kiracı talebini kiracı açsın",
     body: "Görev kaydı var ama kapı kiracıya kapalı. Kiracı paneli kurulana kadar en azından tek kullanımlık talep bağlantısı (token) ile arıza bildirimi alınabilir; telefonda kaybolan arızalar kayda girer.",
   },
   {
-    title: "3) Poliçe ve sözleşme bitişinde tek uyarı listesi",
+    title: "2) Poliçe ve sözleşme bitişinde tek uyarı listesi",
     body: "Poliçeler ve sözleşmeler tarihleri tutuyor ama kimseye seslenmiyor. Otomatik SMS/e-posta kararı verilene kadar ana sayfada 'bu ay bitecekler' tek listesi olsun; para kaybettiren yer burası.",
   },
   {
-    title: "4) Her ekranda geri + tek tuşla ana sayfa",
+    title: "3) Her ekranda geri + tek tuşla ana sayfa",
     body: "Aysan 18 personelle çalışacak; yanlış ekrana giren personelin geri dönememesi en çok şikâyet edilen şey olur. Üst bar + detay geri tuşları var, yeni ekranlarda da korunmalı.",
   },
   {
-    title: "5) Para biriminde tek kural",
+    title: "4) Para biriminde tek kural",
     body: "Her tutar kuruş (tam sayı) olarak saklanıyor, ekranda biçimleniyor. Yeni modüllerde de bu kural bozulmasın; ondalıkla hesap yapılmasın.",
   },
   {
-    title: "6) Yedek her turda",
+    title: "5) Yedek her turda",
     body: "Kod her turda zip olarak kaynaklar/yedek altına alınıyor; PostgreSQL dökümü de (pg_dump) aynı yere ekleniyor. Kod gider, veri kalır.",
   },
 ];
@@ -189,7 +186,7 @@ export function Roadmap() {
         Kaynak: kökteki <strong>“umay emlak program detayları benim yazdığım.txt”</strong>. Bir madde
         bitince <strong>silinmez</strong>; “VAR” durumuna geçer ve <strong>Kapananlar</strong>{" "}
         bölümüne taşınır. Sıra numarası elle yazılmaz: açık maddeler sırayla numaralanır, bir madde
-        kapanınca numaralar kendiliğinden kayar. Son tazeleme: <strong>TUR:53</strong>.
+        kapanınca numaralar kendiliğinden kayar. Son tazeleme: <strong>TUR:54</strong>.
       </InfoNote>
 
       <h3>Kapananlar (son turlar)</h3>

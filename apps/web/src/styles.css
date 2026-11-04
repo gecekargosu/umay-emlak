@@ -1661,3 +1661,27 @@ main h3,
   font-size: 13px;
   resize: vertical;
 }
+
+
+/* TUR:54 — sanal liste (K-10): yalnız görünen satırlar basılır, satır yüksekliği sabit. */
+.virtual-scroll {
+  max-height: 58vh;
+  overflow-y: auto;
+}
+
+.virtual-table tbody tr {
+  height: 38px;
+}
+
+.virtual-table tbody td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 260px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.virtual-table tbody tr.clickable:hover {
+  background: var(--bg-700);
+}

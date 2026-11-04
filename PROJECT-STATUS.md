@@ -1,6 +1,6 @@
 # PROJECT-STATUS
 
-Son güncelleme: 2026-11-05 04:40 · Aktif tur: TUR:53 bitti — işlem kaydı ekranı
+Son güncelleme: 2026-11-05 05:00 · Aktif tur: TUR:54 bitti — portföy sanal liste
 
 ## Şu an çalışan (doğrulandı)
 - Giriş/oturum, boşta kilit, şifre değiştirme; ofis/personel/onay yetkisi.
@@ -41,7 +41,7 @@ M7 · **Y-93 + H-11** — paket OKU-BENI uyarısı ve sürüm notu; paket ASCII 
 Kural: aynı anda tek mission; kapsam büyütülmez, bitmeyen mission yeni mission açmaz.
 
 ## Sıradaki adım (tek cümle)
-M7: YAPILDI (TUR:51). Sırada: portföy listesinde tam sanal liste (yol haritası 1. madde).
+M7: YAPILDI (TUR:51). Sırada: kiracı kendi arıza/talebini açsın (yol haritası 1. madde).
 
 ## Sorular (kullanıcıdan bekleyen)
 - Aysan kirayı mal sahibine mi yatırıyor, ofis hesabından mı geçiyor? (para akışı modeli)
