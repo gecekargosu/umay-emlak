@@ -399,3 +399,11 @@ Y-94 | Denetim bulguları — H-1…H-6 YAPILDI (2026-11-04, TUR:38): ana sayfa 
 Y-95 | H-13 sözleşme formunun varsayılan açılması + H-14 poliçede mülk araması — YAPILDI
        (2026-11-04, TUR:42): ekran listeyle açılıyor, forma "Yeni sözleşme" ile giriliyor;
        poliçe mülk seçicisi yazarken süzülüyor ve kaç sonuç kaldığını gösteriyor. | Dilim 7 | S | YAPILDI
+
+Y-96 | Kalan işler ve sıra (2026-11-04, kaynak dosyadaki kullanıcı istekleri + denetim):
+       KOD KÜÇÜK: M2 (H-7+H-8) · M3 (K-4+K-9) · M4 (K-6 audit_log) · M5 (H-15+K-10) · M6 (K-1/K-2/K-3) · M7 (OKU-BENI)
+       BÜYÜK BAŞLIKLAR: mal sahibi paneli (SIRA 13) · kiracı paneli + kartla ödeme/POS (SIRA 14) ·
+       otomatik hatırlatıcı SMS/e-posta (SIRA 8) · gider + mal sahibi ekstresi (SIRA 9) ·
+       personel performans raporu (SIRA 12) · fotoğraf/video + filigran (SIRA 11) ·
+       mobil saha uygulaması (SIRA 15) · WhatsApp/e-posta (SIRA 16) ·
+       TÜİK oranının otomatik çekilmesi (SIRA 4 kalanı) · kapora makbuzu (SIRA 1 kalanı). | Dilim 8 | L | AÇIK

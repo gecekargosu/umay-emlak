@@ -1,0 +1,220 @@
+
+### P1 (satır 1, 6599 karakter)
+bir program düşün kanka, bu program emlakçılara hitap edicek. bu yüzden önce emlakçıyı anlamak lazım. biz önce emlakçı düşünücez. emlakçımızın adı Aysan. Aysan'ın 1 ortağı var. ofisinde çalışan 18 kişi olsun. ofisi kira. birçok gayrimenkul yönetiyor. mesela senin 15 dairen var benim 2 dükkanım 3 arsam 6 dairem var. ve bizim gibi birsürü müşterisi var. kimisi dairesini kiralatmak için vermiş kimi gayrimenkulünü satıyor kimi ise bazılarını kiralık bazılarını satılık olarak aysana vermiş. bir satılık daire için tapu örneği resimleri videosu gibi belgelere ihtiyaç duyuyor ve bu belgeleri mal sahibinden alıp arşivlemesi gerek. sonrada o dairenin resimlerini videosunu çekmesi lazım. bölgenin fiyatlarını araştırıp gayrimenkül sahibine bilgi verip bir satış fiyatı belirlenmesi gerek.  bu mal sahibi için bir klasör oluşturulmalı ve ondan aldığı belgeleri o klasöre koyabilmesi gerek. ama karışık d
+eğil bizim umay pdf reader gibi raflı bir düzenleme olabilir. biz dersler kısmında pdf ler doc pptx ses dosyaları video gibi bölümlere ayırıp rafları isimlendirmiştik. bu mantıkla rafları düzenleyebilmeli ve belgeleri istediği yere taşıyabilmeli silebilmeli hatta çok önemli diye işaret koyabilmeli. bu bir gayrimenkul için gerekecektir. fakat senin birsürü gayrimenkulün var mesela, bu yüzden klasörleme şekli değişmeli mesela mal sahipleri rafında alfabetik sırayla sağa sola kaydırılabilen mal sahipleri rafı olabilir. bu rafta mesela senin adın var.  seni tıkladığımda açılan ekranda  her gayrimenkulün için bir raf veya rafta kaydırılıp sağa sola gezinebilen bir sistemle 1 rafa tüm gayrimenkulleri gösterebiliriz hatta bunları kapak resimleri o mala ait olur. şimdi seni tıkladım açılan penceredeki raflarda bir sürü senin gayrimenkulelrini gördümher gayrimenkul için ( gayrimenkul=x olsun bund
+an sonra) ayrı bir klasörleme gerek. mesela senin x1 tıkladım ve karşıma açılan ekranda enbaşta o x in resimleri altındada belgeleri olmalıtapu, müşteri ile yapılan anlaşma yani komisyon için yapılan anlaşma metni varsa buna benzer belgeler vealtında satılık veya kiralık kısmı olmalı ve fiyatlar yazılmış olmalı kiralık kısmındaysa tıklandığında açılan pencerede yine daire resimleri ama kiralamadan önceki resimler olmalı metrekare bilgisi kaç oda kaç salon ve bunun gibi temel bilgiler olmalı sonra kiracı bilgileri olmalı adı soyadı ne zaman kiraladığı kira kontratı ve kira zam zamanı gelmeden önce bilgi veren bir alarm, aydat bilgileri olmalı otoparkı felan varmı  kaç araçlış gibi bilgiler ve müşterinin kendi girebilceği bilgiler olmalı bunlar aklıma gelenler ve genişletilebilinir. aslında mal sahibini tıkladığında tüm x ler rafta beliriyorya  acaba bunun altında satılık kiralık kısmı mı 
+eklemeliyiz sonuçta bu daha kök bir klasörleme olacaktır sanırım böyle yapmalıyız. yani mal sahibi tıkladım, ilk rafta tüm x ler var. aslında bunu 2 raf yapalım kiralıklar ve satılıklar rafı olur. onun altında yine 2 buton ekleriz kiralıklar satılıklar diye ayrıca aysan buraya ilave raf ekleyebilmeli. ( unuttuğum bir bilgi = kiralık ve satılıkların adresleri site adı kay daire bilgileride gerek yazmalıyız)  böylece senin bir x inin klasör yapısını çıkartmış olduk. belgeleri ekleyebileceği bir sistem. ve bu sistem yani bu program telefonun hafızasını kullanabilmeli yani kendine ait hafızadan bir alanı tutmalı. kanka bence programın ana sayfasında ayrıca kiracılar kısmıda olmalı. oraya tıkladığında açılan listede filitre yapılıp kiracı blunabilmeli ve buradaki kiracı bilgileri ile mal sahipleri kısmında kiracılar kısmı bilgileri aynı olmalı demi ?  belki daha çok detay olabilir. mesela dai
+reyi boşalttığındaki son haali resimleri, tadilat boya gerekip gerekmediği demirbaşlar gibi şeyleri ayrıca gösterebilmeli ve resimleri eklenebilmeli. bu program için belgeleme arşiv kısmını anlatmış oldum fakat programda hangi daire yada mal sahibi hangi personele atanmış?  personellerin ellerindeki x ler neler bunlarıda ana sayfada personeller kısmından ulaşabilmeli ve yönetebilmeli. yani bu program emlak firmasının patronu tarafından kullanılacak ayrıca kullanıcılar için ayrı bir panel kısıtlamalar olmalı. bu konuya sonra değiniriz. o zaman ana sayfamızda mal sahipleri, kiralıklar satılıklar, personeller ksıımları olacak. ana sayfa raf sistemli ve modül ( yani böyle dikdörtgen içinde belirlenmiş kısımlar mesela kiracılar ) modül ksıımalr olmalı. bu konuda senin fikirlerin nedir ? personeller kısmında resimli kişi kartı telefonu maili olmalı ve alttada raflarda satılık kiralık x lerin l
+isteleri olmalı.belki yaptığı satışlar kiralamalar gibi kayıtlarda eklenmeli personelin neler yaptığı geçmişi belli olması için. ayrıca kanka kiracılarada programı kullandırtıcaz ama panelleri farklı olacak yani admin, personel, kiracı, malsahipleri için ayrı ayrı tasarlamamız gerek. kiracılarda girdiklerinde sözleşmelerini görebilmeli dairenin ilk tutulduğundaki resimlerini görevilmeli önemli notları alabilmeli, ve en önemliside kartla bu program sayesinde kirasını aysana ödeyebilmeli  aysan buna belli oranda komisyon ekleyebilmeli yani kira 30000 ve ben kartla ödersem 33000 olacak. bu oranıda aysan admin kısmında belirlemeli. dolayısıyla aysanın kısmına birde kiracı ödemeleri kısmı olmalı ve kim yatırmış kim yatırmamış kısmı listelenmeli. ödemeler belkide banka aracılığı ilede yapılabilir bu yüzden kiracı kısmında ödeme yapıldığında yani kirayı ödediğinde, aidatı ödediğinde dekont ekle
+nebilmeli. dekontlar ekran görüntüsü veya pdf olabilir. malsahiipleride bu ekranalrında her dairenin belgeleri resimlerini yani her x in herşeyini görebilmeli. ayrıca kira yattığında bilgi alabilmeli yatmayan kiraları ayrıca bilgilendirilmeli yani 10 x varsa 3 ü yatmadı yatmayanlar ……… bu listede ve kişilerin isimleri felan olabilir. ayrıca adminlede belge paylaşabilmeli mesajlaşabilmeli. aysan fatura kesip mal sahibine gönderebilmeli bunları uygun yerlere eklersin.  belkide kiracı kartla direk mal sahibinede ödeme yapabilir ama aysan komisyonunu yine alıcaktır bunu nasıl kurgulamalıyız bilmiyorum .yani belki sanal pos aysana ait olur ve hesabına geçtiğinde aysan otomatik talimatla mal sahibine komisyonsuz kısmını yollar yada başka bir kurgu geliştiririz.  admin sayısı belirlenebilmeli yani ortaklar sonuçta.  belki maille veya telefon numarasıyla giriş ve doğrulamalar gerekebilir. şuan a
+klımda olanlar bunlar ama senaryolamalar eksik kurgular eksik kafamda tam canlandıramadım eksikler mutlaka vardır. bu yazdıklarımı oku değerlendir ve fikrini söyle. önerilerini söyle yanlışlar varsa uyar beni. şimdi aklıma geldikçe listeye ekleyeceğim : aysan herhangi bir x i personele atayabilmeli
+
+### P2 (satır 2, 427 karakter)
+sistemde dask kontrat süresi dolmaya yaklaşan veya dolan , kira artış zammı resmi bilgileri, örnek kira sözleşme metinleri = yani personelelr bu kira sözleşmelerini indirip müşteriye imzalatabilmeli ve programa yükleyebilmeli . ayrıca kira yatma zamanları gelenleride uyarmalı program mesela cengizin kirası 4 gün sonra yatacak ( beyoğlu .... sitesi kat 5 d4) gibi bilgiler de hatırlatmalı olarak ana sayfada bir modülde olmalı
+---- [SATIR 4] AI BLOGU BASLIYOR: Gemini =
+
+### P3 (satır 5, 309 karakter)
+UMAY EMLAK projesi, Umay PDF Reader'da tasarladığın raf mantığıyla emlak sektörünün hantal yapısını modernize etmek için harika bir çıkış noktası kanka, ancak 18 personelli ve yüzlerce portföylü bir ofis için hem veritabanı senkronizasyonunda hem de finansal kurguda bazı hayati düzenlemelere ihtiyacımız var.
+
+### P4 (satır 7, 113 karakter)
+Senin kurgun üzerinden giderek doğruları, eksikleri ve sistemin patlayabileceği yerleri tek tek masaya yatıralım:
+---- [SATIR 9] AI BLOGU BASLIYOR: **1. Raf Sistemi ve UI/UX (Arayüz) Kurgusu**
+
+### P5 (satır 10, 201 karakter)
+Umay PDF Reader’daki raf sistemi görsel olarak çok şık, ancak Aysan’ın 500 tane satılık, 300 tane kiralık dairesi olduğunda sağa-sola kaydırarak (swipe) daire veya mal sahibi bulmak bir kabusa dönüşür.
+
+### P6 (satır 11, 308 karakter)
+Raf sistemini ana ekranda **"Öne Çıkanlar", "Acil Satılıklar", "Son Eklenenler" veya "Benim Portföyüm"** gibi modüller için kullanmalıyız. Ana mal sahipleri veya gayrimenkul (x) listesi için mutlaka güçlü bir arama çubuğu olan, filtrelemeli (ilçe, fiyat, metrekare, oda sayısı) dikey bir liste görünümü şart.
+---- [SATIR 13] AI BLOGU BASLIYOR: **2. Veri Depolama: Telefon Hafızası vs. Bulut (Kritik Uyarı)**
+
+### P7 (satır 14, 284 karakter)
+Belgelerin ve fotoğrafların sadece telefon hafızasında tutulması (lokal depolama) tehlikeli bir nokta. Aysan'ın 18 personeli var. Bir personel sahada yeni bir dairenin (x) fotoğrafını çektiğinde, ofisteki diğer personelin veya Aysan'ın bunu anında kendi telefonunda görebilmesi lazım.
+
+### P8 (satır 15, 322 karakter)
+Tüm veriler ve dosyalar merkezi bir bulut sunucusunda (örneğin CREWINTEL'de kurguladığın gibi PostgreSQL + bir dosya sunucusu) tutulmalı. Telefon hafızası sadece **önbellek (cache)** için kullanılmalı. Yani internet çekmediğinde belgelere ulaşılabilsin, ama internet gelince her şey arka planda sunucuyla senkronize olsun.
+---- [SATIR 17] AI BLOGU BASLIYOR: **3. Ödeme Kurgusu ve Sanal POS (Mali Patlama Riski)**
+
+### P9 (satır 18, 256 karakter)
+Kiracının kartla ödeme yapması ve komisyon eklenmesi mükemmel bir fikir, ancak paranın tamamı Aysan'ın hesabına girip oradan mal sahibine giderse, Aysan devlete karşı **tüm kiranın gelir vergisini** ödemek zorunda kalır ve maliyeyle başı ciddi derde girer.
+
+### P10 (satır 19, 354 karakter)
+Burada **Pazaryeri (Marketplace) Sanal POS** modeli kullanmalısın (Iyzico, PayTR veya Param gibi). Bu sistemde para çekildiği an sistem parayı havada ikiye böler: 30.000 TL doğrudan Mal Sahibinin IBAN'ına, 3.000 TL komisyon doğrudan Aysan'ın IBAN'ına düşer. Böylece Aysan sadece kendi aldığı 3.000 TL'nin faturasını keser ve yasal olarak sıfır risk alır.
+---- [SATIR 21] AI BLOGU BASLIYOR: **4. Veritabanı İlişkileri (Kiracılar ve Mal Sahipleri)**
+
+### P11 (satır 22, 118 karakter)
+Sorduğun soru çok doğru: "Kiracılar modülündeki bilgiler ile Mal Sahipleri altındaki kiracı bilgileri aynı mı olmalı?"
+
+### P12 (satır 23, 359 karakter)
+Kesinlikle aynı olmalı. Sistemde tek bir merkezi "Kiracılar" tablosu olur. Aysan ana sayfadan "Kiracılar" modülüne tıkladığında tüm listeyi görür. Mal sahibi kendi paneline girdiğinde ise sadece kendi gayrimenkulü (x) ile eşleşmiş olan kiracının verisini aynı tablodan çeker. Veri tekrarı olmaz, bir yerde telefon numarası güncellenirse her yerde güncellenir.
+---- [SATIR 25] AI BLOGU BASLIYOR: **5. Rol Tabanlı Paneller (Admin, Personel, Mal Sahibi, Kiracı)**
+
+### P13 (satır 26, 91 karakter)
+Düşündüğün 4 farklı panel kurgusu çok profesyonel ve projenin değerini katlayan yer burası.
+
+### P14 (satır 28, 119 karakter)
+* **Admin (Aysan ve Ortak):** Tüm raflar, tüm modüller, şirket kasası, personel performansları, kiracı ödeme raporları.
+
+### P15 (satır 29, 198 karakter)
+* **Personel:** Sadece kendi üzerine atanmış x'leri (gayrimenkulleri), kendi satış/kiralama geçmişini ve müşterilerini görebilmeli. Diğer personelin portföyünü ancak yetki verilirse inceleyebilmeli.
+
+### P16 (satır 30, 302 karakter)
+* **Mal Sahibi:** Tam bir "Şeffaflık" paneli. Kendi gayrimenkullerinin boş/dolu oranını, yatan/yatmayan kiraları, kontrat sürelerini ve ekspertiz/tadilat fotoğraflarını görür. Aysan'ın bu paneli mal sahiplerine sunması, ona piyasada inanılmaz bir güvenilirlik katar ve yeni müşteriler çekmesini sağlar.
+
+### P17 (satır 31, 126 karakter)
+* **Kiracı:** Oturduğu evin belgeleri (teslim tutanağı, ilk fotoğraflar), kira ödeme butonu, EFT yaparsa dekont yükleme alanı.
+---- [SATIR 33] AI BLOGU BASLIYOR: **6. Geliştirilebilecek İlave Detaylar**
+
+### P18 (satır 35, 226 karakter)
+* **Akıllı Hatırlatıcılar (Cron Jobs):** Sadece kira zam zamanı değil; kontrat bitimine 1 ay kala, DASK yenileme zamanı geldiğinde veya kiracı ödemeyi geciktirdiğinde hem Aysan'a hem de ilgili kişiye otomatik bildirim gitmeli.
+
+### P19 (satır 36, 157 karakter)
+* **Talep/Arıza Yönetimi:** Kiracı, evin kombisi bozulduğunda veya boya aktığında Aysan'ı aramak yerine uygulamadan fotoğraf çekip "Arıza Talebi" açabilmeli.
+
+### P20 (satır 38, 165 karakter)
+Genel çerçevede UMAY EMLAK, sıradan bir emlak arşivleme programından çıkıp gayrimenkul yönetimini dijitalleştiren tam teşekküllü bir iş platformuna dönüşmüş durumda.
+
+### P21 (satır 40, 213 karakter)
+Pazaryeri ödeme altyapısı (paranın komisyon ve kira olarak havada bölünmesi) mantığı aklına yattı mı, yoksa tahsilatların zorunlu olarak tamamen ofis kasasından geçmesini gerektiren özel bir durum mu planlıyorsun?
+
+### P22 (satır 43, 331 karakter)
+Kanka, bu eklediğin özellikler UMAY EMLAK'ı sadece bir dosya arşivleme veya müşteri listesi olmaktan çıkarıp, ofisin beyni olan tam otomatik bir **Gayrimenkul Yönetim Sistemine (PMS)** dönüştürüyor. Özellikle Beyoğlu'ndaki o dairenin kirasının 4 gün sonra yatacağı uyarısını ana ekranda görmek, bir emlakçı için hayat kurtarıcıdır.
+
+### P23 (satır 45, 125 karakter)
+Senin bu yeni kurgularını yazılımsal ve mantıksal olarak nasıl en verimli hale getirebileceğimize gerçekçi bir gözle bakalım:
+---- [SATIR 47] AI BLOGU BASLIYOR: **1. Dinamik Atama ve Yetkilendirme (x'i Personele Bağlamak)**
+
+### P24 (satır 48, 99 karakter)
+Aysan bir x'i (gayrimenkulü) bir personele atadığında, sistemdeki bilgi akışı şu şekilde değişmeli:
+
+### P25 (satır 50, 350 karakter)
+* **Sorumluluk Alanı:** O x ile ilgili DASK bitişi, kira günü, kontrat yenileme gibi tüm bildirimler **önce** o personele gitmeli. Aysan ise ana ekranında sadece "genel bir özet" görmeli (örneğin: "Geciken 14 Tahsilat", "Süresi Dolan 5 Kontrat"). Eğer Aysan her personelin bildirimini tek tek alırsa, 18 personelli ofiste bildirim çöplüğünde boğulur.
+
+### P26 (satır 51, 234 karakter)
+* **Geçmiş (Log) Tutma:** Bir gayrimenkul başka bir personele devredilirse, eski personelin o x üzerinde yaptığı tüm işlemler (eski sözleşmeler, yüklediği dekontlar) silinmemeli, tarihçede "Ahmet tarafından yüklendi" şeklinde kalmalı.
+---- [SATIR 53] AI BLOGU BASLIYOR: **2. Akıllı Bildirim ve Hatırlatıcı Modülü (Ana Sayfa Widget'ı)**
+
+### P27 (satır 54, 173 karakter)
+Ana sayfadaki o bahsettiğin modül sistemin kalbi olacak. Burayı bir "Aksiyon Panosu" gibi tasarlayabiliriz. Sistem her gün saat 09:00'da tarama yapıp bu modülü güncellemeli:
+
+### P28 (satır 56, 88 karakter)
+* **Yaklaşanlar (Sarı):** "Cengiz'in kirasına 4 gün kaldı (Beyoğlu ... Sitesi Kat 5 D4)"
+
+### P29 (satır 57, 56 karakter)
+* **Bugün (Mavi):** "Ali'nin DASK poliçesinin son günü."
+
+### P30 (satır 58, 76 karakter)
+* **Gecikenler/Kritikler (Kırmızı):** "Ayşe'nin kira ödemesi 3 gün gecikti!"
+
+### P31 (satır 59, 109 karakter)
+* Bu listedeki bir uyarının üstüne tıklandığında personel direkt o x'in veya kiracının dosyasına ışınlanmalı.
+---- [SATIR 61] AI BLOGU BASLIYOR: **3. Resmi Kira Artış Oranları (TÜİK Entegrasyonu)**
+
+### P32 (satır 62, 128 karakter)
+"Gerçekçi ol" dediğin için söylüyorum: Kira artış zammını personelin manuel girmesi veya dışarıdan bakması hata riskini artırır.
+
+### P33 (satır 64, 122 karakter)
+* Program, TÜİK'in her ayın 3'ü veya 4'ünde açıkladığı **12 aylık TÜFE ortalamasını** arka planda otomatik olarak çekmeli.
+
+### P34 (satır 65, 251 karakter)
+* Kontrat yenileme zamanı gelen bir kiracı için sistem personelin önüne direkt bir hesap çıkartmalı: "Mevcut Kira: 30.000 TL, Yasal Artış Oranı: %45, Yeni Yasal Kira: 43.500 TL". Personel sadece mal sahibi ve kiracıyla anlaşıp nihai rakamı onaylamalı.
+---- [SATIR 67] AI BLOGU BASLIYOR: **4. Akıllı Şablonlar ve Sözleşme Yönetimi**
+
+### P35 (satır 68, 80 karakter)
+Örnek kira sözleşmesi indirme fikri güzel ama bunu bir adım öteye taşıyabiliriz:
+
+### P36 (satır 70, 296 karakter)
+* Sistemde zaten x'in adresi, mal sahibinin T.C.'si, kiracının bilgileri var. Personel "Sözleşme Oluştur" butonuna bastığında, program boş bir şablon indirmek yerine **tüm bilgileri sözleşme metnine otomatik yazarak** (Umay PDF Reader'daki doküman işleme mantığıyla) PDF veya Word olarak vermeli.
+
+### P37 (satır 71, 123 karakter)
+* Çıktı alınıp ıslak imza atıldıktan sonra, personel bunu kamerayla taratıp veya PDF olarak tekrar o x'in klasörüne yükler.
+
+### P38 (satır 73, 161 karakter)
+Bu yapı ofisteki kağıt işini ve unutkanlıktan kaynaklanan müşteri kayıplarını sıfıra indirir. Sistemin Aysan'ı ve personeli "dürtme" mekanizması çok sağlam oldu.
+
+### P39 (satır 75, 246 karakter)
+Bu bildirimlerin veya sözleşmelerin mal sahibinin kendi paneline de düşmesini (örneğin "Dairenizin yeni sözleşmesi imzalandı ve sisteme yüklendi, görmek için tıklayın") ister misin, yoksa mal sahibi sadece iş bitip para yatınca mı haberdar olsun?
+
+### P40 (satır 77, 98 karakter)
+kanka bu mobil ve masaüstü için programı yapmalıyız tüm bu özellikleri mobilde gösterebilirmiyiz ?
+
+### P41 (satır 79, 194 karakter)
+Kanka, bu kadar kapsamlı bir sistemi hem masaüstü hem de mobil için yapmak kesinlikle mümkün ve emlakçıların sürekli sahada olduğu düşünülürse mobil versiyon zaten bir seçenek değil, zorunluluk.
+
+### P42 (satır 81, 213 karakter)
+Mobilde masaüstündeki her şeyi aynı anda göstermeye çalışmak ekranı çorbaya çevirir, bu yüzden "Kademeli Gösterim" (Progressive Disclosure) mantığıyla ilerlemeliyiz. Tüm özellikleri şu şekilde mobilleştirebiliriz:
+
+### P43 (satır 83, 282 karakter)
+Özet Dashboard (Ana Ekran): Masaüstünde yan yana duran devasa tablolar, mobilde alt alta dizilmiş akıllı bildirim kartlarına (Widget) dönüşür. Ana ekranda sadece "4 Geciken Kira", "2 Biten DASK" gibi renkli uyarı butonları görünür; personel karta tıkladığında detay listesine geçer.
+
+### P44 (satır 85, 329 karakter)
+Raf Sistemi ve Arama: Umay PDF Reader'da kurguladığın yatay raf mantığı, mobilde dokunmatik ekran (swipe) sayesinde masaüstünden bile daha akıcı çalışır. Ancak yüzlerce "x" (gayrimenkul) olacağı için, ekranın en üstüne her zaman sabit kalan, gelişmiş filtrelemeli (ilçe, fiyat, kiralık/satılık) bir arama çubuğu entegre edeceğiz.
+
+### P45 (satır 87, 299 karakter)
+Kamera ve Belge İşleme (Mobilin Gücü): Mobilin en büyük avantajı donanımıdır. Sahadaki personel sistemin otomatik doldurduğu sözleşmeyi müşteriye imzalattıktan sonra, telefonun kamerasıyla belgeyi taratıp anında PDF olarak o gayrimenkulün arşivine yükleyebilir. Harici bir tarayıcıya ihtiyaç kalmaz.
+
+### P46 (satır 89, 250 karakter)
+Navigasyon ve Menüler: Masaüstündeki o geniş sol kontrol menüsü, mobilde parmak erişimi için ekranın altına (Bottom Navigation Bar) yerleşecek. Ana Sayfa, Portföyüm, Müşteriler ve Bildirimler olarak temel sekmelerle her yere tek dokunuşla ulaşılacak.
+
+### P47 (satır 91, 400 karakter)
+Arka planda güçlü bir veritabanı (örneğin PostgreSQL) ve hızlı bir API (FastAPI) kurgulayıp, masaüstü için React, mobil için ise React Native kullanarak tek bir merkezi sistemle her iki platformu anlık olarak konuşturabiliriz. Arayüz tasarımında da koyu lacivert arka plan üzerine neon turuncu vurgular kullanırsak, hem sahada güneş altında ekran net okunur hem de profesyonel, modern bir hava katar.
+
+### P48 (satır 93, 225 karakter)
+Özetle; masaüstü ofisteki Aysan'ın detaylı raporlama, muhasebe ve genel yönetim komuta merkezi olurken, mobil uygulama sahadaki personelin anında fotoğraf çektiği, bilgi güncellediği ve operasyonu yürüttüğü ana silahı olacak.
+
+### P49 (satır 95, 252 karakter)
+Personel sahada yeni bir dairenin (x) fotoğraflarını çekerken, başka emlakçılar fotoğrafları çalmasın diye sistemin resimlerin köşesine otomatik olarak UMAY EMLAK logosunu veya tarih/saat filigranını (watermark) basmasını da bu kurguya dahil edelim mi?
+---- [SATIR 98] AI BLOGU BASLIYOR: Chatgpt =
+
+### P50 (satır 99, 447 karakter)
+Kanka, tamamını okudum. Baştan sona dikkatlice inceledim. Öncelikle şunu söyleyeyim: UMAY EMLAK fikri düşündüğünden çok daha büyük bir potansiyele sahip. Çünkü sen yalnızca emlakçıların dairelerini listeleyeceği bir uygulama düşünmüyorsun. Aslında bir emlak ofisinin müşteri ilişkilerini, gayrimenkul portföyünü, kira yönetimini, personelini, belgelerini, tahsilatlarını ve günlük operasyonlarını tek merkezden yöneteceği bir sistem tasarlıyorsun.
+
+### P51 (satır 101, 176 karakter)
+Bence en doğru kararımız, bu projeyi sıradan bir emlak ilan uygulaması olarak değil, emlak ofisleri için kapsamlı bir işletme ve gayrimenkul yönetim platformu olarak ele almak.
+
+### P52 (satır 103, 147 karakter)
+Ama dosyandaki fikirleri değerlendirirken birkaç noktada önemli mimari değişiklikler öneriyorum. Bazıları ileride çok ciddi sorun yaşamamızı önler.
+
+### P53 (satır 104, 50 karakter)
+1. Önce projenin temel yapısını doğru tanımlayalım
+
+### P54 (satır 105, 50 karakter)
+Senin örneğindeki Aysan Emlak üzerinden düşünelim:
+
+### P55 (satır 106, 25 karakter)
+- 2 ortak ve 18 personel.
+
+### P56 (satır 107, 24 karakter)
+- Çok sayıda mal sahibi.
+
+### P57 (satır 108, 50 karakter)
+- Her mal sahibinin bir veya onlarca gayrimenkulü.
+
+### P58 (satır 109, 111 karakter)
+- Gayrimenkullerin bir kısmı satılık, bir kısmı kiralık, bir kısmı hem satış hem kiralama amacıyla yönetiliyor.
+
+### P59 (satır 110, 78 karakter)
+- Kiracılar, sözleşmeler, tahsilatlar, aidatlar, faturalar ve bakım işlemleri.
+
+### P60 (satır 111, 63 karakter)
+- Personellerin sorumlu oldukları gayrimenkuller ve müşteriler.
+
+### P61 (satır 112, 68 karakter)
+- Mal sahipleri ve kiracıların kendi hesaplarından sisteme erişmesi.
+
+### P62 (satır 113, 215 karakter)
+Bu yapıda dört ayrı kullanıcı paneli fikrin doğru. Fakat sistemin içinde dört ayrı veri tabanı veya dört ayrı uygulama olmamalı. Tek bir merkezi sistem, farklı yetkilerle çalışan dört ayrı kullanıcı deneyimi olmalı.
+
+### P63 (satır 114, 58 karakter)
+2. Mal sahipleri ve gayrimenkuller: En önemli mimari karar
+
+### P64 (satır 115, 94 karakter)
+Senin kurduğun raf mantığını beğendim. Ancak burada küçük ama çok önemli bir ayrım yapmalıyız.
+
+### P65 (satır 117, 33 karakter)
+Bence ana hiyerarşi şöyle olmalı:
+
+### P66 (satır 118, 11 karakter)
+AYSAN EMLAK
+
+### P67 (satır 119, 15 karakter)
+Merkezi işletme

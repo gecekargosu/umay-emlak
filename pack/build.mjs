@@ -126,6 +126,12 @@ writeFileSync(
 
 Nasıl açılır?
 1) Klasörü masaüstüne çıkarın (zip içinden çıkarmadan çalışmaz).
+   ÖNEMLİ — KLASÖR YOLUNDA TÜRKÇE KARAKTER OLMAYACAK:
+   Türkçe harf (ı, ş, ğ, ü, ö, ç) içeren bir klasöre çıkarırsanız veritabanı
+   açılmaz. Örnek doğru yol:  C:\Aysana-gonderilecek\UmayEmlak
+   Örnek yanlış yol:        C:\Users\Aysan\Masaüstü\Gönderilenler
+   (Türkçe yolda açılırsa program veriyi %LOCALAPPDATA%\UmayEmlak altına
+   taşır; yine de ASCII klasör en güvenlisi.)
 2) "UMAY-EMLAK-BASLAT.bat" dosyasına çift tıklayın.
 3) Siyah pencere açılır ve tarayıcı kendiliğinden açılır:
    http://localhost:3100

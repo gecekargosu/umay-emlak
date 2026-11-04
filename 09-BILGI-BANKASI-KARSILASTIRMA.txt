@@ -76,7 +76,8 @@ SIRA 6 — Alıcı adayına uygun portföy önerisi
         gerekçeli öneri listesi. Kalan: öneriden randevu/teklife geçiş. Adayın bütçe/ilçe/oda alanları hazır; eşleştirme puanı üretilmiyor.
 
 SIRA 7 — Arıza / bakım talebi (kiracıdan) — YAPILDI (TUR:35)
-        Durum: YOK. Görev modülüyle birlikte tasarlanmalı; fotoğraflı talep + durum.
+        Durum: VAR (TUR:35) → YAPILDI (2026-11-04): kiracı-mülk bazlı arıza kaydı, fotoğraf, durum
+        ve masraf. Kalan: kiracı panelinden talep açma (SIRA 14 ile).
 
 SIRA 8 — Otomatik hatırlatıcı (SMS/e-posta/push)
         Durum: YOK. Kira günü, sözleşme bitişi, DASK; izin ve KVKK kurallarıyla.
@@ -141,3 +142,15 @@ E. SON TUR GÜNCELLEMELERİ (TUR:38–40, 2026-11-04)
 [KISMI] Kullanılabilirlik bulguları: H-7, H-8, H-13, H-14, H-15 açık (M1-M2-M5 kuyruğunda).
 [YOK] Denetim kaydı (audit_log) ve JSON log + request_id (K-6) — M4'te yapılacak.
 [YOK] Paket OKU-BENI "Türkçe karakterli klasöre açmayın" uyarısı (Y-93, H-11) — M7'de yapılacak.
+
+====================================================================
+F. TUR:41–42 GÜNCELLEMELERİ (2026-11-04)
+====================================================================
+[VAR] Sözleşmeler ekranı listeyle açılıyor; form yalnız "Yeni sözleşme" ile geliyor (H-13, TUR:42).
+[VAR] Poliçe mülk seçicisi yazarken süzülüyor, "Mülk seçin — 7/91" diye sonuç sayısını gösteriyor (H-14, TUR:42).
+[VAR] SIRA 7 (arıza/bakım) durum satırı düzeltildi: "YOK" değil, VAR — TUR:35'te yapılmıştı (H-12 kapandı).
+[KISMI] H-7 (Görevler/Mesajlar kutuları), H-8 (kira takibi satırı), H-15 (belge listesi) açık — M2/M5.
+[YOK] Mal sahibi paneli (SIRA 13) · kiracı paneli + kartla ödeme/sanal POS (SIRA 14) · mobil saha uygulaması
+      (SIRA 15) · otomatik hatırlatıcı SMS/e-posta (SIRA 8) · gider + mal sahibi ekstresi (SIRA 9) ·
+      personel performans raporu (SIRA 12) · fotoğraf/video + filigran (SIRA 11) · WhatsApp/e-posta (SIRA 16) ·
+      TÜİK oranının otomatik çekilmesi (SIRA 4 kalanı).
