@@ -404,54 +404,6 @@ export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
         </Section>
       )}
 
-      {today.contracts.length > 0 && (
-        <Section
-          title="Bitecek sözleşmeler"
-          hint="30 gün içinde bitenler: yenileme veya çıkış konuşulmalı."
-          action={{ label: "Sözleşmeler'e git", onClick: () => go("sozlesmeler") }}
-        >
-          <ul className="action-list">
-            {today.contracts.map((row) => (
-              <li key={row.id}>
-                <div>
-                  <strong>{row.propertyTitle}</strong>
-                </div>
-                <div className="muted small">
-                  {row.endDate} · {row.daysLeft} gün kaldı
-                </div>
-              </li>
-            ))}
-          </ul>
-        </Section>
-      )}
-
-      {today.policies.length > 0 && (
-        <Section
-          title="Poliçe bitişleri"
-          hint="DASK/konut poliçesi bitince kira sözleşmesi riskte kalır; 30 gün önce haber verilir."
-          action={{ label: "Poliçeler'e git", onClick: () => go("policeler") }}
-        >
-          <ul className="action-list">
-            {today.policies.map((row) => (
-              <li key={row.id}>
-                <div>
-                  <strong>{row.propertyTitle}</strong>
-                  {row.district && <span className="muted small"> ({row.district})</span>}
-                </div>
-                <div className="muted small">
-                  {row.endDate} ·{" "}
-                  {row.daysLeft < 0
-                    ? `${Math.abs(row.daysLeft)} gün önce bitti`
-                    : row.daysLeft === 0
-                      ? "bugün bitiyor"
-                      : `${row.daysLeft} gün kaldı`}
-                </div>
-              </li>
-            ))}
-          </ul>
-        </Section>
-      )}
-
       <p className="muted small">
         Not: tutarlar kuruş hassasiyetinde saklanır; ana sayfada yalnız gösterilir.
       </p>
