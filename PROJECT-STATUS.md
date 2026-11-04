@@ -1,6 +1,6 @@
 # PROJECT-STATUS
 
-Son güncelleme: 2026-11-05 03:55 · Aktif tur: TUR:51 bitti — M7 paket v3 hazır (83 MB zip)
+Son güncelleme: 2026-11-05 04:20 · Aktif tur: TUR:52 bitti — teslim tutanağı PDF (fotoğraf + imza)
 
 ## Şu an çalışan (doğrulandı)
 - Giriş/oturum, boşta kilit, şifre değiştirme; ofis/personel/onay yetkisi.
@@ -41,7 +41,7 @@ M7 · **Y-93 + H-11** — paket OKU-BENI uyarısı ve sürüm notu; paket ASCII 
 Kural: aynı anda tek mission; kapsam büyütülmez, bitmeyen mission yeni mission açmaz.
 
 ## Sıradaki adım (tek cümle)
-M7: YAPILDI (TUR:51) — paket v3, zip 83 MB, /health 200. Sırada: teslim tutanağı (fotoğraf + imza).
+M7: YAPILDI (TUR:51). Sırada: denetim kaydı ekranı (yol haritası 1. madde).
 
 ## Sorular (kullanıcıdan bekleyen)
 - Aysan kirayı mal sahibine mi yatırıyor, ofis hesabından mı geçiyor? (para akışı modeli)

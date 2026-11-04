@@ -116,6 +116,14 @@ export function HandoverPanel({ contractId, depositText }: { contractId: string;
                     .join(" · ")}
                 </div>
               )}
+              <a
+                className="small"
+                href={`/api/v1/contracts/${contractId}/handovers/${item.id}/pdf`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Tutanak PDF (fotoğraflı, imza alanlı)
+              </a>
             </li>
           ))}
         </ul>

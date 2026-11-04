@@ -11,6 +11,8 @@ import { z } from "zod";
 import { schema, withTenant } from "@umay/db";
 import { formatTry, parseTryToKurus } from "@umay/shared";
 import { HttpError, requirePasswordChanged, requireWrite, resolveSession } from "../session.js";
+import { getObject } from "../storage.js";
+import { buildHandoverPdf } from "../documents/handover-pdf.js";
 
 export const handoverRoutes = new Hono();
 
@@ -137,4 +139,126 @@ handoverRoutes.post("/:id/handovers", async (c) => {
   });
 
   return c.json(created, 201);
+});
+
+type PdfRow = {
+  id: string;
+  kind: string;
+  happenedOn: string;
+  items: Array<{ name: string; quantity: number; condition?: string }> | null;
+  depositKurus: string | number;
+  deductionKurus: string | number;
+  deductionNote: string | null;
+  refundKurus: string | number;
+  createdAt: string;
+  contractStart: string;
+  contractEnd: string | null;
+  rentKurus: string | number;
+  dueDay: number | null;
+  propertyId: string;
+  title: string;
+  address: string | null;
+  district: string | null;
+  city: string | null;
+  tenantName: string;
+  tenantPhone: string | null;
+  ownerName: string | null;
+  createdBy: string | null;
+};
+
+/**
+ * Tutanağın yazdırılabilir hali (TUR:52): mülk fotoğrafları + imza alanları.
+ *Kayıt değişmez; PDF her istendiğinde kayıttan yeniden üretilir.
+ */
+handoverRoutes.get("/:id/handovers/:handoverId/pdf", async (c) => {
+  const session = await resolveSession(c);
+  requirePasswordChanged(session);
+  const contractId = c.req.param("id");
+  const handoverId = c.req.param("handoverId");
+  if (!z.uuid().safeParse(handoverId).success) throw new HttpError(404, "Tutanak bulunamadı");
+
+  const found = await withTenant(session.tenantId, async (tx) => {
+    const result = await tx.execute(sql`
+      select h.id, h.kind, h.happened_on::text as "happenedOn", h.items,
+             h.deposit_kurus as "depositKurus", h.deduction_kurus as "deductionKurus",
+             h.deduction_note as "deductionNote", h.refund_kurus as "refundKurus",
+             h.created_at as "createdAt",
+             c.start_date::text as "contractStart", c.end_date::text as "contractEnd",
+             c.rent_kurus as "rentKurus", c.due_day as "dueDay",
+             p.id as "propertyId", p.title, p.address, p.district, p.city,
+             t.full_name as "tenantName", t.phone as "tenantPhone",
+             o.full_name as "ownerName", u.full_name as "createdBy"
+        from handover_protocol h
+        join contract c on c.id = h.contract_id
+        join listing l on l.id = c.listing_id
+        join property p on p.id = l.property_id
+        join person t on t.id = c.tenant_person_id
+        left join person o on o.id = p.owner_person_id
+        left join app_user u on u.id = h.created_by_user_id
+       where h.id = ${handoverId}::uuid and h.contract_id = ${contractId}::uuid
+    `);
+    const row = (result as unknown as { rows: PdfRow[] }).rows[0];
+    if (!row) return null;
+
+    // Tutanağa mülkün gerçek fotoğrafları girer; kutu boş kalmasın diye
+    // yalnız JPEG seçilir (PDF'e gömülebilen tek biçim).
+    const media = await tx.execute(sql`
+      select sha256, title
+        from property_media
+       where property_id = ${row.propertyId}::uuid
+         and kind = 'image'
+         and mime_type = 'image/jpeg'
+         and maintenance_id is null
+       order by created_at
+       limit 3
+    `);
+    return {
+      row,
+      photoRows: (media as unknown as { rows: Array<{ sha256: string; title: string | null }> })
+        .rows,
+    };
+  });
+
+  if (!found) throw new HttpError(404, "Tutanak bulunamadı");
+
+  const photos: Array<{ bytes: Buffer; caption: string | null }> = [];
+  for (const media of found.photoRows) {
+    const bytes = await getObject(media.sha256);
+    if (bytes) photos.push({ bytes, caption: media.title });
+  }
+
+  const row = found.row;
+  const asDate = (iso: string) => iso.split("-").reverse().join(".");
+  const pdf = buildHandoverPdf({
+    handoverId: String(row.id),
+    kind: String(row.kind) === "move_in" ? "move_in" : "move_out",
+    happenedOn: asDate(row.happenedOn),
+    propertyTitle: row.title,
+    address: row.address,
+    district: row.district,
+    city: row.city,
+    ownerName: row.ownerName ?? "(mal sahibi kayitli degil)",
+    tenantName: row.tenantName,
+    tenantPhone: row.tenantPhone,
+    contractStart: asDate(row.contractStart),
+    contractEnd: row.contractEnd ? asDate(row.contractEnd) : null,
+    rentText: formatTry(Number(row.rentKurus)),
+    depositText: formatTry(Number(row.depositKurus)),
+    dueDay: row.dueDay === null ? null : Number(row.dueDay),
+    items: row.items ?? [],
+    deductionText: formatTry(Number(row.deductionKurus)),
+    deductionNote: row.deductionNote,
+    refundText: formatTry(Number(row.refundKurus)),
+    photos,
+    createdBy: row.createdBy ?? "—",
+    createdAtText: new Date(String(row.createdAt)).toLocaleString("tr-TR"),
+  });
+
+  return new Response(new Uint8Array(pdf), {
+    headers: {
+      "content-type": "application/pdf",
+      "content-disposition": `inline; filename="teslim-tutanagi-${String(row.id).slice(0, 8)}.pdf"`,
+      "cache-control": "private, no-store",
+    },
+  });
 });

@@ -351,6 +351,7 @@ Y-79 | Komisyon / kapora akışı — KOMİSYON + KAPORA YAPILDI (2026-11-04, TU
 Y-81 | Teslim tutanağı (fotoğraf + demirbaş + imza) ve çıkışta depozito hesabı — SIRA 2.
          YAPILDI (2026-11-04, TUR:28): handover_protocol + HandoverPanel; giriş/çıkış,
          demirbaş, kesinti ve iade sunucuda hesaplanıyor. Kalan: tutanak fotoğrafı/imza.
+         EK (2026-11-04, TUR:52): fotoğraf + imza tamamlandı (Y-105).
 Y-82 | DASK/poliçe bitiş takibi — SIRA 3. YAPILDI (2026-11-04, TUR:29):
          policy tablosu + Poliçeler ekranı + 30 gün uyarısı + ana sayfa kutusu.
 Y-83 | TÜİK kira artış oranıyla yenileme hesabı (onaylı) — SIRA 4.
@@ -439,3 +440,9 @@ Y-103 | K-1/K-2/K-3 dosya bölme — KISMI (2026-11-04, TUR:49): api.ts 66 + api
 Y-104 | M6 kalanı — YAPILDI (2026-11-04, TUR:50): Listings mülk dosyası bloğu ListingDetailPage'e,
         api-types dört konu dosyasına ayrıldı. En büyük kod dosyası artık 428 satır.
         | Dilim 8 | M | YAPILDI
+
+Y-105 | Teslim tutanağını yazdırılabilir PDF yap (fotoğraf + imza alanı) — YAPILDI
+        (2026-11-04, TUR:52): kayıtlı tutanaktan A4 PDF; taşınmaz, taraflar, sözleşme,
+        demirbaş, çıkışta depozito hesabı, mülkün 3 JPEG fotoğrafı, üç imza alanı.
+        Mülk dosyasında "Tutanak PDF" bağlantısı. Kalan: imza cihazı/ıslak imza taraması.
+        | Dilim 9 | M | YAPILDI

@@ -227,3 +227,10 @@ M. TUR:51 GÜNCELLEMELERİ (2026-11-04)
 [VAR] Paket v3: OKU-BENI'de sürüm notu, Türkçe klasör uyarısı, güncel eksik listesi.
 [VAR] Paket kendi kendine yetiyor: /health 200, giriş, belge PDF, kapak JPEG, 16 migration.
 [VAR] Demo fotoğraf/belge paketin ilk kurulumunda üretiliyor (veri/belgeler 286 dosya).
+
+====================================================================
+M. TUR:52 GÜNCELLEMELERİ (2026-11-04)
+====================================================================
+[VAR] Teslim tutanağı yazdırılabilir: kayıtlı tutanaktan A4 PDF (fotoğraf + imza alanı).
+[VAR] PDF mülkün gerçek fotoğraflarını gömer (JPEG/DCTDecode); imza alanları boş bırakılır.
+[VAR] Mülk dosyasında her tutanak satırında "Tutanak PDF" bağlantısı.

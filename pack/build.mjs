@@ -147,6 +147,8 @@ Bu sürümde yeni (v2 → v3)
 - Uzun portföy listesi parça parça açılıyor ("Sonraki 60"), 500+ kayıtta donmuyor.
 - Hata mesajlarında kayıt numarası (ör. K-2J5R5T) — bize yazarken bu numarayı söyleyin.
 - Görevler ekranı, kira satırı etiketleri ve güncel yol haritası.
+- Teslim tutanağı artık PDF: mülk fotoğrafları, demirbaş, depozito hesabı ve imza alanı.
+  Kiralık mülk dosyasındaki "Tutanak PDF" bağlantısından açılır.
 
 Not: Fotoğraflar örnek (stok) görsellerdir; kendi çekimlerinizi mülk dosyasından
 "Fotoğraflar ve videolar" bölümüne yükleyince onların yerini alır. Belgelerin altında
@@ -168,7 +170,6 @@ Bilinen eksikler
 - E-posta/SMS hatırlatma yok (uyarılar ekranda).
 - Mal sahibi ve kiracı için ayrı giriş paneli henüz yok.
 - Fotoğraf filigranı yok; kişi (vesikalık) fotoğrafı alanı yok.
-- Teslim tutanağı belgesi (fotoğraf + imza) henüz üretilmiyor.
 - Denetim kaydının ekranı yok (kayıtlar tutuluyor, ekranda listelenmiyor).
 `,
 );
