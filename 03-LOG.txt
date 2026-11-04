@@ -370,3 +370,10 @@ DOGRULAMA (preview 5175): Sözleşmeler açılış → üstte yalnız "Sözleşm
 TEST:typecheck 0 · pnpm test 17 dosya / 64 test 0
 SIRADAKİ:M2 — H-7 Görevler/Mesajlar kutuları tıklanabilir + H-8 kira takibi satırı.
 --------------------------------------------------------------------------------
+
+[2026-11-04 23:05] TUR:43 | MODUL:Aysan'a gönderim paketi | IS:Kaynak dosyadaki kullanıcı istekleri yeniden tarandı (satır 1-2 = kendi brief'i, 67 paragraf ayrıştırıldı, kaynaklar/analiz/ altına çıkarıldı). 09 (yapılanlar) ve 06 (yapılacaklar) güncellendi; arıza modülünün yanlış "YOK" satırı düzeltildi (H-12). Yeni taşınabilir paket üretildi: `pack/build.mjs` OKU-BENI'ye "klasör yolunda Türkçe karakter olmayacak" uyarısı eklendi (Y-93/H-11), build çalıştı (229,8 MB), ASCII klasörde zip'lendi.
+DOSYA:pack/build.mjs (OKU-BENI uyarısı), 09, 06, kaynaklar/analiz/kullanici-brief.txt, kaynaklar/analiz/kullanici-metni.txt
+CIKTI:C:\Users\isitm\Desktop\Aysana-gonderilecek\UmayEmlak-Beta-2026-11-04-v2.zip (82 MB, 7631 giriş; OKU-BENI + UMAY-EMLAK-BASLAT.bat + app + node)
+TEST:paket derlemesi 0 · zip açılıp giriş sayısı doğrulandı · typecheck 0 · pnpm test 17/64 (kod değişmedi)
+SIRADAKİ:M2 — H-7 Görevler/Mesajlar kutuları + H-8 kira takibi satırı.
+--------------------------------------------------------------------------------
