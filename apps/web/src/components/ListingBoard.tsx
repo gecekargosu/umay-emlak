@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../api";
 import { HandoverPanel } from "./HandoverPanel";
+import { TenantRequestPanel } from "./TenantRequestPanel";
 
 /**
  * Mülk dosyası panosu — TUR:27.
@@ -309,6 +310,8 @@ export function ListingBoard({ listingId }: { listingId: string }) {
               depositText={data.contract.depositText}
             />
           )}
+
+          {data.contract && <TenantRequestPanel contractId={data.contract.id} />}
         </>
       )}
     </section>

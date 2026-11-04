@@ -121,7 +121,7 @@ pause >nul\r
 
 writeFileSync(
   join(staging, "OKU-BENI.txt"),
-  `UMAY EMLAK — Trademark Gayrimenkul (inceleme sürümü v3 · 5 Kasım 2026)
+  `UMAY EMLAK — Trademark Gayrimenkul (inceleme sürümü v4 · 5 Kasım 2026)
 =====================================================================
 
 Nasıl açılır?
@@ -138,19 +138,22 @@ Nasıl açılır?
 4) Giriş:  aysan.kilic@umay-emlak.local
    Şifre:  Umay!2026
 
-Bu sürümde yeni (v2 → v3)
+Bu sürümde yeni (v3 → v4)
 - Portföy raflarında harf yerine MÜLK FOTOĞRAFI; mülk dosyasında fotoğraf galerisi.
 - Belgeler dolu: tapu, yetki belgesi, kimlik ve kira sözleşmesi örnek olarak üretildi;
   kişi kartında "Belgeler" bölümü var, tıklayıp PDF'i açabilirsiniz.
 - "Kim ne yaptı" işlem kaydı: her yazma işlemi ofis/kullanıcı/kayıt bilgisiyle saklanıyor.
 - Belgeler ekranında arama öne alındı (yazarken süzülür), yükleme formu katlanır panelde.
-- Uzun portföy listesi parça parça açılıyor ("Sonraki 60"), 500+ kayıtta donmuyor.
+- Portföy listesi sanal: 2000+ kayıtta bile yalnız görünen satırlar basılıyor, kaydırma akıcı.
 - Hata mesajlarında kayıt numarası (ör. K-2J5R5T) — bize yazarken bu numarayı söyleyin.
 - Görevler ekranı, kira satırı etiketleri ve güncel yol haritası.
 - Teslim tutanağı artık PDF: mülk fotoğrafları, demirbaş, depozito hesabı ve imza alanı.
   Kiralık mülk dosyasındaki "Tutanak PDF" bağlantısından açılır.
 - İşlem kaydı ekranı (Sistem → İşlem kaydı): kim, ne zaman, hangi kayıt; kişi,
   tarih aralığı ve arama süzgeciyle. Kayıtlar silinmez, değiştirilmez.
+- Kiracı talep bağlantısı: kiralık mülk dosyasından 90 günlük bağlantı üretin,
+  kiracı giriş yapmadan arıza bildirsin. Bildirim arıza listesine "açık" düşer;
+  bağlantı iptal edilince jeton anında geçersiz olur (jeton yalnız bir kez gösterilir).
 
 Not: Fotoğraflar örnek (stok) görsellerdir; kendi çekimlerinizi mülk dosyasından
 "Fotoğraflar ve videolar" bölümüne yükleyince onların yerini alır. Belgelerin altında
@@ -170,7 +173,8 @@ Not: Fotoğraflar örnek (stok) görsellerdir; kendi çekimlerinizi mülk dosyas
 
 Bilinen eksikler
 - E-posta/SMS hatırlatma yok (uyarılar ekranda).
-- Mal sahibi ve kiracı için ayrı giriş paneli henüz yok.
+- Mal sahibi için ayrı giriş paneli henüz yok; kiracı yalnız arıza bildirimi
+  bağlantısıyla giriş yapmadan talep açar (kira ödemesi bu sayfada yok).
 - Fotoğraf filigranı yok; kişi (vesikalık) fotoğrafı alanı yok.
 `,
 );

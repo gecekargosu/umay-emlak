@@ -63,6 +63,8 @@ export const auditMiddleware = createMiddleware<AuditEnv>(async (c, next) => {
   if (!WRITE_METHODS.has(method) || status >= 400) return;
   // Oturum açma/çıkarma yazma sayılmaz; denetim gürültüsü olmasın.
   if (path.startsWith("/api/v1/auth/")) return;
+  // Kiracının jetonsuz (girişsiz) uçları: oturum yok, denetim satırı yazılamaz.
+  if (path.startsWith("/api/v1/public/")) return;
 
   try {
     const session = await resolveSession(c);

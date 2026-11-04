@@ -451,3 +451,8 @@ Y-106 | Denetim kaydı ekranı (kim ne yaptı) — YAPILDI (2026-11-04, TUR:53):
         Sistem → İşlem kaydı; kişi, tarih aralığı ve arama süzgeci sunucuda çalışıyor;
         her satırda işlem, kayıt türü/kimliği, yol ve R-… numarası. Kayıt değiştirilemez.
         | Dilim 9 | M | YAPILDI
+Y-107 | Kiracı kendi arıza talebini açsın — YAPILDI (2026-11-05, TUR:55):
+        Kiralık dosyada "Bağlantı oluştur" 90 günlük jeton üretiyor; kiracı giriş
+        yapmadan /talep/<jeton> sayfasından arıza bildiriyor, kayıt arıza listesine
+        "açık" düşüyor. Jeton yalnız sha256 özetiyle saklanır, iptal anında geçersiz.
+        | Yol haritası 1 | M | YAPILDI

@@ -467,3 +467,12 @@ HATA ANALIZI:Sekme arka planda (document.visibilityState=hidden) olduğu için t
 TEST:typecheck 0 · pnpm --filter @umay/web build 0 (403,13 KB js) · pnpm test 18 dosya / 66 test 0
 SIRADAKİ:Yol haritası 1. madde — kiracı kendi arıza/talebi açsın (tek kullanımlık bağlantı).
 --------------------------------------------------------------------------------
+[2026-11-05 06:00] TUR:55 | MODUL:M08 kiracı talep bağlantısı | IS:Kiracı giriş yapmadan arıza bildirebilsin diye jetonlu bağlantı kuruldu: migration 0017 (tenant_access_link + RLS FORCE + tenant_link_lookup security definer), ofis uçları (üret/listele/iptal; jeton yalnız bir kez gösterilir), public uçlar (GET mülk özeti, POST arıza; 10 dakikada 5 sınır), kiralık dosyada panel + /talep/<jeton> girişsiz sayfa. Bildirim maintenance_request'a "açık" düşer; iptal/süre dolumu 404.
+DOSYA:packages/db/migrations/0017_tenant_link.sql, apps/api/src/routes/{tenant-links,public-tenant}.ts, apps/api/src/{app,audit}.ts, apps/api/test/tenant-link.test.ts, apps/web/src/components/TenantRequestPanel.tsx, apps/web/src/pages/TenantRequest.tsx, apps/web/src/components/ListingBoard.tsx, apps/web/src/{App.tsx,pages/Roadmap.tsx}
+TEST:typecheck 0 · pnpm test 19 dosya / 67 test 0 · preview: Ofis 70 dosyasında "Bağlantı oluştur" → jeton; /talep/<jeton> 5175'te girişsiz açıldı (şifre alanı yok), form gönderildi → "Bildiriminiz alındı" (Umay Emlak (pilot) · DEMO Deniz Arslan)
+HATA ANALIZI:1) GET /public/tenant 404 döndü: pg `date` sütunu Date nesnesi olarak geldiği için `${expires_on}T23:59:59` geçersiz tarih oldu → gün ISO'ya çevrildi. 2) Test temizliği TÜM tenant_access_link satırlarını siliyordu (elle kurulan bağlantı da silindi) → temizlik yalnız testin ürettiği satıra daraltıldı; ayrıca test dosyasında createdLinkId iki kez tanımlandı, biri kaldırıldı.
+KARAR:K-86 kiracı bağlantısı: jeton DB'de yalnız sha256 özeti; satır silinmez, iptal revoked_at; ofis kimliği jetonun kendisinden (tenant_link_lookup → withTenant), istemciden asla.
+YARIM:Public POST sınırı bellekte (çok süreçli kurulumda taşınmalı); bağlantı elle kopyalanıyor, e-posta/SMS gönderimi yok; kiracı fotoğraf yükleyemiyor.
+SORU:yok
+SIRADAKI:Yol haritası sıradaki açık madde — kira yenileme hesabı (TÜİK oranı veri olarak: kaynak + tarih + onay; oran koda sabitlenmez).
+--------------------------------------------------------------------------------

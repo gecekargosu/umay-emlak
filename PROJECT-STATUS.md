@@ -1,6 +1,6 @@
 # PROJECT-STATUS
 
-Son güncelleme: 2026-11-05 05:00 · Aktif tur: TUR:54 bitti — portföy sanal liste
+Son güncelleme: 2026-11-05 06:00 · Aktif tur: TUR:55 bitti — kiracı talep bağlantısı (girişsiz arıza bildirimi)
 
 ## Şu an çalışan (doğrulandı)
 - Giriş/oturum, boşta kilit, şifre değiştirme; ofis/personel/onay yetkisi.
@@ -10,6 +10,8 @@ Son güncelleme: 2026-11-05 05:00 · Aktif tur: TUR:54 bitti — portföy sanal 
 - Sözleşme + kiracılık + teslim tutanağı + depozito; kira tahakkuku/tahsilat/gecikme.
 - DASK/poliçe + 30 gün uyarısı; kira artışı (oran + kaynak + onay); randevu + takvim.
 - Portföy önerisi; arıza/bakım talebi (fotoğraf, durum, masraf); Excel/CSV içe aktarma.
+- Kiracı talep bağlantısı (TUR:55): kiralık dosyada üret/iptal, `/talep/<jeton>` girişsiz form,
+  bildirim arıza listesine düşer; jeton DB'de yalnız sha256 özetiyle, süre + iptal kontrolü.
 - Taşınabilir Windows paketi: `Desktop/Aysana-gonderilecek/UmayEmlak-Beta-2026-11-04/` + zip (288 MB).
   Doğrulama: `/health {"ok":true,"migrations":15}`, giriş 200, HTML 200, ilk açılış 14 sn.
 
@@ -37,11 +39,13 @@ M6 · **K-1 / K-2 / K-3** → YAPILDI (2026-11-05, TUR:49-50) — Listings.tsx 9
      Bitiş: davranış aynı, typecheck + test yeşil, ekran kontrolü.
 M7 · **Y-93 + H-11** — paket OKU-BENI uyarısı ve sürüm notu; paket ASCII klasörde açılır.
      Bitiş: zip yeniden üretilip /health 200.
+M8 · **Yol haritası 1** → YAPILDI (2026-11-05, TUR:55) — kiracı kendi arıza/talebini tek kullanımlık
+     bağlantıyla açsın. Bitiş: girişsiz bildirim arıza listesine düşer, iptal edilen jeton 404.
 
 Kural: aynı anda tek mission; kapsam büyütülmez, bitmeyen mission yeni mission açmaz.
 
 ## Sıradaki adım (tek cümle)
-M7: YAPILDI (TUR:51). Sırada: kiracı kendi arıza/talebini açsın (yol haritası 1. madde).
+M8: YAPILDI (TUR:55). Sırada: yol haritası ekranındaki en üst açık madde.
 
 ## Sorular (kullanıcıdan bekleyen)
 - Aysan kirayı mal sahibine mi yatırıyor, ofis hesabından mı geçiyor? (para akışı modeli)
@@ -53,4 +57,4 @@ K-85 onarım sırası: kullanılabilirlik (M1-M2) → güven/iz (M3-M4) → list
 dosya bölme en son (M6) · K-70…K-81 yürürlükte.
 
 ## Test durumu
-typecheck 0 · `pnpm test` 17 dosya / 64 test 0 · web build 0 · paket /health 200.
+typecheck 0 · `pnpm test` 19 dosya / 67 test 0 · web build 0 · paket /health 200 (17 migration).

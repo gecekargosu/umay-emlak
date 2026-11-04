@@ -45,7 +45,8 @@ const ROWS_VAR: Row[] = [
   { key: "aktar", title: "Excel/CSV içe aktarma", status: "var", note: "İçe aktar ekranı, mükerrer açmaz." },
   { key: "guvenlik", title: "Oturum, şifre değiştirme, boşta kilit", status: "var", note: "Zorunlu şifre + IdleLock." },
   { key: "arama", title: "Genel arama (/) ve bildirim sayacı", status: "var", note: "Üst bar." },
-  { key: "gorev", title: "Görev listesi (arıza, bakım, hatırlatma)", status: "var", note: "Operasyon → Görevler; kiracı kendi talebini giremez (aşağıda 4. madde).", turn: "TUR:44" },
+  { key: "gorev", title: "Görev listesi (arıza, bakım, hatırlatma)", status: "var", note: "Operasyon → Görevler; kiracı da bağlantıyla talebini açabiliyor (TUR:55).", turn: "TUR:44" },
+  { key: "kiraciTalep", title: "Kiracı kendi arıza talebini açsın (girişsiz bağlantı)", status: "var", note: "Kiralık dosyada 90 günlük bağlantı: kiracı giriş yapmadan bildirir, talep arıza listesine düşer; iptal edilen/süresi dolan jeton 404 (TUR:55).", turn: "TUR:55" },
   { key: "hata", title: "Anlaşılır hata mesajı + kayıt numarası", status: "var", note: "500'de \"Bu numarayla bildirin: R-…\"; aynı numara sunucu log'unda.", turn: "TUR:45" },
   { key: "denetim", title: "İşlem kaydı altyapısı (audit_log)", status: "var", note: "Her yazma isteği kim/ofis/uç/kayıt ile saklanıyor; Sistem → İşlem kaydı ekranından okunuyor (TUR:53).", turn: "TUR:46" },
   { key: "uzunListe", title: "Portföy listesi 500 kayıtta akıcı", status: "var", note: "Sanal liste: yalnız görünen satırlar basılıyor, kaydırma çubuğu tam uzunluğu gösteriyor (K-10, TUR:54).", turn: "TUR:54" },
@@ -64,12 +65,6 @@ const ROWS_OPEN: Row[] = [
     title: "Alıcı adayına uygun portföy önerisi",
     status: "yok",
     note: "Bütçe + ilçe + oda eşleşmesi; aday CRM alanları hazır.",
-  },
-  {
-    key: "talep",
-    title: "Kiracıdan arıza/talep girişi (kiracı kendi açsın)",
-    status: "kismi",
-    note: "Görev kaydı ofis içinde açılıyor; kiracının kendi talebini gireceği ekran/izin yok.",
   },
   {
     key: "hatirlat",
@@ -134,12 +129,13 @@ const CLOSED: Closed[] = [
   { title: "Teslim tutanağı PDF (fotoğraf + imza alanı)", turn: "TUR:52", what: "Kayıtlı tutanaktan A4 PDF: taşınmaz, taraflar, demirbaş, depozito hesabı, mülkün 3 fotoğrafı ve imza alanları; mülk dosyasından açılıyor." },
   { title: "İşlem kaydı ekranı (kim ne yaptı)", turn: "TUR:53", what: "Sistem → İşlem kaydı: kişi, tarih aralığı ve arama süzgeci; her satırda işlem, kayıt, yol ve R-… numarası. Kayıt değiştirilemez." },
   { title: "Portföy listesinde tam sanal liste", turn: "TUR:54", what: "Yalnız görünen satırlar basılıyor; 2000+ kayıtta da sayfa ağırlaşmıyor, 'sonraki 60' düğmesi kalktı (K-10)." },
+  { title: "Kiracıdan arıza/talep girişi", turn: "TUR:55", what: "Kiralık dosyada 'Bağlantı oluştur': 90 günlük jeton, kiracı giriş yapmadan /talep/<jeton> sayfasından bildirir; talep arıza listesine 'açık' düşer, iptal anında geçersiz (K-86)." },
 ];
 
 const SUGGESTIONS: Array<{ title: string; body: string }> = [
   {
-    title: "1) Kiracı talebini kiracı açsın",
-    body: "Görev kaydı var ama kapı kiracıya kapalı. Kiracı paneli kurulana kadar en azından tek kullanımlık talep bağlantısı (token) ile arıza bildirimi alınabilir; telefonda kaybolan arızalar kayda girer.",
+    title: "1) Kiracı bağlantısını WhatsApp'tan gönderin",
+    body: "Artık kiracı kendi açabiliyor: mülk dosyasında bağlantıyı üretip kopyalayın, WhatsApp'tan atın. Telefonda kaybolan arızalar kayda girer; bir bağlantı yalnız o sözleşme için çalışır, dilediğiniz an iptal edilir.",
   },
   {
     title: "2) Poliçe ve sözleşme bitişinde tek uyarı listesi",
@@ -186,7 +182,7 @@ export function Roadmap() {
         Kaynak: kökteki <strong>“umay emlak program detayları benim yazdığım.txt”</strong>. Bir madde
         bitince <strong>silinmez</strong>; “VAR” durumuna geçer ve <strong>Kapananlar</strong>{" "}
         bölümüne taşınır. Sıra numarası elle yazılmaz: açık maddeler sırayla numaralanır, bir madde
-        kapanınca numaralar kendiliğinden kayar. Son tazeleme: <strong>TUR:54</strong>.
+        kapanınca numaralar kendiliğinden kayar. Son tazeleme: <strong>TUR:55</strong>.
       </InfoNote>
 
       <h3>Kapananlar (son turlar)</h3>

@@ -15,6 +15,7 @@ import { Roadmap } from "./pages/Roadmap";
 import { Policies } from "./pages/Policies";
 import { Appointments } from "./pages/Appointments";
 import { Audit } from "./pages/Audit";
+import { TenantRequestPublic } from "./pages/TenantRequest";
 import { CalendarPage } from "./pages/Calendar";
 import { Rents } from "./pages/Rents";
 import { Team } from "./pages/Team";
@@ -113,6 +114,12 @@ const TITLES: Record<Page, string> = {
   gorevler: "Görevler",
 };
 
+/** TUR:55 — kiracı bağlantısı: /talep/<jeton> girişsiz açılır. */
+function publicTenantToken(): string | null {
+  const match = /^\/talep\/([A-Za-z0-9_-]{16,120})\/?$/.exec(window.location.pathname);
+  return match ? match[1]! : null;
+}
+
 function initials(name: string): string {
   return name
     .split(" ")
@@ -123,6 +130,7 @@ function initials(name: string): string {
 }
 
 export function App() {
+  const publicToken = publicTenantToken();
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState<Page>("bugun");
@@ -136,6 +144,10 @@ export function App() {
   const idle = useIdleLock();
 
   useEffect(() => {
+    if (publicToken) {
+      setLoading(false);
+      return;
+    }
     api<Session>("/auth/session")
       .then(setSession)
       .catch((caught) => {
@@ -185,6 +197,9 @@ export function App() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  // Kiracı bağlantısı: giriş ekranına düşmeden doğrudan talep formu açılır.
+  if (publicToken) return <TenantRequestPublic token={publicToken} />;
 
   if (loading) return <div className="center muted">Yükleniyor…</div>;
   if (!session) return <Login onLogin={setSession} />;

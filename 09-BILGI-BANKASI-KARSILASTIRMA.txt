@@ -248,3 +248,11 @@ M. TUR:54 GÜNCELLEMELERİ (2026-11-04)
 [VAR] Portföy listesi sanal: yalnız görünen ~27 satır basılıyor, 91/2000+ kayıtta aynı.
 [VAR] "Sonraki 60" düğmesi kalktı; kaydırma çubuğu tüm listeyi temsil ediyor (K-10).
 [VAR] Satır yüksekliği sabit (38px), uzun hücreler tek satırda kesiliyor — sanal liste şartı.
+
+====================================================================
+M. TUR:55 GÜNCELLEMELERİ (2026-11-04)
+====================================================================
+[VAR] Kiracı tek kullanımlık (süreli) bağlantıyla arıza/talep açabiliyor: giriş yok, form mülk + kiracı adını gösteriyor.
+[VAR] Bağlantı 90 gün geçerli, iptal edilebilir; jeton DB'de yalnız sha256 özetiyle durur (K-86).
+[VAR] Bildirim ofisin arıza listesine "açık" kayıt olarak düşer; kim/ne zaman ürettiği ve kaç kez kullanıldığı görünür.
+[KISMI] Bağlantı elle kopyalanıyor (WhatsApp/e-posta gönderimi yok); kiracı fotoğraf yükleyemiyor.
