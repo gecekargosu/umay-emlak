@@ -903,12 +903,20 @@ function Shelf({
                 onClick={() => onOpen(row.id)}
               >
                 <div className="shelf-cover">
-                  {row.title
-                    .split(" ")
-                    .filter(Boolean)
-                    .slice(0, 2)
-                    .map((part) => part[0]?.toLocaleUpperCase("tr"))
-                    .join("")}
+                  {(row as { coverUrl?: string | null }).coverUrl ? (
+                    <img
+                      src={(row as { coverUrl?: string | null }).coverUrl!}
+                      alt={row.title}
+                      loading="lazy"
+                    />
+                  ) : (
+                    row.title
+                      .split(" ")
+                      .filter(Boolean)
+                      .slice(0, 2)
+                      .map((part) => part[0]?.toLocaleUpperCase("tr"))
+                      .join("")
+                  )}
                 </div>
                 <div className="shelf-body">
                   <div className="shelf-title">{row.title}</div>

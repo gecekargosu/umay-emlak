@@ -159,6 +159,14 @@ listingRoutes.get("/", async (c) => {
         ownerName: owner.fullName,
         tenantName: tenant.fullName,
         tenantPhone: tenant.phone,
+        // TUR:48 — rafta harf yerine mülkün kapak fotoğrafı görünsün.
+        coverMediaId: sql<string | null>`(
+          select pm.id from property_media pm
+           where pm.property_id = ${schema.properties.id}
+             and pm.kind = 'image' and pm.maintenance_id is null
+           order by pm.created_at
+           limit 1
+        )`,
       })
       .from(schema.listings)
       .innerJoin(schema.properties, eq(schema.properties.id, schema.listings.propertyId))
@@ -178,7 +186,13 @@ listingRoutes.get("/", async (c) => {
 
   return c.json({
     count: rows.length,
-    items: rows.map((r) => ({ ...r, price: formatTry(r.priceKurus) })),
+    items: rows.map((r) => ({
+      ...r,
+      price: formatTry(r.priceKurus),
+      coverUrl: r.coverMediaId
+        ? `/api/v1/properties/${r.propertyId}/media/${r.coverMediaId}/file`
+        : null,
+    })),
   });
 });
 

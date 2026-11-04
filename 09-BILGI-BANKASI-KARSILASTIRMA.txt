@@ -192,3 +192,15 @@ J. TUR:47 GÜNCELLEMELERİ (2026-11-04)
 [VAR] Yol haritası ekranı gerçek duruma çekildi: kapananlar ayrı bölüm, açık maddeler
       otomatik numaralı; komisyon, DASK, randevu, görev, denetim altyapısı artık VAR.
 [KISMI] Yol haritası verisi koda gömülü; tur sonunda elle tazeleniyor (canlı veri değil).
+
+====================================================================
+K. TUR:48 GÜNCELLEMELERİ (2026-11-04)
+====================================================================
+[VAR] Mülk fotoğrafı: raf kartlarında baş harf yerine kapak fotoğrafı; mülk dosyasında galeri
+      (property_media, 90 kayıt). Fotoğraf yoksa eski baş harf geri gelir.
+[VAR] Dolu belgeler: tapu, yetki belgesi, kimlik, kira sözleşmesi (270 belge); alanlar gerçek
+      veriden dolduruluyor, alt satırda "örnek belge" notu var.
+[VAR] Kişi kartında belgeler: kiracı/mal sahibi dosyasında kimlik ve sözleşme listesi, indirme bağlantısı.
+[KISMI] Fotoğraflar stok görsel (16 kare döner); mülke özel çekim değil. Gerçek fotoğraf yüklenince
+      onun yerini alır (galeri zaten yükleme kabul ediyor).
+[YOK] Kişi vesikalık fotoğrafı: yüz fotoğrafı üretilmedi; alan açılmadı.

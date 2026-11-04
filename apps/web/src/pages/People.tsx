@@ -39,6 +39,7 @@ type PersonDetail = {
   person: PersonRow & { notes: string | null };
   properties: Array<{ id: string; title: string; city: string | null; district: string | null }>;
   contracts: Array<{ id: string; startDate: string; rentKurus: number; status: string }>;
+  documents: Array<{ id: string; title: string | null; filename: string; sizeBytes: number }>;
 };
 
 export function People({ initialQuery = "" }: { initialQuery?: string }) {
@@ -415,6 +416,26 @@ export function People({ initialQuery = "" }: { initialQuery?: string }) {
                 </div>
               )}
             </>
+          )}
+
+          <h4>Belgeler</h4>
+          {selected.documents.length === 0 ? (
+            <p className="muted small">
+              Bu kişiye bağlı belge yok. Belgeler ekranından yükleyip kişiye bağlayabilirsiniz.
+            </p>
+          ) : (
+            <ul className="doc-list">
+              {selected.documents.map((doc) => (
+                <li key={doc.id}>
+                  <a href={`/api/v1/documents/${doc.id}/file`} target="_blank" rel="noreferrer">
+                    {doc.title ?? doc.filename}
+                  </a>{" "}
+                  <span className="muted small">
+                    · {doc.filename} · {(doc.sizeBytes / 1024).toFixed(0)} KB
+                  </span>
+                </li>
+              ))}
+            </ul>
           )}
 
           <h4>İletişim izni (KVKK)</h4>

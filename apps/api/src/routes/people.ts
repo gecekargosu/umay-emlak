@@ -216,7 +216,20 @@ peopleRoutes.get("/:id", async (c) => {
       .from(schema.contracts)
       .where(eq(schema.contracts.tenantPersonId, id));
 
-    return { person, properties: owned, contracts };
+    // TUR:48 — kişi kartında belgeler görünsün (kimlik, sözleşme, tapu…).
+    const documents = await tx
+      .select({
+        id: schema.documents.id,
+        kind: schema.documents.kind,
+        title: schema.documents.title,
+        filename: schema.documents.filename,
+        sizeBytes: schema.documents.sizeBytes,
+        createdAt: schema.documents.createdAt,
+      })
+      .from(schema.documents)
+      .where(eq(schema.documents.personId, id));
+
+    return { person, properties: owned, contracts, documents };
   });
 
   if (!detail) throw new HttpError(404, "Kişi bulunamadı");

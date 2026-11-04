@@ -1,11 +1,12 @@
 # PROJECT-STATUS
 
-Son güncelleme: 2026-11-05 00:15 · Aktif tur: TUR:47 bitti — M5 (H-15 + K-10) ve yol haritası tazeleme kapandı
+Son güncelleme: 2026-11-05 01:40 · Aktif tur: TUR:48 bitti — demo portföy fotoğraflı ve belgeli
 
 ## Şu an çalışan (doğrulandı)
 - Giriş/oturum, boşta kilit, şifre değiştirme; ofis/personel/onay yetkisi.
 - Mal sahipleri alfabetik raflar + kişi dosyası; mülk + ilan ayrımı; raf ve liste görünümü.
 - Belge arşivi (sha256 tek kopya, ada göre eşleştirme), fiyat geçmişi, teklif/kapora/komisyon.
+- Demo veri dolu: 90 mülk fotoğrafı, 270 belge (tapu/yetki/kimlik/sözleşme), kişi kartında belge listesi (TUR:48).
 - Sözleşme + kiracılık + teslim tutanağı + depozito; kira tahakkuku/tahsilat/gecikme.
 - DASK/poliçe + 30 gün uyarısı; kira artışı (oran + kaynak + onay); randevu + takvim.
 - Portföy önerisi; arıza/bakım talebi (fotoğraf, durum, masraf); Excel/CSV içe aktarma.

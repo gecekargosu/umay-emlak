@@ -427,3 +427,7 @@ Y-100 | H-15 belge araması — YAPILDI (2026-11-04, TUR:47): arama üstte ve ya
 Y-101 | K-10 uzun liste — KISMI (2026-11-04, TUR:47): portföy listesi 60'lık parçalarla açılıyor,
         "Sonraki 60" ile tamamlanıyor. AÇIK: gerçek sanal liste (2000+ kayıt) ve belge rafı.
         | Dilim 8 | M | KISMI
+
+Y-102 | Demo görsel + belge — YAPILDI (2026-11-04, TUR:48): 90 mülk fotoğrafı, 270 dolu belge,
+        kişi kartında belge listesi. AÇIK: kişi vesikalığı alanı (person.photo) ve mülke özel
+        çekim; şimdilik stok görsel dönüyor. | Dilim 8 | M | KISMI

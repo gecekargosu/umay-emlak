@@ -9,8 +9,21 @@
  *   pnpm demo:seed    → ekle (varsa dokunmaz)
  *   pnpm demo:clean   → yalnız "DEMO " kayıtlarını sil
  */
+import { createHash } from "node:crypto";
+import { mkdirSync, writeFileSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { Client } from "pg";
 import { loadEnv, requireEnv } from "./env.js";
+import {
+  fallbackScene,
+  fetchPhoto,
+  kimlikPdf,
+  sozlesmePdf,
+  tapuPdf,
+  yetkiPdf,
+  type DemoAsset,
+} from "./demo-media.js";
 
 loadEnv();
 
@@ -159,8 +172,114 @@ function phoneFor(base: number, i: number): string {
   return `0532 ${String(base + Math.floor(i / 100)).padStart(3, "0")} ${pad(i % 100)} ${pad((i * 7) % 100)}`;
 }
 
+/** Depo kökü: API ile aynı yeri kullanmalı (yoksa belge açılmaz). */
+function storageRoot(): string {
+  const configured = process.env.UMAY_STORAGE_DIR?.trim();
+  if (configured) return resolve(configured);
+  return join(resolve(fileURLToPath(new URL("../../../", import.meta.url))), "apps", "api", ".data", "documents");
+}
+
+/** İçerik adresli yazma (sha256) — API'nin storage.ts'iyle aynı yerleşim. */
+function saveAsset(asset: DemoAsset): string {
+  const hash = createHash("sha256").update(asset.bytes).digest("hex");
+  const path = join(storageRoot(), hash.slice(0, 2), hash.slice(2, 4), hash);
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(path, asset.bytes);
+  return hash;
+}
+
+const TYPE_TR: Record<string, string> = {
+  apartment: "Mesken (Daire)",
+  house: "Mustakil Ev",
+  land: "Arsa",
+  shop: "Dukkan",
+  office: "Ofis",
+};
+
+function moneyText(kurus: number): string {
+  return `${(kurus / 100).toLocaleString("tr-TR", { minimumFractionDigits: 2 })} TL`;
+}
+
+/** Fotoğraflar: 16 kare indirilir, mülke göre dağıtılır (aynı bayt tek kopya). */
+async function loadPhotos(): Promise<DemoAsset[]> {
+  const assets: DemoAsset[] = [];
+  for (let i = 0; i < 16; i++) {
+    const remote = await fetchPhoto(`umay-emlak-demo-${i + 1}`);
+    assets.push(remote ?? fallbackScene(i));
+  }
+  return assets;
+}
+
 async function clean(client: Client, tenantId: string): Promise<string> {
   const steps: Array<[string, string]> = [
+    [
+      "belge",
+      `delete from document where tenant_id = $1 and (
+         property_id in (select id from property where tenant_id = $1 and title like 'DEMO %')
+         or person_id in (select id from person where tenant_id = $1 and full_name like 'DEMO %'))`,
+    ],
+    [
+      "komisyon",
+      `delete from commission where listing_id in (
+         select l.id from listing l join property p on p.id = l.property_id
+          where p.tenant_id = $1 and p.title like 'DEMO %')`,
+    ],
+    [
+      "teklif",
+      `delete from offer where listing_id in (
+         select l.id from listing l join property p on p.id = l.property_id
+          where p.tenant_id = $1 and p.title like 'DEMO %')`,
+    ],
+    [
+      "randevu",
+      `delete from appointment where listing_id in (
+         select l.id from listing l join property p on p.id = l.property_id
+          where p.tenant_id = $1 and p.title like 'DEMO %')
+         or person_id in (select id from person where tenant_id = $1 and full_name like 'DEMO %')`,
+    ],
+    [
+      "görev",
+      `delete from maintenance_request where tenant_id = $1 and (
+         property_id in (select id from property where tenant_id = $1 and title like 'DEMO %')
+         or person_id in (select id from person where tenant_id = $1 and full_name like 'DEMO %'))`,
+    ],
+    [
+      "poliçe",
+      `delete from policy where property_id in (
+         select id from property where tenant_id = $1 and title like 'DEMO %')`,
+    ],
+    [
+      "geçmiş",
+      `delete from listing_status_change where listing_id in (
+         select l.id from listing l join property p on p.id = l.property_id
+          where p.tenant_id = $1 and p.title like 'DEMO %')`,
+    ],
+    [
+      "fiyat geçmişi",
+      `delete from listing_price_change where listing_id in (
+         select l.id from listing l join property p on p.id = l.property_id
+          where p.tenant_id = $1 and p.title like 'DEMO %')`,
+    ],
+    [
+      "kişi notu",
+      `delete from person_note where person_id in (
+         select id from person where tenant_id = $1 and full_name like 'DEMO %')`,
+    ],
+    [
+      "demirbaş",
+      `delete from property_fixture where property_id in (
+         select id from property where tenant_id = $1 and title like 'DEMO %')`,
+    ],
+    [
+      "abonelik",
+      `delete from property_subscription where property_id in (
+         select id from property where tenant_id = $1 and title like 'DEMO %')`,
+    ],
+    [
+      "hisse",
+      `delete from property_owner where property_id in (
+         select id from property where tenant_id = $1 and title like 'DEMO %')`,
+    ],
     [
       "tahsilat",
       `delete from payment where charge_id in (
@@ -372,6 +491,219 @@ async function seed(
     offerCount++;
   }
 
+  // --- Fotoğraflar ve dolu belgeler (TUR:48) -------------------------------
+  // Raf kartında harf yerine mülk fotoğrafı, kişi kartında dolu kimlik/sözleşme.
+  const photos = await loadPhotos();
+
+  await client.query(
+    `update person
+        set email = lower(replace(replace(full_name, 'DEMO ', ''), ' ', '.')) || '@ornek.local',
+            national_id = '123' || lpad((abs(hashtext(id::text)) % 1000000)::text, 6, '0') || '45',
+            contact_permission = 'allowed'
+      where tenant_id = $1 and full_name like 'DEMO %'`,
+    [tenantId],
+  );
+
+  const props = await client.query<{
+    id: string;
+    title: string;
+    district: string | null;
+    address: string | null;
+    type: string;
+    room_count: string | null;
+    gross_m2: number | null;
+    block: string | null;
+    unit_no: string | null;
+    deed_ref: string | null;
+    owner_name: string | null;
+  }>(
+    `select p.id, p.title, p.district, p.address, p.type::text as type, p.room_count, p.gross_m2,
+            p.block, p.unit_no, p.deed_ref, o.full_name as owner_name
+       from property p
+       left join person o on o.id = p.owner_person_id
+      where p.tenant_id = $1 and p.title like 'DEMO %'
+      order by p.title`,
+    [tenantId],
+  );
+
+  let mediaCount = 0;
+  for (let i = 0; i < props.rows.length; i++) {
+    const row = props.rows[i]!;
+    const asset = photos[i % photos.length]!;
+    const hash = saveAsset(asset);
+    await client.query(
+      `insert into property_media
+         (tenant_id, property_id, kind, title, sha256, mime_type, size_bytes, created_by_user_id)
+       values ($1, $2, 'image', $3, $4, $5, $6, $7)`,
+      [
+        tenantId,
+        row.id,
+        i % 3 === 0 ? "Salon" : "Ön cephe",
+        hash,
+        asset.mimeType,
+        asset.bytes.length,
+        responsibleUserId,
+      ],
+    );
+    mediaCount++;
+  }
+
+  let docCount = 0;
+  async function insertDoc(opts: {
+    kind: string;
+    asset: DemoAsset;
+    filename: string;
+    title: string;
+    personId?: string | null;
+    propertyId?: string | null;
+    listingId?: string | null;
+  }): Promise<void> {
+    const hash = saveAsset(opts.asset);
+    await client.query(
+      `insert into document
+         (tenant_id, kind, sha256, filename, mime_type, size_bytes,
+          person_id, property_id, listing_id, uploaded_by_user_id, title)
+       values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+       on conflict (tenant_id, sha256) do nothing`,
+      [
+        tenantId,
+        opts.kind,
+        hash,
+        opts.filename,
+        opts.asset.mimeType,
+        opts.asset.bytes.length,
+        opts.personId ?? null,
+        opts.propertyId ?? null,
+        opts.listingId ?? null,
+        responsibleUserId,
+        opts.title,
+      ],
+    );
+    docCount++;
+  }
+
+  for (let i = 0; i < props.rows.length; i++) {
+    const row = props.rows[i]!;
+    const listing = await client.query<{ id: string; authority_no: string | null; price_kurus: string; kind: string }>(
+      `select id, authority_no, price_kurus::text as price_kurus, kind::text as kind
+         from listing where tenant_id = $1 and property_id = $2 limit 1`,
+      [tenantId, row.id],
+    );
+    const listingRow = listing.rows[0];
+
+    await insertDoc({
+      kind: "tapu",
+      asset: tapuPdf({
+        title: row.title,
+        district: row.district ?? "Konak",
+        block: row.block,
+        unitNo: row.unit_no,
+        grossM2: row.gross_m2,
+        deedRef: row.deed_ref,
+        ownerName: row.owner_name ?? "-",
+        roomCount: row.room_count,
+        typeLabel: TYPE_TR[row.type] ?? "Mesken",
+      }),
+      filename: `Tapu-${String(i + 1).padStart(4, "0")}.pdf`,
+      title: `Tapu kayıt örneği · ${row.title}`,
+      propertyId: row.id,
+      listingId: listingRow?.id ?? null,
+    });
+
+    if (listingRow) {
+      await insertDoc({
+        kind: "yetki_belgesi",
+        asset: yetkiPdf({
+          title: row.title,
+          ownerName: row.owner_name ?? "-",
+          authorityNo: listingRow.authority_no,
+          priceText: moneyText(Number(listingRow.price_kurus)),
+          district: row.district ?? "Konak",
+        }),
+        filename: `Yetki-${String(i + 1).padStart(4, "0")}.pdf`,
+        title: `Yetki belgesi · ${row.title}`,
+        propertyId: row.id,
+        listingId: listingRow.id,
+      });
+    }
+  }
+
+  const people = await client.query<{
+    id: string;
+    full_name: string;
+    phone: string | null;
+    email: string | null;
+    national_id: string | null;
+    kind: string;
+  }>(
+    `select id, full_name, phone, email, national_id, kind::text as kind
+       from person where tenant_id = $1 and full_name like 'DEMO %' order by full_name`,
+    [tenantId],
+  );
+
+  for (let i = 0; i < people.rows.length; i++) {
+    const person = people.rows[i]!;
+    await insertDoc({
+      kind: "kimlik",
+      asset: kimlikPdf({
+        fullName: person.full_name,
+        phone: person.phone,
+        email: person.email,
+        nationalId: person.national_id,
+      }),
+      filename: `Kimlik-${String(i + 1).padStart(3, "0")}.pdf`,
+      title: "Kimlik fotokopisi",
+      personId: person.id,
+    });
+  }
+
+  const contractRows = await client.query<{
+    tenant_id_person: string;
+    tenant_name: string;
+    owner_name: string | null;
+    title: string;
+    address: string | null;
+    start_date: string;
+    rent_kurus: string;
+    deposit_kurus: string;
+    due_day: number;
+    listing_id: string;
+  }>(
+    `select c.tenant_person_id as tenant_id_person, tp.full_name as tenant_name,
+            op.full_name as owner_name, pr.title, pr.address,
+            c.start_date::text as start_date, c.rent_kurus::text as rent_kurus,
+            c.deposit_kurus::text as deposit_kurus, c.due_day, l.id as listing_id
+       from contract c
+       join person tp on tp.id = c.tenant_person_id
+       join listing l on l.id = c.listing_id
+       join property pr on pr.id = l.property_id
+       left join person op on op.id = pr.owner_person_id
+      where c.tenant_id = $1 and tp.full_name like 'DEMO %'
+      order by tp.full_name`,
+    [tenantId],
+  );
+
+  for (let i = 0; i < contractRows.rows.length; i++) {
+    const row = contractRows.rows[i]!;
+    await insertDoc({
+      kind: "sozlesme",
+      asset: sozlesmePdf({
+        tenantName: row.tenant_name,
+        ownerName: row.owner_name ?? "-",
+        propertyTitle: row.title,
+        address: row.address,
+        startDate: row.start_date,
+        rentText: moneyText(Number(row.rent_kurus)),
+        depositText: moneyText(Number(row.deposit_kurus)),
+        dueDay: row.due_day,
+      }),
+      filename: `Kira-Sozlesmesi-${String(i + 1).padStart(3, "0")}.pdf`,
+      title: `Kira sözleşmesi · ${row.title}`,
+      personId: row.tenant_id_person,
+      listingId: row.listing_id,
+    });
+  }
+
   const statusText = Object.entries(statusCounts)
     .map(([k, v]) => `${k} ${v}`)
     .join(" · ");
@@ -382,6 +714,8 @@ async function seed(
     `mülk ${idx} (satılık ${sale} / kiralık ${rent})`,
     `kiracı ${tenantIds.length} (sözleşmeli ${rentActive.length})`,
     `teklif ${offerCount}`,
+    `fotoğraf ${mediaCount}`,
+    `belge ${docCount} (tapu/yetki/kimlik/sözleşme)`,
     `personel dağıtımı ${responsibleIds.length} kişi`,
     `durum: ${statusText}`,
   ].join(" | ");
