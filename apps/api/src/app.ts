@@ -98,27 +98,75 @@ app.route("/api/v1/appointments", appointmentRoutes);
 app.route("/api/v1/people", suggestionRoutes);
 app.route("/api/v1/maintenance", maintenanceRoutes);
 
-/** Denetim kaydı — "kim ne yaptı" (K-6). Yalnız okuma; kayıt silinmez. */
+/**
+ * Denetim kaydı — "kim ne yaptı" (K-6). Yalnız okuma; kayıt silinmez.
+ *
+ * TUR:53 — ekran için süzgeçler: kişi (userId), tarih aralığı (from/to), serbest
+ * arama (q: işlem, yol, kişi adı, kayıt no). Toplam sayı limit dışında ayrıca döner.
+ */
 app.get("/api/v1/audit", async (c) => {
   const session = await resolveSession(c);
   requirePasswordChanged(session);
   const asked = Number(c.req.query("limit") ?? 50);
-  const limit = Number.isFinite(asked) ? Math.min(Math.max(asked, 1), 200) : 50;
+  const limit = Number.isFinite(asked) ? Math.min(Math.max(asked, 1), 500) : 50;
 
-  const rows = await withTenant(session.tenantId, async (tx) => {
-    const result = await tx.execute(sql`
+  const q = (c.req.query("q") ?? "").trim();
+  const userId = (c.req.query("userId") ?? "").trim();
+  const from = (c.req.query("from") ?? "").trim();
+  const to = (c.req.query("to") ?? "").trim();
+  const uuidRe = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  const dateRe = /^\d{4}-\d{2}-\d{2}$/;
+
+  const conditions = [sql`1 = 1`];
+  if (q) {
+    const like = `%${q.toLocaleLowerCase("tr")}%`;
+    conditions.push(sql`(
+      lower(a.action) like ${like}
+      or lower(a.path) like ${like}
+      or lower(coalesce(a.request_ref, '')) like ${like}
+      or lower(coalesce(u.full_name, '')) like ${like}
+    )`);
+  }
+  if (uuidRe.test(userId)) conditions.push(sql`a.user_id = ${userId}::uuid`);
+  if (dateRe.test(from)) conditions.push(sql`a.created_at >= ${from}::date`);
+  if (dateRe.test(to)) conditions.push(sql`a.created_at < (${to}::date + interval '1 day')`);
+  const where = sql.join(conditions, sql` and `);
+
+  const data = await withTenant(session.tenantId, async (tx) => {
+    const rows = await tx.execute(sql`
       select a.id, a.request_ref as "ref", a.method, a.path, a.action,
              a.entity_type as "entityType", a.entity_id as "entityId", a.status,
-             u.full_name as "userName", a.created_at as "createdAt"
+             a.user_id as "userId", u.full_name as "userName", a.created_at as "createdAt"
         from audit_log a
         left join app_user u on u.id = a.user_id
+       where ${where}
        order by a.created_at desc
        limit ${limit}
     `);
-    return (result as unknown as { rows: unknown[] }).rows;
+
+    const totals = await tx.execute(sql`
+      select count(*)::int as "total"
+        from audit_log a
+        left join app_user u on u.id = a.user_id
+       where ${where}
+    `);
+
+    // Kişi süzgeci: yalnız kaydı olan personel (boş seçenek listesi olmasın).
+    const users = await tx.execute(sql`
+      select distinct u.id, u.full_name as "name"
+        from audit_log a
+        join app_user u on u.id = a.user_id
+       order by u.full_name
+    `);
+
+    return {
+      items: (rows as unknown as { rows: unknown[] }).rows,
+      users: (users as unknown as { rows: unknown[] }).rows,
+      total: Number((totals as unknown as { rows: Array<{ total: number }> }).rows[0]?.total ?? 0),
+    };
   });
 
-  return c.json({ items: rows });
+  return c.json(data);
 });
 
 app.get("/api/v1/me", async (c) => {

@@ -446,3 +446,8 @@ Y-105 | Teslim tutanağını yazdırılabilir PDF yap (fotoğraf + imza alanı) 
         demirbaş, çıkışta depozito hesabı, mülkün 3 JPEG fotoğrafı, üç imza alanı.
         Mülk dosyasında "Tutanak PDF" bağlantısı. Kalan: imza cihazı/ıslak imza taraması.
         | Dilim 9 | M | YAPILDI
+
+Y-106 | Denetim kaydı ekranı (kim ne yaptı) — YAPILDI (2026-11-04, TUR:53):
+        Sistem → İşlem kaydı; kişi, tarih aralığı ve arama süzgeci sunucuda çalışıyor;
+        her satırda işlem, kayıt türü/kimliği, yol ve R-… numarası. Kayıt değiştirilemez.
+        | Dilim 9 | M | YAPILDI

@@ -14,6 +14,7 @@ import { People } from "./pages/People";
 import { Roadmap } from "./pages/Roadmap";
 import { Policies } from "./pages/Policies";
 import { Appointments } from "./pages/Appointments";
+import { Audit } from "./pages/Audit";
 import { CalendarPage } from "./pages/Calendar";
 import { Rents } from "./pages/Rents";
 import { Team } from "./pages/Team";
@@ -31,6 +32,7 @@ type Page =
   | "policeler"
   | "sahipler"
   | "belgeler"
+  | "islem-kaydi"
   | "aktar"
   | "takvim"
   | "randevular"
@@ -83,6 +85,7 @@ const NAV: Array<{ group: string; items: Array<{ page: Page; label: string }> }>
     group: "Sistem",
     items: [
       { page: "belgeler", label: "Belgeler / arşiv" },
+      { page: "islem-kaydi", label: "İşlem kaydı" },
       { page: "aktar", label: "İçe aktar" },
       { page: "yol-haritasi", label: "Yol haritası" },
     ],
@@ -103,6 +106,7 @@ const TITLES: Record<Page, string> = {
   policeler: "Poliçeler",
   sahipler: "Sahipler",
   belgeler: "Belgeler",
+  "islem-kaydi": "İşlem Kaydı",
   aktar: "İçe Aktar",
   "yol-haritasi": "Yol Haritası",
   ekip: "Personeller",
@@ -355,6 +359,7 @@ export function App() {
           {page === "policeler" && <Policies />}
           {page === "sahipler" && <Payouts />}
           {page === "belgeler" && <Documents canApprove={session.canApprove} />}
+          {page === "islem-kaydi" && <Audit />}
           {page === "aktar" && <Import />}
           {page === "takvim" && <CalendarPage onGo={(next) => go(next as Page)} />}
           {page === "randevular" && <Appointments />}

@@ -149,6 +149,8 @@ Bu sürümde yeni (v2 → v3)
 - Görevler ekranı, kira satırı etiketleri ve güncel yol haritası.
 - Teslim tutanağı artık PDF: mülk fotoğrafları, demirbaş, depozito hesabı ve imza alanı.
   Kiralık mülk dosyasındaki "Tutanak PDF" bağlantısından açılır.
+- İşlem kaydı ekranı (Sistem → İşlem kaydı): kim, ne zaman, hangi kayıt; kişi,
+  tarih aralığı ve arama süzgeciyle. Kayıtlar silinmez, değiştirilmez.
 
 Not: Fotoğraflar örnek (stok) görsellerdir; kendi çekimlerinizi mülk dosyasından
 "Fotoğraflar ve videolar" bölümüne yükleyince onların yerini alır. Belgelerin altında
@@ -170,7 +172,6 @@ Bilinen eksikler
 - E-posta/SMS hatırlatma yok (uyarılar ekranda).
 - Mal sahibi ve kiracı için ayrı giriş paneli henüz yok.
 - Fotoğraf filigranı yok; kişi (vesikalık) fotoğrafı alanı yok.
-- Denetim kaydının ekranı yok (kayıtlar tutuluyor, ekranda listelenmiyor).
 `,
 );
 

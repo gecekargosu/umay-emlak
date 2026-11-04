@@ -47,7 +47,7 @@ const ROWS_VAR: Row[] = [
   { key: "arama", title: "Genel arama (/) ve bildirim sayacı", status: "var", note: "Üst bar." },
   { key: "gorev", title: "Görev listesi (arıza, bakım, hatırlatma)", status: "var", note: "Operasyon → Görevler; kiracı kendi talebini giremez (aşağıda 4. madde).", turn: "TUR:44" },
   { key: "hata", title: "Anlaşılır hata mesajı + kayıt numarası", status: "var", note: "500'de \"Bu numarayla bildirin: R-…\"; aynı numara sunucu log'unda.", turn: "TUR:45" },
-  { key: "denetim", title: "İşlem kaydı altyapısı (audit_log)", status: "var", note: "Her yazma isteği kim/ofis/uç/kayıt ile saklanıyor; ekranı yok (aşağıda 7. madde).", turn: "TUR:46" },
+  { key: "denetim", title: "İşlem kaydı altyapısı (audit_log)", status: "var", note: "Her yazma isteği kim/ofis/uç/kayıt ile saklanıyor; Sistem → İşlem kaydı ekranından okunuyor (TUR:53).", turn: "TUR:46" },
   { key: "uzunListe", title: "Portföy listesi 500 kayıtta akıcı", status: "var", note: "Liste 100'lük parçalarla açılıyor (K-10, TUR:47). Tam sanal liste değil.", turn: "TUR:47" },
 ];
 
@@ -82,12 +82,6 @@ const ROWS_OPEN: Row[] = [
     title: "Gider kalemi ve mal sahibi hesap ekstresi",
     status: "kismi",
     note: "Aktarım (payout) var; gider kalemi ve yazdırılabilir ekstre yok.",
-  },
-  {
-    key: "denetimEkran",
-    title: "Denetim kaydı ekranı (kim ne yaptı, ne zaman)",
-    status: "kismi",
-    note: "Kayıt API'den okunuyor (GET /api/v1/audit); personele gösteren ekran ve personel devri geçmişi yok.",
   },
   {
     key: "foto",
@@ -138,35 +132,32 @@ const CLOSED: Closed[] = [
   { title: "Belgelerde arama önde, yükleme katlanır", turn: "TUR:47", what: "Yazarken süzülür, liste üstte; yükleme formu tıklayınca açılır (H-15)." },
   { title: "Portföy listesi parçalı gösterim", turn: "TUR:47", what: "İlk 100 kayıt + 'sonraki 100'; 500 kayıtta DOM şişmiyor (K-10)." },
   { title: "Teslim tutanağı PDF (fotoğraf + imza alanı)", turn: "TUR:52", what: "Kayıtlı tutanaktan A4 PDF: taşınmaz, taraflar, demirbaş, depozito hesabı, mülkün 3 fotoğrafı ve imza alanları; mülk dosyasından açılıyor." },
+  { title: "İşlem kaydı ekranı (kim ne yaptı)", turn: "TUR:53", what: "Sistem → İşlem kaydı: kişi, tarih aralığı ve arama süzgeci; her satırda işlem, kayıt, yol ve R-… numarası. Kayıt değiştirilemez." },
 ];
 
 const SUGGESTIONS: Array<{ title: string; body: string }> = [
   {
-    title: "1) Denetim kaydını ekrana çıkar",
-    body: "Altyapı hazır (audit_log + x-request-id). Kalan iş \"Son işlemler\" ekranı: kim, ne, ne zaman, hangi kayıt. 18 personelle çalışırken 'bunu kim değiştirdi' sorusu bu ekranla biter.",
-  },
-  {
-    title: "2) Portföy listesinde tam sanal liste",
+    title: "1) Portföy listesinde tam sanal liste",
     body: "Şimdi 100'lük parçalarla açılıyor; kayıt 2000'i geçince yine yavaşlar. Görünmeyen satırları hiç basmayan sanal liste (kendi bileşenimiz, ek paket yok) sıradaki adım olmalı.",
   },
   {
-    title: "3) Kiracı talebini kiracı açsın",
+    title: "2) Kiracı talebini kiracı açsın",
     body: "Görev kaydı var ama kapı kiracıya kapalı. Kiracı paneli kurulana kadar en azından tek kullanımlık talep bağlantısı (token) ile arıza bildirimi alınabilir; telefonda kaybolan arızalar kayda girer.",
   },
   {
-    title: "4) Poliçe ve sözleşme bitişinde tek uyarı listesi",
+    title: "3) Poliçe ve sözleşme bitişinde tek uyarı listesi",
     body: "Poliçeler ve sözleşmeler tarihleri tutuyor ama kimseye seslenmiyor. Otomatik SMS/e-posta kararı verilene kadar ana sayfada 'bu ay bitecekler' tek listesi olsun; para kaybettiren yer burası.",
   },
   {
-    title: "5) Her ekranda geri + tek tuşla ana sayfa",
+    title: "4) Her ekranda geri + tek tuşla ana sayfa",
     body: "Aysan 18 personelle çalışacak; yanlış ekrana giren personelin geri dönememesi en çok şikâyet edilen şey olur. Üst bar + detay geri tuşları var, yeni ekranlarda da korunmalı.",
   },
   {
-    title: "6) Para biriminde tek kural",
+    title: "5) Para biriminde tek kural",
     body: "Her tutar kuruş (tam sayı) olarak saklanıyor, ekranda biçimleniyor. Yeni modüllerde de bu kural bozulmasın; ondalıkla hesap yapılmasın.",
   },
   {
-    title: "7) Yedek her turda",
+    title: "6) Yedek her turda",
     body: "Kod her turda zip olarak kaynaklar/yedek altına alınıyor; PostgreSQL dökümü de (pg_dump) aynı yere ekleniyor. Kod gider, veri kalır.",
   },
 ];
@@ -198,7 +189,7 @@ export function Roadmap() {
         Kaynak: kökteki <strong>“umay emlak program detayları benim yazdığım.txt”</strong>. Bir madde
         bitince <strong>silinmez</strong>; “VAR” durumuna geçer ve <strong>Kapananlar</strong>{" "}
         bölümüne taşınır. Sıra numarası elle yazılmaz: açık maddeler sırayla numaralanır, bir madde
-        kapanınca numaralar kendiliğinden kayar. Son tazeleme: <strong>TUR:52</strong>.
+        kapanınca numaralar kendiliğinden kayar. Son tazeleme: <strong>TUR:53</strong>.
       </InfoNote>
 
       <h3>Kapananlar (son turlar)</h3>
