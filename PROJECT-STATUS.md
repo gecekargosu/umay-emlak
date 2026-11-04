@@ -21,7 +21,7 @@ Son güncelleme: 2026-11-04 22:55 · Aktif tur: TUR:42 bitti — M1 (H-13 + H-14
 - Y-93: paket OKU-BENI'ye "Türkçe karakterli klasöre açmayın" uyarısı.
 
 ## Mission kuyruğu (plan — her satır bir mission)
-M1 · **H-13 + H-14** → YAPILDI (2026-11-04, TUR:42) · — sözleşmeler listeyle açılsın, poliçe mülk seçicisine arama gelsin.
+M1 · **H-13 + H-14** → YAPILDI (2026-11-04, TUR:42) — sözleşmeler listeyle açılsın, poliçe mülk seçicisine arama gelsin.
      Bitiş: typecheck 0, test yeşil, iki akış preview'da tıklandı, TUR + commit + push.
 M2 · **H-7 + H-8** — ana sayfadaki Görevler/Mesajlar kutuları tıklanabilsin; kira takibi satırı
      "geciken tahakkuk / beklenen / ödenen" olarak ayrışsın. Bitiş: aynı ölçüt.
