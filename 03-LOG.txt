@@ -434,3 +434,11 @@ HATA ANALIZI:NEXT_STATUS iki kez tanımlı kaldı (ilk taşımada dosyaya kopya 
 TEST:typecheck 0 · pnpm test 17 dosya / 64 test 0
 SIRADAKİ:M7 — paket OKU-BENI uyarısı + sürüm notu (Y-93 + H-11), zip yeniden üretilip /health 200.
 --------------------------------------------------------------------------------
+
+[2026-11-05 03:55] TUR:51 | MODUL:M7 — Aysan'a gidecek paketin yenilenmesi (v2 → v3) | IS:(1) OKU-BENI.txt başlığı "inceleme sürümü v3 · 5 Kasım 2026" oldu; "Bu sürümde yeni (v2 → v3)" bölümü eklendi (raf fotoğrafı, dolu belgeler, işlem kaydı, belge araması, 60'lık parça, hata kayıt no, görevler). (2) Bilinen eksikler güncellendi: teslim tutanağı, kişi fotoğrafı, denetim ekranı, e-posta/SMS, mal sahibi/kiracı paneli, filigran. (3) Paket yeniden derlendi: release/umay-emlak 229,9 MB; zip → C:\Users\isitm\Desktop\Aysana-gonderilecek\UmayEmlak-Beta-2026-11-05-v3.zip (83 MB).
+DOSYA:pack/build.mjs (OKU-BENI metni), release/* (git dışı), Aysana-gonderilecek/*.zip (git dışı)
+DOGRULAMA (paket gerçekten çalıştırıldı, ASCII klasör C:\Aysana-test): /health → 200 {"ok":true,"migrations":16} · arayüz / → 200 · giriş POST /api/v1/auth/login → 200 (Aysan Kılıç / Trademark Gayrimenkul) · belge listesi 200 (200 kayıt) · belge dosyası GET /api/v1/documents/:id/file → application/pdf 2.216 bayt, gövde %PDF-1.4 · portföy listesi 200 (91 ilan, coverUrl dolu) · kapak görseli → image/jpeg 78.920 bayt. Demo medya paketin içinde üretildi: veri/belgeler 286 dosya / 2,1 MB (270 PDF, 16 JPEG). Sunucu kapatıldı, test klasörü silindi.
+HATA ANALIZI:Belgeler uzantısız ada sahip (depo şeması gereği) — "PDF=0" görünmesi hata değil; dosya başlıkları (%PDF) ve HTTP content-type ile doğrulandı. Kapak görseli ilk denemede 401 döndü (oturum çerezi gönderilmemişti), çerezle tekrarlandı.
+TEST:typecheck 0 · pnpm test 17 dosya / 64 test 0 · paket /health 200 + belge/foto erişimi
+SIRADAKİ:Yol haritası 1. madde — teslim tutanağı (fotoğraf + imza) belgesi.
+--------------------------------------------------------------------------------

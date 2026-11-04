@@ -121,8 +121,8 @@ pause >nul\r
 
 writeFileSync(
   join(staging, "OKU-BENI.txt"),
-  `UMAY EMLAK — Trademark Gayrimenkul (deneme sürümü)
-==================================================
+  `UMAY EMLAK — Trademark Gayrimenkul (inceleme sürümü v3 · 5 Kasım 2026)
+=====================================================================
 
 Nasıl açılır?
 1) Klasörü masaüstüne çıkarın (zip içinden çıkarmadan çalışmaz).
@@ -137,6 +137,20 @@ Nasıl açılır?
    http://localhost:3100
 4) Giriş:  aysan.kilic@umay-emlak.local
    Şifre:  Umay!2026
+
+Bu sürümde yeni (v2 → v3)
+- Portföy raflarında harf yerine MÜLK FOTOĞRAFI; mülk dosyasında fotoğraf galerisi.
+- Belgeler dolu: tapu, yetki belgesi, kimlik ve kira sözleşmesi örnek olarak üretildi;
+  kişi kartında "Belgeler" bölümü var, tıklayıp PDF'i açabilirsiniz.
+- "Kim ne yaptı" işlem kaydı: her yazma işlemi ofis/kullanıcı/kayıt bilgisiyle saklanıyor.
+- Belgeler ekranında arama öne alındı (yazarken süzülür), yükleme formu katlanır panelde.
+- Uzun portföy listesi parça parça açılıyor ("Sonraki 60"), 500+ kayıtta donmuyor.
+- Hata mesajlarında kayıt numarası (ör. K-2J5R5T) — bize yazarken bu numarayı söyleyin.
+- Görevler ekranı, kira satırı etiketleri ve güncel yol haritası.
+
+Not: Fotoğraflar örnek (stok) görsellerdir; kendi çekimlerinizi mülk dosyasından
+"Fotoğraflar ve videolar" bölümüne yükleyince onların yerini alır. Belgelerin altında
+"örnek belge" satırı vardır; resmî işlemde kullanılmaz.
 
 Önemli notlar
 - Siyah pencere açık kaldığı sürece program çalışır; kapatırsanız program kapanır.
@@ -153,7 +167,9 @@ Nasıl açılır?
 Bilinen eksikler
 - E-posta/SMS hatırlatma yok (uyarılar ekranda).
 - Mal sahibi ve kiracı için ayrı giriş paneli henüz yok.
-- Fotoğraf filigranı yok.
+- Fotoğraf filigranı yok; kişi (vesikalık) fotoğrafı alanı yok.
+- Teslim tutanağı belgesi (fotoğraf + imza) henüz üretilmiyor.
+- Denetim kaydının ekranı yok (kayıtlar tutuluyor, ekranda listelenmiyor).
 `,
 );
 
