@@ -1,6 +1,6 @@
 # PROJECT-STATUS
 
-Son güncelleme: 2026-11-04 22:10 · Aktif tur: TUR:37 bitti, TUR:38 bekliyor
+Son güncelleme: 2026-11-04 22:20 · Aktif tur: TUR:39 bitti — H-1…H-6 kapandı
 
 ## Şu an çalışan (doğrulandı)
 - Giriş/oturum, boşta kilit, şifre değiştirme; ofis/personel/onay yetkisi.
@@ -13,23 +13,42 @@ Son güncelleme: 2026-11-04 22:10 · Aktif tur: TUR:37 bitti, TUR:38 bekliyor
   Doğrulama: `/health {"ok":true,"migrations":15}`, giriş 200, HTML 200, ilk açılış 14 sn.
 
 ## Açık işler (ayrıntı: 10-DENETIM-ISTEK-LISTESI-2026-11-04.txt)
-- H-1…H-15 ekran/metin/sayaç bulguları (ana sayfa başlığı "Takvim", mal sahibi "—", 51/49 sayaç,
-  personel metni, poliçe mülk seçici, arıza başlığı…).
-- K-1…K-10 kod bulguları (Listings.tsx 914 satır, api.ts 725, documents.ts 716, 11 sessiz catch,
-  audit_log yok, domain birim testi yok).
-- SIRA 8 otomasyon (yükümlülük motoru + e-posta), SIRA 9 ekstre/gider, SIRA 11 kapak fotoğrafı + filigran.
+- H-1…H-6 **YAPILDI** (TUR:38, commit 8c3ff2d; TUR:39 yeniden doğrulandı).
+- H-7…H-15 ekran/metin/akış bulguları (aşağıdaki mission kuyruğunda sıraya kondu).
+- K-1…K-10 kod bulguları (dosya bölme, 11 sessiz catch, audit_log yok, domain birim testi yok).
+- SIRA 8 otomasyon (yükümlülük motoru + e-posta), SIRA 9 ekstre/gider, SIRA 11 kapak fotoğrafı.
 - Mal sahibi paneli, kiracı paneli, mobil (saha), WhatsApp/e-posta, banka eşleştirme, OCR/AI.
 - Y-93: paket OKU-BENI'ye "Türkçe karakterli klasöre açmayın" uyarısı.
 
+## Mission kuyruğu (plan — her satır bir mission)
+M1 · **H-13 + H-14** — sözleşmeler listeyle açılsın, poliçe mülk seçicisine arama gelsin.
+     Bitiş: typecheck 0, test yeşil, iki akış preview'da tıklandı, TUR + commit + push.
+M2 · **H-7 + H-8** — ana sayfadaki Görevler/Mesajlar kutuları tıklanabilsin; kira takibi satırı
+     "geciken tahakkuk / beklenen / ödenen" olarak ayrışsın. Bitiş: aynı ölçüt.
+M3 · **K-4 + K-9** — 11 sessiz catch kullanıcıya sade Türkçe mesaj + kayıt numarası versin;
+     teknik ayrıntı log'a. Bitiş: hata üreten akış ekranda görülür, test yeşil.
+M4 · **K-6 audit_log** — "kim ne yaptı" kaydı (tablo + yazma uçları + JSON log + request_id).
+     Bitiş: bir işlem yapılıp kaydı DB'den okunur.
+M5 · **H-15 + K-10** — belgeler ekranında liste/arama önce gelsin; portföy listesi sanal liste.
+     Bitiş: 91 kartta kaydırma akıcı, belge listesi ilk bakışta görünür.
+M6 · **K-1 / K-2 / K-3** — Listings.tsx 914, api.ts 725, documents.ts 716 satır bölünür.
+     Bitiş: davranış aynı, typecheck + test yeşil, ekran kontrolü.
+M7 · **Y-93 + H-11** — paket OKU-BENI uyarısı ve sürüm notu; paket ASCII klasörde açılır.
+     Bitiş: zip yeniden üretilip /health 200.
+
+Kural: aynı anda tek mission; kapsam büyütülmez, bitmeyen mission yeni mission açmaz.
+
 ## Sıradaki adım (tek cümle)
-H-1…H-6 (yanlış ekran metinleri ve sayaçlar) düzeltilip ekrandan doğrulanacak.
+M1: sözleşmeler ekranı listeyle açılsın (H-13) ve poliçe mülk seçicisine arama gelsin (H-14).
 
 ## Sorular (kullanıcıdan bekleyen)
 - Aysan kirayı mal sahibine mi yatırıyor, ofis hesabından mı geçiyor? (para akışı modeli)
 - Program yalnız Aysan'ın ofisi için mi, başka ofislere satılacak mı? (RLS/SaaS kararı)
 
 ## Kararlar
-K-82 paket ASCII klasörde · K-83 denetim önce listelenir, onarım sonraki oturumda · K-70…K-81 yürürlükte.
+K-82 paket ASCII klasörde · K-83 denetim önce listelenir · K-84 mal sahibi tek kaynak ·
+K-85 onarım sırası: kullanılabilirlik (M1-M2) → güven/iz (M3-M4) → liste/performans (M5) →
+dosya bölme en son (M6) · K-70…K-81 yürürlükte.
 
 ## Test durumu
 typecheck 0 · `pnpm test` 17 dosya / 64 test 0 · web build 0 · paket /health 200.

@@ -214,17 +214,17 @@ Mal sahipleri/kiracılar, Personeller, Kiralar, Sözleşmeler, Poliçeler, Belge
 Hepsi açıldı, veri geldi, konsolda hata yok (yalnız Vite/React DevTools bilgisi).
 
 BULUNAN HATALAR (onarılmadı — sonraki oturum):
- H-1  Ana sayfanın başlığı "Takvim" görünüyor. Aksiyon panosu açılınca h1 "Takvim" kalıyor;
+ H-1  Ana sayfanın başlığı "Takvim" görünüyor. Aksiyon panosu açılınca h1 "Takvim" kalıyor; → YAPILDI (2026-11-04, TUR:38)
       kullanıcı takvimde sanıyor. (Dashboard başlığı yanlış.)
- H-2  Sol menüde "Aksiyon panosu" zaten açık olan "/" sayfasına gidiyor; tıklayınca hiçbir şey
+ H-2  Sol menüde "Aksiyon panosu" zaten açık olan "/" sayfasına gidiyor; tıklayınca hiçbir şey → YAPILDI (2026-11-04, TUR:38)
       olmuyormuş gibi duruyor (görsel geri bildirim yok).
- H-3  Mülk dosyasının alt bilgi satırında "Mal sahibi: —" yazıyor; üstte ise "DEMO Serkan Kara".
+ H-3  Mülk dosyasının alt bilgi satırında "Mal sahibi: —" yazıyor; üstte ise "DEMO Serkan Kara". → YAPILDI (2026-11-04, TUR:38)
       Aynı ekranda iki farklı cevap.
- H-4  Kiralıklar "51 kayıt" diyor, ana sayfa "49 kiralık" diyor. (İlan vs mülk sayısı ayrımı
+ H-4  Kiralıklar "51 kayıt" diyor, ana sayfa "49 kiralık" diyor. (İlan vs mülk sayısı ayrımı → YAPILDI (2026-11-04, TUR:38)
       kullanıcıya açıklanmıyor.)
- H-5  Arıza bölümünün başlığı "AÇIK TALEP YOK" ama altında bitmiş talep listeleniyor; başlık
+ H-5  Arıza bölümünün başlığı "AÇIK TALEP YOK" ama altında bitmiş talep listeleniyor; başlık → YAPILDI (2026-11-04, TUR:38)
       "açık talep yok" derken geçmişi gösteriyor.
- H-6  Personeller açıklaması "şifre değiştirme ekranı henüz yok (Y-02)" diyor; üst barda "Şifre"
+ H-6  Personeller açıklaması "şifre değiştirme ekranı henüz yok (Y-02)" diyor; üst barda "Şifre" → YAPILDI (2026-11-04, TUR:38)
       düğmesi var. Metin eski kalmış, yanlış bilgi veriyor.
  H-7  Ana sayfadaki GÖREVLER ve MESAJLAR kutuları tıklanamıyor (diğer modüller tıklanıyor).
  H-8  "KİRA TAKİBİ 0 geciken · 0,00 ₺ · beklenen 18.500,00 ₺ / ödenen 0,00 ₺" tek satırda

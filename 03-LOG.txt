@@ -345,3 +345,10 @@ TEST:typecheck 0 · pnpm test 17 dosya / 64 test 0 · API /health ok (migrations
 DOSYA:kod değişikliği yok (yalnız bu kayıt)
 SIRADAKİ:H-7…H-15 kullanılabilirlik, sonra K-1…K-10 kod bulguları.
 --------------------------------------------------------------------------------
+
+[2026-11-04 22:20] TUR:40 | MODUL:Plan / mission kuyruğu | IS:Denetim dosyasındaki 8. bölüm (öncelik) mission kuyruğuna çevrildi: M1…M7, her biri tek ölçütlü. PROJECT-STATUS.md güncellendi; 10 dosyasında H-1…H-6 satırları "→ YAPILDI (2026-11-04, TUR:38)" olarak işaretlendi (kural 9).
+KARAR:K-85 sıra — önce kullanılabilirlik (H-13/H-14, H-7/H-8), sonra güven/iz (K-4/K-9, audit_log), sonra liste/performans (H-15/K-10), dosya bölme en son.
+DOSYA:PROJECT-STATUS.md, 10-DENETIM-ISTEK-LISTESI-2026-11-04.txt
+TEST:kod değişikliği yok (önceki tur: typecheck 0, 17/64 test)
+SIRADAKİ:M1 — H-13 sözleşme listesi + H-14 mülk seçici arama.
+--------------------------------------------------------------------------------
