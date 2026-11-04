@@ -44,8 +44,13 @@ export function Documents({ canApprove }: { canApprove: boolean }) {
     }
   }, []);
 
+  // H-15 — liste önce gelir: yazarken kendiliğinden süzülür, Enter beklenmez.
   useEffect(() => {
-    void load("");
+    const timer = setTimeout(() => void load(query), 250);
+    return () => clearTimeout(timer);
+  }, [query, load]);
+
+  useEffect(() => {
     void api<{ items: KindOption[] }>("/documents/kinds")
       .then((data) => setKinds(data.items))
       .catch((caught) => setError(userError(caught, "Belge türleri yüklenemedi")));
@@ -141,6 +146,10 @@ export function Documents({ canApprove }: { canApprove: boolean }) {
     <div>
       <div className="page-head">
         <h2>Belgeler</h2>
+        <span className="spacer" />
+        <span className="muted small">
+          {rows === null ? "yükleniyor…" : `${rows.length} belge`}
+        </span>
       </div>
       <InfoNote title="Dosyalar içeriğiyle saklanır (sha256).">
         Aynı dosya iki kez yüklenirse <strong>tek kopya</strong> durur. Karışık belgeleri tek seferde
@@ -161,10 +170,20 @@ export function Documents({ canApprove }: { canApprove: boolean }) {
         <button type="button" className="secondary" onClick={() => void load(query)}>
           Ara
         </button>
+        {query !== "" && (
+          <button type="button" className="ghost" onClick={() => setQuery("")}>
+            Temizle
+          </button>
+        )}
+        <span className="muted small">
+          {rows === null ? "" : `${rows.length} belge${query ? " bulundu" : " rafta"}`}
+        </span>
       </div>
 
-      <div className="panel">
-        <h3>Belge yükle</h3>
+      <details className="panel">
+        <summary>
+          <strong>Belge yükle</strong> <span className="muted small">(tıkla, form açılır)</span>
+        </summary>
         <div className="inline-form">
           <input
             ref={fileInputRef}
@@ -198,13 +217,17 @@ export function Documents({ canApprove }: { canApprove: boolean }) {
           </button>
         </div>
         <p className="hint">En fazla 25 MB. PDF, JPG, PNG, WEBP, DOC/DOCX, TXT.</p>
-      </div>
+      </details>
 
       {message && <div className="alert">{message}</div>}
       {error && <div className="error">{error}</div>}
 
       {rows === null && <p className="muted">Yükleniyor…</p>}
-      {rows !== null && rows.length === 0 && <p className="muted">Rafta belge yok.</p>}
+      {rows !== null && rows.length === 0 && (
+        <p className="muted">
+          {query ? "Bu aramaya uyan belge yok." : "Rafta belge yok."}
+        </p>
+      )}
 
       {[...groups.entries()].map(([label, items]) => (
         <section key={label} className="shelf-group">

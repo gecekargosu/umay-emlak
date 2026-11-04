@@ -1,6 +1,6 @@
 # PROJECT-STATUS
 
-Son güncelleme: 2026-11-04 23:58 · Aktif tur: TUR:46 bitti — M4 (K-6 audit_log) kapandı
+Son güncelleme: 2026-11-05 00:15 · Aktif tur: TUR:47 bitti — M5 (H-15 + K-10) ve yol haritası tazeleme kapandı
 
 ## Şu an çalışan (doğrulandı)
 - Giriş/oturum, boşta kilit, şifre değiştirme; ofis/personel/onay yetkisi.
@@ -19,6 +19,7 @@ Son güncelleme: 2026-11-04 23:58 · Aktif tur: TUR:46 bitti — M4 (K-6 audit_l
 - SIRA 8 otomasyon (yükümlülük motoru + e-posta), SIRA 9 ekstre/gider, SIRA 11 kapak fotoğrafı.
 - Mal sahibi paneli, kiracı paneli, mobil (saha), WhatsApp/e-posta, banka eşleştirme, OCR/AI.
 - Y-93: paket OKU-BENI'ye "Türkçe karakterli klasöre açmayın" uyarısı.
+- Yol haritası ekranı tur sonunda tazelenir (TUR:47): kapananlar ayrı bölümde, açık maddeler otomatik 1..N numaralı.
 
 ## Mission kuyruğu (plan — her satır bir mission)
 M1 · **H-13 + H-14** → YAPILDI (2026-11-04, TUR:42) — sözleşmeler listeyle açılsın, poliçe mülk seçicisine arama gelsin.
@@ -29,7 +30,7 @@ M3 · **K-4 + K-9** → YAPILDI (2026-11-04, TUR:45) — 11 sessiz catch kullan�
      teknik ayrıntı log'a. Bitiş: hata üreten akış ekranda görülür, test yeşil.
 M4 · **K-6 audit_log** → YAPILDI (2026-11-04, TUR:46) — "kim ne yaptı" kaydı (tablo + yazma uçları + JSON log + request_id).
      Bitiş: bir işlem yapılıp kaydı DB'den okunur.
-M5 · **H-15 + K-10** — belgeler ekranında liste/arama önce gelsin; portföy listesi sanal liste.
+M5 · **H-15 + K-10** → YAPILDI (2026-11-04, TUR:47) — belgeler ekranında liste/arama önce gelsin; portföy listesi sanal liste.
      Bitiş: 91 kartta kaydırma akıcı, belge listesi ilk bakışta görünür.
 M6 · **K-1 / K-2 / K-3** — Listings.tsx 914, api.ts 725, documents.ts 716 satır bölünür.
      Bitiş: davranış aynı, typecheck + test yeşil, ekran kontrolü.
@@ -39,7 +40,7 @@ M7 · **Y-93 + H-11** — paket OKU-BENI uyarısı ve sürüm notu; paket ASCII 
 Kural: aynı anda tek mission; kapsam büyütülmez, bitmeyen mission yeni mission açmaz.
 
 ## Sıradaki adım (tek cümle)
-M5: belgeler ekranında liste/arama öne gelsin (H-15), portföy listesi 500 kayıtta da akıcı olsun (K-10).
+M6: Listings.tsx 914, api.ts 725, documents.ts 716 satır — davranış değişmeden bölünür (K-1/K-2/K-3).
 
 ## Sorular (kullanıcıdan bekleyen)
 - Aysan kirayı mal sahibine mi yatırıyor, ofis hesabından mı geçiyor? (para akışı modeli)

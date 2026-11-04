@@ -401,3 +401,11 @@ HATA ANALIZI:(a) app.use("*", auditMiddleware) TS2769 → createMiddleware kulla
 TEST:typecheck 0 · pnpm test 17 dosya / 64 test 0
 SIRADAKİ:M5 — H-15 belge listesi + K-10 sanal liste.
 --------------------------------------------------------------------------------
+
+[2026-11-05 00:15] TUR:47 | MODUL:M5 — H-15 belge araması + K-10 uzun liste; ek: yol haritası tazeleme | IS:(1) Belgeler ekranı: arama çubuğu en üstte, yazarken 250 ms sonra kendiliğinden süzülüyor (Enter gerekmiyor), "Temizle" düğmesi ve "N belge" sayacı; yükleme formu katlanır panele alındı, arama boşsa "Bu aramaya uyan belge yok." yazıyor. (2) Portföy listesi: tüm satırlar birden basılmıyor; ilk 60 satır + "Sonraki 60" düğmesi, filtre değişince sayaç 60'a dönüyor. (3) Roadmap.tsx elden geçirildi: komisyon, DASK/poliçe, randevu, görev listesi, denetim altyapısı, belge araması ve uzun liste "VAR" durumuna geçti; kapananlar ayrı tabloya taşındı; açık maddeler artık elle numaralanmıyor, sırayla 1..N veriliyor (13 madde); öneriler yeni duruma göre yeniden yazıldı.
+DOSYA:apps/web/src/pages/Documents.tsx, apps/web/src/pages/Listings.tsx, apps/web/src/pages/Roadmap.tsx
+DOGRULAMA (preview, tek tek tıklandı): Belgeler → aramaya "tapu" yazıldı → "Bu aramaya uyan belge yok."; sayfa sırası arama → katlanır yükleme → raf. Gayrimenkuller → 91 ilan, tabloda 60 satır + "60 / 91 kayıt gösteriliyor (K-10)" → "Sonraki 60" tıklandı → 91 satır, düğme kayboldu. Yol haritası → Kapananlar 8 satır, Eksikler 13 satır (1..13), Olanlar 23 satır.
+HATA ANALIZI:Yol haritası listesi koda gömülü veri olduğu için kendiliğinden değişmiyordu; durumlar bayatlamıştı (komisyon, poliçe, randevu programda VAR iken "YOK" yazıyordu). Liste artık tur sonunda tazelenir; sıra numarası türetilir.
+TEST:typecheck 0 · pnpm test 17 dosya / 64 test 0
+SIRADAKİ:M6 — K-1/K-2/K-3 dosya bölme (Listings.tsx 914, api.ts 725, documents.ts 716).
+--------------------------------------------------------------------------------

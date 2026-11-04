@@ -1,12 +1,15 @@
 import { InfoNote } from "../components/InfoNote";
 
 /**
- * Yol haritası — TUR:25.
+ * Yol haritası — TUR:25, güncellendi TUR:47.
  * Kullanıcı isteği: "bilgi bankamızı yeniden oku, her özellik bizim programda var mı
  * listele, olanları ve olmayanları yaz, olmayanlar için görev sırası hazırla."
+ * İkinci istek (TUR:47): "bu liste hiç değişmiyor — yapılanları çıkart, yapılacakları ekle."
  *
  * Tek kaynak: kökteki "umay emlak program detayları benim yazdığım.txt".
- * Durumlar: var / kismi / yok. Sıra numarası olanlar sıradaki işlerdir.
+ * Kural: bir madde bitince satır SİLİNMEZ; "var" durumuna geçer ve KAPANANLAR
+ * bölümüne taşınır. Sıra numarası elle yazılmaz — açık maddeler sırayla 1..N
+ * numaralanır, böylece bir madde kapanınca numaralar kendiliğinden kayar.
  */
 type Status = "var" | "kismi" | "yok";
 
@@ -15,11 +18,14 @@ type Row = {
   title: string;
   status: Status;
   note: string;
-  /** Olmayanlar için önerilen sıra (1 = ilk yapılacak) */
-  order?: number;
+  /** Hangi turda ele alındı (ekranda "son dokunulan" işareti için) */
+  turn?: string;
 };
 
-const ROWS: Row[] = [
+type Closed = { title: string; turn: string; what: string };
+
+/** Programda karşılığı olanlar. */
+const ROWS_VAR: Row[] = [
   { key: "ofis", title: "Ofis, ortaklar, personel, yetki sınırları", status: "var", note: "Rol + canApprove; personel kendi portföyünü görür." },
   { key: "miras", title: "Mal sahipleri: mülk, kiracı, borç klasörü", status: "var", note: "Mal sahipleri ekranı + kişi dosyası." },
   { key: "raf", title: "Raf görünümü (vitrin) ve liste görünümü", status: "var", note: "Işıldayan raf, kartta fiyat/durum; liste + filtre birlikte." },
@@ -27,65 +33,150 @@ const ROWS: Row[] = [
   { key: "sozlesme", title: "Sözleşme kaydı ve yazdırılabilir sözleşme metni", status: "var", note: "Snapshot dondurma + A4 metin." },
   { key: "kira", title: "Kira tahakkuku, tahsilat, gecikme takibi", status: "var", note: "Kiralar/tahsilat ekranı, gecikme seviyesi, ihtarname adayı." },
   { key: "belge", title: "Belge arşivi (sha256) + eşleştirme", status: "var", note: "Net ada göre otomatik bağ, belirsizde onay." },
+  { key: "belgeAra", title: "Belgelerde arama ve liste önde", status: "var", note: "Yazarken süzülür; yükleme formu katlanır panelde (H-15, TUR:47).", turn: "TUR:47" },
   { key: "fiyat", title: "Fiyat geçmişi (eski fiyat silinmez)", status: "var", note: "listing_price_change tablosu." },
   { key: "personel", title: "Personel portföyü + alınan teklifler", status: "var", note: "İlçe ortalaması ve mülk dosyasıyla." },
   { key: "teklif", title: "Müşteri teklifi / görüşme kaydı", status: "var", note: "İlan altında tutar + not + durum." },
+  { key: "komisyon", title: "Satış/kiralama komisyonu (%3) ve kapora makbuzu", status: "var", note: "Taslak → onay → ödendi; indirimde gerekçe zorunlu, kapora alınınca ilan kaporalıya düşer.", turn: "TUR:25" },
+  { key: "dask", title: "DASK / poliçe bitiş takibi", status: "var", note: "Poliçeler ekranı bitiş tarihini tutar; otomatik hatırlatma yok (aşağıda 5. madde).", turn: "TUR:42" },
+  { key: "randevu", title: "Randevu / yer gösterme modülü", status: "var", note: "Randevu ekranı + takvim; aday, portföy, personel, sonuç.", turn: "TUR:24" },
   { key: "kvkk", title: "KVKK iletişim izni", status: "var", note: "İzin bilinmiyor / var / yok + not." },
   { key: "mukerrer", title: "Mükerrer kişi birleştirme (silmeden)", status: "var", note: "Kaybeden kayıt arşivde kalır." },
   { key: "aktar", title: "Excel/CSV içe aktarma", status: "var", note: "İçe aktar ekranı, mükerrer açmaz." },
   { key: "guvenlik", title: "Oturum, şifre değiştirme, boşta kilit", status: "var", note: "Zorunlu şifre + IdleLock." },
   { key: "arama", title: "Genel arama (/) ve bildirim sayacı", status: "var", note: "Üst bar." },
+  { key: "gorev", title: "Görev listesi (arıza, bakım, hatırlatma)", status: "var", note: "Operasyon → Görevler; kiracı kendi talebini giremez (aşağıda 4. madde).", turn: "TUR:44" },
+  { key: "hata", title: "Anlaşılır hata mesajı + kayıt numarası", status: "var", note: "500'de \"Bu numarayla bildirin: R-…\"; aynı numara sunucu log'unda.", turn: "TUR:45" },
+  { key: "denetim", title: "İşlem kaydı altyapısı (audit_log)", status: "var", note: "Her yazma isteği kim/ofis/uç/kayıt ile saklanıyor; ekranı yok (aşağıda 7. madde).", turn: "TUR:46" },
+  { key: "uzunListe", title: "Portföy listesi 500 kayıtta akıcı", status: "var", note: "Liste 100'lük parçalarla açılıyor (K-10, TUR:47). Tam sanal liste değil.", turn: "TUR:47" },
+];
 
-  { key: "komisyon", title: "Satış/kiralama komisyonu (%3) ve kapora makbuzu", status: "yok", note: "Satılıklar ekranında olacak; kapora alınınca ilan kaporalıya düşer.", order: 1 },
-  { key: "tutanak", title: "Teslim tutanağı + demirbaş listesi (fotoğraflı)", status: "kismi", note: "Demirbaş/abonelik kaydı var, tutanak belgesi ve imza akışı yok.", order: 2 },
-  { key: "dask", title: "DASK / poliçe bitiş takibi", status: "yok", note: "Ana sayfada 'planlı' duruyor.", order: 3 },
-  { key: "artis", title: "TÜİK kira artış oranıyla yenileme hesabı", status: "yok", note: "Oran kaynağı ve tarihi gösterilmeli; otomatik uygulanmamalı.", order: 4 },
-  { key: "randevu", title: "Randevu / yer gösterme modülü", status: "yok", note: "Aday + portföy + personel + sonuç.", order: 5 },
-  { key: "eslesme", title: "Alıcı adayına uygun portföy önerisi", status: "yok", note: "Bütçe + ilçe + oda eşleşmesi; aday CRM alanları hazır.", order: 6 },
-  { key: "talep", title: "Arıza / bakım talebi (kiracıdan)", status: "yok", note: "Görev modülüyle birlikte gelmeli.", order: 7 },
-  { key: "hatirlat", title: "Otomatik hatırlatıcı (SMS/e-posta/push)", status: "yok", note: "Kira günü, sözleşme bitişi, DASK; izin kurallarıyla.", order: 8 },
-  { key: "ekstre", title: "Gider ve mal sahibi hesap ekstresi", status: "kismi", note: "Aktarım (payout) var; gider kalemi ve yazdırılabilir ekstre yok.", order: 9 },
-  { key: "audit", title: "İşlem ve değişiklik geçmişi (kim ne yaptı)", status: "kismi", note: "Belge onayı ve fiyat geçmişi var; genel denetim kaydı yok.", order: 10 },
-  { key: "foto", title: "Fotoğraf/video + filigranlı kopya", status: "yok", note: "Kart üzerinde baş harfler var, kapak fotoğrafı yok.", order: 11 },
-  { key: "rapor", title: "Personel performansı ve ofis raporları", status: "kismi", note: "Portföy/teklif sayıları var; dönemsel rapor ekranı yok.", order: 12 },
-  { key: "malSahibiPanel", title: "Mal sahibi paneli (şeffaflık)", status: "yok", note: "Ayrı giriş ve yalnız kendi verisi.", order: 13 },
-  { key: "kiraciPanel", title: "Kiracı paneli (sözleşme, ödeme, dekont)", status: "yok", note: "Sanal POS/ödeme kuruluşu kararı gerekiyor.", order: 14 },
-  { key: "mobil", title: "Mobil uygulama (saha)", status: "yok", note: "Aynı API üzerinden; Tauri/React Native kararı sonra.", order: 15 },
-  { key: "whatsapp", title: "WhatsApp / e-posta entegrasyonu", status: "yok", note: "Toplu bildirimle birlikte tasarlanmalı.", order: 16 },
+/** Henüz olmayan / yarım olanlar. Sıra numarası bu dizinin sırasıdır. */
+const ROWS_OPEN: Row[] = [
+  {
+    key: "tutanak",
+    title: "Teslim tutanağı: fotoğraf + demirbaş + imza",
+    status: "kismi",
+    note: "Demirbaş/abonelik ve depozito kesintisi kaydı var; tutanak belgesi, fotoğraf ve imza akışı yok. Depozito tartışması bu belgeyle biter.",
+  },
+  {
+    key: "artis",
+    title: "TÜİK kira artış oranıyla yenileme hesabı",
+    status: "yok",
+    note: "Oran kaynağı ve tarihi gösterilmeli; otomatik uygulanmamalı (K-72: oran veridir).",
+  },
+  {
+    key: "eslesme",
+    title: "Alıcı adayına uygun portföy önerisi",
+    status: "yok",
+    note: "Bütçe + ilçe + oda eşleşmesi; aday CRM alanları hazır.",
+  },
+  {
+    key: "talep",
+    title: "Kiracıdan arıza/talep girişi (kiracı kendi açsın)",
+    status: "kismi",
+    note: "Görev kaydı ofis içinde açılıyor; kiracının kendi talebini gireceği ekran/izin yok.",
+  },
+  {
+    key: "hatirlat",
+    title: "Otomatik hatırlatıcı (SMS/e-posta/push)",
+    status: "yok",
+    note: "Kira günü, sözleşme bitişi, poliçe bitişi. İzin (KVKK) ve sağlayıcı kararıyla birlikte.",
+  },
+  {
+    key: "ekstre",
+    title: "Gider kalemi ve mal sahibi hesap ekstresi",
+    status: "kismi",
+    note: "Aktarım (payout) var; gider kalemi ve yazdırılabilir ekstre yok.",
+  },
+  {
+    key: "denetimEkran",
+    title: "Denetim kaydı ekranı (kim ne yaptı, ne zaman)",
+    status: "kismi",
+    note: "Kayıt API'den okunuyor (GET /api/v1/audit); personele gösteren ekran ve personel devri geçmişi yok.",
+  },
+  {
+    key: "foto",
+    title: "Fotoğraf/video + filigranlı kopya",
+    status: "kismi",
+    note: "Mülk dosyasında belge yükleme var; kapak fotoğrafı, galeri ve filigran yok.",
+  },
+  {
+    key: "rapor",
+    title: "Personel performansı ve ofis raporları (dönemsel)",
+    status: "kismi",
+    note: "Portföy/teklif sayıları var; tarih aralığı seçilen rapor ekranı yok.",
+  },
+  {
+    key: "malSahibiPanel",
+    title: "Mal sahibi paneli (şeffaflık)",
+    status: "yok",
+    note: "Ayrı giriş ve yalnız kendi verisi; yetki modeliyle birlikte tasarlanmalı.",
+  },
+  {
+    key: "kiraciPanel",
+    title: "Kiracı paneli (sözleşme, ödeme, dekont)",
+    status: "yok",
+    note: "Sanal POS/ödeme kuruluşu kararı gerekiyor (K-70…K-83: dış servis kararı önce).",
+  },
+  {
+    key: "mobil",
+    title: "Mobil uygulama (saha)",
+    status: "yok",
+    note: "Aynı API üzerinden; teknoloji kararı sonra.",
+  },
+  {
+    key: "whatsapp",
+    title: "WhatsApp / e-posta entegrasyonu",
+    status: "yok",
+    note: "Toplu bildirimle birlikte tasarlanmalı.",
+  },
+];
+
+/** Son turlarda kapanan maddeler — satır silinmez, buraya taşınır. */
+const CLOSED: Closed[] = [
+  { title: "Komisyon (%3) + kapora makbuzu", turn: "TUR:25", what: "Komisyon taslağı, indirim gerekçesi, kapora al/iade; kapora alınınca ilan kaporalıya düşüyor." },
+  { title: "Randevu / yer gösterme", turn: "TUR:24", what: "Randevu ekranı + takvim; aday, portföy, personel ve sonuç birlikte." },
+  { title: "DASK / poliçe listesi", turn: "TUR:42", what: "Poliçeler ekranı bitiş tarihiyle listeleniyor (H-13/H-14: liste + mülk arama)." },
+  { title: "Görevler ekranı + kira satırı etiketi", turn: "TUR:44", what: "Operasyon → Görevler; kira satırında etiket (H-7/H-8)." },
+  { title: "Anlaşılır hata + kayıt numarası", turn: "TUR:45", what: "Kullanıcı 'R-…' numarası görüyor; sunucuda aynı numarayla tek satır log." },
+  { title: "Denetim kaydı altyapısı (audit_log)", turn: "TUR:46", what: "Her yazma isteği ofis/kullanıcı/uç/kayıt ile saklanıyor; x-request-id + JSON log." },
+  { title: "Belgelerde arama önde, yükleme katlanır", turn: "TUR:47", what: "Yazarken süzülür, liste üstte; yükleme formu tıklayınca açılır (H-15)." },
+  { title: "Portföy listesi parçalı gösterim", turn: "TUR:47", what: "İlk 100 kayıt + 'sonraki 100'; 500 kayıtta DOM şişmiyor (K-10)." },
 ];
 
 const SUGGESTIONS: Array<{ title: string; body: string }> = [
   {
-    title: "1) Komisyon ve kapora aynı ekranda olsun",
-    body: "Satışta %3 varsayılan ama oran/tutar elle değişebilsin, indirim gerekçesi zorunlu olsun. Kapora alınınca ilan kendiliğinden 'kaporalı'ya düşsün; kapora iadesi de kayda geçsin. Bu, ofisin en çok para kaybettiği yer: sözlü anlaşma.",
+    title: "1) Teslim tutanağını bitir (fotoğraf + imza)",
+    body: "Depozito kesintisi zaten kuruş kuruş tutuluyor; eksik olan tek şey kanıt. Kiracı girerken ve çıkarken aynı ekrandan tutanak üretilsin, fotoğraflar mülke bağlansın, iki taraf imzalasın. Ofisin en çok tartıştığı konu bu belgeyle kapanır.",
   },
   {
-    title: "2) Teslim tutanağı: fotoğraf + demirbaş + imza",
-    body: "Kiracı girerken ve çıkarken aynı ekrandan tutanak üretilsin; fotoğraflar mülke bağlansın. Depozito iadesi tartışması bu belgeyle biter.",
+    title: "2) Denetim kaydını ekrana çıkar",
+    body: "Altyapı hazır (audit_log + x-request-id). Kalan iş \"Son işlemler\" ekranı: kim, ne, ne zaman, hangi kayıt. 18 personelle çalışırken 'bunu kim değiştirdi' sorusu bu ekranla biter.",
   },
   {
-    title: "3) DASK/poliçe takibi küçük ama kritik",
-    body: "Poliçe bitiş tarihi + 30 gün önce hatırlatma. Ana sayfada 'planlı' yerine gerçek sayı görünür.",
+    title: "3) Portföy listesinde tam sanal liste",
+    body: "Şimdi 100'lük parçalarla açılıyor; kayıt 2000'i geçince yine yavaşlar. Görünmeyen satırları hiç basmayan sanal liste (kendi bileşenimiz, ek paket yok) sıradaki adım olmalı.",
   },
   {
-    title: "4) Teklif kabulünde zincir kurulsun",
-    body: "Teklif kabul edilince ilan 'kaporalı'ya düşsün, komisyon taslağı oluşsun, kabul eden müşteri alıcı adayına dönsün. Şu an üç ayrı yerde elle yapılıyor.",
+    title: "4) Kiracı talebini kiracı açsın",
+    body: "Görev kaydı var ama kapı kiracıya kapalı. Kiracı paneli kurulana kadar en azından tek kullanımlık talep bağlantısı (token) ile arıza bildirimi alınabilir; telefonda kaybolan arızalar kayda girer.",
   },
   {
-    title: "5) Her ekranda geri + tek tuşla ana sayfa",
-    body: "Aysan 18 personelle çalışacak; yanlış ekrana giren personelin geri dönememesi en çok şikâyet edilen şey olur. Artık üst bar + detay geri tuşları var, yeni ekranlarda da korunmalı.",
+    title: "5) Poliçe ve sözleşme bitişinde tek uyarı listesi",
+    body: "Poliçeler ve sözleşmeler tarihleri tutuyor ama kimseye seslenmiyor. Otomatik SMS/e-posta kararı verilene kadar ana sayfada 'bu ay bitecekler' tek listesi olsun; para kaybettiren yer burası.",
   },
   {
-    title: "6) Para biriminde tek kural",
+    title: "6) Her ekranda geri + tek tuşla ana sayfa",
+    body: "Aysan 18 personelle çalışacak; yanlış ekrana giren personelin geri dönememesi en çok şikâyet edilen şey olur. Üst bar + detay geri tuşları var, yeni ekranlarda da korunmalı.",
+  },
+  {
+    title: "7) Para biriminde tek kural",
     body: "Her tutar kuruş (tam sayı) olarak saklanıyor, ekranda biçimleniyor. Yeni modüllerde de bu kural bozulmasın; ondalıkla hesap yapılmasın.",
   },
   {
-    title: "7) Sessiz hatalar yerine açık uyarı",
-    body: "Belge eşleşmezse kişi açtık; bu iyi. Ama kullanıcıya 'ne oldu' tek satırda söylenmeli. Aksi hâlde 3 ay sonra 200 sahte kişi kaydı olur.",
-  },
-  {
     title: "8) Yedek her turda",
-    body: "Kod her turda zip olarak kaynaklar/yedek altına alınıyor; PostgreSQL dökümü de (pg_dump) aynı yere eklenmeli. Kod gider, veri kalır.",
+    body: "Kod her turda zip olarak kaynaklar/yedek altına alınıyor; PostgreSQL dökümü de (pg_dump) aynı yere ekleniyor. Kod gider, veri kalır.",
   },
 ];
 
@@ -97,13 +188,10 @@ const STATUS_TR: Record<Status, string> = {
 
 export function Roadmap() {
   const counts = {
-    var: ROWS.filter((r) => r.status === "var").length,
-    kismi: ROWS.filter((r) => r.status === "kismi").length,
-    yok: ROWS.filter((r) => r.status === "yok").length,
+    var: ROWS_VAR.length,
+    kismi: ROWS_OPEN.filter((r) => r.status === "kismi").length,
+    yok: ROWS_OPEN.filter((r) => r.status === "yok").length,
   };
-  const planned = ROWS.filter((r) => r.order !== undefined).sort(
-    (a, b) => (a.order ?? 99) - (b.order ?? 99),
-  );
 
   return (
     <div>
@@ -115,31 +203,31 @@ export function Roadmap() {
         </span>
       </div>
 
-      <InfoNote title="Bilgi bankası yeniden okundu, programla karşılaştırıldı.">
-        Kaynak: kökteki <strong>“umay emlak program detayları benim yazdığım.txt”</strong>. Aşağıdaki
-        liste o dosyadaki her başlığın bugünkü programda karşılığı olup olmadığını gösterir.
-        <strong> YOK</strong> ve <strong>KISMİ</strong> olanlar numaralı sıraya dizildi; numara küçükse
-        önce o yapılır. Sıra, “para kaybettiren / hukuki risk taşıyan” iş önce olacak şekilde kuruldu.
+      <InfoNote title="Liste artık elle yazılmıyor: her turda durum tazeleniyor.">
+        Kaynak: kökteki <strong>“umay emlak program detayları benim yazdığım.txt”</strong>. Bir madde
+        bitince <strong>silinmez</strong>; “VAR” durumuna geçer ve <strong>Kapananlar</strong>{" "}
+        bölümüne taşınır. Sıra numarası elle yazılmaz: açık maddeler sırayla numaralanır, bir madde
+        kapanınca numaralar kendiliğinden kayar. Son tazeleme: <strong>TUR:47</strong>.
       </InfoNote>
 
-      <h3>Olanlar</h3>
+      <h3>Kapananlar (son turlar)</h3>
       <div className="table-scroll">
         <table>
           <thead>
             <tr>
-              <th>Özellik</th>
-              <th>Durum</th>
-              <th>Programdaki karşılığı</th>
+              <th>Madde</th>
+              <th>Tur</th>
+              <th>Ne yapıldı</th>
             </tr>
           </thead>
           <tbody>
-            {ROWS.filter((r) => r.status === "var").map((row) => (
-              <tr key={row.key}>
+            {CLOSED.map((row) => (
+              <tr key={row.title}>
                 <td>{row.title}</td>
                 <td>
-                  <span className="chip ok">{STATUS_TR[row.status]}</span>
+                  <span className="chip ok">{row.turn}</span>
                 </td>
-                <td className="muted small">{row.note}</td>
+                <td className="muted small">{row.what}</td>
               </tr>
             ))}
           </tbody>
@@ -158,14 +246,38 @@ export function Roadmap() {
             </tr>
           </thead>
           <tbody>
-            {planned.map((row) => (
+            {ROWS_OPEN.map((row, index) => (
               <tr key={row.key}>
-                <td>{row.order}</td>
+                <td>{index + 1}</td>
                 <td>{row.title}</td>
                 <td>
                   <span className={`chip ${row.status === "yok" ? "danger" : ""}`}>
                     {STATUS_TR[row.status]}
                   </span>
+                </td>
+                <td className="muted small">{row.note}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style={{ marginTop: 22 }}>Olanlar</h3>
+      <div className="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Özellik</th>
+              <th>Durum</th>
+              <th>Programdaki karşılığı</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ROWS_VAR.map((row) => (
+              <tr key={row.key}>
+                <td>{row.title}</td>
+                <td>
+                  <span className="chip ok">{STATUS_TR[row.status]}</span>
                 </td>
                 <td className="muted small">{row.note}</td>
               </tr>

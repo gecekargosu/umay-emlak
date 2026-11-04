@@ -101,6 +101,8 @@ export function Listings({
   });
   const [authority, setAuthority] = useState("");
   const [assets, setAssets] = useState<PropertyAssets | null>(null);
+  /** K-10: 500+ kayıtta tüm satırları basmayalım; liste 60'lık parçalarla açılır. */
+  const [shown, setShown] = useState(60);
   const [subForm, setSubForm] = useState({ kind: "elektrik", provider: "", monthlyText: "" });
   const [fixtureForm, setFixtureForm] = useState({ name: "", quantity: 1 });  async function load(params: Partial<Filters> = {}) {
     try {
@@ -111,6 +113,7 @@ export function Listings({
       const qs = search.toString();
       const data = await api<{ items: ListingRow[] }>(`/listings${qs ? `?${qs}` : ""}`);
       setRows(data.items);
+      setShown(60);
       setError(null);
     } catch {
       setError("Portföy yüklenemedi");
@@ -520,7 +523,7 @@ export function Listings({
               </tr>
             </thead>
             <tbody>
-              {rows.map((row) => (
+              {rows.slice(0, shown).map((row) => (
                 <tr
                   key={row.id}
                   className={selectedListingId === row.id ? "selected" : "clickable"}
@@ -551,6 +554,19 @@ export function Listings({
           </table>
         </div>
       )}
+          {rows.length > shown && (
+            <p className="muted small">
+              {shown} / {rows.length} kayıt gösteriliyor (K-10).
+              <button
+                type="button"
+                className="secondary"
+                style={{ marginLeft: 10 }}
+                onClick={() => setShown(shown + 60)}
+              >
+                Sonraki 60
+              </button>
+            </p>
+          )}
         </>
       )}
         </>

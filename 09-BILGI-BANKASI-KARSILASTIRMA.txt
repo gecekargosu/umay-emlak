@@ -180,3 +180,15 @@ I. TUR:46 GÜNCELLEMELERİ (2026-11-04)
       GET /api/v1/audit ile son kayıtlar okunuyor (K-6, SIRA 10'un çekirdeği).
 [VAR] İstek numarası + JSON log: yanıtlarda x-request-id, sunucu çıktısı tek satır JSON.
 [KISMI] Denetim kaydı için ekran yok (API'den okunuyor); personel devri geçmişi ayrı iş.
+
+====================================================================
+J. TUR:47 GÜNCELLEMELERİ (2026-11-04)
+====================================================================
+[VAR] Belgelerde arama: yazarken süzülüyor, "Temizle" ve sayaç var; yükleme formu
+      katlanır panelde, liste ilk bakışta görünüyor (H-15).
+[VAR] Uzun portföy listesi: ilk 60 satır + "Sonraki 60"; 91 kayıtta tam sayfa açılıyor (K-10).
+[KISMI] Sanal liste: görünmeyen satırlar hiç basılmıyor değil, parça parça basılıyor;
+      2000+ kayıtta gerçek sanal liste gerekir.
+[VAR] Yol haritası ekranı gerçek duruma çekildi: kapananlar ayrı bölüm, açık maddeler
+      otomatik numaralı; komisyon, DASK, randevu, görev, denetim altyapısı artık VAR.
+[KISMI] Yol haritası verisi koda gömülü; tur sonunda elle tazeleniyor (canlı veri değil).
