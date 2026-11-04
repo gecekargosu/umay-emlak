@@ -331,8 +331,8 @@ export function Listings({
       <InfoNote title="İlan, mülkün ticari teklifidir.">
         Aynı daire hem satılık hem kiralık olabilir; bu yüzden ilan ayrı kayıttır. Taslak ilan,
         zorunlu belgeler (tapu, yetki, kimlik) tamamlanmadan <strong>yayına alınamaz</strong>.
-        Raf görünümünde kartın üzerindeki kısaltma mülkün baş harfleridir; kapak fotoğrafı
-        eklendiğinde buraya fotoğraf gelecek.
+        Raf görünümünde kartın üzerinde mülkün <strong>kapak fotoğrafı</strong> görünür; fotoğrafı
+        olmayan kayıtta baş harfler yazar. Fotoğrafı mülk dosyasından ekleyip değiştirebilirsin.
       </InfoNote>
 
       {fixedKind !== "rent" && (
