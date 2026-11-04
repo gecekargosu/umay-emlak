@@ -213,3 +213,10 @@ L. TUR:49 GÜNCELLEMELERİ (2026-11-04)
 [VAR] Listings.tsx bölündü: raf (ListingShelf), filtre formu (ListingFilters), etiketler (listing-labels).
 [KISMI] Listings.tsx 700 satır: mülk dosyası (detay) bloğu hâlâ sayfada — sıradaki bölme.
 [KISMI] api-types.ts 682 satır: tamamı saf tip, konuya göre bölünmedi.
+
+====================================================================
+M. TUR:50 GÜNCELLEMELERİ (2026-11-04)
+====================================================================
+[VAR] Listings.tsx 428 satır: mülk dosyası ayrı bileşende (ListingDetailPage 356), raf/filtre/etiket ayrı.
+[VAR] api tipleri dört dosyaya bölündü (ilan, kişi, para, belge); api-types.ts yalnız köprü.
+[VAR] Bölme sonrası davranış aynı: raf fotoğrafları, filtre, 60'lık liste, mülk dosyası ve geri dönüş çalışıyor.

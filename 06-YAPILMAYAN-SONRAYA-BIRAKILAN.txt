@@ -435,3 +435,7 @@ Y-102 | Demo görsel + belge — YAPILDI (2026-11-04, TUR:48): 90 mülk fotoğra
 Y-103 | K-1/K-2/K-3 dosya bölme — KISMI (2026-11-04, TUR:49): api.ts 66 + api-types 682,
         documents.ts 477 + documents/link.ts 250, Listings.tsx 943→700 (Shelf, Filters, labels ayrıldı).
         AÇIK: Listings mülk dosyası bloğu ve api-types konu bölünmesi. | Dilim 8 | M | KISMI
+
+Y-104 | M6 kalanı — YAPILDI (2026-11-04, TUR:50): Listings mülk dosyası bloğu ListingDetailPage'e,
+        api-types dört konu dosyasına ayrıldı. En büyük kod dosyası artık 428 satır.
+        | Dilim 8 | M | YAPILDI

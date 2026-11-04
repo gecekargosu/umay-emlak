@@ -426,3 +426,11 @@ TEST:typecheck 0 · pnpm test 17 dosya / 64 test 0
 KALAN (KISMI): Listings.tsx 700 satır — mülk dosyası (detay) bloğu hâlâ sayfada; ayrı bileşene alınacak. api-types.ts 682 satır ama tamamı saf tip; konuya göre (ilan/kişi/para/belge) bölünecek.
 SIRADAKİ:M6 kalanı (detay bloğu + api-types bölünmesi), sonra M7 (paket OKU-BENI + H-11).
 --------------------------------------------------------------------------------
+
+[2026-11-05 03:40] TUR:50 | MODUL:M6 kalanı — mülk dosyası bileşeni + api tiplerinin bölünmesi | IS:(1) pages/Listings.tsx 700→428 satır: mülk dosyası (ilan detayı) bloğu components/ListingDetailPage.tsx'e (356 satır) taşındı; state sayfada kaldı, bileşen yalnız gösteriyor ve olayları yukarı iletiyor (uploadDoc/savePrice/changeStatus/addSubscription/addFixture/removeAsset/refresh/close). NEXT_STATUS components/listing-labels.ts'e taşındı. (2) api-types.ts 682→9 satır: tipler konuya göre dört dosyaya bölündü — api-types-listing.ts (6 bildirim: ilan, mal sahibi, portföy), api-types-people.ts (12: kişi, kiracı, personel, randevu), api-types-money.ts (14: sözleşme, tahakkuk, poliçe, para, rapor), api-types-docs.ts (5: belge, medya, içe aktarma); api-types.ts dördünü yeniden dışa aktarıyor, `from "../api"` importları değişmedi.
+DOSYA:apps/web/src/pages/Listings.tsx, apps/web/src/components/ListingDetailPage.tsx (yeni), apps/web/src/components/listing-labels.ts, apps/web/src/api-types.ts, api-types-listing.ts (yeni), api-types-people.ts (yeni), api-types-money.ts (yeni), api-types-docs.ts (yeni)
+DOGRULAMA (ekran): Portföy → 20 raf kartı, fotoğraflar yükleniyor (18/20 anlık, 3 sn sonra tamam); filtre "Hemen filtrele"/"Temizle" yerinde, tablo 60 satır; raf kartından mülk dosyası açıldı — başlıklar: Fotoğraflar ve videolar, Mülk bilgileri, Poliçeler (DASK), Arıza/bakım, Alınan teklifler, Komisyon ve kapora, Belgeler, Fiyat, Durum, EİDS, Abonelikler ve demirbaş; durum düğmeleri (Kaporalı/Kapat/Arşivle) görünüyor; "Portföy listesine dön" ile geri dönüldü.
+HATA ANALIZI:NEXT_STATUS iki kez tanımlı kaldı (ilk taşımada dosyaya kopya girmişti) → TS2451; tek tanıma indirildi. Taşıma betiği iş sonunda silindi.
+TEST:typecheck 0 · pnpm test 17 dosya / 64 test 0
+SIRADAKİ:M7 — paket OKU-BENI uyarısı + sürüm notu (Y-93 + H-11), zip yeniden üretilip /health 200.
+--------------------------------------------------------------------------------

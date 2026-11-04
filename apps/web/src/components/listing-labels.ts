@@ -1,5 +1,6 @@
-/** İlan türü/durum etiketleri — tek yerde (K-1/K-2, TUR:49). */
+/** İlan türü/durum etiketleri — tek yerde (K-1/K-2, TUR:49; NEXT_STATUS TUR:50). */
 export const KIND_TR: Record<string, string> = { sale: "Satılık", rent: "Kiralık" };
+
 export const STATUS_TR: Record<string, string> = {
   draft: "Taslak",
   active: "Aktif",
@@ -9,7 +10,7 @@ export const STATUS_TR: Record<string, string> = {
 };
 
 /** İzin verilen geçişler sunucudaki kuralla aynı; sunucu yine kendi kontrolünü yapar. */
-const NEXT_STATUS: Record<string, Array<{ status: string; label: string }>> = {
+export const NEXT_STATUS: Record<string, Array<{ status: string; label: string }>> = {
   draft: [
     { status: "active", label: "Yayına al" },
     { status: "archived", label: "Arşivle" },
