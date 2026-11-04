@@ -129,3 +129,15 @@ D. KAYIT KURALI
 - Bu dosya silinmez; maddeler yerinde kalır.
 - Bir madde tamamlandığında satırın altına "→ YAPILDI (tarih, TUR)" yazılır.
 - Yeni eksik çıkarsa sonuna SIRA numarası verilerek eklenir.
+
+====================================================================
+E. SON TUR GÜNCELLEMELERİ (TUR:38–40, 2026-11-04)
+====================================================================
+[VAR] Ana sayfa kendi adını taşıyor: "Aksiyon panosu" (H-1/H-2).
+[VAR] Mülk dosyasında mal sahibi üst kartla aynı kaynaktan okunuyor (H-3, K-84).
+[VAR] İlan/mülk sayaç dili ayrıştı: raf "51 ilan", ana sayfa "39 satılık mülk · 49 kiralık mülk" (H-4).
+[VAR] Arıza başlığı açık talep durumu + toplam kayıt sayısı veriyor (H-5).
+[VAR] Personel metni var olan şifre ekranını doğru anlatıyor (H-6).
+[KISMI] Kullanılabilirlik bulguları: H-7, H-8, H-13, H-14, H-15 açık (M1-M2-M5 kuyruğunda).
+[YOK] Denetim kaydı (audit_log) ve JSON log + request_id (K-6) — M4'te yapılacak.
+[YOK] Paket OKU-BENI "Türkçe karakterli klasöre açmayın" uyarısı (Y-93, H-11) — M7'de yapılacak.

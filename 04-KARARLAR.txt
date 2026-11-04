@@ -449,3 +449,11 @@ K-82 | Paket ASCII klasörde çalışır.
        veritabanı %LOCALAPPDATA%\UmayEmlak\<özet>-v2\db altında tutulur, yeri
        veri/db-yeri.txt dosyasına yazılır. Junction / 8.3 kısa yol hilesi yok:
        sessizce düşüyordu, yanlış güven veriyordu.
+
+K-84 | 2026-11-04 | Mülk dosyasındaki mal sahibi tek kaynaktan okunur.
+       Ne: property_owners boşsa mülkün owner_person_id alanındaki kişi gösterilir (listings detay ucu).
+       Neden: Üst kart "DEMO Serkan Kara" derken alt bilgi "—" diyordu; aynı ekranda iki farklı cevap güveni bozuyor.
+
+K-85 | 2026-11-04 | Onarım sırası: kullanılabilirlik → güven/iz → liste/performans → dosya bölme.
+       Ne: M1 H-13+H-14, M2 H-7+H-8, M3 K-4+K-9, M4 K-6 audit_log, M5 H-15+K-10, M6 K-1/K-2/K-3, M7 Y-93.
+       Neden: Kullanıcının her gün tıkladığı ekranlar önce; dosya bölme davranış değiştirmediği için en son.

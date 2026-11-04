@@ -352,3 +352,9 @@ DOSYA:PROJECT-STATUS.md, 10-DENETIM-ISTEK-LISTESI-2026-11-04.txt
 TEST:kod değişikliği yok (önceki tur: typecheck 0, 17/64 test)
 SIRADAKİ:M1 — H-13 sözleşme listesi + H-14 mülk seçici arama.
 --------------------------------------------------------------------------------
+
+[2026-11-04 22:30] TUR:41 | MODUL:Kayıt tamamlama | IS:Denetim sonrası eksik kalan kayıtlar kapatıldı: 04'e K-84 ve K-85 kararları, 09'a TUR:38-40 güncelleme bloğu (VAR/KISMI/YOK) eklendi; PostgreSQL yedeği alındı.
+YEDEK:kaynaklar/yedek/umay-emlak-2026-11-04.zip (kod) + umay-emlak-db-2026-11-04.dump (pg_dump -Fc)
+TEST:kod değişikliği yok (son koşu typecheck 0, 17/64 test)
+SIRADAKİ:M1 — H-13 sözleşme listesi + H-14 mülk seçici arama.
+--------------------------------------------------------------------------------
