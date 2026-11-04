@@ -45,6 +45,8 @@ export function Policies() {
   const [list, setList] = useState<PolicyList | null>(null);
   const [properties, setProperties] = useState<Array<{ id: string; title: string }>>([]);
   const [filter, setFilter] = useState<Filter>("all");
+  // H-14: 91 mülklük düz liste yerine yazarak süzülen seçim.
+  const [propQuery, setPropQuery] = useState("");
   const [form, setForm] = useState({ ...EMPTY_FORM });
   const [editingId, setEditingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -82,6 +84,15 @@ export function Policies() {
       .catch(() => setProperties([]));
   }, []);
 
+  const filteredProperties = useMemo(() => {
+    const q = propQuery.trim().toLocaleLowerCase("tr");
+    if (!q) return properties;
+    const hits = properties.filter((p) => p.title.toLocaleLowerCase("tr").includes(q));
+    const selected = properties.find((p) => p.id === form.propertyId);
+    // Seçili mülk süzgecin dışında kalsa da listede kalsın; seçim kaybolmasın.
+    return selected && !hits.some((p) => p.id === selected.id) ? [selected, ...hits] : hits;
+  }, [properties, propQuery, form.propertyId]);
+
   const totals = useMemo(() => {
     const items = list?.items ?? [];
     const expired = items.filter((row) => row.expired).length;
@@ -96,6 +107,7 @@ export function Policies() {
 
   function startEdit(row: PolicyRow) {
     setEditingId(row.id);
+    setPropQuery("");
     setForm({
       propertyId: row.propertyId,
       kind: row.kind,
@@ -111,6 +123,7 @@ export function Policies() {
 
   /** Yenileme: eski poliçe kalır, yeni dönem satırı açılır (bitiş +1 yıl). */
   function startRenew(row: PolicyRow) {
+    setPropQuery("");
     const end = new Date(`${row.endDate}T00:00:00`);
     end.setFullYear(end.getFullYear() + 1);
     setEditingId(null);
@@ -204,13 +217,26 @@ export function Policies() {
           )}
         </div>
         <div className="inline-form">
+          <input
+            placeholder="Mülk ara (örn. Konak)"
+            aria-label="Mülk ara"
+            value={propQuery}
+            onChange={(e) => setPropQuery(e.target.value)}
+            disabled={Boolean(editingId)}
+          />
           <select
             value={form.propertyId}
             onChange={(e) => setForm({ ...form, propertyId: e.target.value })}
             disabled={Boolean(editingId)}
           >
-            <option value="">Mülk seçin</option>
-            {properties.map((p) => (
+            <option value="">
+              {properties.length === 0
+                ? "Mülk seçin"
+                : filteredProperties.length === 0
+                  ? "Eşleşen mülk yok"
+                  : `Mülk seçin — ${filteredProperties.length}/${properties.length}`}
+            </option>
+            {filteredProperties.map((p) => (
               <option key={p.id} value={p.id}>
                 {p.title}
               </option>

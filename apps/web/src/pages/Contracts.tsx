@@ -3,7 +3,6 @@ import { api, ApiError, type ContractDetail, type ContractRow, type ListingRow, 
 import { InfoNote } from "../components/InfoNote";
 import { useDraft } from "../hooks/useDraft";
 import { formatKurusText } from "./Rents";
-import { BackButton } from "../components/BackButton";
 import { RentRevisionPanel } from "../components/RentRevisionPanel";
 
 const STATUS_TR: Record<string, string> = { active: "Aktif", ended: "Bitti", cancelled: "İptal" };
@@ -36,6 +35,8 @@ export function Contracts({ canApprove = false }: { canApprove?: boolean }) {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  // H-13: ekran listeyle açılır; form yalnız "Yeni sözleşme" ile gelir.
+  const [formOpen, setFormOpen] = useState(false);
 
   const load = useCallback(async () => {
     try {
@@ -85,6 +86,7 @@ export function Contracts({ canApprove = false }: { canApprove?: boolean }) {
       });
       setMessage("Sözleşme açıldı, ilan kapandı.");
       clearDraft();
+      setFormOpen(false);
       await load();
       await open(created.id);
     } catch (caught) {
@@ -136,6 +138,11 @@ export function Contracts({ canApprove = false }: { canApprove?: boolean }) {
     <div>
       <div className="page-head">
         <h2>Sözleşmeler</h2>
+        {!formOpen && (
+          <button type="button" onClick={() => setFormOpen(true)}>
+            Yeni sözleşme
+          </button>
+        )}
       </div>
       <InfoNote title="Sözleşme kiralık ilana bağlanır.">
         Açılınca ilan kapanır ve durum geçmişine yazılır. Depozito gelir değildir, ayrı alanda
@@ -143,9 +150,14 @@ export function Contracts({ canApprove = false }: { canApprove?: boolean }) {
         Tahsilat "Kiralar" ekranından yapılır.
       </InfoNote>
 
-      <div className="panel">
-          <BackButton onBack={() => setDetail(null)} label="Listeye dön" />
-        <h3>Yeni kira sözleşmesi</h3>
+      {formOpen && (
+        <div className="panel">
+          <div className="detail-head">
+            <h3>Yeni kira sözleşmesi</h3>
+            <button type="button" className="ghost" onClick={() => setFormOpen(false)}>
+              Vazgeç
+            </button>
+          </div>
         {listings.length === 0 ? (
           <p className="muted">
             Kiralık ilan yok. Önce portföyden kiralık ilan açın (veya içe aktarın).
@@ -222,7 +234,8 @@ export function Contracts({ canApprove = false }: { canApprove?: boolean }) {
           Depozito gelir değildir; ayrı alanda tutulur. Kiracı yoksa önce Kişiler ekranından
           “Kiracı” olarak ekleyin.
         </p>
-      </div>
+        </div>
+      )}
 
       {message && <div className="alert">{message}</div>}
       {error && <div className="error">{error}</div>}

@@ -363,3 +363,10 @@ SIRADAKİ:M1 — H-13 sözleşme listesi + H-14 mülk seçici arama.
 YEDEK:kaynaklar/yedek/umay-emlak-db-2026-11-04.dump (pg_dump -Fc, doğrulandı) + umay-emlak-2026-11-04.zip (kod)
 SIRADAKİ:M1 — H-13 sözleşme listesi + H-14 mülk seçici arama.
 --------------------------------------------------------------------------------
+
+[2026-11-04 22:55] TUR:42 | MODUL:M1 — H-13 + H-14 | IS:Sözleşmeler ekranı artık listeyle açılıyor; "Yeni sözleşme" düğmesine basınca form geliyor, "Vazgeç" kapatıyor. Formun üstündeki anlamsız "← Listeye dön" düğmesi kaldırıldı. Poliçeler ekranındaki 91 kayıtlık düz mülk listesinin üstüne arama kutusu eklendi; yazarken süzülüyor, seçenek başlığı "Mülk seçin — 7/91" diye kaç sonuç kaldığını söylüyor, seçili mülk süzgeç dışında kalsa da listede kalıyor (seçim kaybolmuyor).
+DOSYA:apps/web/src/pages/Contracts.tsx (formOpen durumu, page-head düğmesi, BackButton kaldırıldı), apps/web/src/pages/Policies.tsx (propQuery + filteredProperties + arama girdisi, startEdit/startRenew aramayı sıfırlıyor)
+DOGRULAMA (preview 5175): Sözleşmeler açılış → üstte yalnız "Sözleşmeler" + "Yeni sözleşme"; form görünmüyor. Düğmeye basınca form + "Vazgeç" geldi. Poliçeler → "Mülk ara" kutusu var; başlangıç "Mülk seçin — 91/91"; "Konak" yazılınca "Mülk seçin — 7/91", ilk sonuçlar "DEMO Daire 20 · Konak", "DEMO Daire 32 · Konak".
+TEST:typecheck 0 · pnpm test 17 dosya / 64 test 0
+SIRADAKİ:M2 — H-7 Görevler/Mesajlar kutuları tıklanabilir + H-8 kira takibi satırı.
+--------------------------------------------------------------------------------

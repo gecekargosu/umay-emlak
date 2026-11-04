@@ -395,3 +395,7 @@ Y-94 | Denetim bulguları H-1…H-15 ve kod bulguları K-1…K-10 — ayrıntı:
 Y-94 | Denetim bulguları — H-1…H-6 YAPILDI (2026-11-04, TUR:38): ana sayfa başlığı,
        mal sahibi boş görünmesi, ilan/mülk sayaç dili, arıza başlığı, personel şifre metni.
        AÇIK KALAN: H-7…H-15 ve kod bulguları K-1…K-10. | Dilim 7 | M | KISMI
+
+Y-95 | H-13 sözleşme formunun varsayılan açılması + H-14 poliçede mülk araması — YAPILDI
+       (2026-11-04, TUR:42): ekran listeyle açılıyor, forma "Yeni sözleşme" ile giriliyor;
+       poliçe mülk seçicisi yazarken süzülüyor ve kaç sonuç kaldığını gösteriyor. | Dilim 7 | S | YAPILDI

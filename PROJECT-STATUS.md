@@ -1,6 +1,6 @@
 # PROJECT-STATUS
 
-Son güncelleme: 2026-11-04 22:20 · Aktif tur: TUR:39 bitti — H-1…H-6 kapandı
+Son güncelleme: 2026-11-04 22:55 · Aktif tur: TUR:42 bitti — M1 (H-13 + H-14) kapandı
 
 ## Şu an çalışan (doğrulandı)
 - Giriş/oturum, boşta kilit, şifre değiştirme; ofis/personel/onay yetkisi.
@@ -21,7 +21,7 @@ Son güncelleme: 2026-11-04 22:20 · Aktif tur: TUR:39 bitti — H-1…H-6 kapan
 - Y-93: paket OKU-BENI'ye "Türkçe karakterli klasöre açmayın" uyarısı.
 
 ## Mission kuyruğu (plan — her satır bir mission)
-M1 · **H-13 + H-14** — sözleşmeler listeyle açılsın, poliçe mülk seçicisine arama gelsin.
+M1 · **H-13 + H-14** → YAPILDI (2026-11-04, TUR:42) · — sözleşmeler listeyle açılsın, poliçe mülk seçicisine arama gelsin.
      Bitiş: typecheck 0, test yeşil, iki akış preview'da tıklandı, TUR + commit + push.
 M2 · **H-7 + H-8** — ana sayfadaki Görevler/Mesajlar kutuları tıklanabilsin; kira takibi satırı
      "geciken tahakkuk / beklenen / ödenen" olarak ayrışsın. Bitiş: aynı ölçüt.
@@ -39,7 +39,7 @@ M7 · **Y-93 + H-11** — paket OKU-BENI uyarısı ve sürüm notu; paket ASCII 
 Kural: aynı anda tek mission; kapsam büyütülmez, bitmeyen mission yeni mission açmaz.
 
 ## Sıradaki adım (tek cümle)
-M1: sözleşmeler ekranı listeyle açılsın (H-13) ve poliçe mülk seçicisine arama gelsin (H-14).
+M2: ana sayfadaki Görevler ve Mesajlar kutuları tıklanabilsin (H-7), kira takibi satırı ayrışsın (H-8).
 
 ## Sorular (kullanıcıdan bekleyen)
 - Aysan kirayı mal sahibine mi yatırıyor, ofis hesabından mı geçiyor? (para akışı modeli)
