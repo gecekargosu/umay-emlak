@@ -1,0 +1,289 @@
+UMAY EMLAK — İSTEK LİSTESİ, DENETİM VE HATA DEFTERİ
+Tarih: 2026-11-04 · TUR:37 · Denetçi: Buffy (kanka)
+Kaynak: kökteki "umay emlak program detayları benim yazdığım.txt" (5410 satır, baştan sona okundu:
+1-1400, 1401-2300, 2301-3500, 3500-4400, 4401-5410) + 09/06/04/03 dosyaları + çalışan program.
+
+KURAL: Bu dosya silinmez. Her madde yerinde kalır; yapılanın yanına "YAPILDI (tarih)" yazılır.
+
+====================================================================
+0. KALDIĞIM YER (tespit)
+====================================================================
+- Aysan paketi Türkçe karakterli klasörde açılmıyordu (initdb "invalid byte sequence").
+  Kök neden: gömülü PostgreSQL'in İKİLİ dosyaları paket klasöründe; klasör yolunda "ö" olunca
+  initdb kendi yolunu okuyamıyor. Veritabanı klasörünü ASCII'ye taşımak ve çalışma dizinini
+  değiştirmek yetmedi (ölçüldü).
+- Çözüm uygulandı (TUR:36): paket ASCII klasörde ("Desktop/Aysana-gonderilecek/...");
+  Türkçe yolda açılırsa veritabanı %LOCALAPPDATA%\UmayEmlak\<özet>-v2\db altında tutulur,
+  yeri veri/db-yeri.txt'ye yazılır. Junction / 8.3 kısa yol hilesi kaldırıldı (sessizce düşüyordu).
+- Doğrulandı: /health {"ok":true,"migrations":15} · giriş 200 · /api/v1/maintenance 401 ·
+  HTML 200 · ilk açılış 14 sn · zip 288 MB.
+- Commit 1eb7f63 push edildi; yedek kaynaklar/yedek/umay-emlak-20261104-2141.zip.
+- Kalan küçük iş: OKU-BENI'ye "Türkçe karakterli klasöre açmayın" uyarısı (Y-93).
+
+====================================================================
+1. SENİN METNİNDEKİ İSTEKLER — SATIR SATIR (madde madde)
+====================================================================
+Not: Metin tek uzun paragraf + üç ajan sohbeti + 27 maddelik master prompt + 18 modül planı +
+kılavuzdan oluşuyor. Aşağıda senin cümlelerinden çıkan istekler, ajan metinlerinden ayrılmış hâlde.
+
+A. OFİS VE KİŞİLER
+ 1. Program emlakçıya hitap edecek; önce emlakçıyı anlamak gerekiyor.
+ 2. Aysan'ın 1 ortağı, 18 personeli var; ofis kiralık.
+ 3. Çok sayıda mal sahibi; birinde 15 daire, başkasında 2 dükkân + 3 arsa + 6 daire olabilir.
+ 4. Bazı mülkler kiralık, bazıları satılık, bazıları ikisi birden olarak ofise verilmiş.
+ 5. Mal sahibi için klasör oluşturulmalı; aldığı belgeler o klasöre konmalı.
+ 6. Klasörleme karışık olmamalı: Umay PDF Reader'daki "raf" düzeni gibi olmalı.
+ 7. Raflar isimlendirilebilmeli, belgeler raflar arasında taşınabilmeli, silinebilmeli.
+ 8. Çok önemli işareti (yıldız) konabilmeli.
+ 9. Mal sahipleri rafı alfabetik olmalı ve sağa-sola kaydırılabilmeli.
+10. Mal sahibine tıklayınca açılan ekranda her gayrimenkul için raf olmalı; kapak resmi o mala ait olmalı.
+11. Gayrimenkule (x) tıklayınca önce resimleri, altında belgeleri görünmeli.
+12. Belgeler: tapu, müşteriyle yapılan komisyon anlaşması, kira sözleşmesi vb.
+13. Satılık daire için tapu örneği, resimler, video gibi belgeler mal sahibinden alınıp arşivlenmeli.
+14. Personel dairenin resim/videosunu çekmeli; bölge fiyatları araştırılıp mal sahibiyle satış fiyatı belirlenmeli.
+15. Personel bir x'e atanabilmeli; atama değişince eski personelin işlemleri silinmemeli.
+16. Kiracılar modülü ile mal sahibi altındaki kiracı aynı kayıt olmalı (veri tekrarı olmasın).
+17. Bir kişi hem mal sahibi hem kiracı olabilmeli (Cengiz örneği).
+18. Aynı mülkte birden fazla hissedar/malik ve pay oranı desteklenmeli.
+
+B. MÜLK DOSYASI VE YAŞAM DÖNGÜSÜ
+19. Her x'in tek dijital dosyası: fotoğraf, video, tapu, sözleşme, kiracı, finans, bakım, geçmiş.
+20. Fiziksel gayrimenkul ile kiralık/satılık portföy kaydı ayrı tutulmalı (aynı daire sonra satılık olabilir).
+21. Fiyat değişince eski fiyat silinmemeli; kim, ne zaman, neden değiştirdi görünmeli.
+22. Portföy durumları: yeni → belge bekliyor → fotoğraflandı → fiyat onayı → yayında → kiralandı/satıldı → portföyden çıktı.
+23. Portföyden çıkış/arşivleme tanımlı olmalı (dosya sonsuza kadar açık kalmasın).
+24. Eksik belge uyarısı: "bu dosyada 6 belgeden 2'si eksik" ve yayına alma engeli.
+25. Mülk türüne göre dinamik alanlar (arsa, dükkân, konut aynı form değil).
+
+C. KİRA, SÖZLEŞME, PARA
+26. Kira sözleşmesi, teslim tutanağı, depozito, kira günü, aidat sorumlusu takip edilmeli.
+27. Giriş/çıkış tutanağı: fotoğraf, demirbaş listesi, sayaç, anahtar, boya/durum.
+28. Kira tahakkuku + tahsilat + mahsup (kısmi ödeme, gecikme, geçmiş borç).
+29. Dekont yükleme, banka havalesi eşleştirme; ödeme onayı.
+30. DASK/sigorta poliçesi ayrı kayıt; bitişten önce uyarı.
+31. Kira artışı: oran kaynak + tarihiyle veri olarak girilmeli, sistem önerir, yetkili onaylar.
+32. Kartla kiraya %10 ekleme fikri: 5464 md.17 nedeniyle YAPILMAYACAK (üç ajan da aynı sonuca vardı).
+33. Ofis hizmet bedeli ayrı kalem ve ayrı fatura/makbuz olmalı.
+34. Mal sahibi hesap ekstresi (tahsilat - gider - komisyon = net) ve yazdırma.
+35. Faturayı kendimiz yazmayalım: önce PDF/Excel, sonra e-fatura entegratörü.
+36. Kapora / komisyon (%3 varsayılan, indirim gerekçesi, onay) takibi.
+
+D. OPERASYON
+37. Arıza/bakım talebi: kiracı fotoğrafla bildirir, durum ilerler, masraf ve usta bilgisi tutulur.
+38. Görev atama, randevu/yer gösterme, sonuç (geldi/gelmedi/iptal) ve teklif bağlantısı.
+39. Takvim: kira günleri, randevular, sözleşme bitişleri tek ekranda.
+40. Alıcı adayı CRM: bütçe, ilçe, oda tercihi; uygun portföy önerisi.
+41. Toplu bildirim (SMS/e-posta/WhatsApp) — onaylı gönderim, KVKK izni.
+42. Denetim kaydı: kim hangi belgeyi indirdi, fiyatı değiştirdi, kirayı onayladı.
+
+E. PANELLER VE PLATFORM
+43. Dört panel: admin/ortak, personel, mal sahibi, kiracı.
+44. Mal sahibi paneli: kendi mülkleri, belgeleri, kira durumu, ekstre (şeffaflık = yeni müşteri).
+45. Kiracı paneli: sözleşme, ödeme geçmişi, dekont, arıza talebi.
+46. Mal sahibi kiracının hangi bilgisini görecek sınırı (telefon/kimlik varsayılan görünmez).
+47. Masaüstü önce, mobil sonra; mobil saha aracı (kamera, belge tarama, görev).
+48. Tek backend, tek veritabanı; telefon yalnız önbellek.
+49. Çevrimdışı hafif: son bakılan kayıtlar okunur, yükleme kuyruğu; finans çevrimdışı düzenlenmez.
+50. Çoklu ofis (SaaS) hazırlığı: her kayıtta ofis kimliği, ofis izolasyonu.
+51. Güvenlik: parola + oturum, 5 hatalı girişte kilit, personel ayrılınca oturumları düşür.
+52. Yedekleme + geri yükleme tatbikatı.
+53. Türkçe arama ve alfabetik sıralama (İ/ı, Ş/ş) doğru olmalı.
+54. Mükerrer kişi uyarısı ve "kayıtları birleştir" aracı.
+55. Excel/CSV içe aktarma (mevcut 350 kayıt için) ve tam dışa aktarma.
+56. Yazdırma/PDF: ekstre, portföy föyü, sözleşme taslağı, tutanak, eksik belge raporu.
+57. Mobil native ancak push/arka plan yükleme gerçekten şartsa (önce PWA).
+58. AI/OCR, akıllı arama, ilan platformları, harita: sonraki aşama.
+
+====================================================================
+2. ÜÇ AJANIN FİKİRLERİ (senin metnindeki bölümler)
+====================================================================
+GEMINI (hızlı, cesur):
+ - Doğru: veri merkezde/telefon önbellek, kiracı tek kaynak, raf tek başına yetmez (arama+filtre şart),
+   dört panel, DASK/kira/sözleşme tek modülde, arıza talebi kiracıdan, filigran (orijinal korunur),
+   mobilde kademeli gösterim.
+ - Yanlış/riskli: "pazaryeri POS ile sıfır risk", TÜİK'i kazıma, %45 örnek oran, "koyu tema güneşte iyi",
+   her özelliği mobilde gösterme vaadi, React Native'i ilk günden dayatma.
+
+CHATGPT (en iyi zihin haritası, en riskli kapsam):
+ - Doğru: gayrimenkul ≠ portföy ≠ sözleşme ≠ kiracılık; çok hissedar; kişi tek kaynak; fiyat geçmişi;
+   personel devrinde geçmiş; dört panel + satır bazında yetki; sahte veriyle test; "ekranları önce yapıp
+   sonra DB'ye bağlama"; filigran kopyada; ödeme kalemleri ayrı; KVKK/audit/soft delete/migration.
+ - Yanlış/eksik: 18 modül sırası (finans 6. aşamada = ürünün kalbi sonda), 18 modül ≈ 60-70 ekran,
+   FastAPI + RN + Docker (3 dil), "beklenen kira" tek satır sanılmış (tahakkuk yok), veri göçü yok,
+   mükerrer kayıt yok, portföyden çıkış yok.
+
+CLAUDE (en olgun, ürün kararları havada):
+ - Doğru: parties + rol profilleri; dikey dilim; hafif offline; iki tür raf; giriş/çıkış tutanağı;
+   5464 uyarısı; fatura entegratörü; oran veri + onay; çalışma protokolü (tek görev kartı,
+   PROJECT-STATUS, commit, "burada durdum"); ADR ve "bitti" tanımı.
+ - Eksik: SQL v002 yok, test stratejisi tek satır, veri göçü yok, süre yok, mobil yükleme detayı yok.
+
+FREEBUFF KILAVUZU (dosyaya sonradan eklenen bölüm):
+ - Ürün tezi: "arşiv + raf" değil "yükümlülük + kanıt" yönetimi.
+ - Yükümlülük tarihten TÜRETİLİR (elle hatırlatma yok) + ayrı teslim/erteleme kaydı.
+ - Belge zorunluluk matrisi (eksik belge motoru) — üç ajanın hiçbirinde yok.
+ - Türkçe normalizasyon (İ/ı) + sort_key.
+ - Para: tahakkuk / tahsilat / mahsup üçlüsü, kuruş tam sayı, ters kayıt.
+ - K13 audit append-only; K17 yedek tatbikatı; K18 gerçek kapasite (500 x, 30 GB).
+ - 12 dilimlik yol haritası; Dilim 5'te Aysan gerçek kullanıma başlar.
+ - R-1…R-8 revizyonları: baştan PostgreSQL, Tauri ince kabuk, para akışı iki ihtimali modeller,
+   oran veridir, belge imhası yok, süre taahhüdü yok, dosya ajana verilmez, SaaS sorusu açık.
+
+====================================================================
+3. BİRLEŞTİRİLMİŞ LİSTE (programda bugün ne var?)
+====================================================================
+VAR (çalışıyor, ekranda doğrulandı):
+ 1 Ofis/ortak/personel + yetki sınırları (onay yetkisi ayrı)             [VAR]
+ 2 Mal sahipleri alfabetik raflar + kişi dosyası                          [VAR]
+ 3 Raf (vitrin) + liste görünümü, yazarken süzme                          [VAR]
+ 4 Gayrimenkul + ilan ayrımı, 91 kayıt demo                               [VAR]
+ 5 Kiracılık dönemi + sözleşme kaydı + sözleşme metni (A4)                [VAR]
+ 6 Kira tahakkuku/tahsilat/gecikme                                        [VAR]
+ 7 Belge arşivi (sha256 tek kopya) + ada göre otomatik eşleştirme         [VAR]
+ 8 Fiyat geçmişi                                                          [VAR]
+ 9 Personel portföyü + ilçe ortalaması                                    [VAR]
+10 Teklif/görüşme kaydı                                                   [VAR]
+11 KVKK iletişim izni                                                     [VAR]
+12 Mükerrer kişi birleştirme                                              [VAR]
+13 Excel/CSV içe aktarma                                                  [VAR]
+14 Oturum güvenliği, zorunlu şifre değişimi, boşta kilit                   [VAR]
+15 Genel arama (/) + bildirim sayacı                                      [VAR]
+16 EİDS / ilan yetki no alanı                                             [VAR]
+17 Abonelik + demirbaş kaydı                                              [VAR]
+18 Komisyon + kapora akışı                                                [VAR]
+19 Teslim tutanağı + depozito hesabı                                      [VAR]
+20 DASK/poliçe takibi + 30 gün uyarısı                                    [VAR]
+21 Kira artışı (oran + kaynak + onay)                                     [VAR]
+22 Randevu + takvimde işaret                                             [VAR]
+23 Portföy önerisi (bütçe/ilçe/oda + gerekçe)                             [VAR]
+24 Arıza/bakım talebi (fotoğraf, durum, masraf)                           [VAR]
+25 Taşınabilir Windows paketi (Aysan'a gidecek)                           [VAR - TUR:36]
+
+KISMI:
+ - Kapora makbuzu yazdırma + komisyonun finansa otomatik düşmesi
+ - Tutanak fotoğrafı ve imza akışı
+ - Poliçe/kira/sözleşme otomatik hatırlatma (e-posta/SMS yok)
+ - Gider kalemi + mal sahibi ekstresi + yazdırma
+ - Genel denetim kaydı (audit) — yalnız belge onayı/fiyat/teklif izleniyor
+ - Personel performans raporu (sayı var, dönemsel rapor yok)
+ - Fotoğraf/video + filigranlı kopya (kapak fotoğrafı yok)
+
+YOK (sırayla):
+ SIRA 8  Otomatik hatırlatıcı (SMS/e-posta/push)
+ SIRA 9  Gider + mal sahibi ekstresi
+ SIRA 10 Denetim kaydı (audit_log)
+ SIRA 11 Kapak fotoğrafı + video + filigran
+ SIRA 12 Dönemsel raporlar
+ SIRA 13 Mal sahibi paneli
+ SIRA 14 Kiracı paneli
+ SIRA 15 Mobil uygulama (saha)
+ SIRA 16 WhatsApp/e-posta entegrasyonu
+ + Tauri/masaüstü kabuk, banka eşleştirme, OCR/AI, ilan platformları, SaaS abonelik.
+
+====================================================================
+4. BENİM EKLEDİKLERİM (listeye girmesi gerekenler)
+====================================================================
+ E1. Yükümlülük motoru: tarihlerden türetilen iş listesi + teslim/erteleme kaydı (SIRA 8'in çekirdeği).
+ E2. Belge zorunluluk matrisi ekranı: portföy tipine göre "3/7 belge" rozeti ve yayına alma kilidi
+     (bugün kısmen var: bugün ekranında "eksik" listesi çıkıyor, ama mülk dosyasında rozet yok).
+ E3. Türkçe arama/sıralama testi: "Işık/ışık", "İzmir/izmir", "Şişli/şişli" aynı sonucu vermeli.
+ E4. Mükerrer ödeme koruması: aynı havale iki kiracıya yazılmasın (banka eşleştirmede tek yön + geri alma).
+ E5. Personel ayrılış işlemi tek ekran: hesabı kilitle + oturumları düşür + atamaları devret.
+ E6. Veri göçü dilimi: mevcut Excel/defter → içe aktarma + doğrulama raporu (80-150 saatlik iş).
+ E7. Çıkış yolu: portföy kapatma/arşivleme + saklama süresi (silme yok).
+ E8. Her ekranda tek satırlık "ne yaptım" geri bildirimi (sessiz hata yok).
+ E9. Paket için sürüm notu + "Türkçe karakterli klasöre açmayın" uyarısı (Y-93).
+ E10. Test piramidi: domain birim testleri (para/tarih/artış/mahsup) bugün yok denecek kadar az.
+
+====================================================================
+5. YÜZDE KAÇINDAYIZ?
+====================================================================
+- Ofis çekirdeği (mal sahibi → mülk → belge → sözleşme → kira → arıza → randevu → raf):
+  %78. Günlük işin büyük kısmı ekranda çalışıyor; eksik olan otomasyon ve raporlama.
+- Aysan'ın "gerçek işinde kullanma" eşiği: %85 (eksik: otomatik hatırlatma, ekstre, kapak fotoğrafı).
+- Nihai vizyon (4 panel + mobil + ödeme + SaaS + AI): %40.
+- Genel ağırlıklı: %58.
+Gerekçe: 31 izlenen başlığın 25'i VAR, 6'sı KISMI, 12'si YOK; YOK olanların çoğu (paneller, mobil,
+otomasyon, ödeme) işin en uzun kuyruğu. "Bitti" sayılmak için SIRA 8-11 + mal sahibi/kiracı paneli şart.
+
+====================================================================
+6. EKRANDAN DENETİM (preview, kullanıcı gibi tıklayarak)
+====================================================================
+Gezilen ekranlar: Ana sayfa (Aksiyon panosu), Gayrimenkuller, Kiralıklar, mülk dosyası (DEMO Daire 80),
+Mal sahipleri/kiracılar, Personeller, Kiralar, Sözleşmeler, Poliçeler, Belgeler, Yol haritası.
+Hepsi açıldı, veri geldi, konsolda hata yok (yalnız Vite/React DevTools bilgisi).
+
+BULUNAN HATALAR (onarılmadı — sonraki oturum):
+ H-1  Ana sayfanın başlığı "Takvim" görünüyor. Aksiyon panosu açılınca h1 "Takvim" kalıyor;
+      kullanıcı takvimde sanıyor. (Dashboard başlığı yanlış.)
+ H-2  Sol menüde "Aksiyon panosu" zaten açık olan "/" sayfasına gidiyor; tıklayınca hiçbir şey
+      olmuyormuş gibi duruyor (görsel geri bildirim yok).
+ H-3  Mülk dosyasının alt bilgi satırında "Mal sahibi: —" yazıyor; üstte ise "DEMO Serkan Kara".
+      Aynı ekranda iki farklı cevap.
+ H-4  Kiralıklar "51 kayıt" diyor, ana sayfa "49 kiralık" diyor. (İlan vs mülk sayısı ayrımı
+      kullanıcıya açıklanmıyor.)
+ H-5  Arıza bölümünün başlığı "AÇIK TALEP YOK" ama altında bitmiş talep listeleniyor; başlık
+      "açık talep yok" derken geçmişi gösteriyor.
+ H-6  Personeller açıklaması "şifre değiştirme ekranı henüz yok (Y-02)" diyor; üst barda "Şifre"
+      düğmesi var. Metin eski kalmış, yanlış bilgi veriyor.
+ H-7  Ana sayfadaki GÖREVLER ve MESAJLAR kutuları tıklanamıyor (diğer modüller tıklanıyor).
+ H-8  "KİRA TAKİBİ 0 geciken · 0,00 ₺ · beklenen 18.500,00 ₺ / ödenen 0,00 ₺" tek satırda
+      karışık; ilk sayı (0) neyin sayısı olduğu belirsiz.
+ H-9  Geliştirme ortamı: `vite --port 5174` yok sayılıyor, 5173'e düşüyor (o port başka projede).
+      Arayüz ancak `--port 5175` ile açıldı; vite config'te port sabit.
+ H-10 API sağlık yolu iki tane değil: /health var, /api/v1/health 404. Paket /health kullanıyor;
+      istemci ile sunucu aynı sözleşmeyi kullanmıyor.
+ H-11 Türkçe karakterli klasörde paket açılmıyor (çözüldü, ama OKU-BENI uyarısı yok → Y-93).
+ H-12 09 dosyasında "SIRA 7" başlığı YAPILDI diyor, altındaki "Durum: YOK" satırı güncellenmemiş.
+ H-13 Sözleşmeler ekranı açılınca doğrudan "Yeni kira sözleşmesi" formu geliyor; liste için
+      "← Listeye dön" gerekiyor (ilk açılışta kullanıcı formda kalıyor).
+ H-14 Poliçeler ekranında mülk seçimi 91 kayıtlık düz açılır liste (DEMO Arsa 12, 18, 24...);
+      arama yok, 350 kayıtta kullanılamaz.
+ H-15 Belgeler ekranı yükleme odaklı; belge listesi/arama sonucu ilk bakışta görünmüyor.
+
+====================================================================
+7. KOD İNCELEMESİ (temiz kod, fonksiyon/blok)
+====================================================================
+İYİ OLANLAR:
+ - TODO/FIXME/HACK yok. `as any`, `@ts-ignore` yok. SQL sorgularında string birleştirme yok
+   (parametreli sorgu), yani enjeksiyon yüzeyi dar.
+ - Typecheck 0, testler 17 dosya / 64 test, web build 0.
+ - Domain ayrımı var: packages/db (migration + şema), apps/api (Hono uçları), apps/web (React).
+ - Para kuruş tam sayı, biçimlendirme tek yerde; tarih/saat ayrımı korunmuş.
+
+BULGULAR (onarılacak):
+ K-1  apps/web/src/pages/Listings.tsx 914 satır: mülk dosyası + ilan + teklif + kapora + medya +
+      arıza aynı dosyada. Bölünmeli (PropertyDossier, ListingForm, ListingOffers, ListingMoney…).
+ K-2  apps/web/src/api.ts 725 satır: tüm uçlar tek dosyada; alan adına göre bölünmeli.
+ K-3  apps/api/src/routes/documents.ts 716 satır, contracts.ts 622 satır: tek dosyada çok sorumluluk.
+ K-4  11 yerde boş/sessiz catch var (handover, listing money/offers, maintenance, media, useDraft,
+      storage). Kullanıcıya "ne oldu" demeden yutuluyor → hata görünmezliği.
+ K-5  2 yerde eslint-disable (react-refresh, exhaustive-deps). İlki kabul edilebilir; ikincisi
+      (Listings.tsx:147) efekt bağımlılığını saklıyor, ileride bayat veri hatası riski.
+ K-6  Sunucu log'u düz metin (`[UMAY] ...`); kılavuz K16 JSON log + request_id istiyor. Denetim
+      kaydı (audit_log) olmadığı için "kim ne yaptı" sorusu hâlâ cevapsız.
+ K-7  Testler ağırlıklı API entegrasyon; saf domain (para/tarih/artış/mahsup) için birim test yok.
+ K-8  Para/tarih hesabı bazı ekranlarda istemcide tekrar ediyor (ör. "kaç gün kaldı"); tek yerden
+      gelmeli (kılavuz: "bir sayı ekranda hesaplanmaz").
+ K-9  Hata mesajları Türkçe ama teknik ayrıntı içeren yerler var (ör. "Postgres init script failed");
+      son kullanıcıya kayıt numarası + sade cümle verilmeli.
+ K-10 Portföy listesi 91 kartı tek seferde basıyor; 500 kayıtta sanal liste şart (K18).
+
+====================================================================
+8. SONRAKİ OTURUMUN ONARIM SIRASI (öncelik)
+====================================================================
+ 1. H-1/H-2/H-3/H-4/H-6 (yanlış bilgi veren ekran metinleri ve sayaçlar) — küçük, güven kazandırır.
+ 2. H-14 (mülk seçici arama) + H-13 (sözleşme listesi varsayılan) — kullanılabilirlik.
+ 3. K-4 (sessiz catch) + K-6 audit_log — güven ve iz sürülebilirlik.
+ 4. SIRA 8 otomasyon (yükümlülük motoru + e-posta) — Aysan'ın her gün kullanma eşiği.
+ 5. SIRA 9 ekstre + gider — para tarafının kapanması.
+ 6. SIRA 11 kapak fotoğrafı + filigran — vitrin ve pazarlama.
+ 7. K-1/K-2/K-3 dosya bölme — hız düşmeden yapılmalı.
+ 8. Paket: OKU-BENI uyarısı + sürüm notu (Y-93).
+
+====================================================================
+9. KAYIT KURALI
+====================================================================
+- Bu dosya silinmez; maddeler yerinde kalır.
+- Bir madde kapanınca satırın yanına "→ YAPILDI (tarih, TUR)" eklenir.
+- Yeni istek geldikçe numara verilerek sonuna eklenir.

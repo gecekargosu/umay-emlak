@@ -317,3 +317,13 @@ KARAR:K-82 Paket ASCII klasörde çalıştırılır; Türkçe karakterli yolda v
 YARIM:OKU-BENI ve zip içi uyarı metni "Türkçe karakterli klasöre açmayın" satırıyla güncellenecek (Y-93) · kod imzalama ve otomatik güncelleme yok (Y-90)
 SIRADAKI:Denetim kaydı (SIRA 10), sonra kapak fotoğrafı + filigran (SIRA 11).
 --------------------------------------------------------------------------------
+
+[2026-11-04 22:05] TUR:37 | MODUL:İstek listesi + tam denetim | IS:Kök metin (5410 satır) baştan sona okundu; istekler satır satır 54 maddeye, üç ajanın fikirleri ayrı bölüme, birleşik VAR/KISMI/YOK listesine ve hata defterine dönüştürüldü: 10-DENETIM-ISTEK-LISTESI-2026-11-04.txt. Program preview'da açıldı (5175), 11 ekran kullanıcı gibi tıklanarak gezildi, mülk dosyası ve arıza paneli dahil.
+HATA ANALIZI: Ekran denetiminde 15 bulgu (H-1…H-15): ana sayfa başlığı "Takvim" kalıyor; mülk dosyasında mal sahibi üstte dolu alt satırda "—"; Kiralıklar 51 / ana sayfa 49 sayaç farkı; personel metni "şifre ekranı yok" diyor ama düğme var; arıza başlığı "açık talep yok" iken geçmiş listeleniyor; vite --port yok sayılıyor; /api/v1/health 404. Kod incelemesinde 10 bulgu (K-1…K-10): Listings.tsx 914 satır, api.ts 725, documents.ts 716; 11 sessiz catch; 2 eslint-disable; audit_log yok; domain birim testi yok. Hiçbiri bu turda onarılmadı (kullanıcı istediği: listele, sonraki oturumda onar).
+DOGRULAMA: 11 ekran açıldı, konsolda hata yok; typecheck 0; paket /health 200; commit 1eb7f63 uzakla eşit.
+DOSYA:10-DENETIM-ISTEK-LISTESI-2026-11-04.txt (yeni), 03/06
+TEST:ekran gezintisi (preview 5175) · typecheck 0 · paket testi (önceki adım)
+KARAR:K-83 Denetim bulguları önce listelenir, onarım sonraki oturumda öncelik sırasıyla yapılır; sessiz catch ve audit_log ilk sırada
+YARIM:H-1…H-15 ve K-1…K-10 açık · OKU-BENI uyarısı (Y-93) · mobil/paneller/otomasyon yok
+SIRADAKİ:Yanlış ekran metinleri + sayaçlar (H-1…H-6), sonra audit_log ve sessiz catch temizliği.
+--------------------------------------------------------------------------------

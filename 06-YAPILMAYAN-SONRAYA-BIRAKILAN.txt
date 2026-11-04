@@ -387,3 +387,7 @@ Y-92 | Paket ASCII klasör kuralı — YAPILDI (2026-11-04, TUR:36): paket
 Y-93 | OKU-BENI ve zip içi uyarı: "Klasör yolunda Türkçe karakter (ö, ü, ş, ı, ğ,
        ç) olmasın; C:\UMAY-EMLAK gibi bir yere açın." Paket yeniden üretilirken
        eklenecek. | Dilim 7 | S | AÇIK
+
+Y-94 | Denetim bulguları H-1…H-15 ve kod bulguları K-1…K-10 — ayrıntı:
+       10-DENETIM-ISTEK-LISTESI-2026-11-04.txt. Öncelik: yanlış ekran metinleri/sayaçlar,
+       sonra audit_log + sessiz catch. | Dilim 7 | M | AÇIK
