@@ -38,21 +38,31 @@ import { rentRevisionRoutes } from "./routes/rent-revisions.js";
 import { appointmentRoutes } from "./routes/appointments.js";
 import { suggestionRoutes } from "./routes/suggestions.js";
 import { maintenanceRoutes } from "./routes/maintenance.js";
+import { auditMiddleware, logJson, makeRef, type AuditEnv } from "./audit.js";
 
-export const app = new Hono();
+export const app = new Hono<AuditEnv>();
 
 app.onError((error, c) => {
   if (error instanceof HttpError) {
     return c.json({ error: error.message }, error.status);
   }
   // K-9: kullanıcıya sade cümle + kayıt numarası; teknik ayrıntı yalnız log'a.
-  const ref = `S-${Date.now().toString(36).toUpperCase().slice(-6)}`;
-  console.error(`[UMAY] ${ref} ${c.req.method} ${c.req.path}`, error);
+  const ref = c.get("ref") ?? makeRef();
+  logJson({
+    level: "error",
+    ref,
+    method: c.req.method,
+    path: c.req.path,
+    error: error instanceof Error ? (error.stack ?? error.message) : String(error),
+  });
   return c.json(
     { error: `Beklenmeyen bir hata oldu. Bu numarayla bildirin: ${ref}`, ref },
     500,
   );
 });
+
+// Her isteğe numara + JSON log; yazma istekleri ayrıca audit_log'a düşer (K-6).
+app.use("*", auditMiddleware);
 
 app.get("/health", async (c) => {
   const { rows } = await getPool().query<{ count: number }>(
@@ -87,6 +97,29 @@ app.route("/api/v1/rent-revisions", rentRevisionRoutes);
 app.route("/api/v1/appointments", appointmentRoutes);
 app.route("/api/v1/people", suggestionRoutes);
 app.route("/api/v1/maintenance", maintenanceRoutes);
+
+/** Denetim kaydı — "kim ne yaptı" (K-6). Yalnız okuma; kayıt silinmez. */
+app.get("/api/v1/audit", async (c) => {
+  const session = await resolveSession(c);
+  requirePasswordChanged(session);
+  const asked = Number(c.req.query("limit") ?? 50);
+  const limit = Number.isFinite(asked) ? Math.min(Math.max(asked, 1), 200) : 50;
+
+  const rows = await withTenant(session.tenantId, async (tx) => {
+    const result = await tx.execute(sql`
+      select a.id, a.request_ref as "ref", a.method, a.path, a.action,
+             a.entity_type as "entityType", a.entity_id as "entityId", a.status,
+             u.full_name as "userName", a.created_at as "createdAt"
+        from audit_log a
+        left join app_user u on u.id = a.user_id
+       order by a.created_at desc
+       limit ${limit}
+    `);
+    return (result as unknown as { rows: unknown[] }).rows;
+  });
+
+  return c.json({ items: rows });
+});
 
 app.get("/api/v1/me", async (c) => {
   const session = await resolveSession(c);

@@ -1,6 +1,6 @@
 # PROJECT-STATUS
 
-Son güncelleme: 2026-11-04 23:45 · Aktif tur: TUR:45 bitti — M3 (K-4 + K-9) kapandı
+Son güncelleme: 2026-11-04 23:58 · Aktif tur: TUR:46 bitti — M4 (K-6 audit_log) kapandı
 
 ## Şu an çalışan (doğrulandı)
 - Giriş/oturum, boşta kilit, şifre değiştirme; ofis/personel/onay yetkisi.
@@ -27,7 +27,7 @@ M2 · **H-7 + H-8** → YAPILDI (2026-11-04, TUR:44) — ana sayfadaki Görevler
      "geciken tahakkuk / beklenen / ödenen" olarak ayrışsın. Bitiş: aynı ölçüt.
 M3 · **K-4 + K-9** → YAPILDI (2026-11-04, TUR:45) — 11 sessiz catch kullanıcıya sade Türkçe mesaj + kayıt numarası versin;
      teknik ayrıntı log'a. Bitiş: hata üreten akış ekranda görülür, test yeşil.
-M4 · **K-6 audit_log** — "kim ne yaptı" kaydı (tablo + yazma uçları + JSON log + request_id).
+M4 · **K-6 audit_log** → YAPILDI (2026-11-04, TUR:46) — "kim ne yaptı" kaydı (tablo + yazma uçları + JSON log + request_id).
      Bitiş: bir işlem yapılıp kaydı DB'den okunur.
 M5 · **H-15 + K-10** — belgeler ekranında liste/arama önce gelsin; portföy listesi sanal liste.
      Bitiş: 91 kartta kaydırma akıcı, belge listesi ilk bakışta görünür.
@@ -39,7 +39,7 @@ M7 · **Y-93 + H-11** — paket OKU-BENI uyarısı ve sürüm notu; paket ASCII 
 Kural: aynı anda tek mission; kapsam büyütülmez, bitmeyen mission yeni mission açmaz.
 
 ## Sıradaki adım (tek cümle)
-M4: "kim ne yaptı" kaydı (audit_log + JSON log + request_id) eklensin (K-6).
+M5: belgeler ekranında liste/arama öne gelsin (H-15), portföy listesi 500 kayıtta da akıcı olsun (K-10).
 
 ## Sorular (kullanıcıdan bekleyen)
 - Aysan kirayı mal sahibine mi yatırıyor, ofis hesabından mı geçiyor? (para akışı modeli)

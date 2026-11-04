@@ -172,3 +172,11 @@ H. TUR:45 GÜNCELLEMELERİ (2026-11-04)
 [VAR] Sessiz catch kalmadı: belge türü/kişi/ilçe/aktarım/randevu listeleri düşerse ekranda sebep
       yazıyor; oturum, sayaç, demirbaş ve taslak hataları kayıt numarasıyla log'a düşüyor (K-4).
 [KISMI] JSON log + request_id: 500 yanıtı numara taşıyor ama log hâlâ düz metin (M4'ün parçası).
+
+====================================================================
+I. TUR:46 GÜNCELLEMELERİ (2026-11-04)
+====================================================================
+[VAR] Denetim kaydı (audit_log): her yazma isteği kim/ofis/uç/kayıt bilgisiyle saklanıyor;
+      GET /api/v1/audit ile son kayıtlar okunuyor (K-6, SIRA 10'un çekirdeği).
+[VAR] İstek numarası + JSON log: yanıtlarda x-request-id, sunucu çıktısı tek satır JSON.
+[KISMI] Denetim kaydı için ekran yok (API'den okunuyor); personel devri geçmişi ayrı iş.

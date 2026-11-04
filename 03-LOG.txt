@@ -393,3 +393,11 @@ HATA ANALIZI:typecheck ilk turda 2 hata verdi (Payouts.tsx'te kalan ApiError kul
 TEST:typecheck 0 · pnpm test 17 dosya / 64 test 0
 SIRADAKİ:M4 — audit_log + JSON log + request_id (K-6).
 --------------------------------------------------------------------------------
+
+[2026-11-04 23:58] TUR:46 | MODUL:M4 — K-6 denetim kaydı + JSON log + request_id | IS:(1) Migration 0016_audit_log.sql: audit_log tablosu (tenant_id, user_id, request_ref, method, path, action, entity_type, entity_id, status, summary, created_at) + tenant indeksi + RLS politikası + umay_app'e select/insert yetkisi. (2) apps/api/src/audit.ts: auditMiddleware her isteğe R-… numarası verip x-request-id başlığına yazıyor ve tek satır JSON log düşüyor; yazma istekleri (POST/PATCH/PUT/DELETE) 400 altı dönerse audit_log'a satır ekliyor (kim, hangi ofis, hangi uç, hangi kayıt). Denetim yazımı hata verirse isteği bozmuyor. (3) app.onError aynı numarayı kullanıyor; 500 yanıtı "Beklenmeyen bir hata oldu. Bu numarayla bildirin: R-…" diyor. (4) GET /api/v1/audit?limit=N — son kayıtlar, kullanıcı adıyla.
+DOSYA:packages/db/migrations/0016_audit_log.sql, apps/api/src/audit.ts (yeni, 91 satır), apps/api/src/app.ts
+DOGRULAMA (gerçek istek): giriş 200 → PATCH /api/v1/maintenance/<id> 200, yanıt başlığında x-request-id R-MW2JAPY2V0U; GET /api/v1/audit?limit=3 aynı numarayla satırı döndürdü: PATCH, "güncelleme maintenance", entityId eşleşti, userName "Aysan Kılıç". /health migrations 16.
+HATA ANALIZI:(a) app.use("*", auditMiddleware) TS2769 → createMiddleware kullanıldı. (b) c.get("ref") Hono Variables tanımsız olduğu için TS2769 verdi → AuditEnv tipi (Hono<AuditEnv>) tanımlandı, typecheck 0.
+TEST:typecheck 0 · pnpm test 17 dosya / 64 test 0
+SIRADAKİ:M5 — H-15 belge listesi + K-10 sanal liste.
+--------------------------------------------------------------------------------

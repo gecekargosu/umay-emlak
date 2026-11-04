@@ -415,3 +415,7 @@ Y-97 | H-7 + H-8 — YAPILDI (2026-11-04, TUR:44): Görevler sayfası eklendi, M
 Y-98 | K-4 + K-9 — YAPILDI (2026-11-04, TUR:45): sessiz catch'ler kapatıldı, hata mesajları
        sade Türkçe + kayıt numarası oldu, ham teknik metin ekrana çıkmıyor.
        AÇIK KALAN: JSON log + request_id (K-6, M4). | Dilim 8 | S | YAPILDI
+
+Y-99 | K-6 audit_log — YAPILDI (2026-11-04, TUR:46): audit_log tablosu + middleware + GET /api/v1/audit
+       + x-request-id + JSON log. AÇIK: denetim kaydını gösteren ekran ve personel devri geçmişi.
+       | Dilim 8 | M | KISMI
