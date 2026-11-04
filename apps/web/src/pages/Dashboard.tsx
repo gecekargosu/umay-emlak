@@ -127,7 +127,7 @@ export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
       key: "properties",
       label: "Gayrimenkuller",
       value: String(modules.properties.total),
-      sub: `${modules.properties.empty} boş · ${modules.properties.occupied} dolu · ${modules.properties.sale} satılık · ${modules.properties.rent} kiralık`,
+      sub: `${modules.properties.empty} boş · ${modules.properties.occupied} dolu · ${modules.properties.sale} satılık mülk · ${modules.properties.rent} kiralık mülk`,
       page: "portfoy",
     },
     {
@@ -201,8 +201,12 @@ export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
 
   return (
     <div>
-      {/* TUR:26 — kullanıcı isteği: "bugün yazan başlığı ve bilgi penceresini kaldır,
-          yerine takvim ekle". Ana sayfa artık takvimle açılır. */}
+      {/* H-1: sayfanın adı görünmüyordu, en üstteki "Takvim" başlığı sayfa başlığı
+          sanılıyordu. Kullanıcı isteğiyle "Bugün" başlığı kaldırılmıştı; sayfa adı
+          menüdeki adıyla (Aksiyon panosu) veriliyor. */}
+      <div className="page-head">
+        <h2>Aksiyon panosu</h2>
+      </div>
       <Calendar compact onGo={onGo} />
 
       <h3>Modüller</h3>

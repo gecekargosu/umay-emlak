@@ -327,3 +327,13 @@ KARAR:K-83 Denetim bulguları önce listelenir, onarım sonraki oturumda önceli
 YARIM:H-1…H-15 ve K-1…K-10 açık · OKU-BENI uyarısı (Y-93) · mobil/paneller/otomasyon yok
 SIRADAKİ:Yanlış ekran metinleri + sayaçlar (H-1…H-6), sonra audit_log ve sessiz catch temizliği.
 --------------------------------------------------------------------------------
+
+[2026-11-04 22:35] TUR:38 | MODUL:Denetim H-1…H-6 onarımı | IS:Ana sayfa ve mülk dosyasındaki yanlış metin/sayaç bulguları düzeltildi. H-1/H-2: ana sayfaya "Aksiyon panosu" sayfa başlığı eklendi (menüdeki ad; "Bugün" başlığı kullanıcı isteğiyle kaldırılmıştı) ve menüde aktif sayfa vurgusu görünür oldu. H-3: mülk dosyasında mal sahibi "—" görünüyordu; malik property_owners'ta yoksa mülkün owner_person_id alanındaki kişi gösteriliyor (mülk kartıyla aynı kaynak). H-4: sayaç dili ayrıştırıldı — portföy ekranı "51 ilan", ana sayfa "satılık mülk / kiralık mülk" diyor. H-5: arıza başlığı açık talep durumunun yanında toplam kayıt sayısını da yazıyor ("açık talep yok · 1 kayıt"). H-6: personel bilgi metni güncellendi; şifre değiştirme ekranının üst bardaki "Şifre" düğmesinde olduğu yazıyor (eski "ekran yok" ifadesi kaldırıldı).
+HATA ANALIZI: (a) TS2769: fallback sorguda eq() nullable ownerPersonId ile çağrılıyordu → kimlik değişkene alınıp varlık kontrolü eklendi. (b) İlk denetimde h4 başlığı "ARIZA" (CSS büyük harf) olduğu için filtre "Arıza" ile eşleşmedi; kontrol büyük/küçük harf duyarsız yapıldı.
+DOGRULAMA: typecheck 0 · pnpm test 17 dosya / 64 test 0 · preview (5175): ana sayfa h2 "Aksiyon panosu", aktif menü "Aksiyon panosu"; Kiralıklar "51 ilan"; mülk dosyası "Mal sahibi: DEMO Serkan Kara"; personel metni güncel; arıza başlığı kayıt sayısını gösteriyor.
+DOSYA:apps/web/src/pages/Dashboard.tsx, apps/web/src/pages/Listings.tsx, apps/web/src/components/MaintenancePanel.tsx, apps/web/src/pages/Team.tsx, apps/api/src/routes/listings.ts, 03/06
+TEST:typecheck 0 · test 17/64 · ekran doğrulaması (6 davranış)
+KARAR:K-84 Mülk dosyasındaki mal sahibi, malik tablosu boşsa mülkün owner_person_id alanından okunur; ekranda iki farklı cevap olmaz
+YARIM:K-1…K-10 kod bulguları açık (dosya bölme, sessiz catch, audit_log) · H-7…H-15 açık
+SIRADAKİ:H-7…H-15, sonra audit_log + sessiz catch temizliği.
+--------------------------------------------------------------------------------

@@ -117,8 +117,9 @@ export function Team({
         Personel <strong>silinmez</strong>: işten ayrılanın üyeliği "ayrıldı" olur, geçmişi ve
         kayıtları durur (K-29). Onay yetkisi yalnız ofis sahibi ve ortağındadır; personel tahsilat
         iptali, fiyat değişikliği ve gider gibi işlemleri onaylayamaz. Yeni personel geçici şifreyle
-        açılır ve <strong>ilk girişte şifresini değiştirmek zorundadır</strong> — şifre değiştirme
-        ekranı henüz yok (Y-02), o yüzden geçici şifreli hesap şu an veri uçlarında kilitli kalır.
+        açılır ve <strong>ilk girişte şifresini değiştirmek zorundadır</strong>; şifre değiştirme
+        ekranı üst bardaki <strong>Şifre</strong> düğmesindedir. Şifresini değiştirmeyen geçici
+        şifreli hesap veri uçlarında kilitli kalır.
       </InfoNote>
 
       {error && <div className="error">{error}</div>}

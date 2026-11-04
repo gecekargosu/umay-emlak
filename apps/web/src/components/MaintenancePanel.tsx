@@ -185,6 +185,7 @@ export function MaintenancePanel({ propertyId }: { propertyId: string }) {
         {items !== null && (
           <span className="muted small">
             {openCount > 0 ? `${openCount} açık talep` : "açık talep yok"}
+            {items.length > 0 ? ` · ${items.length} kayıt` : ""}
           </span>
         )}
       </h4>

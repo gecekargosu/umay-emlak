@@ -318,7 +318,7 @@ export function Listings({
       <div className="page-head">
         <h2>{fixedKind === "sale" ? "Satılıklar" : fixedKind === "rent" ? "Kiralıklar" : "Portföy"}</h2>
         <span className="spacer" />
-        <span className="muted small">{rows.length} kayıt</span>
+        <span className="muted small">{rows.length} ilan</span>
       </div>
       <InfoNote title="İlan, mülkün ticari teklifidir.">
         Aynı daire hem satılık hem kiralık olabilir; bu yüzden ilan ayrı kayıttır. Taslak ilan,

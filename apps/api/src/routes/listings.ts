@@ -273,7 +273,7 @@ listingRoutes.get("/:id", async (c) => {
       .limit(1);
     if (!row) return null;
 
-    const owners = await tx
+    const ownerRows = await tx
       .select({
         personId: schema.propertyOwners.personId,
         shareBp: schema.propertyOwners.shareBp,
@@ -283,6 +283,25 @@ listingRoutes.get("/:id", async (c) => {
       .from(schema.propertyOwners)
       .innerJoin(schema.persons, eq(schema.persons.id, schema.propertyOwners.personId))
       .where(eq(schema.propertyOwners.propertyId, row.property.id));
+
+    // H-3: demo ve eski kayıtlarda malik, property_owners tablosunda değil mülkün
+    // owner_person_id alanında duruyor. Bu durumda mülk dosyasında mal sahibi "—"
+    // görünüyordu; mülk kartındaki kaynakla aynı kişiyi gösteriyoruz.
+    const fallbackOwnerId = row.property.ownerPersonId;
+    const owners =
+      ownerRows.length > 0
+        ? ownerRows
+        : fallbackOwnerId
+          ? await tx
+              .select({
+                personId: schema.persons.id,
+                shareBp: sql<number | null>`null::int`,
+                fullName: schema.persons.fullName,
+                phone: schema.persons.phone,
+              })
+              .from(schema.persons)
+              .where(eq(schema.persons.id, fallbackOwnerId))
+          : [];
 
     const docs = await tx
       .select({
