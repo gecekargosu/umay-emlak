@@ -337,3 +337,11 @@ KARAR:K-84 Mülk dosyasındaki mal sahibi, malik tablosu boşsa mülkün owner_p
 YARIM:K-1…K-10 kod bulguları açık (dosya bölme, sessiz catch, audit_log) · H-7…H-15 açık
 SIRADAKİ:H-7…H-15, sonra audit_log + sessiz catch temizliği.
 --------------------------------------------------------------------------------
+
+[2026-11-04 22:50] TUR:39 | MODUL:Mission yeniden doğrulama (H-1…H-6) | IS:Mission panelden yeniden başlatıldı; 8c3ff2d'deki düzeltmeler yeniden kanıtlandı, kod değişikliği gerekmedi.
+DOGRULAMA (preview, 5175, tek tek tıklama):
+H-1 ana sayfa h2 = "Aksiyon panosu" · H-2 aktif menü = "Aksiyon panosu" · H-3 mülk dosyası (DEMO Daire 80 · Konak) = "Mal sahibi: DEMO Serkan Kara" · H-4 ana sayfa = "39 satılık mülk · 49 kiralık mülk", Kiralıklar = "51 ilan" / "51 kayıt" · H-5 arıza başlığı = "ARIZA / BAKIM AÇIK TALEP YOK · 1 KAYIT" · H-6 personel metni = "şifre değiştirme ekranı üst bardaki Şifre düğmesindedir".
+TEST:typecheck 0 · pnpm test 17 dosya / 64 test 0 · API /health ok (migrations 15) · web 200
+DOSYA:kod değişikliği yok (yalnız bu kayıt)
+SIRADAKİ:H-7…H-15 kullanılabilirlik, sonra K-1…K-10 kod bulguları.
+--------------------------------------------------------------------------------
