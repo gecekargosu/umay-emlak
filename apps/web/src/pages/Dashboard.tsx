@@ -149,7 +149,7 @@ export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
       key: "rent",
       label: "Kira takibi",
       value: String(modules.rent.overdue),
-      sub: `geciken · ${modules.rent.overdueFormatted} · beklenen ${modules.rent.charged} / ödenen ${modules.rent.collected}`,
+      sub: `${modules.rent.overdue} geciken tahakkuk · açık bakiye ${modules.rent.overdueFormatted} · beklenen ${modules.rent.charged} / ödenen ${modules.rent.collected}`,
       page: "kiralar",
       tone: modules.rent.overdue > 0 ? "danger" : undefined,
     },
@@ -181,7 +181,7 @@ export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
           ? "açık arıza talebi yok — mülk dosyasından açılır"
           : `${modules.tasks.open} açık arıza talebi${modules.tasks.urgent > 0 ? ` · ${modules.tasks.urgent} acil` : ""}`,
       tone: modules.tasks.urgent > 0 ? "warn" : undefined,
-      page: null,
+      page: "gorevler",
     },
     {
       key: "finance",
@@ -194,8 +194,8 @@ export function Dashboard({ onGo }: { onGo?: (page: string) => void }) {
       key: "messages",
       label: "Mesajlar",
       value: "—",
-      sub: "modül planlı (Y-19): e-posta/SMS gönderimi henüz yok",
-      page: null,
+      sub: "modül planlı (Y-19): e-posta/SMS gönderimi henüz yok — yol haritasında",
+      page: "yol-haritasi",
     },
   ];
 

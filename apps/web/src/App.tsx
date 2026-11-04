@@ -17,6 +17,7 @@ import { Appointments } from "./pages/Appointments";
 import { CalendarPage } from "./pages/Calendar";
 import { Rents } from "./pages/Rents";
 import { Team } from "./pages/Team";
+import { Tasks } from "./pages/Tasks";
 
 type Page =
   | "bugun"
@@ -34,7 +35,8 @@ type Page =
   | "takvim"
   | "randevular"
   | "yol-haritasi"
-  | "ekip";
+  | "ekip"
+  | "gorevler";
 
 /** Kaynak dosya 6.2: düz 15 maddelik menü değil, 6 grup. */
 const NAV: Array<{ group: string; items: Array<{ page: Page; label: string }> }> = [
@@ -74,6 +76,7 @@ const NAV: Array<{ group: string; items: Array<{ page: Page; label: string }> }>
     items: [
       { page: "sozlesmeler", label: "Sözleşmeler" },
       { page: "policeler", label: "Poliçeler / DASK" },
+      { page: "gorevler", label: "Görevler" },
     ],
   },
   {
@@ -103,6 +106,7 @@ const TITLES: Record<Page, string> = {
   aktar: "İçe Aktar",
   "yol-haritasi": "Yol Haritası",
   ekip: "Personeller",
+  gorevler: "Görevler",
 };
 
 function initials(name: string): string {
@@ -348,6 +352,7 @@ export function App() {
           {page === "takvim" && <CalendarPage onGo={(next) => go(next as Page)} />}
           {page === "randevular" && <Appointments />}
           {page === "yol-haritasi" && <Roadmap />}
+          {page === "gorevler" && <Tasks onGo={(next) => go(next as Page)} />}
           {page === "ekip" && (
             <Team
               canApprove={session.canApprove}

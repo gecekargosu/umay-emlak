@@ -377,3 +377,11 @@ CIKTI:C:\Users\isitm\Desktop\Aysana-gonderilecek\UmayEmlak-Beta-2026-11-04-v2.zi
 TEST:paket derlemesi 0 · zip açılıp giriş sayısı doğrulandı · typecheck 0 · pnpm test 17/64 (kod değişmedi)
 SIRADAKİ:M2 — H-7 Görevler/Mesajlar kutuları + H-8 kira takibi satırı.
 --------------------------------------------------------------------------------
+
+[2026-11-04 23:25] TUR:44 | MODUL:M2 — H-7 + H-8 | IS:Ana sayfadaki "Görevler" ve "Mesajlar" kutuları ölüydü (div, tıklanamıyordu). Görevler için mevcut /maintenance verisini okuyan yeni bir Görevler sayfası eklendi (menüde Operasyon altında, filtre çipleri: Açık/İşlemde/Bitti/Tümü, mülk·talep·tür/öncelik·bildiren·açılış·gün·masraf·durum kolonları; düzenleme mülk dosyasında kalır). Mesajlar kutusu yol haritasına bağlandı (modül gerçekten planlı, Y-19) ve metni "yol haritasında" diye düzeltildi. Kira takibi kutusunun alt satırı etiketlendi: "0 geciken tahakkuk · açık bakiye 0,00 ₺ · beklenen 18.500,00 ₺ / ödenen 0,00 ₺" — çıplak "0" artık neyin sayısı olduğunu söylüyor.
+DOSYA:apps/web/src/pages/Tasks.tsx (yeni, 144 satır), apps/web/src/App.tsx (Page "gorevler", NAV Operasyon, TITLES, render), apps/web/src/pages/Dashboard.tsx (kira alt satırı, tasks→gorevler, messages→yol-haritasi)
+DOGRULAMA (preview 5175): Görevler kutusu BUTTON; tıklanınca başlık "Görevler", aktif menü "Görevler", "0 kayıt" (açık talep yok) + bilgi notu; "Tümü" çipinde kayıtlar listelenir. Mesajlar kutusu BUTTON; tıklanınca "Yol haritası" açıldı, aktif menü "Yol haritası". Kira takibi alt satırı etiketli okunuyor.
+HATA ANALIZI:pnpm test ilk koşuda 3 test kırıldı (403 beklenirken 201/200). Sebep kod değil, test veritabanı kayması: elif.demir kullanıcısının membership.can_approve alanı true kalmıştı (önceki oturumdan). Seed durumuna çekildi (role=agent, can_approve=false), testler 17/64 yeşile döndü. Testlerde gevşetme yapılmadı.
+TEST:typecheck 0 · pnpm test 17 dosya / 64 test 0
+SIRADAKİ:M3 — K-4 sessiz catch + K-9 hata dili.
+--------------------------------------------------------------------------------
