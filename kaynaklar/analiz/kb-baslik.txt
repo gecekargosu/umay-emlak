@@ -1,0 +1,1005 @@
+Gemini =
+Chatgpt =
+1. Önce projenin temel yapısını doğru tanımlayalım
+2. Mal sahipleri ve gayrimenkuller: En önemli mimari karar
+AYSAN EMLAK
+Merkezi işletme
+MAL SAHİPLERİ
+Alfabetik, aramalı ve filtrelenebilir liste
+Cengiz Kılıç
+15 gayrimenkul
+Mimo
+5 gayrimenkul
+CENGİZ KILIÇ – PORTFÖYÜ
+Kiralıklar
+Satılıklar
+GAYRİMENKUL DOSYASI
+3. Raf tasarımı: Bence vazgeçmeyelim ama doğru yerde kullanalım
+1. Raf görünümü
+2. Liste görünümü
+3. İş akışı görünümü
+4. Kiracı modülü: Çok doğru düşünmüşsün
+5. Telefon hafızası mı, bulut mu?
+UMAY EMLAK MERKEZİ
+Veritabanı + güvenli dosya depolama
+Masaüstü
+Yönetim, raporlama, muhasebe
+Mobil
+Fotoğraf, belge, saha işlemleri
+Çevrimdışı çalışma
+6. Ödeme sistemi: En dikkatli olmamız gereken bölüm
+Ödeme kalemi	Tutar
+Kira bedeli	30.000 TL
+Hizmet bedeli	3.000 TL
+Kart/ödeme kuruluşu ücreti	Varsa ayrıca
+Toplam	33.000 TL
+7. Personel yönetimi: Sadece gayrimenkul atamak yetmez
+8. Ana sayfa nasıl olmalı?
+Modül	Gösterilecek bilgiler
+Mal sahipleri	Toplam malik ve portföy sayısı
+Gayrimenkuller	Toplam, boş, dolu, satılık, kiralık
+Kiracılar	Aktif kiracılar, çıkış yapacaklar
+Personeller	Çalışanlar ve portföy dağılımı
+Kira takibi	Beklenen, ödenen, geciken kiralar
+Sözleşmeler	Yaklaşan bitiş ve yenilemeler
+DASK	Süresi yaklaşan veya biten poliçeler
+Görevler	Bekleyen ve geciken işler
+Finans	Tahsilat, gider, komisyon ve aktarım
+Mesajlar	Mal sahibi ve kiracılardan gelenler
+AKSİYON MERKEZİ
+Bugün ilgilenilmesi gerekenler
+8 işlem
+3 geciken kira
+Beyoğlu, Şişli ve Kadıköy
+2 kira günü yaklaşıyor
+Önümüzdeki 4 gün
+2 sözleşme yenilenecek
+Önümüzdeki 30 gün
+1 DASK süresi dolmuş
+İlgili gayrimenkul kontrol edilmeli
+9. Dosyanda olmayan ama mutlaka eklememiz gereken özellikler
+A. Müşteri ve potansiyel alıcı CRM sistemi
+B. Randevu ve yer gösterme modülü
+C. Gayrimenkul değerleme ve fiyat geçmişi
+D. Gider ve mal sahibi hesap ekstresi
+E. İşlem ve değişiklik geçmişi
+F. Toplu bildirimler
+G. WhatsApp ve e-posta entegrasyonu
+10. Gemini'nin önerilerinde düzeltilmesi gereken üç nokta
+Konu	Benim değerlendirmem
+11. Dört panelin yetki sınırları
+Panel	Temel işlev
+Admin / Ortak	Bütün ofis, finans, personel, portföy, ayarlar ve raporlar
+Personel	Yetkili olduğu portföyler, müşteriler, görevler ve işlemler
+Mal sahibi	Kendi gayrimenkulleri, belgeleri, kira ve ödeme raporları
+Kiracı	Kendi sözleşmesi, ödeme, dekont, teslim bilgileri ve talepleri
+12. Benim en önemli mimari önerim: Projeyi modüllere ayıralım
+UMAY EMLAK geliştirme haritası
+1. Aşama 1 – Temel işletme sistemi
+2. Aşama 2 – Gayrimenkul ve raf sistemi
+3. Aşama 3 – Kiracı ve sözleşmeler
+4. Aşama 4 – Kira ve finans yönetimi
+5. Aşama 5 – Takvim ve otomasyon
+6. Aşama 6 – CRM ve personel operasyonları
+7. Aşama 7 – Mobil ve masaüstü deneyimi
+8. Aşama 8 – Ödeme ve kullanıcı portalları
+9. Aşama 9 – Akıllı UMAY özellikleri
+13. Son olarak: Bence henüz netleştirmemiz gereken önemli konular var
+Benim nihai değerlendirmem
+1. Aysan Emlak'ın asıl yönetim merkezi masaüstü olmalı
+2. Mobil uygulama ise saha operasyonlarının merkezi olmalı
+3. Ama en önemli karar: İki ayrı sistem geliştirmemeliyiz
+Ortak backend · Veritabanı · Dosya depolama · Yetkilendirme
+İlk geliştirilecek
+Yönetim, raporlama, portföy, finans ve personel
+İkinci geliştirilecek
+Saha, kamera, belge, görev ve bildirimler
+Tek veri kaynağı
+4. Ben olsam hangi sırayla geliştirirdim?
+Sıra	Geliştirme	Amaç
+1	Ortak backend ve veritabanı	Sağlam temel
+2	Masaüstü yönetim paneli	Aysan'ın ofisini yönetmek
+3	Mobil personel uygulaması	Saha işlemleri
+4	Mal sahibi paneli	Portföy ve gelir takibi
+5	Kiracı paneli	Sözleşme ve ödeme
+6	Sanal POS	Online tahsilat
+5. Teknoloji tercihim
+Son kararım
+UMAY EMLAK
+Masaüstü Yönetim Uygulaması – Proje Başlangıç ve Geliştirme Master Promptu
+1. PROJE TANIMI VE GÖREVİN
+Proje adı: UMAY EMLAK
+2. MEVCUT UMAY PDF READER PROJESİYLE İLİŞKİ
+UMAY-EMLAK/
+3. GERÇEK İŞLETME SENARYOSU: AYSAN EMLAK
+4. UYGULAMA TÜRÜ VE TEKNOLOJİ MİMARİSİ
+Frontend
+Backend
+Veritabanı
+Dosya depolama
+Altyapı
+5. TASARIM KİMLİĞİ VE UI/UX
+Renk ve atmosfer
+Masaüstü yerleşimi
+Tasarım ilkeleri
+6. ANA NAVİGASYON VE MODÜLLER
+1. Ana Sayfa
+2. Mal Sahipleri
+3. Gayrimenkuller
+4. Kiracılar
+5. Personeller
+6. Finans ve Ödemeler
+7. Sözleşmeler
+8. Takvim ve Hatırlatmalar
+9. Müşteriler / CRM
+10. Görevler
+11. Bakım ve Arıza
+12. Belgeler ve Arşiv
+13. Raporlar
+14. Mesajlar
+15. Ayarlar
+7. ANA SAYFA – YÖNETİM KOMUTA MERKEZİ
+Özet göstergeler
+Aksiyon merkezi
+Grafikler ve raporlar
+8. MAL SAHİPLERİ MODÜLÜ
+Mal sahibi kartı
+Mal sahibi detay ekranı
+9. GAYRİMENKUL MODÜLÜ
+Gayrimenkul temel bilgileri
+Gayrimenkul detay ekranı
+Portföy durumları
+10. BELGE VE RAF SİSTEMİ
+Belge yönetimi özellikleri
+11. KİRACILAR MODÜLÜ
+Kiracı profili
+Kiracı arama
+12. PERSONEL MODÜLÜ
+Personel kartı
+Personel detay ekranı
+Atama sistemi
+13. SÖZLEŞME VE TAKVİM MODÜLÜ
+Sözleşme özellikleri
+Sözleşme şablonları
+Takvim ve hatırlatmalar
+14. FİNANS VE ÖDEME MODÜLÜ
+Ödeme takibi
+Ödeme durumları
+Önemli finansal kural
+15. CRM VE MÜŞTERİ YÖNETİMİ
+16. GÖREV, BAKIM VE ARIZA YÖNETİMİ
+17. KULLANICI ROLLERİ VE YETKİLER
+18. VERİTABANI MİMARİSİ
+Kritik veri ilişkileri
+Veri güvenliği
+19. MOBİL UYGULAMA İÇİN ŞİMDİDEN HAZIRLIK
+20. GÜVENLİK VE KVKK
+21. GELİŞTİRME YÖNTEMİ VE ÇALIŞMA KURALLARI
+KURAL 1 – Önce analiz
+KURAL 2 – Mimariyi belirle
+KURAL 3 – Bağımsız proje
+KURAL 4 – Aşamalı geliştirme
+KURAL 5 – Önce çalışan sistem
+KURAL 6 – Test etmeden tamamlandı deme
+KURAL 7 – Çalışan kodu koru
+KURAL 8 – Log ve rapor
+22. PROJE KLASÖR YAPISI
+23. İLK GELİŞTİRME HEDEFİ
+24. İLK SÜRÜMDE BEKLEDİĞİM KULLANICI DENEYİMİ
+25. İLK GÖREVİN: ANALİZ VE PROJEYİ BAŞLATMA
+ADIM 1 – ORTAM DENETİMİ
+ADIM 2 – TEKNİK KARAR RAPORU
+ADIM 3 – ÜRÜN VE MİMARİ DOKÜMANTASYONU
+ADIM 4 – İLK ÇALIŞAN SÜRÜM
+26. TESLİM VE RAPORLAMA
+27. PROJENİN NİHAİ VİZYONU
+28. Promptu ajana vermeden önce benim üç ek tavsiyem
+Yazılım Modül Planlaması ve Aşamalı Geliştirme Yol Haritası
+Proje türü: Emlak Ofisi Yönetim Sistemi
+Geliştirme yaklaşımı: Modüler yazılım mimarisi
+İlk hedef: Masaüstü yönetim uygulaması
+İkinci hedef: Aynı altyapıyı kullanan mobil uygulama
+Uzun vadeli hedef: Birden fazla emlak ofisine sunulabilecek SaaS platformu
+1. MODÜLER GELİŞTİRME YAKLAŞIMI
+Önerilen ana modül sayısı: 18
+Sistem altyapısı ve güvenlik
+Emlak ve portföy yönetimi
+Finans ve sözleşme yönetimi
+Operasyon ve müşteri yönetimi
+Raporlama ve entegrasyonlar
+2. MODÜLLER VE İÇERİKLERİ
+GRUP A — SİSTEM ALTYAPISI VE GÜVENLİK
+MODÜL 01 — Sistem Altyapısı ve Organizasyon Yönetimi
+Uygulama yapılandırması
+Veritabanı bağlantısı
+API altyapısı
+Dosya depolama altyapısı
+Ortam değişkenleri ve yapılandırma yönetimi
+Hata yakalama ve log sistemi
+Yedekleme altyapısı
+Organizasyon/ofis tanımlama
+Ofis bilgileri ve iletişim bilgileri
+Şube tanımlama altyapısı
+Çoklu ofis (multi-tenant) mimarisine hazırlık
+Sistem sağlık kontrolü
+MODÜL 02 — Kullanıcı, Oturum ve Yetkilendirme Yönetimi
+Kullanıcı oluşturma
+Kullanıcı girişi ve çıkışı
+Parola değiştirme ve sıfırlama
+Oturum yönetimi
+Kullanıcı aktif/pasif durumu
+Rol tanımlama
+Yetki tanımlama
+Modül bazında erişim kontrolü
+İşlem bazında yetkilendirme
+Kullanıcı işlem geçmişi
+Birden fazla yönetici hesabı
+Güvenli parola saklama
+İleride iki aşamalı doğrulama desteği
+Sistem yöneticisi
+Ofis sahibi/ortak
+Ofis yöneticisi
+Personel
+Muhasebe/finans personeli
+İleride mal sahibi
+İleride kiracı
+MODÜL 03 — Personel ve İnsan Kaynakları Yönetimi
+Personel kaydı
+Adres ve iletişim bilgileri
+Görev/unvan tanımlama
+İşe giriş ve işten ayrılış bilgileri
+Personel kullanıcı hesabı ile eşleştirme
+Personel yetki ve rol bilgileri
+Personel portföy atamaları
+Personel görev atamaları
+İşlem ve performans geçmişi
+Personel bazında portföy listesi
+Personel bazında satış ve kiralama raporları
+Personel aktif/pasif durumu
+GRUP B — EMLAK VE PORTFÖY YÖNETİMİ
+MODÜL 04 — Mal Sahipleri Yönetimi
+Mal sahibi kaydı
+Gerçek kişi/tüzel kişi ayrımı
+Ad, soyad veya şirket unvanı
+Telefon ve e-posta
+Kimlik ve iletişim bilgileri
+Adres bilgileri
+Mal sahibi belge arşivi
+Banka ve ödeme bilgileri
+Mal sahibi notları
+İletişim geçmişi
+Mal sahibine bağlı gayrimenkuller
+Kiralık/satılık portföy ayrımı
+Mal sahibi bazında gelir ve tahsilat özeti
+Mal sahibiyle yapılan anlaşmalar
+Mal sahibi aktif/pasif durumu
+MODÜL 05 — Gayrimenkul Yönetimi
+Gayrimenkul oluşturma
+Gayrimenkul türü
+Daire
+Villa
+Müstakil ev
+Dükkân
+Ofis
+Arsa
+Tarla
+Depo
+Diğer gayrimenkul türleri
+İl, ilçe ve mahalle
+Açık adres
+Site, blok, kat ve daire numarası
+Brüt/net metrekare
+Oda ve salon sayısı
+Bina yaşı
+Kat bilgisi
+Isıtma sistemi
+Asansör
+Otopark
+Aidat
+Balkon, teras ve diğer özellikler
+Tapu ve mülkiyet bilgileri
+Gayrimenkul durumu
+Mal sahibi ilişkisi
+Gayrimenkulün geçmiş kayıtları
+MODÜL 06 — Portföy ve İlan Yönetimi
+Kiralık portföy oluşturma
+Satılık portföy oluşturma
+Kiralık ve satılık durumlarının yönetimi
+İlan başlığı ve açıklaması
+İstenen kira/satış fiyatı
+Fiyat değişiklik geçmişi
+Komisyon bilgileri
+Yetkilendirme anlaşması
+Portföy başlangıç ve bitiş tarihi
+Portföy durumu
+Aktif, pasif, kiralandı, satıldı, beklemede
+Portföy sorumlusu personel
+İlan yayın durumu
+İlan açıklaması ve özellikleri
+İleride harici ilan platformlarına aktarım
+MODÜL 07 — Dijital Gayrimenkul Dosyası ve Belge Arşivi
+Gayrimenkul kapak fotoğrafı
+Fotoğraf galerisi
+Video galerisi
+Fotoğraf sıralama
+Fotoğraf açıklamaları
+Belge yükleme
+PDF, Word, Excel ve görsel dosyaları
+Tapu belgeleri
+Kimlik/yetki belgeleri
+Sözleşmeler
+Komisyon anlaşmaları
+DASK belgeleri
+Dekontlar
+Bakım ve tadilat belgeleri
+Belge kategorileri
+Özel raf oluşturma
+Raf sıralama ve düzenleme
+Belge arama ve filtreleme
+Dosya sürüm geçmişi
+Belge erişim yetkileri
+Fotoğraf üzerinde filigranlı kopya oluşturma
+Orijinal dosyanın korunması
+MODÜL 08 — Kiracı ve Kiracılık Yönetimi
+Kiracı kaydı
+İletişim bilgileri
+Kimlik ve gerekli belgeler
+Acil durum iletişim bilgileri
+Kiracıya bağlı sözleşmeler
+Kiracının kiraladığı gayrimenkuller
+Kiracılık başlangıç tarihi
+Kiracılık bitiş tarihi
+Depozito bilgileri
+Teslim tutanağı
+Anahtar teslim bilgileri
+Kiracı ödeme geçmişi
+Bakım ve arıza talepleri
+Kiracı notları
+Eski kiracılık dönemleri
+Kiracı aktif/pasif durumu
+GRUP C — FİNANS VE SÖZLEŞME YÖNETİMİ
+MODÜL 09 — Sözleşme Yönetimi
+Kira sözleşmesi oluşturma
+Satış sözleşmesi kaydı
+Mal sahibi yetkilendirme anlaşması
+Komisyon sözleşmesi
+Sözleşme başlangıç tarihi
+Sözleşme bitiş tarihi
+Sözleşme süresi
+Kira bedeli
+Depozito
+Ödeme günü
+Artış koşulları
+Sözleşme ekleri
+Sözleşme dosyası
+Sözleşme yenileme
+Sözleşme fesih bilgileri
+Sözleşme geçmişi
+Süresi yaklaşan sözleşmeler
+MODÜL 10 — Kira Tahsilatı ve Ödeme Takibi
+Aylık kira ödeme planı
+Beklenen kira tutarı
+Ödenen kira tutarı
+Eksik ödeme
+Gecikmiş ödeme
+Ödeme tarihi
+Ödeme yöntemi
+Banka havalesi
+Nakit ödeme kaydı
+Dekont yükleme
+Dekont kontrolü
+Ödeme onayı
+Gecikme durumu
+Kısmi ödeme
+Geçmiş dönem borçları
+Kira tahsilat geçmişi
+Kiracı bazında ödeme özeti
+Gayrimenkul bazında ödeme özeti
+Mal sahibi bazında tahsilat özeti
+MODÜL 11 — Finans, Gider ve Muhasebe Takibi
+Gelir kaydı
+Gider kaydı
+Gayrimenkul bazında giderler
+Mal sahibi adına yapılan harcamalar
+Bakım ve onarım giderleri
+Aidat takibi
+Vergi ve sigorta giderleri
+Komisyon gelirleri
+Personel bazında komisyon
+Mal sahibi hesap ekstresi
+Kiracı hesap ekstresi
+Gayrimenkul hesap ekstresi
+Ofis gelir/gider raporu
+Tahsilat ve ödeme raporu
+Dönemsel finans raporları
+Dekont ve fatura arşivi
+MODÜL 12 — Hatırlatma, Takvim ve Bildirim Yönetimi
+Kira ödeme hatırlatması
+Gecikmiş kira bildirimi
+Sözleşme bitiş uyarısı
+Sözleşme yenileme hatırlatması
+DASK bitiş tarihi
+Sigorta yenileme tarihi
+Aidat ödeme hatırlatması
+Bakım ve kontrol hatırlatmaları
+Personel görev hatırlatmaları
+Randevu hatırlatmaları
+Kullanıcıya özel bildirimler
+Günlük/haftalık/aylık takvim
+Bildirim geçmişi
+Bildirim okundu bilgisi
+E-posta ve ileride mobil bildirim desteği
+GRUP D — OPERASYON VE MÜŞTERİ YÖNETİMİ
+MODÜL 13 — Müşteri ve CRM Yönetimi
+Potansiyel müşteri kaydı
+Alıcı müşteri
+Kiracı adayı
+Satıcı müşteri
+Mal sahibi adayı
+Müşteri talepleri
+Bütçe aralığı
+Aranan gayrimenkul türü
+Konum tercihi
+Oda ve metrekare tercihi
+Müşteri notları
+Görüşme geçmişi
+Müşteri-personel ilişkisi
+Müşteri durumu
+Potansiyel, görüşüldü, randevu, sonuçlandı, iptal
+Müşteri-gayrimenkul eşleştirme
+MODÜL 14 — Görev, Randevu ve Saha Operasyonları
+Görev oluşturma
+Personel görevlendirme
+Gayrimenkul ziyareti
+Yer gösterme randevusu
+Mal sahibi görüşmesi
+Kiracı görüşmesi
+Fotoğraf çekimi görevi
+Belge toplama görevi
+Ekspertiz/fiyat araştırması
+Görev başlangıç ve bitiş tarihi
+Görev önceliği
+Görev durumu
+Görev açıklaması
+Görev notları
+Tamamlanma bilgisi
+Görev geçmişi
+Personel iş yükü takibi
+MODÜL 15 — Bakım, Arıza ve Teknik İşler Yönetimi
+Arıza talebi oluşturma
+Talep kategorileri
+Elektrik
+Su tesisatı
+Isıtma
+Boya ve tadilat
+Diğer teknik işler
+Fotoğraf/video ekleme
+Talep önceliği
+Talep durumu
+Sorumlu personel
+Teknik servis/usta bilgileri
+Teklif ve maliyet kaydı
+İşlem başlangıç/bitiş tarihi
+Tamamlanma raporu
+Mal sahibi onayı
+Gider kaydıyla ilişkilendirme
+Arıza geçmişi
+GRUP E — RAPORLAMA, PORTALLAR VE ENTEGRASYONLAR
+MODÜL 16 — Raporlama ve Analitik
+Toplam mal sahibi sayısı
+Toplam gayrimenkul sayısı
+Kiralık/satılık portföy sayıları
+Boş/dolu gayrimenkul sayıları
+Toplam kiracı sayısı
+Beklenen kira toplamı
+Tahsil edilen kira toplamı
+Geciken kira toplamı
+Aylık gelir/gider
+Mal sahibi bazında finans raporu
+Gayrimenkul bazında kârlılık
+Personel performans raporu
+Satış ve kiralama raporları
+Portföy yaşlandırma raporu
+Sözleşme ve yenileme raporları
+Dönemsel karşılaştırmalar
+PDF ve Excel rapor çıktıları
+MODÜL 17 — Mal Sahibi ve Kiracı Portalları
+Kendi gayrimenkullerini görüntüleme
+Kiralık ve satılık portföyleri görüntüleme
+Gayrimenkul belgelerini görüntüleme
+Kira tahsilat durumunu görüntüleme
+Yapılan giderleri görüntüleme
+Kiracı bilgilerini yetkisi ölçüsünde görüntüleme
+Sözleşme bilgileri
+Ofise mesaj gönderme
+Belge paylaşma
+Bildirimler
+Kendi sözleşmesini görüntüleme
+Kira ödeme bilgileri
+Ödeme geçmişi
+Ödeme bildirimi gönderme
+Bakım/arıza talebi oluşturma
+Talep durumunu takip etme
+Ofisle iletişim
+MODÜL 18 — Entegrasyonlar ve Akıllı Özellikler
+Harita servisleri
+Adres ve konum desteği
+E-posta servisi
+SMS servisi
+Mobil bildirim altyapısı
+Dosya depolama servisleri
+Banka entegrasyonlarına hazırlık
+Ödeme kuruluşu entegrasyonlarına hazırlık
+İlan platformlarına veri aktarımı
+Takvim entegrasyonları
+Yapay zekâ destekli belge sınıflandırma
+OCR ile belge metni okuma
+Sözleşme bilgilerinden alan çıkarma
+Gayrimenkul ilan açıklaması oluşturma
+Müşteri-gayrimenkul eşleştirme önerileri
+Fiyat araştırmasına yardımcı analizler
+Doğal dilde sistem içi arama
+3. MODÜLLERİN GELİŞTİRİLME SIRASI
+Geliştirme aşaması	Modüller	Hedef
+Aşama 1	01, 02	Sistem altyapısı ve kullanıcı güvenliği
+Aşama 2	03, 04	Personel ve mal sahibi yönetimi
+Aşama 3	05, 06	Gayrimenkul ve portföy yönetimi
+Aşama 4	07	Dijital dosya ve belge arşivi
+Aşama 5	08, 09	Kiracı ve sözleşme yönetimi
+Aşama 6	10, 11	Kira tahsilatı ve finans
+Aşama 7	12	Hatırlatma ve bildirimler
+Aşama 8	13, 14, 15	CRM ve operasyon yönetimi
+Aşama 9	16	Raporlama ve analitik
+Aşama 10	17	Mal sahibi ve kiracı portalları
+Aşama 11	18	Entegrasyonlar ve akıllı özellikler
+4. HER MODÜL İÇİN UYGULANACAK GELİŞTİRME PROSEDÜRÜ
+1. Analiz
+2. Tasarım
+3. Geliştirme
+4. Test
+5. Tamamlama ve raporlama
+5. MODÜLLER ARASI TEMEL VERİ İLİŞKİLERİ
+6. İLK SÜRÜMDE TAMAMLANMASI GEREKEN MODÜLLER
+Sistem altyapısı
+Kullanıcı ve yetkilendirme
+Personel yönetimi
+Mal sahibi yönetimi
+Gayrimenkul yönetimi
+Portföy yönetimi
+Dijital gayrimenkul dosyası
+Temel kiracı yönetimi
+Temel sözleşme yönetimi
+7. PROJE GELİŞTİRME KURALLARI
+8. SONUÇ
+Benim özellikle dikkat etmeni istediğim 3 konu
+İlk geliştirme döngüsü
+Modül 01 — Sistem Altyapısı
+Modül 02 — Kullanıcı ve Yetkilendirme
+Modül 03 — Personel
+Modül 04 — Mal Sahipleri
+Modül 05 — Gayrimenkuller
+İlk çalışan temel sistem
+Claude =
+UMAY EMLAK – Proje Yol Haritası ve Şablon Paketi (v3)
+BÖLÜM A – SENİN İÇİN
+A1. Fikrin özeti
+A2. Genel değerlendirmem
+A3. Kararlarım ve gerekçeleri
+Platform
+Veri modeli (önceki SQL'i etkiliyor)
+Raf sistemi
+Para
+Diğer
+A4. Uyarılar (öncelik sırasıyla)
+A5. Geliştirme dilimleri
+A6. Senin ve Aysan'ın vereceği kararlar
+4. Mal sahipleri sisteme belge/fotoğraf yükleyebilecek mi, yoksa yalnızca görecek mi?
+7. Mal sahibi kiracının hangi bilgilerini görecek (ad, telefon, ödeme durumu)?
+11. Sunucu nerede olacak ve ofisin bütçesi/aylık sistem maliyet beklentisi ne?
+12. Pilot için kaç personel hangi cihazla (Android/iPhone/bilgisayar) kullanacak?
+BÖLÜM B – AJANA VERİLECEK ŞABLONLAR
+B1. Token'a dayanıklı çalışma protokolü
+ÇALIŞMA PROTOKOLÜ (zorunlu)
+B2. PROJECT-STATUS.md şablonu
+Son güncelleme: <tarih saat>
+Aktif dilim: <örn. Dilim 2>      Aktif görev: <örn. G-014>
+B3. Görev kartı şablonu
+GÖREV KARTI G-<no>
+Başlık: <örn. Mal sahibi oluşturma API ve formu>
+Dilim / Modül: <Dilim 2 / Modül 04>
+Kapsam içi: <liste>
+Kapsam dışı: <liste>
+Bağımlılıklar: <hangi görevler bitmiş olmalı>
+Veri: <tablolar/sütunlar; migration gerekiyor mu>
+API: <uç noktalar, yetki>
+Ekran: <rota, butonlar ve hedefleri>
+Kurallar: <doğrulama, yetki, ofis izolasyonu, audit log>
+Tahmini boyut: S / M / L   (L ise böl)
+B4. Modül tanım kartı şablonu
+MODÜL <no> – <ad>
+1. Amaç ve kullanıcılar (kim kullanır, hangi rolle)
+2. Kullanıcı senaryoları (5-10 madde, "X yapar, sistem Y gösterir")
+4. Veri (tablolar, ilişkiler, silme/arşiv kuralı)
+5. API (uç noktalar, yetkiler)
+6. Ekranlar (rota, butonlar → hedef)
+7. Diğer modüllerle ilişki (neyi okur, neyi yazar)
+8. Hata ve istisna senaryoları
+9. Test planı (işlev, yetki, ofis izolasyonu, hatalı girdi)
+10. Hukuki/iş kuralı sorular (DOĞRULANACAK listesi)
+B5. İlk oturum komutu (Dilim 0, kod yok)
+B6. Devam komutu (yarım kalınca)
+B7. Senaryo şablonu (Aysan'ın iş akışı)
+SENARYO S-<no>: <ad>
+Tetikleyen olay: <örn. mal sahibi ofise geldi>
+Bildirimler: kime, ne zaman
+İstisnalar: <örn. mal sahibi belgeyi geç getirdi>
+B8. Karar kaydı (ADR) şablonu
+ADR-<no>: <başlık>   Tarih:   Durum: Önerildi / Onaylandı
+Bağlam: <neden karar gerekiyor>
+B9. "Bitti" tanımı (her görev ve dilim için)
+B10. Sonraki adımlar (sıra önerisi)
+Katıldığım noktalar
+Farklı düşündüklerim
+Uyarılarım
+FREEBUFF FİKİRLERİ
+UMAY EMLAK — DERİN ANALİZ, BAĞLAYICI KARARLAR VE UYGULAMA KILAVUZU
+Yazan: Freebuff (Buffy)  ·  3 Kasım 2026
+0. BU BÖLÜM NASIL KULLANILIR
+1. YÖNETİCİ ÖZETİ — 12 CÜMLE
+2. ÜÇ AJANIN DEĞERLENDİRMESİ
+Ürün  Mimari  Hukuk  Uygulanabilirlik  Süreç
+Gemini              7      6       3          5             2
+ChatGPT             9      7       6          6             5
+Claude              9      8       8          7            10
+2.1 GEMINI — "Hızlı, cesur, yarısı yanlış"
+G1. Veri merkezde, telefon sadece önbellek. 18 kişi aynı dosyaya bakacaksa
+ÖNERİR, yetkili ONAYLAR. Kazıma (scraping) yasak/engellenebilir, sessizce
+Y3. "İnternet yokken belgelere ulaşılabilsin."  → Doğru istek, ama sınırsız
+Ayrıca filigranı orijinalin üstüne basmayı önerdiği yerde kendi kuralıyla
+İlan sitelerinin kullanım şartları buna izin vermez. v1'de emsal, personelin
+2.2 CHATGPT — "En iyi zihin haritası, en riskli kapsam"
+2 arayüz kod tabanı, Windows'ta Docker sürtünmesi. Bakımı tek kişide
+C-4h. "Beklenen kira" tek satır sanılıyor. Muhasebe mantığında "beklenen" bir
+TAHAKKUK kaydıdır; ödeme ondan düşülür (mahsup). Kısmi ödeme, gecikme
+C-6h. E-imza/ıslak imza, tarama kalitesi, evrakın ASLININ kimde olduğu, noter/
+C-7h. "Personel yalnızca kendi portföyünü görsün" fazla katı. Sahada personel
+2.3 CLAUDE — "En olgun metin, ama ürün kararları hâlâ havada"
+L-5. Giriş/çıkış tutanağı birinci sınıf modül. Doğru; bu, ilerideki
+L-6. 5464 uyarısı ve "UMAY para tutmasın". Doğru; Gemini'nin "sıfır risk"ini
+L-4h. Test stratejisi tek satır. Yetki matrisi testi, ofis izolasyonu testi
+L-6h. E-imza/uzaktan imza, muhasebeci mutabakatı, ofisin mal sahibi adına
+L-7h. Banka ekstresi eşleştirmenin asıl zorluğu yanlış yerde aranmış: mesele
+2.4 ÜÇÜNÜN ORTAK KÖR NOKTALARI — en değerli bölüm
+2'si eksik" diyebilmeli ve portföyü "yayına hazır" saymamalı. Bu tek özellik
+Yani "kirayı kartla ödeyene %10 ekle" modeli, kart hamili tüketici ise
+Ofis "veri sorumlusu", yazılım "veri işleyen"dir. Bu, sözleşme (veri işleme
+Postgres + tek Node süreci + disk/S3 yeter. Karmaşıklık eklemek hata
+Restore tatbikatı yapılmamış yedek, yedek değildir. Aylık 1 kez boş bir
+Sistem bunu (a) telefon/e-posta ile uyarmalı, (b) "birleştir" aracı
+Her biri için "kapanış" işlemi tanımlanmalı: erişim kapanır, dosya
+3. BENİM TEŞHİSİM: BU PROGRAM NE OLMALI, NE OLMAMALI
+3.1 ÜRÜN TEZİ (tek paragraf)
+UMAY EMLAK, bir emlak ofisinin HAFIZASI ve VİCDANIDIR. Hafıza, çünkü her
+Raf, bu hafızanın vitrinidir; para, bu vicdanın sonucudur. Program bir "ilan
+3.2 PROGRAMIN ÇÖZDÜĞÜ 3 GERÇEK PARA KAYBI
+3.3 v1'DE (İLK ÇALIŞAN SÜRÜMDE) YAPILMAYACAKLAR — NET LİSTE
+Bunları yazmak, kapsamı kontrol altında tutmanın tek yoludur. Her biri "sonra"
+15. Sözleşme metninin hukuki sorumluluğunu üstlenen otomatik üretim
+3.4 BAŞARI ÖLÇÜTLERİ (pilot sonunda ölçülecek, 8 KPI)
+3.5 SENİN KENDİ METNİNDE DÜZELTİLMESİ GEREKEN 10 NOKTA
+D-1. "Program telefonun hafızasını kullansın." → Merkez sunucu esas; telefon
+D-3. "Kiracılar modülündeki bilgiler mal sahibi altındaki kiracıyla aynı olsun."
+D-10. "Program emlak firmasının patronu tarafından kullanılacak." → Patron
+4. MİMARİ KARARLAR (K1-K18) — KOD YAZMADAN ÖNCE SABİTLENECEK
+Bir karar değişecekse: eski karar silinmez, "şu tarihte K-x ile değiştirildi"
+K1 — TEK DEPO, TEK DİL: TypeScript monorepo
+RİSK: Node ekosisteminde "her şey JS" alışkanlığı; disiplin şart — domain
+K2 — SAF DOMAIN ÇEKİRDEĞİ (projenin kalbi)
+RİSK: Ajan kısa yoldan ekranda hesap yapmak ister. Kabul ölçütüne "ekranda
+K3 — API: Hono + Zod, sürüm 1
+RİSK: Hono ekosistemi Express kadar geniş değil; ihtiyaç duyulan ara katman
+K4 — VERİTABANI: SQLite ile başla, Postgres'e PROVALI geç
+NEDEN: Windows'ta Docker/Postgres kurulumu ilk haftayı yer. SQLite ile 3 hafta
+RİSK: Geçiş provası ertelenirse SQLite'a bağımlılık sessizce büyür. Bu yüzden
+K5 — DOSYA DEPOLAMA: içerik adresli (content-addressed) + adaptör
+NEDEN: Fotoğraf+video tek başına yüzlerce GB. Binary'yi DB'ye koymak yedekleri
+K6 — MASAÜSTÜ: web-first, sonra Tauri kabuk (Electron DEĞİL)
+K7 — MOBİL: önce responsive PWA, native sonra ve SADECE gerekçeyle
+KARAR: Aşama A (Dilim 7): aynı React uygulaması, telefon için düzenlenmiş
+K8 — ÇEVRİMDIŞI: outbox + idempotency, TAM SENKRON YOK
+Outbox, gerçek ihtiyacın (sahada internet yokken fotoğraf/not girmek)
+K9 — ÇOKLU OFİS: org_id BAŞTAN, SaaS iş modeli SONRA
+Katman 4 KAYIT KURALI: satır bazlı istisnalar (örn. "mal sahibi kiracının
+NEDEN: "Personel kendi portföyünü görsün" tek başına yetmez: müşteriye başka
+K11 — YÜKÜMLÜLÜK MOTORU (projenin farkı burada)
+NEDEN: Elle yazılan hatırlatma eskir, ikilenir, iptal edilen işi hatırlatmaya
+K12 — ARAMA VE SIRALAMA: Türkçe normalizasyon zorunlu
+K13 — İZ SÜRÜLEBİLİRLİK: append-only audit + ters kayıt
+Finansal tablolarda UPDATE/DELETE yok: düzeltme = ters kayıt (reversal) +
+Kim hangi belgeyi İNDİRDİ, kim fiyatı değiştirdi, kim kirayı onayladı: hepsi
+NEDEN: Bu sistemin değeri "kim ne yaptı"yı kanıtlayabilmesidir. Ayrıca mal
+K14 — ZAMAN: iki farklı zaman tipi
+K15 — KİMLİK DOĞRULAMA: parola + oturum, TOTP opsiyonel
+NEDEN: 20 kullanıcı için fazlası gereksiz; e-postasız personel varsa kullanıcı
+SONUÇ: Personel işten ayrıldığında: hesabı kilitle + tüm oturumları düşür +
+K16 — HATA VE LOG: kullanıcıya kayıt numarası
+KARAR: Sunucu logu yapılandırılmış (JSON), her istekte request_id. Kullanıcıya
+K17 — YEDEKLEME: tatbikat yapılmayan yedek, yedek değildir
+NEDEN: En sık yapılan hata: yedeğin hiç test edilmemesi. Restore edilemeyen
+K18 — PERFORMANS VE KAPASİTE: gerçek sayılar
+350 x × 22 foto × 2,5 MB ≈ 19 GB
+350 x × 1 video × 40 MB ≈ 14 GB
+350 x × 8 belge × 1 MB  ≈ 2,8 GB
+5. VERİ MODELİ (SQL v002) — TABLOLAR, KURALLAR, TÜRETİMLER
+5.1 GRUP A — SİSTEM / KİMLİK
+5.2 GRUP B — KİŞİLER (tek kaynak, çok rol)
+5.3 GRUP C — GAYRİMENKUL VE PORTFÖY
+5.4 GRUP D — KİRACI / SÖZLEŞME / TUTANAK
+NEDEN: "Daire boşaltıldığındaki son hâli" senin fikrindi; bu, ileride
+5.5 GRUP E — PARA (en kritik grup)
+5.6 GRUP F — BELGE / ARŞİV / RAF
+GÖRÜNÜM. Veriyi rafa kopyalamıyoruz; raf veriye bakıyor. Böylece hem
+5.7 GRUP G — OPERASYON
+5.8 GRUP H — BİLDİRİM / YÜKÜMLÜLÜK TÜRETİMİ
+5.9 KRİTİK VERİTABANI KURALLARI (uygulama + DB seviyesinde)
+10. Mükerrer kişi uyarısı: aynı phone_norm veya email_norm ile yeni kayıt
+5.10 BELGE ZORUNLULUK MATRİSİ (eksik belge motoru)
+Portföy tipi        Zorunlu belgeler                                  Süre
+TÜMÜ                ofis yetki belgesi (işletme), personel yetki
+KURAL: listing.status "published" olabilmesi için zorunlu belge seti tamam
+NEDEN: Bu, "hiçbir dosya eksik gitmez" garantisidir ve ofise parayla
+5.11 YETKİ MATRİSİ (örnek satırlar — tam tablo Dilim 1'de dondurulur)
+Kaynak:Aksiyon            Admin/Ortak  Ofis Müd.  Personel      Mal Sahibi  Kiracı
+6. MASAÜSTÜ EKRAN HARİTASI VE UX
+6.1 YERLEŞİM (1366×768'den 1920×1080'e)
+1. BUGÜN            → Aksiyon panosu (varsayılan açılış)
+2. PORTFÖY          → Gayrimenkuller, Portföyler (kiralık/satılık), Raflar
+3. KİŞİLER          → Mal Sahipleri, Kiracılar, Müşteriler (CRM)
+4. PARA             → Kiralar/Tahakkuk, Tahsilatlar, Giderler, Mal Sahibi
+Ekstreleri, Finans Özeti
+Bakım/Arıza, Takvim
+6. SİSTEM           → Belgeler/Arşiv, Raporlar, Personel, Ayarlar, Denetim İzi
+NEDEN: ChatGPT'nin 15 maddelik düz menüsünde "Finans ve Ödemeler" ile
+6.3 AMİRAL EKRAN 1 — "BUGÜN" (Aksiyon Panosu)
+1) GECİKMİŞ (kırmızı) 2) BUGÜN (turuncu) 3) 7 GÜN İÇİNDE (sarı)
+4) DİKKAT (mavi: eksik belge, 90 gündür yayında)
+Kişiselleştirme: Personel "Bugün"ü kendi işleriyle görür; yönetici ofis geneli +
+Üst: kişi kartı (foto/baş harf, ad, telefon — tıkla-ara, e-posta, sorumlu
+Alt: RAF ALANI
+Görünüm değiştirici (sağ üst): [Raf] [Liste] [İş akışı]
+6.5 AMİRAL EKRAN 3 — GAYRİMENKUL DOSYASI
+KURAL: Belge sekmesinde kategori rafları (senin PDF Reader mantığı): her kategori
+6.6 RAF BİLEŞENİ — TEKNİK ŞARTNAME (tekrar kullanılabilir bileşen)
+6.7 TABLO STANDARDI
+6.8 FORM STANDARDI
+6.9 GLOBAL ARAMA
+6.10 DURUMLAR: boş, yükleniyor, hata, yetkisiz
+6.11 TASARIM DİLİ (token bazlı)
+6.12 YAZDIRMA / PDF ÇIKTILARI (aranan özellik, kimse yazmamış)
+6.13 YAPILMAYACAK ARAYÜZ HATALARI (anti-pattern listesi)
+7. TEST STRATEJİSİ (kısa ama bağlayıcı)
+7.1 PİRAMİT
+7.2 YETKİ MATRİSİ TESTİ (tablo güdümlü — zorunlu)
+7.3 OFİS İZOLASYONU TESTİ
+7.4 ALTIN DOSYA (golden file) TESTLERİ
+Sözleşme taslağı, ekstre, tutanak PDF'leri: bilinen girdi → beklenen çıktı
+7.5 VERİ DOĞRULAMA TESTLERİ
+7.6 "BİTTİ" TANIMI (her görev için)
+8. MOBİL PLANI (masaüstü bittikten sonra)
+8.1 İLKE
+Mobil, masaüstünün küçültülmüş hâli DEĞİL. Mobil = SAHA aracı. Masaüstünde
+8.2 MOBİL EKRAN SETİ (6 + 2)
+1. Bugün (kart listesi; tek dokunuşla ara/WhatsApp/dekont)
+2. Portföy (arama + filtre; kart görünümü; "yakınımdakiler" sonra)
+3. x Dosyası (fotoğraf, belge, özet; sekmeler yerine kaydırmalı bölümler)
+6. Görevlerim (bugün/geciken; tamamla + not + fotoğraf)
+8.3 SAHA İÇİN ZORUNLU TEKNİK DETAYLAR
+8.4 NATIVE'E GEÇİŞ EŞİĞİ (net kural)
+8.5 MOBİL UX KURALLARI
+9. PARA, VERGİ, HUKUK, KVKK — EN RİSKLİ BÖLGE
+9.1 SENİN FİKRİNİN EN SEVDİĞİN PARÇASI: "KARTLA 30.000 → 33.000"
+DAHA KÖTÜSÜ: Kira, mal sahibinin geliridir. Ofis hesabına girip oradan
+9.2 KİRA ARTIŞI
+9.3 SÖZLEŞMELER VE MEVZUAT (ürünleşen uyum katmanı)
+Taşınmaz ticareti mevzuatı (Taşınmaz Ticareti Hakkında Yönetmelik) işletmenin
+9.4 FATURA
+9.5 KVKK
+2. Aydınlatma metni: kiracı, mal sahibi, müşteri adayı için ayrı; girişte
+3. Veri minimizasyonu: TCKN zorunlu değil; sadece gerektiğinde ve maskeli
+7. Yurt dışı aktarım: sunucu ve dosya depolama bölgesi netleşmeli. Türkiye
+DOĞRULANACAK: VERBİS eşiği, özel nitelikli veri sınıflandırması, saklama
+9.6 PARA KURALLARI (özet, tekrar)
+10. YOL HARİTASI — 12 DİLİM
+ÇALIŞAN demo + PROJECT-STATUS güncellemesi + git commit. Bir dilim bitmeden
+DİLİM 0 — KARARLAR (kod yok) — 3-5 gün
+Aysan'la keşif görüşmesi (Bölüm 13 soruları), S-01..S-11 senaryoları birlikte
+DİLİM 1 — İSKELET + KİMLİK — 4-6 gün
+DİLİM 2 — KİŞİLER (mal sahibi + personel) — 5-7 gün
+DİLİM 5 — KİRACI + SÖZLEŞME + TUTANAK — 6-8 gün
+DİLİM 7 — MOBİL SAHA (PWA) — 6-8 gün
+DİLİM 8 — GÖREV/RANDEVU/BAKIM + CRM — 6-8 gün
+DİLİM 10 — PORTALLAR (mal sahibi, sonra kiracı) — 8-10 gün
+DİLİM 11 — OTOMASYON + ENTEGRASYON (seçilmiş) — değişken
+Banka ekstresi CSV eşleştirme → e-posta bildirimi → (onay varsa) hizmet
+11. AJANLA ÇALIŞMA PROTOKOLÜ (yarım kalma probleminin gerçek çözümü)
+Claude'un B1-B6 seti iyi; aşağıdaki sürüm onun sadeleştirilmiş ve sertleştirilmiş
+11.1 HER OTURUMDA UYULACAK 12 KURAL
+11.2 DOSYA DÜZENİ (3 dosya, hep güncel)
+11.3 GÖREV KARTI ŞABLONU (doldurulmuş örnek Ek'te)
+Bağımlılıklar / Veri (tablo, migration) / API (uç nokta, yetki) /
+Ekran (rota, buton → hedef) / Kurallar (doğrulama, yetki, audit) /
+11.4 OTURUM KOMUTU ŞABLONLARI
+Yalnızca şu parçayı yap: <...>. Bitince dur ve raporla."
+Yarım dosyayı çalışır hâle getir. Sonra 'sıradaki adım' neyse YALNIZCA onu
+12. RİSK DEFTERİ (olasılık / etki / önlem)
+R1  KAPSAM ŞİŞMESİ                            O: çok yüksek  E: yüksek
+Dilim 6'da "Aysan kullanıyor" eşiği. Biri yeni özellik isterse: "hangi
+R2  VERİ GÖÇÜ (Excel/WhatsApp/defter)          O: yüksek      E: yüksek
+R4  KVKK İHLALİ / VERİ SIZINTISI               O: düşük-orta   E: çok yüksek
+Önlem: yetki testleri, erişim logu, maskeli alanlar, cihaz önbelleği
+R5  YANLIŞ HATIRLATMA / YANLIŞ ORAN             O: orta        E: yüksek
+R6  AJAN YARIM BIRAKIR                          O: yüksek      E: orta
+R7  ÇEVRİMDIŞI ÇAKIŞMA / MÜKERRER KAYIT         O: orta        E: yüksek
+R8  PERFORMANS (500 x, 5.000 belge)             O: düşük       E: düşük
+R9  TEK KİŞİLİK BAKIM / DESTEK                  O: yüksek      E: orta
+Önlem: dokümantasyon (PROJECT-STATUS, DECISIONS, README), tek komutla
+R10 PERSONELE BENİMSETİLEMEME                   O: yüksek      E: yüksek
+R11 İNTERNET/SUNUCU KESİNTİSİ                   O: orta        E: orta
+Önlem: çevrimdışı okuma + kuyruk; sunucu izleme; 4 saatlik kesintide
+R12 RAFA/ARAYÜZE AŞIRI ZAMAN                     O: orta        E: düşük
+13. AYSAN'A SORULACAK 25 SORU (cevaplar tabloları belirler)
+İş modeli
+1. Sadece aracılık mı yapıyorsunuz, yoksa mal sahiplerinin işlerini sürekli
+Ofis komisyonu nasıl alınıyor (kira başına %, aylık sabit, yıllık)?
+3. Hangi komisyon türleri AYRI takip edilmeli: satış, kiralama, yönetim bedeli?
+Belgeler ve arşiv
+7. Tapunun ASLI kimde duruyor? Fotokopi yeterli mi? Kim onaylıyor?
+9. Fotoğrafları kim çekiyor, kaç fotoğraf standart, video çekiyor musunuz?
+10. Silinmemesi gereken belge var mı (10 yıl saklama)? Kim silebilir?
+Kiracılar ve para
+12. Depozito nasıl tutuluyor, iade nasıl yapılıyor, kaydı var mı?
+14. Gecikmede ne yapıyorsunuz (arama, mesaj, ihtar)? Kaç gün sonra?
+16. Kira artışını kim hesaplıyor, mal sahibine nasıl bildiriliyor?
+Personel ve yetki
+17. Personel bir x'i başka personele devredince eski personel dosyayı görmeye
+18. Personel başka personelin portföyünü müşteriye gösterebiliyor mu?
+19. Ortaklar birbirinin finans işlemlerini görüyor mu? Personel ne görmeli?
+20. Personel ayrıldığında dosyalar ve telefonundaki fotoğraflar ne oluyor?
+21. Kaç kişi, hangi cihazla kullanacak (Android/iPhone/bilgisayar)?
+Mal sahibi / kiracı
+22. Mal sahibi hangi bilgileri görmeli? Kiracının telefonunu görmeli mi?
+23. Mal sahibi sisteme belge/fotoğraf yükleyecek mi, sadece görecek mi?
+24. Kiracı uygulamadan arıza talebi açsın mı, yoksa telefonla mı arıyor?
+Geçmiş veri
+14. İLK 10 GÜN — SOMUT PLAN
+İtiraz ettiğin kararı not et; gerekçeni yaz. (Karar = senin.)
+15. EKLER
+15.1 GÖREV KARTI — DOLDURULMUŞ ÖRNEK
+GÖREV KARTI G-014
+Başlık        : Mal sahibi oluşturma (API + form + liste)
+Dilim / Modül : Dilim 2 / Kişiler
+Amaç          : Ofis, yeni bir mal sahibini kaydedebilsin ve listede Türk
+Veri          : parties, party_roles, owner_profiles. Migration: 0007_owners.sql
+GET /owners/:id, PATCH /owners/:id (owner:update)
+Kurallar      : org_id oturumdan; phone_norm + email_norm hesaplanır; aynı
+Boyut         : M
+15.2 ADR — DOLDURULMUŞ ÖRNEK
+ADR-004: Para alanları kuruş cinsinden tam sayı
+Tarih        : 2026-11-05    Durum: Onaylandı
+Bağlam       : Kira, komisyon ve giderlerde ondalık hata riski; farklı dillerde
+Seçenekler   : A) DECIMAL/NUMERIC  B) INTEGER kuruş  C) float (reddedildi)
+Sonuçlar     : Toplama/çıkarma güvenli; çarpma/bölmede tek yuvarlama fonksiyonu
+15.3 SEED VERİSİ (gerçekçi ama tamamen sahte)
+15.4 SÖZLÜK (ekip içi dil birliği)
+16. KAPANIŞ — 10 MADDELİK MANİFESTO
+SON SÖZ
+Üç ajanın kör noktası (bence en önemli tespit)
+Yanlış bulduklarım
+Bence program nasıl olmalı
+Doğruladıklarım
+Kart farkı ödeyenler dikkat! Başvuran parasını faiziyle geri alacak
+Freebuff’tan aldıklarım
+Katılmadıklarım
+OKUMA SONUÇLARI — DOSYANIN BAŞTAN SONA YENİDEN OKUNMASI (3 Kasım 2026)
+OK-1 · SATIR 1 — SENİN İLK METNİN
+OK-2 · SATIR 4-76 — GEMİNİ (3 CEVAP)
+OK-3 · SATIR 77-97 — MOBİL SORUSU VE GEMİNİ'NİN 3. CEVABI
+OK-4 · SATIR 98-675 — CHATGPT ANA DEĞERLENDİRME
+OK-5 · SATIR 676-1638 — MASTER PROMPT (27 MADDE)
+OK-6 · SATIR 1639-2676 — 18 MODÜL PLANI
+OK-7 · SATIR 2677-2903 — CLAUDE v3 PAKETİ
+OK-8 · SATIR 2904-4644 — "FREEBUFF FİKİRLERİ" KILAVUZU
+OK-9 · SATIR 4645-4672 — CLAUDE'UN SON CEVABI + REVİZYON
+OK-10 · BU OKUMANIN EN ÖNEMLİ TEK SONUCU
+YOL HARİTASI — MASAÜSTÜ SÜRÜM, MODÜL MODÜL (SaaS hedefli)
+B0. ÖNCE ÜÇ UYARI
+B1. HEDEF MİMARİ — TEK BAKIŞTA
+PROJECT-STATUS.md, CHANGELOG.md
+B2. MODÜL LİSTESİ (16) VE DİLİM EŞLEMESİ
+M05 Gayrimenkul — fiziksel taşınmaz, adres, özellikler, hissedar/pay → D2
+M13 Raporlama — gerçek veriden, dışa aktarım (Excel/PDF) → D9
+M14 Portallar — mal sahibi paneli, kiracı paneli → D8
+B3. DİLİMLER — HER BİRİ İÇİN HEDEF, İÇERİK, KABUL EŞİĞİ
+DİLİM 0 — KARAR VE İSKELET (kod az, karar çok)
+DİLİM 1 — PLATFORM, KİMLİK, EKİP (M01, M02, M03)
+DİLİM 2 — KİŞİLER VE GAYRİMENKUL (M04, M05)
+DİLİM 4 — SÖZLEŞME VE KİRACILIK (M08)
+Hedef: "Kim oturuyor, ne zaman bitiyor, ne imzalandı."
+DİLİM 6 — MASAÜSTÜ KABUK VE KURULUM (M01 devam)
+DİLİM 7 — SAHA: GÖREV, ARIZA, TELEFON (M11)
+DİLİM 8 — PORTALLAR (M14)
+DİLİM 9 — RAPORLAMA, CRM, RANDEVU (M12, M13) + VERİ TAŞINABİLİRLİĞİ
+DİLİM 10 — SaaS: ABONELİK, ONBOARDING, LİMİT (M15)
+DİLİM 11 — MOBİL NATIVE (yalnız gerekirse)
+DİLİM 12 — ENTEGRASYON VE AKILLI (M16)
+B4. İLK 10 GÜN — SOMUT ADIMLAR
+B5. "BİTTİ" TANIMI — HER DİLİM İÇİN YEDİ MADDE
+B6. MASAÜSTÜ v1'DE YAPILMAYACAKLAR (kırmızı çizgi)
+B7. SaaS'A ÖZEL SEKİZ KARAR
+B8. BEŞ RİSK VE ÖNLEMİ
+B9. TEK CÜMLELİK ÖZET
+Implementation Plan
+18:59
+19:04
+Dosya	Açıklama
+App.tsx
+Uygulamanın ana kabuğu, menü, sayfa yönlendirme ve oturum yönetimi
+Portföy (Gayrimenkul) listesi, filtreleme, detay paneli
+Tek bir ilan/ mülk detay sayfası (bord)
+1️⃣ Genel Mimari & Yol Haritası
+Kategori	Durum	Sorun / Eksik	Çözüm Önerisi
+2️⃣ Ana Sayfa (Dashboard) – Nasıl Olmalı?
+Bölüm	İçerik	Tasarım‑Öneri
+3️⃣ Alt Sayfalar – Gözlem ve İyileştirme
+3.1 Listings (Portföy / Gayrimenkul Listesi)
+3.2 Listing Detail (ListingBoard + ilgili bölümler)
+3.3 Dashboard > Günlük İşler (Bugün)
+3.4 Kullanıcı / Personel (People, Owners)
+3.5 Sözleşmeler, Poliçeler, Belgeler
+4️⃣ Performans & Ölçeklenebilirlik
+İyileştirme	Açıklama	Hedef
+5️⃣ Güvenlik & Yetkilendirme
+6️⃣ UI/UX – Modern Estetik
+Alan	Şu anki Durum	Önerilen Modern Tasarım
+7️⃣ Hata/İyileştirme Listesi (Öncelik Sıralı)
+Öncelik	Dosya	Sorun	Çözüm
+8️⃣ Uygulama İçin Yol Haritası (Kısa Süreli)
+Erişilebilirlik – aria- öznitelikleri, focus yönetimi, renk kontrastı testi. (1 gün)
+Dashboard UI – modern kartlar, istatistikler, skeleton loader. (1‑2 gün)
+Dokümantasyon – README, contribution guide, API endpoint listesi. (1 gün)
+9️⃣ Sonuç
+1️⃣ Proje Özeti (Mevcut Koddan Çıkarımlar)
+Dosya	Açıklama	Durum
+2️⃣ Kritik Hatalar ve Nedenleri
+3️⃣ Eksik Fonksiyonel Özellikler (Metin Dosyasındaki Gereksinimler)
+Modül	Gereksinim	Mevcut Durum	Nasıl Eklenir
+4️⃣ Mimari ve Teknoloji Önerileri (Önerilen Yol Haritası)
+4.1 Genel Mimari
+UMAY EMLAK (SaaS)
+4.2 Adım‑Adım Geliştirme Planı (3 aylık Sprint)
+Sprint	Hedef	Alt‑görevler	Çıktı
+2	React + Vite Yönetim UI	• react-router-dom entegrasyonu
+3	Modüler Bileşenler	• ListingTable, FilterPanel, ListingDetail
+4	Dosya & Medya Depolama	• S3‑compatible storage (MinIO local)
+5	Ödeme & Komisyon Modülü	• Sanal POS entegrasyonu (Iyzico sandbox)
+6	Bildirim & Otomasyon	• APScheduler jobs (kira hatırlatıcı, DASK yenileme)
+8	Test, CI & Deploy	• Vitest + React Testing Library
+9	Mobil (React Native) İlk Versiyon	• API client (axios)
+5️⃣ Veri Model Önerileri (ER‑Diagram)
+User (id, name, email, password_hash, role)           <-- RBAC
+Role (id, name)                                       <-- admin / staff / owner / tenant
+Owner (id, name, phone, email)                       <-- can have many PropertyOwners
+Property (id, address, city, district, type, area_m2, rooms, floor, block, unit_no)
+PropertyOwner (property_id, owner_id, share_percent) <-- many‑to‑many
+Lease (id, property_id, tenant_id, start_date, end_date, rent_price, deposit, status)
+Tenant (id, name, phone, email)
+Payment (id, lease_id, amount, commission, method, status, created_at, receipt_url)
+Shelf (id, name, owner_id?, tenant_id?, user_id?, filter_json)   <-- dynamic raf
+TaskLog (id, property_id, user_id, action, description, timestamp)
+6️⃣ UI/UX – Premium Tasarım Önerileri (Gemini‑stiline paralel)
+Bölüm	Tasarım İpucu	Teknoloji
+Mobile’da flex-col.	CSS‑grid + Tailwind grid-cols-1 md:grid-cols-2 lg:grid-cols-3
+7️⃣ En Önemli “Kırmızı Bayraklar” (Acil Düzeltme)
+8️⃣ Çıktı – Özet Yol Haritası (Kısa)
+9️⃣ Sonraki Adım
+19:12

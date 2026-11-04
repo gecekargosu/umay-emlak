@@ -476,3 +476,11 @@ YARIM:Public POST sınırı bellekte (çok süreçli kurulumda taşınmalı); ba
 SORU:yok
 SIRADAKI:Yol haritası sıradaki açık madde — kira yenileme hesabı (TÜİK oranı veri olarak: kaynak + tarih + onay; oran koda sabitlenmez).
 --------------------------------------------------------------------------------
+[2026-11-05 06:45] TUR:56 | MODUL:Yol haritası / bilgi bankası | IS:Kullanıcının kök metni (5410 satır: kendi istekleri + Gemini, ChatGPT, Claude, Freebuff analizleri) ile 06/08/09/10 kayıtları birlikte okundu; "Eksikler ve görev sırası" 10 dağınık maddeden 22 maddelik tek sıraya çevrildi. Sıra para ve iz önce olacak şekilde kuruldu: (1-6) otomatik hatırlatma, gider+ekstre, belge rozeti/yayın kilidi, personel ayrılışı, yükümlülük motoru, kapora makbuzu; (7-11) ters kayıt/mahsup, depozito iadesi, aidat+vade, teknik alanlar, birlikte kiracı; (12-16) dönemsel rapor, mal sahibi paneli, kiracı paneli, toplu bildirim, global arama+bildirim merkezi; (17-22) medya/filigran, mobil saha, masaüstü kabuk, banka+OCR, SaaS/lisans, erişilebilirlik. "Olanlar" bölümüne teslim tutanağı PDF ve portföy önerisi eklendi.
+DOSYA:apps/web/src/pages/Roadmap.tsx (ROWS_OPEN, ROWS_VAR, SUGGESTIONS, CLOSED notu), 09-BILGI-BANKASI-KARSILASTIRMA.txt, 03-LOG.txt
+TEST:typecheck 0 · pnpm --filter @umay/web build 0 · ekranda yol haritası 26 var / 13 kısmi / 9 yok, ilk açık madde "Otomatik hatırlatma: kira günü, sözleşme ve poliçe bitişi"
+KARAR:K-87 yol haritası sırası para/iz → akış → görünürlük → platform; madde bitince satır silinmez, Kapananlar'a taşınır, numaralar kendiliğinden kayar · K-88 "yapay zeka önerisi" tek başına iş sayılmaz: yalnız Y kaydı veya bilgi bankası maddesiyle eşleşen öneri listeye girer
+YARIM:Liste hâlâ koda gömülü (tur sonunda elle tazeleniyor); canlı veri değil
+SORU:yok
+SIRADAKİ:1. madde — otomatik hatırlatma: önce ana sayfada "bu ay bitecekler" tek listesi (sözleşme bitişi + poliçe bitişi + kira günü), sonra e-posta/SMS kararı.
+--------------------------------------------------------------------------------

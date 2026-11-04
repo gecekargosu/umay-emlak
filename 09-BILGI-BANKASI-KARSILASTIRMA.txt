@@ -256,3 +256,15 @@ M. TUR:55 GÜNCELLEMELERİ (2026-11-04)
 [VAR] Bağlantı 90 gün geçerli, iptal edilebilir; jeton DB'de yalnız sha256 özetiyle durur (K-86).
 [VAR] Bildirim ofisin arıza listesine "açık" kayıt olarak düşer; kim/ne zaman ürettiği ve kaç kez kullanıldığı görünür.
 [KISMI] Bağlantı elle kopyalanıyor (WhatsApp/e-posta gönderimi yok); kiracı fotoğraf yükleyemiyor.
+
+====================================================================
+M. TUR:56 İŞ LİSTESİ TAZELEME (2026-11-05)
+====================================================================
+Kaynak: kök metin (5410 satır: kullanıcı istekleri + Gemini/ChatGPT/Claude/Freebuff) + 06/07/08/10 kayıtları.
+Yöntem: metindeki başlıklar ve istek cümleleri ile Y kayıtları eşleştirildi; her açık madde tek satıra indirildi, sıra para/iz önceliğiyle yeniden dizildi.
+Sonuç: 26 var · 13 kısmi · 9 yok (yol haritası ekranındaki "Eksikler ve görev sırası").
+[VAR] Kiracı arıza bağlantısı (TUR:55), teslim tutanağı PDF (TUR:52), işlem kaydı ekranı (TUR:53), sanal liste (TUR:54), portföy önerisi (TUR:33) "Olanlar" bölümüne alındı.
+[KISMI] 1 gider kalemi + mal sahibi ekstresi · 2 belge rozeti/yayın kilidi · 3 personel ayrılışı tek ekran · 4 yükümlülük motoru (sorumlu/erteleme) · 5 kapora makbuzu · 6 depozito iadesi · 7 aidat/vade 29-31 · 8 mülk teknik alanları · 9 dönemsel rapor + dışa aktarım · 10 kiracı paneli · 11 global arama + bildirim merkezi · 12 medya (video/filigran/vesikalık) · 13 masaüstü kabuk.
+[YOK] Otomatik hatırlatma (SMS/e-posta) · ters kayıt + çok borca mahsup · birlikte kiracı/bağımsız birim · mal sahibi paneli · toplu bildirim + KVKK ret · mobil saha (PWA) · banka eşleştirme + OCR · SaaS lisans/paket · erişilebilirlik (klavye/tema).
+Sıra gerekçesi: ilk altı madde doğrudan para kaybını ve güveni kapatıyor; 7-11 günlük akışı tamamlıyor; 12-16 görünürlük ve müşteriye dönük yüz; 17-22 platform ve satış katmanı.
+Not: Üç ajanın ortak tespiti — "eksik belge dosyayı kilitlemeli", "restore tatbikatı yapılmamış yedek yedek değildir", "para kuruş tam sayı, düzeltme ters kayıtla" — sırasıyla 3, 5 ve 7. maddede karşılık buldu.
