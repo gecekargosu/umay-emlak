@@ -456,3 +456,8 @@ Y-107 | Kiracı kendi arıza talebini açsın — YAPILDI (2026-11-05, TUR:55):
         yapmadan /talep/<jeton> sayfasından arıza bildiriyor, kayıt arıza listesine
         "açık" düşüyor. Jeton yalnız sha256 özetiyle saklanır, iptal anında geçersiz.
         | Yol haritası 1 | M | YAPILDI
+Y-108 | Bozuk kayıt kimliğinde 500 → 404 — YAPILDI (2026-11-05, TUR:58):
+        uuid bekleyen yola düz metin gelince Postgres 22P02 hatası 500 dönüyordu;
+        tek yerde (onError) yakalanıp "Kayıt bulunamadı" 404'e çevrildi.
+        Denetimde /api/v1/tenants/links, /properties/abc, /contracts/xyz ile doğrulandı.
+        | Denetim | S | YAPILDI

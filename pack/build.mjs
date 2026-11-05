@@ -121,7 +121,7 @@ pause >nul\r
 
 writeFileSync(
   join(staging, "OKU-BENI.txt"),
-  `UMAY EMLAK — Trademark Gayrimenkul (inceleme sürümü v4 · 5 Kasım 2026)
+  `UMAY EMLAK — Trademark Gayrimenkul (inceleme sürümü v5 · 5 Kasım 2026)
 =====================================================================
 
 Nasıl açılır?
@@ -138,7 +138,17 @@ Nasıl açılır?
 4) Giriş:  aysan.kilic@umay-emlak.local
    Şifre:  Umay!2026
 
-Bu sürümde yeni (v3 → v4)
+Bu sürümde yeni (v4 → v5)
+- Ana sayfada "Bu ay bitecekler" TEK liste: sözleşme bitişi, poliçe bitişi ve yaklaşan
+  kira günü aynı yerde; süresi geçenler en üstte, "4 gün önce bitti / 7 gün kaldı"
+  ifadesiyle. Panodaki yinelenen sözleşme ve poliçe bölümleri kaldırıldı.
+- Kiracı talep bağlantısı (TUR:55): kiralık mülk dosyasından 90 günlük bağlantı üretin,
+  kiracı giriş yapmadan arıza bildirsin. Bağlantı iptal edilince jeton anında geçersiz.
+- Demo veri gerçek akışı gösteriyor: demo sözleşmelerin bitiş tarihi ve 6 DASK poliçesi
+  dolu; yeni kurulumda pano boş görünmüyor.
+- Bozuk kayıt adresi (uuid yerine düz metin) artık 500 değil "Kayıt bulunamadı" dönüyor.
+
+Önceki sürümden (v3 → v4)
 - Portföy raflarında harf yerine MÜLK FOTOĞRAFI; mülk dosyasında fotoğraf galerisi.
 - Belgeler dolu: tapu, yetki belgesi, kimlik ve kira sözleşmesi örnek olarak üretildi;
   kişi kartında "Belgeler" bölümü var, tıklayıp PDF'i açabilirsiniz.

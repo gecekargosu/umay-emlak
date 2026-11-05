@@ -493,3 +493,12 @@ YARIM:Liste yalnız 30 gün; e-posta/SMS gönderimi ve okundu/erteleme işareti 
 SORU:yok
 SIRADAKİ:2. madde — gider kalemleri + mal sahibi hesap ekstresi (yazdırılabilir).
 --------------------------------------------------------------------------------
+[2026-11-05 20:10] TUR:58 | MODUL:M15 denetim + paket | IS:Kullanıcı "her şeyi gerçek kullanıcı gibi dene" dedi: giriş yapıldı, 18 menü sayfası sırayla gezildi (hata bandı yok), sonra yazma akışları uçtan uca denendi — kişi eklendi (DENETIM Kisi Bir / 0555 000 00 01), kira tahsilatı yapıldı (18.500,00 ₺, Havale/EFT, "Ödenmiş" ve "Tümü" sekmelerinde kalan 0,00 ₺), kiracı bağlantısı üretildi (90 gün) ve girişsiz /talep/<jeton> sayfasından arıza bildirildi (maintenance_request: plumbing / open + kiracının telefonu notta). Bulunan tek kusur: uuid bekleyen yola düz metin gelince (ör. GET /api/v1/tenants/links) Postgres 22P02 hatası 500 dönüyordu → onError'da 404 "Kayıt bulunamadı" karşılığı eklendi. Paket v5 yeniden üretildi (staging 229,9 MB, OKU-BENI v5: bu ay bitecekler, kiracı bağlantısı, demo veri düzeltmesi, 404 düzeltmesi).
+DOSYA:apps/api/src/app.ts (onError 22P02 → 404), pack/build.mjs (OKU-BENI v5 + sürüm notu), apps/web/src/pages/Roadmap.tsx (tazeleme turu)
+TEST:typecheck 0 · pnpm test 19 dosya / 67 test 0 · API: /health {"ok":true,"migrations":17} · /api/v1/{today,charges,maintenance,people,contracts,tenants links} 200/201 · uuid bozuk yol: tenants/links, properties/abc, contracts/xyz → 404 · ekran: kiralar Ödenmiş/Tümü "Ödendi · kalan 0,00 ₺", /talep/<jeton> "Bildiriminiz alındı"
+HATA ANALIZI:1) API ilk açılışta 500 verdi: umay-pg konteyneri kapalıydı (Exited 255) — docker start umay-pg sonrası /health 200, kod hatası değil. 2) GET /api/v1/tenants/links 500: rota /:id bekliyor, "links" uuid değil → Postgres cast hatası; hata gövdesi teknik ayrıntı sızdırmıyordu ama durum kodu yanlıştı, 404'e çevrildi. 3) Kiralar "Açık" sekmesi tahsilattan sonra boş görünüyor — doğru davranış (kayıt Ödenmiş'e geçti), kayıt kaybolmadı.
+KARAR:K-91 Var olmayan/kötü biçimli kayıt kimliği "sunucu hatası" değil "kayıt bulunamadı" sayılır: tek yerde (onError) 22P02 → 404; uçlara ayrı ayrı kontrol eklenmez.
+YARIM:Denetimde belge yükleme ve Excel içe aktarma dosya seçicisi tıklanmadı (dosya seçimi işletim penceresi açıyor); paket zip'i Compress-Archive ile uzun sürdüğü için ayrıca doğrulanacak.
+SORU:yok
+SIRADAKI:Yol haritası 2. madde — gider kalemleri + mal sahibi hesap ekstresi (yazdırılabilir).
+--------------------------------------------------------------------------------

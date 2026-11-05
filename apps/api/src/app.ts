@@ -48,6 +48,15 @@ app.onError((error, c) => {
   if (error instanceof HttpError) {
     return c.json({ error: error.message }, error.status);
   }
+  // TUR:58 — denetimde görüldü: uuid yerine düz metin gelen yolda Postgres
+  // "invalid input syntax for type uuid" (22P02) fırlatıyor ve 500 dönüyordu.
+  // Var olmayan kayıt gibi davran: 404. Teknik ayrıntı log'a gitmez.
+  const pgCode =
+    (error as { code?: string; cause?: { code?: string } }).code ??
+    (error as { cause?: { code?: string } }).cause?.code;
+  if (pgCode === "22P02") {
+    return c.json({ error: "Kayıt bulunamadı" }, 404);
+  }
   // K-9: kullanıcıya sade cümle + kayıt numarası; teknik ayrıntı yalnız log'a.
   const ref = c.get("ref") ?? makeRef();
   logJson({

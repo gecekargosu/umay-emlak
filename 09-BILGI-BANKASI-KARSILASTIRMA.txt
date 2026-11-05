@@ -276,3 +276,15 @@ M. TUR:57 GÜNCELLEMELERİ (2026-11-05)
 [VAR] Sıra mantığı: süresi geçenler en yeni önce (en fazla 5), sonra yaklaşanlar en yakın önce; toplam 20 satır.
 [VAR] Demo veri düzeltildi: sözleşmeler artık bitiş tarihli (1 yıl), 6 DASK poliçesi üretiliyor (biri geçmiş, biri 30 gün içinde) — pano kutuları boş kalmıyor.
 [KISMI] Uyarı hâlâ yalnız ekranda; e-posta/SMS gönderimi ve "okundu/ertele" işareti yok (yol haritası 15. madde).
+
+====================================================================
+N. TUR:58 DENETİM SONUÇLARI (2026-11-05)
+====================================================================
+[VAR] 18 menü sayfası tarandı; hiçbirinde hata bandı / kayıt numarası çıkmadı.
+[VAR] Kişi ekleme (kişi kartları): yeni kayıt listede göründü, audit_log'a "oluşturma people 201" düştü.
+[VAR] Kira tahsilatı: 18.500,00 ₺ Havale/EFT işlendi; "Ödenmiş" ve "Tümü" sekmelerinde kalan 0,00 ₺ / Ödendi; audit_log "charges/.../payments 200".
+[VAR] Kiracı bağlantısı: 90 günlük jeton üretildi (201), /talep/<jeton> girişsiz açıldı, form gönderildi, maintenance_request "plumbing/open" + telefon notu.
+[VAR] Bozuk kayıt kimliği artık 404 "Kayıt bulunamadı" (22P02 → 404, tek yerde).
+[VAR] Paket v5 üretildi: release/umay-emlak 229,9 MB, OKU-BENI sürüm notu güncel.
+[KISMI] Belge yükleme ve Excel içe aktarma dosya seçicisi denetimde tıklanmadı (işletim penceresi).
+[KISMI] Paket zip'i ve ilk açılış süresi bu turda yeniden ölçülmedi.

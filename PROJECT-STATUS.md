@@ -1,6 +1,6 @@
 # PROJECT-STATUS
 
-Son güncelleme: 2026-11-05 08:30 · Aktif tur: TUR:57 bitti — panoda "Bu ay bitecekler" tek listesi
+Son güncelleme: 2026-11-05 20:15 · Aktif tur: TUR:58 bitti — tam senaryo denetimi + paket v5
 
 ## Şu an çalışan (doğrulandı)
 - Giriş/oturum, boşta kilit, şifre değiştirme; ofis/personel/onay yetkisi.
@@ -12,8 +12,10 @@ Son güncelleme: 2026-11-05 08:30 · Aktif tur: TUR:57 bitti — panoda "Bu ay b
 - Portföy önerisi; arıza/bakım talebi (fotoğraf, durum, masraf); Excel/CSV içe aktarma.
 - Kiracı talep bağlantısı (TUR:55): kiralık dosyada üret/iptal, `/talep/<jeton>` girişsiz form,
   bildirim arıza listesine düşer; jeton DB'de yalnız sha256 özetiyle, süre + iptal kontrolü.
-- Taşınabilir Windows paketi: `Desktop/Aysana-gonderilecek/UmayEmlak-Beta-2026-11-04/` + zip (288 MB).
-  Doğrulama: `/health {"ok":true,"migrations":15}`, giriş 200, HTML 200, ilk açılış 14 sn.
+- Taşınabilir Windows paketi v5 (TUR:58): `release/umay-emlak` 229,9 MB →
+  `Desktop/Aysana-gonderilecek/UmayEmlak-Beta-2026-11-05-v5.zip`. OKU-BENI v5 sürüm notu güncel.
+- TUR:58 denetimi (kullanıcı gibi): 18 menü sayfası hatasız; kişi ekleme, kira tahsilatı,
+  kiracı bağlantısı + girişsiz talep formu uçtan uca çalıştı. Bozuk kayıt kimliği artık 404 (K-91).
 
 ## Açık işler (ayrıntı: 10-DENETIM-ISTEK-LISTESI-2026-11-04.txt)
 - H-1…H-6 **YAPILDI** (TUR:38, commit 8c3ff2d; TUR:39 yeniden doğrulandı).
