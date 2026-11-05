@@ -457,3 +457,31 @@ K-84 | 2026-11-04 | Mülk dosyasındaki mal sahibi tek kaynaktan okunur.
 K-85 | 2026-11-04 | Onarım sırası: kullanılabilirlik → güven/iz → liste/performans → dosya bölme.
        Ne: M1 H-13+H-14, M2 H-7+H-8, M3 K-4+K-9, M4 K-6 audit_log, M5 H-15+K-10, M6 K-1/K-2/K-3, M7 Y-93.
        Neden: Kullanıcının her gün tıkladığı ekranlar önce; dosya bölme davranış değiştirmediği için en son.
+
+K-92 | 2026-11-05 | Ödeme altyapısı sağlayıcıdan bağımsız kurulur (iyzico/param pos benzeri).
+       Ne: Para hareketi PSP'ye göre değil kendi modelimize göre tutulur: payment_intent
+       (charge_id, tenant_id, tutar kuruş, provider, provider_ref, status, idempotency_key,
+       ham callback) + /api/v1/public/psp/webhook (imza doğrulama, tekrar gönderime dayanıklı).
+       Kiracı ödeme sayfası /ode/<jeton> (girişsiz, tek kullanımlık). Kart bilgisi hiçbir yerde
+       saklanmaz; PCI kapsamı dışında kalınır. Tahsilat yine charge/payment'a mahsup edilir,
+       sağlayıcı yalnız aracıdır.
+       Neden: mal sahibi/kiracı/personel panelleri aynı para çekirdeğini kullanacak; sağlayıcı
+       değişince veri ve muhasebe bozulmasın.
+
+K-93 | 2026-11-05 | Belge eşleştirme (crewintel "mesh" fikri) UMAY'a sırayla taşınır.
+       Ne: (1) toplu yükleme + batch kaydı, (2) dosya adı + eldeki Excel listeden isim/mülk
+       eşleştirme skoru, (3) inceleme kuyruğu (aday + skor + onay/red), (4) onayda kişi/mülk
+       kartı yoksa açar ve belgeyi bağlar, (5) hesabı olmayan kişiye davet/tek kullanımlık bağlantı.
+       OCR ve PDF metin çıkarma yeni bağımlılık gerektirir (K-70 gereği eklenmez): metin
+       gerektiren işler dosya adı + insan onayıyla çözülür; gerçek OCR ayrı karar.
+       Neden: 100 belgeyi tek tek elden geçirmek yerine kuyruk; yanlış eşleşme insan onayında durur.
+
+K-94 | 2026-11-05 | Paneller ayrı giriş, tek çekirdek.
+       Ne: ofis (admin) / mal sahibi / kiracı / personel panelleri ayrı oturum ve ayrı yetkiyle
+       açılır; veri aynı tablolardan tenant_id + kişi bağıyla okunur. Panel uçları
+       /api/v1/portal/... altında toplanır; her panel yalnız kendi kaydını yazar.
+       Neden: yeni panel eklerken muhasebe ve yetki ikinci kez yazılmasın.
+
+K-95 | 2026-11-05 | Aysan paketi depoya değil GitHub sürümüne (release asset) yüklenir.
+       Ne: 237 MB zip git geçmişine girmez; gh release asset olarak durur, sürüm notu yazılır.
+       Neden: depo şişmeden Aysan her sürümü indirebilsin.

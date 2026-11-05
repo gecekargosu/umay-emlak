@@ -502,3 +502,12 @@ YARIM:Denetimde belge yükleme ve Excel içe aktarma dosya seçicisi tıklanmad�
 SORU:yok
 SIRADAKI:Yol haritası 2. madde — gider kalemleri + mal sahibi hesap ekstresi (yazdırılabilir).
 --------------------------------------------------------------------------------
+[2026-11-05 20:55] TUR:59 | MODUL:M12 medya sınırı + altyapı kararları | IS:Kullanıcı "resim/video 50 MB yerine 500 MB olsun" dedi: mülk medya sınırı 500 MB'a çıkarıldı (uç + ekran metni). Crewintel'in (docker, C:\CREWINTEL) mesh/belge eşleştirme akışı API düzeyinde incelendi: bulk-match, upload batch (arka planda eşleştirme), review queue, aday+skor, convert-to-PDF uçları var; UMAY'a OCR bağımlılığı eklemeden taşınabilecek sıra K-93 olarak yazıldı. Ödeme (iyzico benzeri), paneller (mal sahibi/kiracı/personel) ve GitHub sürüm yüklemesi kararları K-92/K-94/K-95 olarak kaydedildi; Aysan paketi GitHub release asset olarak yüklendi. Telefon/tablet: spacedesk kurulu ve çalışıyor; Iriun Webcam ve Deskreen indirmeleri ağ tarafında düştü (kurulmadı).
+DOSYA:apps/api/src/routes/media.ts (MAX_MEDIA_BYTES 500 MB), apps/web/src/components/PropertyMedia.tsx (metin), 04-KARARLAR.txt (K-92…K-95), 06 (Y-109…Y-111), pack (v5 yeniden üretildi)
+TEST:typecheck 0 · paket yeniden üretildi (229,9 MB) · zip 237 MB · GitHub release asset yüklendi
+HATA ANALIZI:Compress-Archive 230 MB'da takıldı (0 bayt, 10 dk) → tar -a ile 6 sn. winget üzerinden Iriun/Deskreen indirmesi "InternetOpenUrl failed / 404" verdi; aynı URL curl ile 302 dönüp gövde inmedi — ağ tarafı engeli, kurulum yapılmadı.
+KARAR:K-92 ödeme PSP'den bağımsız (payment_intent + webhook, kart saklanmaz) · K-93 belge eşleştirme kuyruğu OCR'sız başlar · K-94 paneller ayrı giriş tek çekirdek · K-95 paket release asset
+YARIM:Belge eşleştirme ve ödeme altyapısı henüz kodlanmadı (karar + sıra yazıldı); dokunmatik BIOS/servis kontrolü kullanıcıda.
+SORU:yok
+SIRADAKI:Yol haritası 2. madde (gider + mal sahibi ekstresi) bitmeden panele geçilmez; sonra Y-110 belge kuyruğu.
+--------------------------------------------------------------------------------

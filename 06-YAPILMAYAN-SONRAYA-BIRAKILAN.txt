@@ -461,3 +461,13 @@ Y-108 | Bozuk kayıt kimliğinde 500 → 404 — YAPILDI (2026-11-05, TUR:58):
         tek yerde (onError) yakalanıp "Kayıt bulunamadı" 404'e çevrildi.
         Denetimde /api/v1/tenants/links, /properties/abc, /contracts/xyz ile doğrulandı.
         | Denetim | S | YAPILDI
+Y-109 | Ödeme altyapısı (PSP'ye hazır) — BAŞLANMADI (K-92): payment_intent tablosu,
+        webhook ucu, kiracı /ode/<jeton> sayfası. Sıra: önce mal sahibi ekstresi (yol 2),
+        sonra bu. | Ödeme | L | BEKLİYOR
+Y-110 | Belge eşleştirme kuyruğu (crewintel mesh fikri) — BAŞLANMADI (K-93):
+        toplu yükleme + batch + skor + inceleme kuyruğu + onayda kart açma.
+        OCR yeni bağımlılık gerektirdiği için ilk sürüm dosya adı + Excel + insan onayı.
+        | Belge | L | BEKLİYOR
+Y-111 | Mal sahibi / kiracı / personel panelleri — BAŞLANMADI (K-94):
+        ayrı giriş, aynı çekirdek; önce ekstre (mal sahibi) sonra kiracı ödeme sayfası.
+        | Panel | L | BEKLİYOR

@@ -3,7 +3,8 @@
  * videoları önemli notları ve tüm detayları yok").
  *
  * Depo: belge deposuyla aynı (sha256, içerik adresli). Tablo yalnız meta tutar.
- * Sınır: 50 MB, yalnız image/* ve video/*.
+ * Sınır: 500 MB (TUR:59 — kullanıcı isteği: telefonla çekilen uzun videolar da
+yüklensin; 50 MB video için yetmiyordu), yalnız image/* ve video/*.
  */
 import { Hono } from "hono";
 import { and, desc, eq } from "drizzle-orm";
@@ -15,7 +16,7 @@ import { getObject, putObject, sha256Of } from "../storage.js";
 
 export const mediaRoutes = new Hono();
 
-const MAX_MEDIA_BYTES = 50 * 1024 * 1024;
+const MAX_MEDIA_BYTES = 500 * 1024 * 1024;
 
 const EXT_MIME: Record<string, string> = {
   jpg: "image/jpeg",

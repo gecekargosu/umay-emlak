@@ -80,7 +80,7 @@ export function PropertyMedia({ propertyId }: { propertyId: string }) {
           accept="image/jpeg,image/png,image/webp,image/gif,video/mp4,video/webm,video/quicktime"
           onChange={(e) => void upload([...(e.target.files ?? [])])}
         />
-        <span className="muted small">En fazla 50 MB · JPG/PNG/WEBP/GIF · MP4/WEBM/MOV</span>
+        <span className="muted small">En fazla 500 MB · JPG/PNG/WEBP/GIF · MP4/WEBM/MOV</span>
       </div>
 
       {items === null && <p className="muted small">Yükleniyor…</p>}
