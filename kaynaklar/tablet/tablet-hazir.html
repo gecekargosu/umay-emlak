@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UMAY EMLAK — Tableti hazırla</title>
+    <style>
+      body { margin: 0; font: 18px/1.55 system-ui, sans-serif; background: #0b0d12; color: #f2f4f8; padding: 22px; }
+      h1 { font-size: 25px; margin: 0 0 6px; }
+      h2 { font-size: 19px; margin: 26px 0 10px; color: #9fb4d8; }
+      p { color: #97a1b1; margin: 0 0 16px; }
+      a.kutu { display: block; text-decoration: none; color: #0f1115; background: #f2f4f8; border-radius: 16px; padding: 18px; margin-bottom: 12px; }
+      a.kutu strong { display: block; font-size: 21px; }
+      a.kutu span { display: block; font-size: 14px; color: #4a5260; margin-top: 4px; }
+      a.kutu.yesil { background: #2fbf71; color: #06210f; }
+      a.kutu.yesil span { color: #0d3a1f; }
+      a.kutu.mavi { background: #4c8dff; color: #fff; }
+      a.kutu.mavi span { color: #dbe6ff; }
+      button { font: 16px system-ui, sans-serif; padding: 12px 16px; border: 0; border-radius: 12px; background: #4c8dff; color: #fff; margin: 6px 0; }
+      button.ok { background: #2fbf71; color: #06210f; }
+      code, pre { background: #1b1f27; color: #eaf0ff; border-radius: 8px; }
+      code { padding: 2px 6px; }
+      pre { padding: 12px; overflow-x: auto; font-size: 14px; white-space: pre-wrap; }
+      .kucuk { font-size: 14px; color: #7f8b9e; }
+    </style>
+  </head>
+  <body>
+    <h1>UMAY EMLAK — tableti hazırla</h1>
+    <p>Bu sayfa tableti laptopla birlikte çalışmaya hazırlar. Sırayla ilerle; her adım tek dokunuş.</p>
+
+    <h2>1. PDF okuyucu (UMAY PDF Reader 5.13)</h2>
+    <a class="kutu mavi" href="UmayPdfReader-5.13.apk" download>
+      <strong>UMAY PDF Reader 5.13 kur</strong>
+      <span>71 MB — indir, sonra "Kur"a dokun (kaynağı bilinmeyen uygulama izni isteyebilir)</span>
+    </a>
+    <p class="kucuk">Dosya tablete zaten kopyalandı: <code>Dahili depolama/Download/UmayPdfReader-5.13.apk</code> — Dosyalar uygulamasından da kurabilirsin.</p>
+
+    <h2>2. Ders ve proje dosyaları</h2>
+    <a class="kutu" href="paylas/3-DONEM.zip" download>
+      <strong>3.DÖNEM paketi</strong>
+      <span>Ders notları, sınav takvimi, transkript (zip)</span>
+    </a>
+    <a class="kutu" href="paylas/MOBIL-APLIKASYONLAR.zip" download>
+      <strong>Geliştirdiğim mobil uygulamalar</strong>
+      <span>Proje klasörleri (zip)</span>
+    </a>
+    <a class="kutu" href="paylas/UMAY-EMLAK-KAYNAK.zip" download>
+      <strong>UMAY EMLAK kaynak kodu</strong>
+      <span>Tabletten incelemek/geliştirmek için (zip)</span>
+    </a>
+
+    <h2>3. Tableti laptopun işçisi yap (SSH)</h2>
+    <p class="kucuk">Aşağıdaki satırı kopyala, Termux'u aç, uzun bas → <b>Paste</b> → Enter. Bir kere yapılır, tablet açıldıkça kendi başlar.</p>
+    <pre id="ssh">curl -sL http://192.168.1.33:8080/tablet-ssh-kur.sh | bash</pre>
+    <button onclick="kopyala('ssh', this)">Satırı kopyala</button>
+
+    <h2>4. Denetim (ne var, ne gereksiz)</h2>
+    <pre id="denetim">curl -sL http://192.168.1.33:8080/paket-denetim.sh | bash</pre>
+    <button onclick="kopyala('denetim', this)">Satırı kopyala</button>
+
+    <h2>5. Paylaşılan klasör</h2>
+    <p class="kucuk">Laptopun attığı dosyalar tablette <code>/sdcard/Umay-tablet</code> içinde. Termux'ta bağlamak için:</p>
+    <pre id="paylas">curl -sL http://192.168.1.33:8080/umay-paylasim.sh | bash</pre>
+    <button onclick="kopyala('paylas', this)">Satırı kopyala</button>
+
+    <script>
+      function kopyala(id, btn) {
+        const metin = document.getElementById(id).textContent;
+        const eski = btn.textContent;
+        navigator.clipboard.writeText(metin).then(
+          () => { btn.textContent = "Kopyalandı ✓"; btn.classList.add("ok"); setTimeout(() => { btn.textContent = eski; btn.classList.remove("ok"); }, 1800); },
+          () => { btn.textContent = "Uzun basıp elle kopyala"; }
+        );
+      }
+    </script>
+  </body>
+</html>

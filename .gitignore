@@ -35,3 +35,6 @@ kaynaklar/tablet/*.apk
 
 # 8080 APK servisi erisim kayitlari (yerel, commit edilmez)
 kaynaklar/loglar/
+
+# Tablete tasinan zip paketleri (buyuk, commit edilmez)
+kaynaklar/tablet/paylas/
