@@ -489,3 +489,11 @@ Y-114 | Docker Desktop açılışta başlamıyor — BEKLİYOR (TUR:61):
 Y-115 | Kira takip bedeli demo verisi — YAPILDI (2026-11-05, TUR:62):
         186 owner_payout kaydı (son 6 ay, %8 DEMO oranı, geçen aylar 'paid').
         Ekstrede takip bedeli 43.344,00 ₺ / net 317.856,00 ₺ görünüyor. | Demo | S | YAPILDI
+Y-110 | Belge eşleştirme kuyruğu — YAPILDI (2026-11-05, TUR:63):
+        GET /documents/queue + Belgeler / arşiv ekranında "İnceleme kuyruğu" paneli.
+        Bekleyen öneriler tek listede (belge + hedef + güven + gerekçe), onay/red
+        tek tıkla; otomatik bağ eşiği 70, belirsiz 45-69 insan onayına kalır.
+        Excel listesiyle toplu eşleştirme hâlâ açık (Y-116). | Belge | L | YAPILDI
+Y-116 | Excel listesiyle toplu belge eşleştirme — BEKLİYOR (TUR:63):
+        Kardeşin hazırlayacağı liste içe aktarıldığında belge adlarıyla
+        eşleştirme kuyruğa düşmeli; şu an yalnız dosya adı örtüşmesi kullanılıyor. | Belge | M | BEKLİYOR

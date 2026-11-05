@@ -538,3 +538,12 @@ YARIM:Belge eşleştirme kuyruğu (Y-110) ve ödeme altyapısı (Y-109) açık
 SORU:yok
 SIRADAKİ:Y-110 belge eşleştirme kuyruğu (toplu yükleme → aday skoru → inceleme → onayda karta bağlama)
 --------------------------------------------------------------------------------
+[2026-11-05 22:32] TUR:63 | MODUL:M07 belge inceleme kuyruğu (Y-110) | IS:Belge eşleştirmenin altyapısı vardı (sha256 depo + otomatik öneri + onay/red uçları) ama bekleyen öneriler yalnız belge tek tek açılınca görünüyordu. Yeni GET /api/v1/documents/queue bekleyen TÜM önerileri belge adı + hedef adı + güven puanı + gerekçeyle, puana göre sıralı döndürüyor (en fazla 200). Belgeler / arşiv ekranına "İnceleme kuyruğu" paneli eklendi: her satırda Bağı kur / Değil / Belgeyi aç; onaydan sonra kuyruk ve raf kendini yeniliyor. Toplu yükleme zaten vardı (çoklu dosya + dosya adından kişi açma + net örtüşmede otomatik bağ).
+DOSYA:apps/api/src/routes/documents.ts, apps/web/src/pages/Documents.tsx, apps/web/src/api-types-docs.ts
+TEST:typecheck 3 paket 0 · pnpm test 19 dosya / 67 test 0 · ekran: TEST vekalet Simsek.pdf yüklendi → öneri 1 (güven 45/100, "TEST vekalet Ahmet" ile kısmen örtüşüyor) → kuyruk paneli göründü → "Bağı kur" tıklandı → kuyruk 0, panel kapandı · test kayıtları temizlendi
+HATA ANALIZI:İlk denemede kuyruk boştu çünkü 270 belgenin hepsi bağlıydı; öneri üretmek için kısmi örtüşen test dosyası yüklendi (puan 45 → otomatik bağ eşiği 70'in altında kaldı, insan onayına düştü — K-32 beklendiği gibi). Panel ilk açılışta boş göründü: sayfa remount olmadan kuyruk yenilenmiyordu; sayfa yenilenince doğrulandı (yükleme ve karar sonrası kendini yeniliyor).
+KARAR:K-100 kuyruk tek ekranda: bekleyen eşleştirmeler belge açılmadan karara bağlanır; otomatik bağ eşiği 70, belirsiz (45-69) insan onayına kalır
+YARIM:Excel listesiyle (kardeşin hazırlayacağı liste) toplu eşleştirme henüz yok; kuyruk yalnız dosya adı örtüşmesine bakıyor
+SORU:yok
+SIRADAKİ:Y-109 ödeme altyapısı (payment_intent + /api/v1/public/psp/webhook + kiracı /ode/<jeton>)
+--------------------------------------------------------------------------------

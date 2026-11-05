@@ -3,6 +3,7 @@ import {
   api,
   ApiError,
   type DocumentDetail,
+  type DocumentQueue,
   type DocumentRow,
   type KindOption,
   type PersonRow,
@@ -21,6 +22,8 @@ export function Documents({ canApprove }: { canApprove: boolean }) {
   const [kinds, setKinds] = useState<KindOption[]>([]);
   const [people, setPeople] = useState<PersonRow[]>([]);
   const [detail, setDetail] = useState<DocumentDetail | null>(null);
+  // TUR:63 — bekleyen eşleştirmeler tek kuyrukta: belge tek tek açılmadan karar verilir.
+  const [queue, setQueue] = useState<DocumentQueue | null>(null);
   const [query, setQuery] = useState("");
   const [kind, setKind] = useState("tapu");
   const [personId, setPersonId] = useState("");
@@ -31,6 +34,14 @@ export function Documents({ canApprove }: { canApprove: boolean }) {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+
+  const loadQueue = useCallback(async () => {
+    try {
+      setQueue(await api<DocumentQueue>("/documents/queue"));
+    } catch {
+      setQueue(null);
+    }
+  }, []);
 
   const load = useCallback(async (q: string) => {
     try {
@@ -49,6 +60,10 @@ export function Documents({ canApprove }: { canApprove: boolean }) {
     const timer = setTimeout(() => void load(query), 250);
     return () => clearTimeout(timer);
   }, [query, load]);
+
+  useEffect(() => {
+    void loadQueue();
+  }, [loadQueue]);
 
   useEffect(() => {
     void api<{ items: KindOption[] }>("/documents/kinds")
@@ -105,6 +120,7 @@ export function Documents({ canApprove }: { canApprove: boolean }) {
       setTitle("");
       if (fileInputRef.current) fileInputRef.current.value = "";
       await load(query);
+      await loadQueue();
       if (lastId) await open(lastId);
     } catch (caught) {
       setError(caught instanceof ApiError ? caught.message : "Belge yüklenemedi");
@@ -129,6 +145,7 @@ export function Documents({ canApprove }: { canApprove: boolean }) {
       setMessage(action === "approve" ? "Bağ kuruldu." : "Öneri reddedildi.");
       if (detail) await open(detail.document.id);
       await load(query);
+      await loadQueue();
     } catch (caught) {
       setError(caught instanceof ApiError ? caught.message : "İşlem yapılamadı");
     } finally {
@@ -218,6 +235,56 @@ export function Documents({ canApprove }: { canApprove: boolean }) {
         </div>
         <p className="hint">En fazla 25 MB. PDF, JPG, PNG, WEBP, DOC/DOCX, TXT.</p>
       </details>
+
+      {queue !== null && queue.items.length > 0 && (
+        <section className="panel">
+          <div className="detail-head">
+            <h3>İnceleme kuyruğu</h3>
+            <span className="muted small">{queue.count} bekleyen eşleştirme</span>
+          </div>
+          <ul className="suggestion-list">
+            {queue.items.map((item) => (
+              <li key={item.id}>
+                <div>
+                  <strong>{item.targetLabel}</strong>{" "}
+                  <span className="muted small">
+                    ← {item.title ?? item.filename} · {item.kindLabel} · güven {item.score}/100
+                  </span>
+                </div>
+                <div className="muted small">{item.reasons.join(" · ")}</div>
+                <div className="row-gap">
+                  <button
+                    type="button"
+                    disabled={busy || !canApprove}
+                    title={canApprove ? "" : "Onay yetkisi yalnız ofis sahibi/ortağında"}
+                    onClick={() => void decide(item.id, "approve")}
+                  >
+                    Bağı kur
+                  </button>
+                  <button
+                    type="button"
+                    className="ghost"
+                    disabled={busy}
+                    onClick={() => void decide(item.id, "reject")}
+                  >
+                    Değil
+                  </button>
+                  <button
+                    type="button"
+                    className="ghost"
+                    onClick={() => void open(item.documentId)}
+                  >
+                    Belgeyi aç
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+          {!canApprove && (
+            <p className="hint">Bağ kurma yetkisi olan bir kullanıcı (ofis sahibi/ortağı) onaylamalı.</p>
+          )}
+        </section>
+      )}
 
       {message && <div className="alert">{message}</div>}
       {error && <div className="error">{error}</div>}

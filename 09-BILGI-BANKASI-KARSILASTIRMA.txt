@@ -310,3 +310,5 @@ P. TUR:61 GÜNCELLEMELERİ (2026-11-05)
 [KISMI] Takip bedeli (owner_payout) demo veride yok → ekstrede 0,00 ₺.
 [KISMI] Docker Desktop açılışta başlamıyor (Y-114); laptop açılışında servisler elle kaldırılıyor.
 [VAR] Ekstrede takip bedeli ve net dolu: 186 owner_payout kaydı, %8 DEMO oranı (K-99).
+[VAR] Belge inceleme kuyruğu: bekleyen eşleştirmeler tek ekranda, onay/red tek tıkla (K-100).
+[KISMI] Kuyruk yalnız dosya adı örtüşmesine bakıyor; Excel listesiyle eşleştirme yok (Y-116).

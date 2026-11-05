@@ -51,3 +51,19 @@ export type DocumentDetail = {
 };
 
 export type KindOption = { kind: string; label: string };
+
+/** İnceleme kuyruğu satırı — belge + aday hedef tek satırda (K-93). */
+export type DocumentQueueItem = {
+  id: string;
+  documentId: string;
+  targetType: "person" | "property" | "listing";
+  targetLabel: string;
+  score: number;
+  reasons: string[];
+  createdAt: string;
+  filename: string;
+  title: string | null;
+  kindLabel: string;
+};
+
+export type DocumentQueue = { count: number; items: DocumentQueueItem[] };

@@ -283,6 +283,59 @@ documentRoutes.get("/kinds", async (c) => {
   });
 });
 
+/**
+ * İnceleme kuyruğu — bekleyen TÜM eşleştirme önerileri tek listede (K-93 / Y-110).
+ * Belge tek tek açılmadan karar verilebilsin diye belge + hedef adı birlikte döner.
+ */
+documentRoutes.get("/queue", async (c) => {
+  const session = await resolveSession(c);
+  requirePasswordChanged(session);
+
+  const items = await withTenant(session.tenantId, async (tx) => {
+    const rows = await tx
+      .select({
+        id: schema.documentSuggestions.id,
+        documentId: schema.documentSuggestions.documentId,
+        targetType: schema.documentSuggestions.targetType,
+        score: schema.documentSuggestions.score,
+        reasons: schema.documentSuggestions.reasons,
+        createdAt: schema.documentSuggestions.createdAt,
+        filename: schema.documents.filename,
+        title: schema.documents.title,
+        kind: schema.documents.kind,
+        personName: schema.persons.fullName,
+        propertyTitle: schema.properties.title,
+      })
+      .from(schema.documentSuggestions)
+      .innerJoin(schema.documents, eq(schema.documents.id, schema.documentSuggestions.documentId))
+      .leftJoin(schema.persons, eq(schema.persons.id, schema.documentSuggestions.targetId))
+      .leftJoin(schema.properties, eq(schema.properties.id, schema.documentSuggestions.targetId))
+      .where(eq(schema.documentSuggestions.status, "pending"))
+      .orderBy(desc(schema.documentSuggestions.score))
+      .limit(200);
+
+    return rows.map((row) => ({
+      id: row.id,
+      documentId: row.documentId,
+      targetType: row.targetType,
+      targetLabel:
+        row.targetType === "person"
+          ? (row.personName ?? "(kişi)")
+          : row.targetType === "property"
+            ? (row.propertyTitle ?? "(mülk)")
+            : "(ilan)",
+      score: row.score,
+      reasons: row.reasons,
+      createdAt: row.createdAt,
+      filename: row.filename,
+      title: row.title,
+      kindLabel: DOCUMENT_KIND_TR[row.kind as DocumentKind],
+    }));
+  });
+
+  return c.json({ count: items.length, items });
+});
+
 /** Belge detayı + öneriler (hedef adlarıyla). */
 documentRoutes.get("/:id", async (c) => {
   const session = await resolveSession(c);
