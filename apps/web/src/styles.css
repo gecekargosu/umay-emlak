@@ -1685,3 +1685,40 @@ main h3,
 .virtual-table tbody tr.clickable:hover {
   background: var(--bg-700);
 }
+
+/* TUR:60 — ekstre yazdırma: menü/üst bar kâğıda girmesin. */
+@media print {
+  .topbar,
+  .side,
+  .no-print,
+  .toolbar,
+  .page-head button {
+    display: none !important;
+  }
+  .app,
+  .layout,
+  main {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  body {
+    background: #fff !important;
+  }
+  .statement-sheet {
+    border: none !important;
+    box-shadow: none !important;
+  }
+}
+
+.statement-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.statement-total td {
+  border-top: 2px solid #999;
+}

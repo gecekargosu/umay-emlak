@@ -259,7 +259,7 @@ export function Roadmap() {
         metnin + Gemini/ChatGPT/Claude/Freebuff analizleri) ve <strong>06/08/09/10</strong> kayıtları.
         Bir madde bitince <strong>silinmez</strong>; “VAR” durumuna geçer ve <strong>Kapananlar</strong>{" "}
         bölümüne taşınır. Sıra numarası elle yazılmaz: açık maddeler sırayla numaralanır, bir madde
-        kapanınca numaralar kendiliğinden kayar. Son tazeleme: <strong>TUR:58</strong> — para/iz
+        kapanınca numaralar kendiliğinden kayar. Son tazeleme: <strong>TUR:60</strong> — para/iz
         sırası öne alındı, panel ve mobil işleri arkasına kondu.
       </InfoNote>
 

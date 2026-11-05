@@ -471,3 +471,11 @@ Y-110 | Belge eşleştirme kuyruğu (crewintel mesh fikri) — BAŞLANMADI (K-93
 Y-111 | Mal sahibi / kiracı / personel panelleri — BAŞLANMADI (K-94):
         ayrı giriş, aynı çekirdek; önce ekstre (mal sahibi) sonra kiracı ödeme sayfası.
         | Panel | L | BEKLİYOR
+Y-112 | Gider kalemleri + mal sahibi ekstresi — YAPILDI (2026-11-05, TUR:60):
+        Migration 0018 (expense), /expenses (liste/ekle/düzelt/iptal) ve
+        /statements/owners(+/:id); Para → Giderler ekranı, ekstre ayrı sayfada
+        yazdırılabilir. Net = tahsil − gider − kira takip bedeli.
+        | Yol haritası 2 | L | YAPILDI
+Y-113 | Demo mal sahibi dağılımı — BEKLİYOR (TUR:60'da görüldü):
+        31 mal sahibinin 1'inde tahakkuk var; ekstre çoğu kişide boş görünüyor.
+        Demo sözleşmeleri farklı mal sahiplerine dağıtılmalı. | Demo | S | BEKLİYOR

@@ -288,3 +288,13 @@ N. TUR:58 DENETİM SONUÇLARI (2026-11-05)
 [VAR] Paket v5 üretildi: release/umay-emlak 229,9 MB, OKU-BENI sürüm notu güncel.
 [KISMI] Belge yükleme ve Excel içe aktarma dosya seçicisi denetimde tıklanmadı (işletim penceresi).
 [KISMI] Paket zip'i ve ilk açılış süresi bu turda yeniden ölçülmedi.
+
+====================================================================
+O. TUR:60 GÜNCELLEMELERİ (2026-11-05)
+====================================================================
+[VAR] Gider kalemleri: mülke bağlı gider (tamir/aidat/temizlik/sigorta/vergi/komisyon), kuruş tam sayı, düzelt/iptal; silme yok.
+[VAR] Mal sahibi hesap ekstresi: mülk bazlı tahakkuk/tahsil/kalan/gider/kira takip bedeli/net + toplam + "Yazdır / PDF"; ayrı sayfada, geri düğmeli.
+[VAR] Ekstre hesabı doğrulandı: Umay Emlak (pilot) Mal Sahibi · tahakkuk 18.500,00 ₺ · tahsil 18.500,00 ₺ · net 18.500,00 ₺.
+[VAR] Gider kaydı uçtan uca: form → DB (tamir, 2.750,00 ₺) → audit_log 201.
+[KISMI] Ekstrede gider satırları kalem kalem değil, toplam olarak görünüyor.
+[KISMI] Demo veri: 31 mal sahibinin yalnız 1'inde tahakkuk var (sözleşme dağılımı); ekstre ekranı bu yüzden çoğu kişide boş görünür.

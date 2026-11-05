@@ -1,6 +1,6 @@
 # PROJECT-STATUS
 
-Son güncelleme: 2026-11-05 20:15 · Aktif tur: TUR:58 bitti — tam senaryo denetimi + paket v5
+Son güncelleme: 2026-11-05 21:05 · Aktif tur: TUR:60 bitti — gider kalemleri + mal sahibi ekstresi
 
 ## Şu an çalışan (doğrulandı)
 - Giriş/oturum, boşta kilit, şifre değiştirme; ofis/personel/onay yetkisi.
@@ -16,6 +16,8 @@ Son güncelleme: 2026-11-05 20:15 · Aktif tur: TUR:58 bitti — tam senaryo den
   `Desktop/Aysana-gonderilecek/UmayEmlak-Beta-2026-11-05-v5.zip`. OKU-BENI v5 sürüm notu güncel.
 - TUR:58 denetimi (kullanıcı gibi): 18 menü sayfası hatasız; kişi ekleme, kira tahsilatı,
   kiracı bağlantısı + girişsiz talep formu uçtan uca çalıştı. Bozuk kayıt kimliği artık 404 (K-91).
+- Gider kalemleri + mal sahibi ekstresi (TUR:60): Para → Giderler; gider mülke bağlı,
+  silinmez (düzelt/iptal), ekstre ayrı sayfada açılır ve yazdırılır (net = tahsil − gider − bedel).
 
 ## Açık işler (ayrıntı: 10-DENETIM-ISTEK-LISTESI-2026-11-04.txt)
 - H-1…H-6 **YAPILDI** (TUR:38, commit 8c3ff2d; TUR:39 yeniden doğrulandı).

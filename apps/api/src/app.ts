@@ -40,6 +40,8 @@ import { rentRevisionRoutes } from "./routes/rent-revisions.js";
 import { appointmentRoutes } from "./routes/appointments.js";
 import { suggestionRoutes } from "./routes/suggestions.js";
 import { maintenanceRoutes } from "./routes/maintenance.js";
+import { expenseRoutes } from "./routes/expenses.js";
+import { statementRoutes } from "./routes/statements.js";
 import { auditMiddleware, logJson, makeRef, type AuditEnv } from "./audit.js";
 
 export const app = new Hono<AuditEnv>();
@@ -110,6 +112,8 @@ app.route("/api/v1/rent-revisions", rentRevisionRoutes);
 app.route("/api/v1/appointments", appointmentRoutes);
 app.route("/api/v1/people", suggestionRoutes);
 app.route("/api/v1/maintenance", maintenanceRoutes);
+app.route("/api/v1/expenses", expenseRoutes);
+app.route("/api/v1/statements", statementRoutes);
 
 /**
  * Denetim kaydı — "kim ne yaptı" (K-6). Yalnız okuma; kayıt silinmez.

@@ -4,6 +4,7 @@ import { IdleLock, useIdleLock } from "./components/IdleLock";
 import { Contracts } from "./pages/Contracts";
 import { Dashboard } from "./pages/Dashboard";
 import { Documents } from "./pages/Documents";
+import { Expenses } from "./pages/Expenses";
 import { Import } from "./pages/Import";
 import { Listings } from "./pages/Listings";
 import { Owners } from "./pages/Owners";
@@ -32,6 +33,7 @@ type Page =
   | "sozlesmeler"
   | "policeler"
   | "sahipler"
+  | "giderler"
   | "belgeler"
   | "islem-kaydi"
   | "aktar"
@@ -71,6 +73,7 @@ const NAV: Array<{ group: string; items: Array<{ page: Page; label: string }> }>
     group: "Para",
     items: [
       { page: "kiralar", label: "Kiralar / tahsilat" },
+      { page: "giderler", label: "Giderler" },
       { page: "sahipler", label: "Sahibe aktarım" },
     ],
   },
@@ -106,6 +109,7 @@ const TITLES: Record<Page, string> = {
   sozlesmeler: "Sözleşmeler",
   policeler: "Poliçeler",
   sahipler: "Sahipler",
+  giderler: "Giderler",
   belgeler: "Belgeler",
   "islem-kaydi": "İşlem Kaydı",
   aktar: "İçe Aktar",
@@ -373,6 +377,7 @@ export function App() {
           {page === "sozlesmeler" && <Contracts canApprove={session.canApprove} />}
           {page === "policeler" && <Policies />}
           {page === "sahipler" && <Payouts />}
+          {page === "giderler" && <Expenses />}
           {page === "belgeler" && <Documents canApprove={session.canApprove} />}
           {page === "islem-kaydi" && <Audit />}
           {page === "aktar" && <Import />}
