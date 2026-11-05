@@ -486,3 +486,6 @@ Y-113 | Demo mal sahibi dağılımı — YAPILDI (2026-11-05, TUR:61):
 Y-114 | Docker Desktop açılışta başlamıyor — BEKLİYOR (TUR:61):
         Yeniden başlatmadan sonra umay-pg kapalı geliyor, API 500 veriyor.
         Docker Desktop başlangıca eklenmeli ya da servis otomatik başlatılmalı. | Altyapı | S | BEKLİYOR
+Y-115 | Kira takip bedeli demo verisi — YAPILDI (2026-11-05, TUR:62):
+        186 owner_payout kaydı (son 6 ay, %8 DEMO oranı, geçen aylar 'paid').
+        Ekstrede takip bedeli 43.344,00 ₺ / net 317.856,00 ₺ görünüyor. | Demo | S | YAPILDI

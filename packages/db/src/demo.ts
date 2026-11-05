@@ -523,6 +523,32 @@ async function seed(
     [tenantId],
   );
 
+  // --- Kira takip bedeli (TUR:62) ------------------------------------------
+  // Mal sahibi ekstresinde "takip bedeli" ve "net" 0,00 ₺ görünüyordu çünkü
+  // demo veride hiç owner_payout yoktu. Her sözleşme için son 6 ayın bedeli
+  // üretilir; oran VERİDİR (kodda sabit oran yok, burada demo değeri %8).
+  await client.query(
+    `insert into owner_payout
+       (tenant_id, contract_id, period, gross_kurus, fee_kurus, expense_kurus,
+        net_kurus, status, paid_at, note)
+     select c.tenant_id, c.id,
+            (date_trunc('month', current_date) - (m || ' month')::interval)::date,
+            c.rent_kurus,
+            round(c.rent_kurus * 8.0 / 100)::bigint,
+            0,
+            c.rent_kurus - round(c.rent_kurus * 8.0 / 100)::bigint,
+            case when m = 0 then 'draft' else 'paid' end,
+            case when m = 0 then null
+                 else (date_trunc('month', current_date) - (m || ' month')::interval
+                        + interval '6 day')::timestamptz end,
+            'DEMO kira takip bedeli'
+       from contract c
+      cross join generate_series(0, 5) m
+      where c.tenant_id = $1
+     on conflict (contract_id, period) do nothing`,
+    [tenantId],
+  );
+
   // --- DASK poliçeleri (TUR:57) --------------------------------------------
   // Panoda "poliçe bitiyor" kutusu boş kalıyordu: demo veride hiç poliçe yoktu.
   // Bitiş tarihleri bugüne göre dağıtılır (biri geçmiş, biri 30 gün içinde).

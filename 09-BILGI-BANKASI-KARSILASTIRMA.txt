@@ -309,3 +309,4 @@ P. TUR:61 GÜNCELLEMELERİ (2026-11-05)
 [VAR] Termux/F-Droid APK'ları ve tablet kılavuzu 8080'de servis ediliyor.
 [KISMI] Takip bedeli (owner_payout) demo veride yok → ekstrede 0,00 ₺.
 [KISMI] Docker Desktop açılışta başlamıyor (Y-114); laptop açılışında servisler elle kaldırılıyor.
+[VAR] Ekstrede takip bedeli ve net dolu: 186 owner_payout kaydı, %8 DEMO oranı (K-99).

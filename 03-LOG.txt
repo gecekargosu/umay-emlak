@@ -529,3 +529,12 @@ YARIM:Ekstrede takip bedeli (owner_payout) demo veride yok → 0,00 ₺ görün�
 SORU:yok
 SIRADAKİ:Y-114 Docker açılışta otomatik başlasın; sonra Y-110 belge eşleştirme kuyruğu
 --------------------------------------------------------------------------------
+[2026-11-05 22:25] TUR:62 | MODUL:M06 kira takip bedeli demo verisi | IS:Ekstrede "takip bedeli" ve "net" 0,00 ₺ görünüyordu; demo veride hiç owner_payout kaydı yoktu (0 kayıt / 32 sözleşme). Her sözleşme için son 6 ayın takip bedeli üretildi: gross = kira, fee = %8 (DEMO değeri, oran veridir — koda sabit oran yazılmadı), net = gross − fee; geçen aylar 'paid' + paid_at, bu ay 'draft'. packages/db/src/demo.ts'e kalıcı eklendi. DEV: 186 bedel kaydı, toplam bedel 325.680,00 ₺.
+DOSYA:packages/db/src/demo.ts
+TEST:typecheck 3 paket 0 · pnpm test 19 dosya / 67 test 0 · DEV SQL: owner_payout 186 · ekran: DEMO Ahmet Şimşek ekstresi (01.01.2026–31.12.2026) TOPLAM tahakkuk 541.800,00 ₺ · tahsil 361.200,00 ₺ · kalan 180.600,00 ₺ · gider 0,00 ₺ · takip bedeli 43.344,00 ₺ · net 317.856,00 ₺
+HATA ANALIZI:on conflict (contract_id, period) kullanıldı; 32×6=192 satırın 6'sı mevcut kayıtlarla çakıştı, 186 yazıldı. Ekstre net kuralı (K-97) değişmedi: net = tahsil − gider − bedel; ekrandaki 317.856,00 ₺ bu kurala uyuyor.
+KARAR:K-99 takip bedeli oranı veridir: demo %8 ile üretilir, gerçek oran ofis ayarından gelir; koda sabit oran yazılmaz (eski kuralın devamı)
+YARIM:Belge eşleştirme kuyruğu (Y-110) ve ödeme altyapısı (Y-109) açık
+SORU:yok
+SIRADAKİ:Y-110 belge eşleştirme kuyruğu (toplu yükleme → aday skoru → inceleme → onayda karta bağlama)
+--------------------------------------------------------------------------------
