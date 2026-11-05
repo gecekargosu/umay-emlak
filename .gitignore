@@ -32,3 +32,6 @@ release/
 
 # tablet APK'lari (buyuk ikili dosya; 8080 uzerinden dagitilir)
 kaynaklar/tablet/*.apk
+
+# 8080 APK servisi erisim kayitlari (yerel, commit edilmez)
+kaynaklar/loglar/

@@ -20,8 +20,26 @@ foreach ($surec in $eski) {
 }
 Start-Sleep -Seconds 1
 
-Start-Process -FilePath 'python' -ArgumentList @('-m', 'http.server', $port, '--bind', '0.0.0.0', '--directory', $dizin) -WindowStyle Hidden
+# Indirme kaniti icin erisim kaydi tutulur (hangi IP hangi dosyayi cekti).
+$logDir = Join-Path $PSScriptRoot '..\loglar'
+New-Item -ItemType Directory -Path $logDir -Force | Out-Null
+# python http.server erisim kayitlarini stderr'e yazar -> erisim kaydi apk-servis.log'a gider.
+$log = Join-Path $logDir 'apk-servis.out.log'
+$logErr = Join-Path $logDir 'apk-servis.log'
+
+# python yolu: PATH'teki ilk bulunan; yoksa py -3
+$python = (Get-Command python -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty Source)
+if (-not $python) { $python = (Get-Command py -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty Source) }
+if (-not $python) { Write-Output 'python bulunamadi'; exit 1 }
+Write-Output ('python: ' + $python)
+
+# Yol bosluk/Turkce karakter icerebildigi icin dizin arguman olarak degil, calisma klasoru olarak verilir.
+Start-Process -FilePath $python `
+  -ArgumentList @('-m', 'http.server', $port, '--bind', '0.0.0.0') `
+  -WorkingDirectory $dizin `
+  -WindowStyle Hidden -RedirectStandardOutput $log -RedirectStandardError $logErr
 Start-Sleep -Seconds 3
+Write-Output ('log: ' + $log)
 
 $ip = (Get-NetIPAddress -AddressFamily IPv4 -ErrorAction SilentlyContinue |
   Where-Object { $_.IPAddress -like '192.168.*' } |
