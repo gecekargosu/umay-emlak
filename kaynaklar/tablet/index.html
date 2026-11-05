@@ -13,13 +13,15 @@
       a.kutu span { display: block; font-size: 14px; color: #4a5260; margin-top: 4px; }
       a.kutu.ana { background: #4c8dff; color: #fff; }
       a.kutu.ana span { color: #dbe6ff; }
+      a.kutu.isci { background: #2fbf71; color: #06210f; }
+      a.kutu.isci span { color: #0d3a1f; }
       .kucuk { font-size: 14px; color: #9aa3b2; }
       code { background: #1b1f27; padding: 2px 6px; border-radius: 6px; color: #f2f4f8; }
     </style>
   </head>
   <body>
     <h1>UMAY EMLAK — Tablet hazırlığı</h1>
-    <p>Aşağıdaki kutulara dokun. Sıra: 1) F-Droid, 2) Termux, 3) kılavuz.</p>
+    <p>Kutulara sırayla dokun: 1–4 Termux zinciri, 5 Freebuff (tablet ajanı), 6–7 laptopun tableti işçi yapması.</p>
 
     <a class="kutu ana" href="fdroid.apk" download>
       <strong>1. F-Droid'i kur</strong>
@@ -28,7 +30,7 @@
 
     <a class="kutu ana" href="termux-arm64.apk" download>
       <strong>2. Termux'u kur</strong>
-      <span>Terminal + dosya araçları (17 MB, arm64)</span>
+      <span>Terminal + dosya araçları (34 MB, arm64)</span>
     </a>
 
     <a class="kutu" href="termux-api.apk" download>
@@ -41,14 +43,33 @@
       <span>Tablet açılınca betikleri kendiliğinden çalıştırır (0,7 MB)</span>
     </a>
 
+    <a class="kutu isci" href="https://play.google.com/store/apps/details?id=com.freebuff.app">
+      <strong>5. Freebuff'ı kur (tablet ajanı)</strong>
+      <span>Google Play → "Freebuff: Free AI Coding Agent" → Kur. Aynı hesapla gir.</span>
+    </a>
+
+    <a class="kutu isci" href="tablet-ssh-kur.sh">
+      <strong>6. SSH kanalını aç (laptop → tablet)</strong>
+      <span>Bu dosyayı indir; sonra Termux'ta tek satır çalıştır (aşağıda)</span>
+    </a>
+
+    <a class="kutu" href="paket-denetim.sh">
+      <strong>7. Uygulama denetimi</strong>
+      <span>Ne var, nereden kurulmuş, hangisi mağaza dışı — rapor üretir</span>
+    </a>
+
     <a class="kutu" href="OKU-BENI-TABLET.md">
-      <strong>5. Kılavuzu aç</strong>
+      <strong>8. Kılavuzu aç</strong>
       <span>Termux komutları, ikinci ekran ayarları, iPhone notları</span>
     </a>
 
     <p class="kucuk">
-      Tek komut (Termux açılınca):<br />
+      Termux'ta tek satır (kurulum):<br />
       <code>curl -sL http://192.168.1.33:8080/termux-kur.sh | bash</code><br /><br />
+      SSH kanalı (laptopun tableti işçi yapması):<br />
+      <code>curl -sL http://192.168.1.33:8080/tablet-ssh-kur.sh | bash</code><br /><br />
+      Uygulama denetimi:<br />
+      <code>curl -sL http://192.168.1.33:8080/paket-denetim.sh | bash</code><br /><br />
       Program: <code>http://192.168.1.33:5175</code><br />
       API sağlık: <code>http://192.168.1.33:3100/health</code><br />
       Giriş: aysan.kilic@umay-emlak.local / Umay!2026
