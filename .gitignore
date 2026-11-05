@@ -29,3 +29,6 @@ kaynaklar/yedek/
 
 # yerel paket ciktisi
 release/
+
+# tablet APK'lari (buyuk ikili dosya; 8080 uzerinden dagitilir)
+kaynaklar/tablet/*.apk

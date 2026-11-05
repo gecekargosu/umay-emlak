@@ -357,6 +357,7 @@ async function seed(
   const responsibleIds = members.rows.map((row) => row.id);
   const allListings: Array<{ id: string; kind: string; priceKurus: number; status: string }> = [];
   const rentActive: Array<{ listingId: string; rentKurus: number }> = [];
+  const rentCandidates: Array<{ listingId: string; rentKurus: number }> = [];
   let idx = 0;
   let sale = 0;
   let rent = 0;
@@ -439,8 +440,11 @@ async function seed(
       if (kind === "sale") sale++;
       else rent++;
 
-      if (kind === "rent" && status === "active" && rentActive.length < tenantIds.length) {
-        rentActive.push({ listingId: listingRows[0]!.id, rentKurus: priceKurus });
+      // Y-113: sözleşmeleri ilk mal sahiplerine yığmak yerine tüm portföye yay.
+      // Aday listesi toplanır, aşağıda kiracı sayısına eşit aralıklarla seçilir;
+      // böylece ekstre her mal sahibinde dolu görünür.
+      if (kind === "rent" && status === "active") {
+        rentCandidates.push({ listingId: listingRows[0]!.id, rentKurus: priceKurus });
       }
 
       idx++;
@@ -448,6 +452,14 @@ async function seed(
   }
 
   // --- Kiralık sözleşmeleri (kiracı adı araması için) ----------------------
+  // Y-113: adayların arasından eşit aralıklarla seç → sözleşmeler mal sahiplerine dağılır.
+  {
+    const target = Math.min(tenantIds.length, rentCandidates.length);
+    const step = target > 0 ? rentCandidates.length / target : 1;
+    for (let i = 0; i < target; i++) {
+      rentActive.push(rentCandidates[Math.floor(i * step)]!);
+    }
+  }
   for (let i = 0; i < rentActive.length; i++) {
     const entry = rentActive[i]!;
     await client.query(
@@ -468,6 +480,48 @@ async function seed(
       ],
     );
   }
+
+  // --- Kira tahakkukları (Y-113) -------------------------------------------
+  // Denetimde görüldü: demo veride 32 sözleşmenin yalnız 1'inde tahakkuk vardı;
+  // ekstre ve tahsilat ekranları boş görünüyordu. Her sözleşme için son 6 ayın
+  // kira tahakkuku üretilir, üçte ikisi tahsil edilmiş sayılır. Veri DEMO'dur.
+  await client.query(
+    `insert into charge (tenant_id, contract_id, period, kind, amount_kurus, due_date, status)
+     select c.tenant_id, c.id,
+            (date_trunc('month', current_date) - (m || ' month')::interval)::date,
+            'rent', c.rent_kurus,
+            (date_trunc('month', current_date) - (m || ' month')::interval
+              + (c.due_day - 1) * interval '1 day')::date,
+            'open'
+       from contract c
+      cross join generate_series(0, 5) m
+      where c.tenant_id = $1
+     on conflict (contract_id, period, kind) do nothing`,
+    [tenantId],
+  );
+  await client.query(
+    `insert into payment (tenant_id, charge_id, amount_kurus, method, paid_at, received_by_name)
+     select ch.tenant_id, ch.id, ch.amount_kurus, 'cash_office',
+            (ch.due_date + interval '2 day')::timestamptz, 'DEMO tahsilat'
+       from charge ch
+      where ch.tenant_id = $1 and ch.kind = 'rent'
+        and (extract(month from ch.period)::int % 3) <> 0
+        and not exists (select 1 from payment p where p.charge_id = ch.id)`,
+    [tenantId],
+  );
+  await client.query(
+    `update charge ch set status = 'paid'
+      where ch.tenant_id = $1
+        and exists (select 1 from payment p
+                     where p.charge_id = ch.id and p.amount_kurus >= ch.amount_kurus)`,
+    [tenantId],
+  );
+  await client.query(
+    `update charge ch set status = 'partial'
+      where ch.tenant_id = $1 and ch.status = 'open'
+        and exists (select 1 from payment p where p.charge_id = ch.id)`,
+    [tenantId],
+  );
 
   // --- DASK poliçeleri (TUR:57) --------------------------------------------
   // Panoda "poliçe bitiyor" kutusu boş kalıyordu: demo veride hiç poliçe yoktu.

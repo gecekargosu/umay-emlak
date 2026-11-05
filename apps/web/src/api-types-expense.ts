@@ -32,6 +32,16 @@ export type StatementOwner = { id: string; name: string; propertyCount: number }
 
 export type StatementOwnerList = { count: number; items: StatementOwner[] };
 
+export type StatementExpenseLine = {
+  id: string;
+  category: string;
+  spentOn: string;
+  amountKurus: number;
+  amountText: string;
+  vendor: string | null;
+  note: string | null;
+};
+
 export type StatementPropertyLine = {
   id: string;
   title: string;
@@ -48,6 +58,7 @@ export type StatementPropertyLine = {
   feeText: string;
   netKurus: number;
   netText: string;
+  expenseLines: StatementExpenseLine[];
 };
 
 export type Statement = {

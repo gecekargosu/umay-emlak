@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import {
   api,
   userError,
@@ -38,6 +38,20 @@ function monthStartIso(): string {
 function trDate(iso: string): string {
   if (!iso) return "—";
   return new Date(`${iso}T00:00:00`).toLocaleDateString("tr-TR");
+}
+
+const GIDER_TURU: Record<string, string> = {
+  tamir: "Tamir / bakım",
+  aidat: "Aidat",
+  temizlik: "Temizlik",
+  sigorta: "Sigorta",
+  vergi: "Vergi",
+  komisyon: "Komisyon",
+  diger: "Diğer",
+};
+
+function turAdi(category: string): string {
+  return GIDER_TURU[category] ?? category;
 }
 
 const EMPTY_FORM: Form = {
@@ -264,20 +278,40 @@ export function Expenses() {
                 </thead>
                 <tbody>
                   {statement.properties.map((row) => (
-                    <tr key={row.id}>
-                      <td>
-                        <strong>{row.title}</strong>
-                        {row.district && <div className="muted small">{row.district}</div>}
-                      </td>
-                      <td>{row.chargedText}</td>
-                      <td>{row.collectedText}</td>
-                      <td>{row.outstandingText}</td>
-                      <td>{row.expensesText}</td>
-                      <td>{row.feeText}</td>
-                      <td>
-                        <strong>{row.netText}</strong>
-                      </td>
-                    </tr>
+                    <Fragment key={row.id}>
+                      <tr>
+                        <td>
+                          <strong>{row.title}</strong>
+                          {row.district && <div className="muted small">{row.district}</div>}
+                        </td>
+                        <td>{row.chargedText}</td>
+                        <td>{row.collectedText}</td>
+                        <td>{row.outstandingText}</td>
+                        <td>{row.expensesText}</td>
+                        <td>{row.feeText}</td>
+                        <td>
+                          <strong>{row.netText}</strong>
+                        </td>
+                      </tr>
+                      {(row.expenseLines ?? []).map((line) => (
+                        <tr key={line.id}>
+                          <td>
+                            <span className="muted small">
+                              └ {trDate(line.spentOn)} · {turAdi(line.category)}
+                            </span>
+                            {(line.vendor || line.note) && (
+                              <div className="muted small">{line.vendor ?? line.note}</div>
+                            )}
+                          </td>
+                          <td />
+                          <td />
+                          <td />
+                          <td className="muted small">{line.amountText}</td>
+                          <td />
+                          <td />
+                        </tr>
+                      ))}
+                    </Fragment>
                   ))}
                   <tr className="statement-total">
                     <td>

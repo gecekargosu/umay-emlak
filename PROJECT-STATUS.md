@@ -62,3 +62,10 @@ dosya bölme en son (M6) · K-70…K-81 yürürlükte.
 
 ## Test durumu
 typecheck 0 · `pnpm test` 19 dosya / 67 test 0 · web build 0 · paket /health 200 (17 migration).
+
+## TUR:61 (2026-11-05)
+- Ekstrede gider dökümü kalem kalem (API `expenseLines` + ekran + yazdırma).
+- Y-113 kapandı: demo veride 187 tahakkuk / 124 tahsilat / 12 mal sahibinde hareket; `demo.ts` kalıcı.
+- USB klavye/fare onarımı kalıcı (`kaynaklar/scripts/usb-onar.ps1`), açılıştan sonra hata 0.
+- Tablet: Termux + F-Droid APK'ları ve kılavuz `kaynaklar/tablet/` → http://192.168.1.33:8080
+- Açık: Y-114 (Docker açılışta başlamıyor), Y-109 ödeme, Y-110 belge kuyruğu.

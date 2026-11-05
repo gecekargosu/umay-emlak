@@ -149,6 +149,29 @@ statementRoutes.get("/owners/:id", async (c) => {
       `)
     ) as unknown as { rows: AggregateRow[] };
 
+    // Gider dökümü: ekstrede toplamın yanında kalem kalem görünür (TUR:61).
+    const expenseDetailRows = (
+      await tx.execute(sql`
+        select e.property_id as "propertyId", e.id, e.category, e.spent_on as "spentOn",
+               e.amount_kurus as "amountKurus", e.vendor, e.note
+          from expense e
+         where e.status = 'aktif'
+           and e.spent_on >= ${from}::date and e.spent_on <= ${to}::date
+           and e.property_id = any(${sql.raw(`array['${ids.join("','")}']::uuid[]`)})
+         order by e.spent_on asc, e.created_at asc
+      `)
+    ) as unknown as {
+      rows: Array<{
+        propertyId: string;
+        id: string;
+        category: string;
+        spentOn: string;
+        amountKurus: string | number;
+        vendor: string | null;
+        note: string | null;
+      }>;
+    };
+
     const feeRows = (
       await tx.execute(sql`
         select l.property_id as "propertyId", coalesce(sum(op.fee_kurus), 0)::bigint as "value"
@@ -164,6 +187,26 @@ statementRoutes.get("/owners/:id", async (c) => {
     const chargedMap = new Map(chargedRows.rows.map((row) => [String(row.propertyId), row]));
     const expenseMap = new Map(expenseRows.rows.map((row) => [String(row.propertyId), toKurus(row.value)]));
     const feeMap = new Map(feeRows.rows.map((row) => [String(row.propertyId), toKurus(row.value)]));
+    const detailMap = new Map<
+      string,
+      Array<{ id: string; category: string; spentOn: string; amountKurus: number; amountText: string; vendor: string | null; note: string | null }>
+    >();
+    for (const row of expenseDetailRows.rows) {
+      const key = String(row.propertyId);
+      const amount = toKurus(row.amountKurus);
+      const line = {
+        id: String(row.id),
+        category: String(row.category),
+        spentOn: String(row.spentOn).slice(0, 10),
+        amountKurus: amount,
+        amountText: formatTry(amount),
+        vendor: row.vendor === null ? null : String(row.vendor),
+        note: row.note === null ? null : String(row.note),
+      };
+      const list = detailMap.get(key);
+      if (list) list.push(line);
+      else detailMap.set(key, [line]);
+    }
 
     const properties = propertyRows.rows.map((property) => {
       const id = String(property.id);
@@ -187,6 +230,7 @@ statementRoutes.get("/owners/:id", async (c) => {
         feeText: formatTry(fee),
         netKurus: collected - expenses - fee,
         netText: formatTry(collected - expenses - fee),
+        expenseLines: detailMap.get(id) ?? [],
       };
     });
 

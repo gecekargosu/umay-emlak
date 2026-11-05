@@ -479,3 +479,10 @@ Y-112 | Gider kalemleri + mal sahibi ekstresi — YAPILDI (2026-11-05, TUR:60):
 Y-113 | Demo mal sahibi dağılımı — BEKLİYOR (TUR:60'da görüldü):
         31 mal sahibinin 1'inde tahakkuk var; ekstre çoğu kişide boş görünüyor.
         Demo sözleşmeleri farklı mal sahiplerine dağıtılmalı. | Demo | S | BEKLİYOR
+Y-113 | Demo mal sahibi dağılımı — YAPILDI (2026-11-05, TUR:61):
+        Her sözleşme için son 6 ay kira tahakkuku + üçte iki tahsilat üretildi
+        (DEV: 187 tahakkuk / 124 tahsilat / 12 mal sahibi). demo.ts'e kalıcı eklendi.
+        | Demo | S | YAPILDI
+Y-114 | Docker Desktop açılışta başlamıyor — BEKLİYOR (TUR:61):
+        Yeniden başlatmadan sonra umay-pg kapalı geliyor, API 500 veriyor.
+        Docker Desktop başlangıca eklenmeli ya da servis otomatik başlatılmalı. | Altyapı | S | BEKLİYOR

@@ -298,3 +298,14 @@ O. TUR:60 GÜNCELLEMELERİ (2026-11-05)
 [VAR] Gider kaydı uçtan uca: form → DB (tamir, 2.750,00 ₺) → audit_log 201.
 [KISMI] Ekstrede gider satırları kalem kalem değil, toplam olarak görünüyor.
 [KISMI] Demo veri: 31 mal sahibinin yalnız 1'inde tahakkuk var (sözleşme dağılımı); ekstre ekranı bu yüzden çoğu kişide boş görünür.
+
+====================================================================
+P. TUR:61 GÜNCELLEMELERİ (2026-11-05)
+====================================================================
+[VAR] Ekstrede gider dökümü: mülk satırının altında tarih/tür/tutar/kim satırları (yazdırmada da var).
+[VAR] Demo veri dolu: 187 kira tahakkuku, 124 tahsilat, 12 mal sahibinde hareket; demo.ts'e kalıcı.
+[VAR] Demo sözleşmeleri mal sahiplerine eşit aralıklarla dağıtılıyor (Y-113 kapandı).
+[VAR] USB klavye/fare onarımı kalıcı: Kod 21 temizliği + xHCI yeniden başlatma + güç yönetimi kapalı.
+[VAR] Termux/F-Droid APK'ları ve tablet kılavuzu 8080'de servis ediliyor.
+[KISMI] Takip bedeli (owner_payout) demo veride yok → ekstrede 0,00 ₺.
+[KISMI] Docker Desktop açılışta başlamıyor (Y-114); laptop açılışında servisler elle kaldırılıyor.
