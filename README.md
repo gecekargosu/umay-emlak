@@ -3,8 +3,24 @@
 Çok kiracılı (multi-tenant) emlak ofisi yönetim programı. Masaüstü tarayıcıda çalışan
 React arayüzü + Hono/PostgreSQL API'si.
 
-> Bu depo **özel**dir: gerçek müşteri verisi, `.env` sırları ve yerel yedekler depoya
-> girmez (K-19). Demo veriler `DEMO ` önekiyle üretilir ve tek komutla silinir.
+> Gerçek müşteri verisi, `.env` sırları ve yerel yedekler depoya girmez (K-19).
+> Demo veriler `DEMO ` önekiyle üretilir ve tek komutla silinir.
+
+## Ekran Görüntüleri
+
+| Ana sayfa | Portföy |
+|---|---|
+| ![Ana sayfa](ekran-anasayfa.png) | ![Portföy](ekran-gayrimenkuller.png) |
+
+| Mülk dosyası | Kiracı dosyası |
+|---|---|
+| ![Mülk](ekran-mulk-dosyasi.png) | ![Kiracı](ekran-kiraci-dosyasi.png) |
+
+| Kişiler | Poliçeler |
+|---|---|
+| ![Kişiler](ekran-kisiler-raflar.png) | ![Poliçeler](ekran-policeler.png) |
+
+Daha fazla ekran: depo kökündeki `ekran-*.png` dosyaları.
 
 ## Neler var?
 
